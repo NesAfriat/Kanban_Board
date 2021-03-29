@@ -2,22 +2,27 @@ package BusinessLayer.Shifts;
 
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
+
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Shift {
 
 
     private boolean approved;
-    private Map<Job,JobArrangement> currentWorkers;
+    private final Map<Job,JobArrangement> currentWorkers;
 
     public Shift(){
         approved = false;
+        currentWorkers = new HashMap<>();
         currentWorkers.put(Job.Shift_Manager, new JobArrangement(1));
+        // add more jobs
     }
 
-    private class JobArrangement {
+    private static class JobArrangement {
         // Constructor
         JobArrangement(int required){
             this.required = required;
@@ -47,6 +52,9 @@ public class Shift {
         if (jobArrangement.workers.remove(worker)){
             jobArrangement.amountAssigned--;
         }
+        else {
+            throw new Exception("no such worker working at this position at current shift");
+        }
     }
 
     // verify that shift contains the role and return the job arrangement for this role
@@ -63,6 +71,24 @@ public class Shift {
         JobArrangement jobArrangement = getJobArrangement(role);
         return jobArrangement.required;
     }
+
+    public String getCurrentWorkers(Job role) throws Exception {
+        JobArrangement jobArrangement = getJobArrangement(role);
+        StringBuilder stringBuilder = new StringBuilder();
+        int i = 1;
+        for (Worker worker: jobArrangement.workers) {
+            stringBuilder.append(i+") ");
+            stringBuilder.append(worker.toString());
+            stringBuilder.append(" ");
+        }
+        return stringBuilder.toString();
+    }
+
+    public int getCurrentWorkersAmount(Job role) throws Exception {
+        JobArrangement jobArrangement = getJobArrangement(role);
+        return jobArrangement.amountAssigned;
+    }
+
 
     public void setAmountRequired(Job role, int required) throws Exception {
         JobArrangement jobArrangement = getJobArrangement(role);
@@ -89,5 +115,14 @@ public class Shift {
             throw new Exception("Can not approve a shift without a shift manager");
         }
         approved = true;
+    }
+    public boolean isWorking(Worker worker){
+        AtomicBoolean working = new AtomicBoolean(false);
+        currentWorkers.forEach((job, jobArrangement) -> {
+            if (jobArrangement.workers.contains(worker)) {
+            working.set(true);
+            }
+        });
+        return working.get();
     }
 }
