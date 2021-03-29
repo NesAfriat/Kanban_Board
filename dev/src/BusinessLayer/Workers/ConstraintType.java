@@ -1,4 +1,6 @@
 package BusinessLayer.Workers;
 
-public class ConstraintType {
+public enum ConstraintType {
+    Cant,
+    Want
 }
