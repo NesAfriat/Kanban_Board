@@ -16,11 +16,11 @@ public class Worker {
     private String educationFund;
     private int vacationDaysPerMonth;
     private int sickDaysPerMonth;
-    private Date startWorkingDate;
-    private Date endWorkingDate;
+    private String startWorkingDate;
+    private String endWorkingDate;
 
     public Worker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
-                  int vacationDaysPerMonth, int sickDaysPerMonth, Date startWorkingDate){
+                  int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate){
         this.isAdmin = isAdmin;
         this.name = name;
         this.id = id;
@@ -39,7 +39,7 @@ public class Worker {
         this.constaraints = new LinkedList<>();
         this.occupations = new LinkedList<>();
     }
-    public void addConstraint(Date date, ShiftType shiftType, ConstraintType constraintType ) throws Exception {
+    public void addConstraint(String date, ShiftType shiftType, ConstraintType constraintType ) throws Exception {
         for (Constaraint con: constaraints) {
             if(con.compareShift(date, shiftType)){
                 throw new Exception("this shift already has constraint");
@@ -48,7 +48,7 @@ public class Worker {
         this.constaraints.add(new Constaraint(date, shiftType, constraintType));
     }
 
-    public void removeConstraint(Date date, ShiftType shiftType) throws Exception {
+    public void removeConstraint(String date, ShiftType shiftType) throws Exception {
         for (Constaraint con: constaraints) {
             if(con.compareShift(date, shiftType)){
                 constaraints.remove(con);
@@ -56,7 +56,7 @@ public class Worker {
         }
     }
 
-    public boolean canWorkInShift(Date date, ShiftType shiftType){
+    public boolean canWorkInShift(String date, ShiftType shiftType){
         for (Constaraint con: constaraints) {
             if(con.compareShift(date, shiftType) && con.getConstraintType() == ConstraintType.Cant){
                return false;
@@ -72,4 +72,16 @@ public class Worker {
     public void addOccupations(Job job){
         this.occupations.add(job);
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public boolean getIsAdmin(){
+        return isAdmin;
+    }
+
+//    public void testPrintConstraint(){
+//        System.out.println(constaraints);
+//    }
 }

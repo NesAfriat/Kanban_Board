@@ -9,6 +9,11 @@ public class WorkersTest {
         Worker worker = new Worker("moshe");
         worker.addOccupations(Job.Shift_Manager);
         worker.addOccupations(Job.Shift_Manager);
-        //worker.addConstraint(new Constaraint(new Date("1/1/2000")));
+        try {
+            worker.addConstraint("1/1/2000", ShiftType.Morning, ConstraintType.Cant);
+            //worker.testPrintConstraint();
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }
