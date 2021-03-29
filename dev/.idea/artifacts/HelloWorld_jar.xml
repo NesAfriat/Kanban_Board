@@ -2,7 +2,7 @@
   <artifact type="jar" build-on-make="true" name="HelloWorld:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/HelloWorld_jar</output-path>
     <root id="archive" name="adss_v0.jar">
-      <element id="module-output" name="HelloWorld" />
+      <element id="module-output" name="Workers" />
     </root>
   </artifact>
 </component>
