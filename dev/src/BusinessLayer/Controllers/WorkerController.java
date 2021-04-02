@@ -59,6 +59,10 @@ public class WorkerController {
                 sickDaysPerMonth, startWorkingDate);
     }
 
+    public Worker getWorker(String id) throws InnerLogicException {
+       return workersList.getWorker(id);
+    }
+
     public Constraint addConstraint(String date, String shiftType, String constraintType) throws InnerLogicException {
         if(loggedIn == null) throw new InnerLogicException("tried to add constraint but no user was logged in");
         ShiftType st;

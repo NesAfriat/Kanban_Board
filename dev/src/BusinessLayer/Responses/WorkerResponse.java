@@ -86,4 +86,21 @@ public class WorkerResponse {
         return this.constraints;
     }
 
+    //boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
+    //                  int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Name: ").append(name).append("\n");
+        stringBuilder.append("ID: ").append(id).append("\n");
+        stringBuilder.append("Bank account: ").append(bankAccount).append("\n");
+        stringBuilder.append("Salary: ").append(salary).append("\n");
+        stringBuilder.append("Education fund: ").append(educationFund).append("\n");
+        stringBuilder.append("Vacation days per month: ").append(vacationDaysPerMonth).append("\n");
+        stringBuilder.append("Sick days per month: ").append(sickDaysPerMonth).append("\n");
+        stringBuilder.append("Start working date: ").append(startWorkingDate).append("\n");
+        if (endWorkingDate != null)
+            stringBuilder.append("End working date: ").append(endWorkingDate).append("\n");
+
+        return stringBuilder.toString();
+    }
 }

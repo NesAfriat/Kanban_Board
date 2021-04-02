@@ -84,6 +84,15 @@ public class Facade {
         }
     }
 
+    public ResponseT<WorkerResponse> getWorker(String id){
+        try{
+            Worker worker = workerController.getWorker(id);
+            return new ResponseT<>(new WorkerResponse(worker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
 
 
 }
