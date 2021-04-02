@@ -66,8 +66,9 @@ public class Menu {
     private static void viewConstraints() {
         ResponseT<WorkerResponse> worker = facade.getLoggedWorker();
         if (worker.ErrorOccurred()){
-
+            System.out.println(worker.getErrorMessage());
         }
+        
     }
 
     private static void AdminMenu() {
