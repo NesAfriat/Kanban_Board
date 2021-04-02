@@ -4,6 +4,7 @@ import BusinessLayer.Responses.ConstraintResponse;
 import BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Responses.WorkerResponse;
 
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -48,7 +49,7 @@ public class Menu {
         int option = scanner.nextInt();
         switch (option){
             case 2:
-                viewConstraints();
+                viewWorkerConstraints();
                 break;
             case 3:
                 addConstraint();
@@ -73,11 +74,18 @@ public class Menu {
         WorkerMenu();
     }
 
-    private static void viewConstraints() {
+    private static void viewWorkerConstraints() {
         ResponseT<WorkerResponse> worker = facade.getLoggedWorker();
         if (worker.ErrorOccurred()){
             System.out.println(worker.getErrorMessage());
         }
+        else {
+            List<ConstraintResponse> constraintResponseList = worker.value.getConstraints();
+            for (ConstraintResponse constraint: constraintResponseList){
+                System.out.println("Date: " + constraint.getDate() + " Shift: " + constraint.getShiftType()+ " Constraint: " + constraint.getConstraintType());
+            }
+        }
+        WorkerMenu();
         
     }
 
