@@ -23,4 +23,6 @@ public class WorkerResponse {
         this.name = worker.getName();
         this.id = worker.getId();
     }
+
+    public boolean getIsAdmin(){return isAdmin;}
 }
