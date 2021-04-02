@@ -27,4 +27,8 @@ public class ConstraintResponse {
     public ShiftType getShiftType() {
         return shiftType;
     }
+
+    public String toString(){
+        return "Date: " + date + " || Shift: " + shiftType + " || Constraint: " + constraintType;
+    }
 }

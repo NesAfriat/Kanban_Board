@@ -54,19 +54,41 @@ public class Menu {
             case 3:
                 addConstraint();
                 break;
+            case 4:
+                removeConstraint();
+                break;
+            case 5:
+                System.exit(0);
+            }
+
+    }
+
+    private static void removeConstraint() {
+        System.out.println("Enter Date <DD/MM/YYYY>: ");
+        String date = scanner.next();
+        System.out.println("Enter Shift (Morning/Evening): ");
+        String shiftType = scanner.next();
+        ResponseT<ConstraintResponse> constraint = facade.removeConstraint(date, shiftType);
+        if (constraint.ErrorOccurred()){
+            printPrettyError(constraint.getErrorMessage());
         }
+        else {
+            System.out.println("Constraint removed successfully, details: ");
+            System.out.println(constraint);
+        }
+        WorkerMenu();
     }
 
     private static void addConstraint() {
         System.out.println("Enter Date <DD/MM/YYYY>: ");
         String date = scanner.next();
-        System.out.println("Enter Shift Type (Morning/Evening): ");
+        System.out.println("Enter Shift (Morning/Evening): ");
         String shiftType = scanner.next();
         System.out.println("Enter Constraint Type (Cant/Want): ");
         String constraintType = scanner.next();
         ResponseT<ConstraintResponse> constraint = facade.addConstraint(date, shiftType, constraintType);
         if (constraint.ErrorOccurred()){
-            System.out.println(ANSI_RED + constraint.getErrorMessage() + ANSI_RESET);
+            printPrettyError(constraint.getErrorMessage());
         }
         else {
             System.out.println("Constraint added successfully");
@@ -74,15 +96,19 @@ public class Menu {
         WorkerMenu();
     }
 
+    private static void printPrettyError(String errorMessage) {
+        System.out.println(ANSI_RED + errorMessage + ANSI_RESET);
+    }
+
     private static void viewWorkerConstraints() {
         ResponseT<WorkerResponse> worker = facade.getLoggedWorker();
         if (worker.ErrorOccurred()){
-            System.out.println(worker.getErrorMessage());
+            printPrettyError(worker.getErrorMessage());
         }
         else {
             List<ConstraintResponse> constraintResponseList = worker.value.getConstraints();
             for (ConstraintResponse constraint: constraintResponseList){
-                System.out.println("Date: " + constraint.getDate() + " Shift: " + constraint.getShiftType()+ " Constraint: " + constraint.getConstraintType());
+                System.out.println(constraint);
             }
         }
         WorkerMenu();
