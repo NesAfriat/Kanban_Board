@@ -81,6 +81,10 @@ public class Worker {
         return isAdmin;
     }
 
+    public String getName() {
+        return this.name;
+    }
+
 //    public void testPrintConstraint(){
 //        System.out.println(constaraints);
 //    }
