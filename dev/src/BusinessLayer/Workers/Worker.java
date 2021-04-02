@@ -1,4 +1,5 @@
 package BusinessLayer.Workers;
+import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.*;
 import org.omg.CORBA.CODESET_INCOMPATIBLE;
 
@@ -39,10 +40,10 @@ public class Worker {
         this.constraints = new LinkedList<>();
         this.occupations = new LinkedList<>();
     }
-    public Constraint addConstraint(String date, ShiftType shiftType, ConstraintType constraintType ) throws Exception {
+    public Constraint addConstraint(String date, ShiftType shiftType, ConstraintType constraintType ) throws InnerLogicException {
         for (Constraint con: constraints) {
             if(con.compareShift(date, shiftType)){
-                throw new Exception("this shift already has constraint");
+                throw new InnerLogicException("this shift already has constraint");
             }
         }
         Constraint con = new Constraint(date, shiftType, constraintType);
@@ -50,7 +51,7 @@ public class Worker {
         return con;
     }
 
-    public Constraint removeConstraint(String date, ShiftType shiftType) throws Exception {
+    public Constraint removeConstraint(String date, ShiftType shiftType) throws InnerLogicException {
         Constraint output = null;
         for (Constraint con: constraints) {
             if(con.compareShift(date, shiftType)){
@@ -58,7 +59,7 @@ public class Worker {
                 break;
             }
         }
-        if(output == null) throw new Exception("tried to remove non-existing constraint");
+        if(output == null) throw new InnerLogicException("tried to remove non-existing constraint");
         constraints.remove(output);
         return output;
     }

@@ -22,7 +22,7 @@ public class Facade {
             Worker worker = workerController.login(id);
             shiftController.login(worker.getIsAdmin());
             return new ResponseT<>(new WorkerResponse(worker));
-        }catch (Exception e){
+        }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
     }
@@ -30,7 +30,7 @@ public class Facade {
     public ResponseT<WorkerResponse> getLoggedWorker(){
         try{
             return new ResponseT<WorkerResponse>(new WorkerResponse(workerController.getLoggedIn()));
-        }catch (Exception e){
+        }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
     }
@@ -39,7 +39,7 @@ public class Facade {
         try{
             Constraint constraint = workerController.addConstraint(date, shiftType, constraintType);
             return new ResponseT<>(new ConstraintResponse(constraint));
-        }catch (Exception e){
+        }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
     }
@@ -49,7 +49,7 @@ public class Facade {
             Constraint constraint = workerController.removeConstraint(date, shiftType);
             return new ResponseT<>(new ConstraintResponse(constraint));
         }
-        catch (Exception e){
+        catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
     }
