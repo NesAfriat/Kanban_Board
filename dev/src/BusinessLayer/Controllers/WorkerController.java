@@ -93,19 +93,17 @@ public class WorkerController {
         }
         if (!result.equals(date)) throw new InnerLogicException("invalid date");
     }
-
     private ShiftType parseShiftType(String shiftType) throws InnerLogicException {
-        if (shiftType.equals("Morning")) return ShiftType.Morning;
-        else if (shiftType.equals("Evening")) return ShiftType.Evening;
+        if ("Morning".equals(shiftType)) return ShiftType.Morning;
+        else if ("Evening".equals(shiftType)) return ShiftType.Evening;
         else throw new InnerLogicException("invalid shift type");
     }
 
     private ConstraintType parseConstraintType(String constraintType) throws InnerLogicException {
-        if (constraintType.equals("Cant")) return ConstraintType.Cant;
-        else if (constraintType.equals("Want")) return ConstraintType.Want;
+        if ("Cant".equals(constraintType)) return ConstraintType.Cant;
+        else if ("Want".equals(constraintType)) return ConstraintType.Want;
         else throw new InnerLogicException("invalid constraint type");
     }
-
 
 
 

@@ -1,5 +1,13 @@
 package BusinessLayer.Workers;
 
 public enum Job {
-    Shift_Manager
-}
+    Cashier,
+    Storekeeper,
+    Usher,
+    Guard,
+    Shift_Manager,
+    HR_Manager,
+    Branch_Manager,
+    Assistant_Branch_Manager,
+
+    }
