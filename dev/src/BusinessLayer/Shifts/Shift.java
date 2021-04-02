@@ -23,18 +23,6 @@ public class Shift {
         // add more jobs
     }
 
-    private static class JobArrangement {
-        // Constructor
-        JobArrangement(int required){
-            this.required = required;
-            amountAssigned = 0;
-            workers = new LinkedList<>();
-        }
-
-        int required;
-        List<Worker> workers;
-        int amountAssigned;
-    }
 
     // assign new worker to the shift
     public void addWorker(Job role, Worker worker) throws InnerLogicException {
@@ -73,16 +61,9 @@ public class Shift {
         return jobArrangement.required;
     }
 
-    public String getCurrentWorkers(Job role) throws InnerLogicException {
-        JobArrangement jobArrangement = getJobArrangement(role);
-        StringBuilder stringBuilder = new StringBuilder();
-        int i = 1;
-        for (Worker worker: jobArrangement.workers) {
-            stringBuilder.append(i+") ");
-            stringBuilder.append(worker.toString());
-            stringBuilder.append(" ");
-        }
-        return stringBuilder.toString();
+    public List<Worker> getCurrentWorkers(Job role) throws InnerLogicException {
+        // TODO: return a copy of the list
+        return getJobArrangement(role).workers;
     }
 
     public int getCurrentWorkersAmount(Job role) throws InnerLogicException {
@@ -125,5 +106,26 @@ public class Shift {
             }
         });
         return working.get();
+    }
+
+    public List<Job> getJobs() {
+        List<Job> jobs = new LinkedList<>();
+        currentWorkers.forEach((job, jobArrangement) -> {
+            jobs.add(job);
+        });
+        return jobs;
+    }
+
+    private static class JobArrangement {
+        // Constructor
+        JobArrangement(int required){
+            this.required = required;
+            amountAssigned = 0;
+            workers = new LinkedList<>();
+        }
+
+        int required;
+        List<Worker> workers;
+        int amountAssigned;
     }
 }
