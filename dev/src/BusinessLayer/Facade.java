@@ -4,7 +4,9 @@ import BusinessLayer.Controllers.ShiftController;
 import BusinessLayer.Controllers.WorkerController;
 import BusinessLayer.Responses.ConstraintResponse;
 import BusinessLayer.Responses.ResponseT;
+import BusinessLayer.Responses.WorkDayResponse;
 import BusinessLayer.Responses.WorkerResponse;
+import BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers.Worker;
 
@@ -48,6 +50,16 @@ public class Facade {
         try{
             Constraint constraint = workerController.removeConstraint(date, shiftType);
             return new ResponseT<>(new ConstraintResponse(constraint));
+        }
+        catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<WorkDayResponse> viewShiftArrangement(String date) {
+        try{
+            WorkDay workDay = shiftController.getWorkDay(date);
+            return new ResponseT<>(new WorkDayResponse(workDay));
         }
         catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
