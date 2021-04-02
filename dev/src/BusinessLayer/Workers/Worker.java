@@ -21,7 +21,9 @@ public class Worker {
     private String endWorkingDate;
 
     public Worker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
-                  int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate){
+                  int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
+        if(name == null || id == null || bankAccount == null || educationFund == null || startWorkingDate == null)
+            throw new InnerLogicException("tried to create new worker without all the necessary data");
         this.isAdmin = isAdmin;
         this.name = name;
         this.id = id;
