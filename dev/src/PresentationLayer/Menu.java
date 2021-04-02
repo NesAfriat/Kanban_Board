@@ -22,7 +22,7 @@ public class Menu {
 
     public static void main(String[] args){
         System.out.println("Enter ID number for login: ");
-        String ID = scanner.nextLine();
+        String ID = scanner.next();
         ResponseT<WorkerResponse> worker = facade.login(ID);
         if (worker.ErrorOccurred()){
             System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
@@ -204,7 +204,7 @@ public class Menu {
         System.out.println("1) Add Worker");
         System.out.println("2) Fire Worker");
         System.out.println("3) Get Worker");
-        System.out.println("5) Previous");
+        System.out.println("4) Previous");
         System.out.print("Option: ");
         int option = getUserInput();
         switch (option){
@@ -216,7 +216,7 @@ public class Menu {
                 break;
             case 3:
             case 4:
-                break;
+                AdminMenu();
             case 5:
                 System.exit(0);
             default:
