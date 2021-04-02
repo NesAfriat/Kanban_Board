@@ -57,7 +57,7 @@ public class Menu {
         switch (option){
             case 1:
                 viewShiftArrangement();
-                break;;
+                break;
             case 2:
                 viewWorkerConstraints();
                 break;
