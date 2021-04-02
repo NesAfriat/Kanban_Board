@@ -55,10 +55,11 @@ public class Worker {
         for (Constraint con: constraints) {
             if(con.compareShift(date, shiftType)){
                 output = con;
-                constraints.remove(con);
+                break;
             }
         }
         if(output == null) throw new Exception("tried to remove non-existing constraint");
+        constraints.remove(output);
         return output;
     }
 
