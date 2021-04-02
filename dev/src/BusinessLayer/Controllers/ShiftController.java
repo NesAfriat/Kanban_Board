@@ -4,6 +4,7 @@ import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.ShiftSchedule;
 import BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Shifts.WorkDay;
+import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.WorkersList;
 
 import java.time.LocalDate;
@@ -15,20 +16,33 @@ public class ShiftController {
     private WorkDay currentDay;
     private ShiftType currentShiftType;
     private WorkersList workers;
-    private boolean isAdminAuthoried;
+    private boolean isAdminAuthorized;
 
     public ShiftController(WorkersList workers){
         this.workers = workers;
         calendar = new ShiftSchedule();
-        isAdminAuthoried = false;
+        // TODO: remove this lines (testing purposes)
+        try{
+            calendar.addWorkDay(true, true, "01/02/2020");
+            calendar.addWorkDay(true, false, "02/02/2020");
+            calendar.addWorkDay(false, false, "03/02/2020");
+            calendar.getWorkDay("01/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("321"), ShiftType.Evening);
+            calendar.getWorkDay("01/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("123"), ShiftType.Morning);
+            calendar.getWorkDay("02/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("321"), ShiftType.Morning);
+            //calendar.getWorkDay("03/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("321"), ShiftType.Evening);
+        }
+        catch (Exception ignored) {
+
+        }
+        isAdminAuthorized = false;
     }
 
-    public void login(boolean isAdminAuthoried){
-        this.isAdminAuthoried = isAdminAuthoried;
+    public void login(boolean isAdminAuthorized){
+        this.isAdminAuthorized = isAdminAuthorized;
     }
 
     public void logout(){
-        this.isAdminAuthoried = false;
+        this.isAdminAuthorized = false;
     }
 
     public void setCurrentDay(String date) throws Exception {

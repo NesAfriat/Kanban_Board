@@ -3,6 +3,7 @@ package BusinessLayer.Shifts;
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
+import BusinessLayer.Workers.WorkersList;
 
 import java.time.LocalDate;
 
@@ -16,15 +17,20 @@ public class WorkDay {
         if (hasMorning) morningShift = new Shift();
         if (hasEvening) eveningShift = new Shift();
         this.date = date;
+        //TODO: remove
     }
 
+    // TODO: check worker has no constraints
     public Shift addWorker(Job job, Worker worker, ShiftType shiftType) throws InnerLogicException {
         Shift current = getCurrentShift(shiftType);
         if (morningShift != null && morningShift.isWorking(worker)){
-            throw new InnerLogicException(worker.toString() + "is already working at this day");
+            throw new InnerLogicException(worker.getName() + " is already working at this day");
         }
         if (eveningShift != null && eveningShift.isWorking(worker)){
-            throw new InnerLogicException(worker.toString() + "is already working at this day");
+            throw new InnerLogicException(worker.getName() + " is already working at this day");
+        }
+        if (!worker.canWorkInShift(date,shiftType)){
+            throw new InnerLogicException(worker.getName() + " cant work at this shift");
         }
         current.addWorker(job, worker);
         return current;

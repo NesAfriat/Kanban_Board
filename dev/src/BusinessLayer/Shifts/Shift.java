@@ -25,6 +25,7 @@ public class Shift {
 
 
     // assign new worker to the shift
+    // TODO: check cardinality of manager
     public void addWorker(Job role, Worker worker) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
 
@@ -37,6 +38,7 @@ public class Shift {
     }
 
     // remove worker from the shift
+    // TODO: if removed manager change approved to false
     public void removeWorker(Job role, Worker worker) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
         if (jobArrangement.workers.remove(worker)){

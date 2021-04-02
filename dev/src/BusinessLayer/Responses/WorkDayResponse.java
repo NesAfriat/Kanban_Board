@@ -23,4 +23,14 @@ public class WorkDayResponse {
         }
         this.date = workDay.getDate();
     }
+
+    public String toString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Date: ").append(date).append("\n");
+        if (morningShift != null)
+            stringBuilder.append("Morning shift details:\n").append(morningShift.toString());
+        if (eveningShift != null)
+            stringBuilder.append("Evening shift details:\n").append(eveningShift.toString());
+        return stringBuilder.toString();
+    }
 }
