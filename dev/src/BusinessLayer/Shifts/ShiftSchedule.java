@@ -10,6 +10,7 @@ public class ShiftSchedule {
 
     public ShiftSchedule(){
         workDays = new HashMap<>();
+
     }
 
     public void addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {

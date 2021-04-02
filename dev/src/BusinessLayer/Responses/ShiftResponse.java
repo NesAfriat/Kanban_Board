@@ -34,7 +34,7 @@ public class ShiftResponse {
         currentWorkers.forEach((job, jobArrangement) -> {
             stringBuilder.append(job).append(":\n");
             for (WorkerResponse workerResponse: jobArrangement.workers){
-                stringBuilder.append("Name: ").append(workerResponse.getName()).append(" || ID: ").append(workerResponse.getId()).append("\n");
+                stringBuilder.append("Name: ").append(workerResponse.getName()).append(" (ID: ").append(workerResponse.getId()).append(")\n");
             }
         });
 

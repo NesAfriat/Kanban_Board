@@ -80,7 +80,13 @@ public class Menu {
         System.out.println("Enter Date <DD/MM/YYYY>: ");
         String date = scanner.next();
         ResponseT<WorkDayResponse> workDay = facade.viewShiftArrangement(date);
-
+        if (workDay.ErrorOccurred()){
+            printPrettyError(workDay.getErrorMessage());
+        }
+        else {
+                printPrettyConfirm(workDay.value.toString());
+        }
+        WorkerMenu();
     }
 
     private static int getUserInput() {
