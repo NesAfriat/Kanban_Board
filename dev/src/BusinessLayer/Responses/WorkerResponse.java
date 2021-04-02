@@ -82,4 +82,8 @@ public class WorkerResponse {
         return this.endWorkingDate;
     }
 
+    public List<ConstraintResponse> getConstraints(){
+        return this.constraints;
+    }
+
 }

@@ -30,6 +30,10 @@ public class WorkerController {
         return this.workersList;
     }
 
+    public Worker getLoggedIn() {
+        return loggedIn;
+    }
+
     public Worker login(String id) throws Exception {
         if (loggedIn != null) throw new Exception("tried to login while another user is already logged in");
         loggedIn = workersList.getWorker(id); // if the id isn't belong to any user this line will throw the right exception.
@@ -70,21 +74,7 @@ public class WorkerController {
 
         return loggedIn.addConstraint(date, st, ct);
     }
+
+
 }
 
-
-
-//     private void isValidDateFormat(String date) throws Exception {
-//        String dateParts[] = date.split("/");
-//        if(dateParts[0].length() != 2) throw new Exception("invalid Date");
-//        if(dateParts[1].length() != 2) throw new Exception("invalid Date");
-//        if(dateParts[2].length() != 4) throw new Exception("invalid Date");
-//        isOnlyNumbers(dateParts[])
-//     }
-//
-//     private boolean isOnlyNumbers(String str){
-//        for(int i = 0; i < str.length(); i++){
-//            if(str.charAt(i) < '0' || str.charAt(i) > '9') return false;
-//        }
-//     }
-//}
