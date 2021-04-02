@@ -49,6 +49,7 @@ public class WorkerController {
         if (!loggedIn.getIsAdmin())
             throw new InnerLogicException("cant add new worker to the system because loggedIn is not admin");
         if (workersList.contains(id)) throw new InnerLogicException("the system already has worker with the ID: " + id);
+        dateValidation(startWorkingDate);
         return workersList.addWorker(isAdmin, name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                 sickDaysPerMonth, startWorkingDate);
     }
