@@ -20,9 +20,11 @@ public class Menu {
             System.exit(0);
         }
         else if (worker.value.getIsAdmin()){
+            System.out.println("im admin");
             AdminMenu(worker);
         }
         else {
+            System.out.println("im not admin");
             WorkerMenu(worker);
         }
     }

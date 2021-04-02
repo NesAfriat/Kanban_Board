@@ -11,6 +11,10 @@ public class WorkerController {
 
     public WorkerController(){
         this.workersList = new WorkersList();
+        try {
+            workersList.addWorker(true, "tsuri", "123", null, 123, null, 1, 1, null);
+            workersList.addWorker(false, "dan", "321", null, 123, null, 1, 1, null);
+        }catch (Exception e ){}
     }
 
     public WorkersList getWorkersList(){
