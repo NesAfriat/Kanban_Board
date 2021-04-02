@@ -6,6 +6,7 @@ import BusinessLayer.Responses.ConstraintResponse;
 import BusinessLayer.Responses.Response;
 import BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Responses.WorkerResponse;
+import BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers.Worker;
 
 public class Facade {
@@ -29,7 +30,8 @@ public class Facade {
 
     public ResponseT<ConstraintResponse> addConstraint(String date, String shiftType, String constraintType){
         try{
-            workerController.addConstraint(date, shiftType, constraintType);
+            Constraint constraint = workerController.addConstraint(date, shiftType, constraintType);
+            return new ResponseT<>(new ConstraintResponse(constraint));
         }catch (Exception e){
             return new ResponseT<>(e.getMessage());
         }

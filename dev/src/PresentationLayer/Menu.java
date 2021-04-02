@@ -19,7 +19,7 @@ public class Menu {
             System.out.println("Invalid ID: " + ID);
             System.exit(0);
         }
-        System.out.println("Hello "+worker.getName()+".");
+        System.out.println("Hello "+worker.value.getName()+".");
         if (worker.value.getIsAdmin()){
             AdminMenu();
         }
@@ -34,7 +34,7 @@ public class Menu {
         System.out.println("3) Add constraint");
         System.out.println("4) Remove constraint");
         System.out.println("5) Exit");
-        System.out.println("Enter option number: ");
+        System.out.print("Option: ");
         int option = scanner.nextInt();
         switch (option){
             case 2:
@@ -47,12 +47,12 @@ public class Menu {
     }
 
     private static void addConstraint() {
-        System.out.println("Enter Date <DD/MM/YY>: ");
-        String date = scanner.nextLine();
+        System.out.println("Enter Date <DD/MM/YYYY>: ");
+        String date = scanner.next();
         System.out.println("Enter Shift Type (Morning/Evening): ");
-        String shiftType = scanner.nextLine();
+        String shiftType = scanner.next();
         System.out.println("Enter Constraint Type (Cant/Want): ");
-        String constraintType = scanner.nextLine();
+        String constraintType = scanner.next();
         ResponseT<ConstraintResponse> constraint = facade.addConstraint(date, shiftType, constraintType);
         if (constraint.ErrorOccurred()){
             System.out.println(constraint.getErrorMessage());
