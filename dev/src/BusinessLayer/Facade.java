@@ -2,6 +2,8 @@ package BusinessLayer;
 
 import BusinessLayer.Controllers.ShiftController;
 import BusinessLayer.Controllers.WorkerController;
+import BusinessLayer.Responses.ConstraintResponse;
+import BusinessLayer.Responses.Response;
 import BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Responses.WorkerResponse;
 import BusinessLayer.Workers.Worker;
@@ -20,6 +22,14 @@ public class Facade {
             Worker worker = workerController.login(id);
             shiftController.login(worker.getIsAdmin());
             return new ResponseT<>(new WorkerResponse(worker));
+        }catch (Exception e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<ConstraintResponse> addConstraint(String date, String shiftType, String constraintType){
+        try{
+            workerController.addConstraint(date, shiftType, constraintType);
         }catch (Exception e){
             return new ResponseT<>(e.getMessage());
         }

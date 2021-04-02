@@ -1,14 +1,14 @@
 package BusinessLayer.Workers;
 import BusinessLayer.Shifts.*;
+import org.omg.CORBA.CODESET_INCOMPATIBLE;
 
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Worker {
     private boolean isAdmin;
     private List<Job> occupations;
-    private List<Constaraint> constaraints;
+    private List<Constraint> constraints;
     private String name;
     private String id;
     private String bankAccount;
@@ -31,33 +31,35 @@ public class Worker {
         this.sickDaysPerMonth = sickDaysPerMonth;
         this.startWorkingDate = startWorkingDate;
         this.endWorkingDate = null;
-        this.constaraints = new LinkedList<>();
+        this.constraints = new LinkedList<>();
         this.occupations = new LinkedList<>();
     }
     public Worker(String name){
         this.name = name;
-        this.constaraints = new LinkedList<>();
+        this.constraints = new LinkedList<>();
         this.occupations = new LinkedList<>();
     }
-    public void addConstraint(String date, ShiftType shiftType, ConstraintType constraintType ) throws Exception {
-        for (Constaraint con: constaraints) {
+    public Constraint addConstraint(String date, ShiftType shiftType, ConstraintType constraintType ) throws Exception {
+        for (Constraint con: constraints) {
             if(con.compareShift(date, shiftType)){
                 throw new Exception("this shift already has constraint");
             }
         }
-        this.constaraints.add(new Constaraint(date, shiftType, constraintType));
+        Constraint con = new Constraint(date, shiftType, constraintType);
+        this.constraints.add(con);
+        return con;
     }
 
     public void removeConstraint(String date, ShiftType shiftType) throws Exception {
-        for (Constaraint con: constaraints) {
+        for (Constraint con: constraints) {
             if(con.compareShift(date, shiftType)){
-                constaraints.remove(con);
+                constraints.remove(con);
             }
         }
     }
 
     public boolean canWorkInShift(String date, ShiftType shiftType){
-        for (Constaraint con: constaraints) {
+        for (Constraint con: constraints) {
             if(con.compareShift(date, shiftType) && con.getConstraintType() == ConstraintType.Cant){
                return false;
             }
@@ -85,7 +87,43 @@ public class Worker {
         return this.name;
     }
 
-//    public void testPrintConstraint(){
-//        System.out.println(constaraints);
-//    }
+    public String getBankAccount(){
+        return this.bankAccount;
+    }
+
+    public double getSalary(){
+        return this.salary;
+    }
+
+    public String getEducationFund(){
+        return this.educationFund;
+    }
+
+    public int getVacationDaysPerMonth(){
+        return this.vacationDaysPerMonth;
+    }
+
+    public int getSickDaysPerMonth(){
+        return this.sickDaysPerMonth;
+    }
+
+    public String getStartWorkingDate(){
+        return this.startWorkingDate;
+    }
+
+    public String getEndWorkingDate(){
+        return this.endWorkingDate;
+    }
+
+    public List<Job> getOccupations(){
+        return new LinkedList<Job>(occupations);
+    }
+
+    public List<Constraint> getConstraints(){
+        LinkedList<Constraint> output =  new LinkedList<Constraint>();
+        for (Constraint constraint: constraints) {
+            output.add(new Constraint(constraint));
+        }
+        return output;
+    }
 }
