@@ -1,5 +1,6 @@
 package BusinessLayer.Shifts;
 
+import BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
 
@@ -17,51 +18,51 @@ public class WorkDay {
         this.date = date;
     }
 
-    public Shift addWorker(Job job, Worker worker, ShiftType shiftType) throws Exception {
+    public Shift addWorker(Job job, Worker worker, ShiftType shiftType) throws InnerLogicException {
         Shift current = getCurrentShift(shiftType);
         if (morningShift != null && morningShift.isWorking(worker)){
-            throw new Exception(worker.toString() + "is already working at this day");
+            throw new InnerLogicException(worker.toString() + "is already working at this day");
         }
         if (eveningShift != null && eveningShift.isWorking(worker)){
-            throw new Exception(worker.toString() + "is already working at this day");
+            throw new InnerLogicException(worker.toString() + "is already working at this day");
         }
         current.addWorker(job, worker);
         return current;
     }
 
-    public Shift removeWorker(Job job, Worker worker, ShiftType shiftType) throws Exception {
+    public Shift removeWorker(Job job, Worker worker, ShiftType shiftType) throws InnerLogicException {
         Shift current = getCurrentShift(shiftType);
         current.removeWorker(job,worker);
         return current;
     }
 
-    public Shift approveShift(ShiftType shiftType) throws Exception {
+    public Shift approveShift(ShiftType shiftType) throws InnerLogicException {
         Shift shift = getCurrentShift(shiftType);
         shift.approveShift();
         return shift;
     }
 
-    public Shift addRequiredJob(Job role, int required, ShiftType shiftType) throws Exception{
+    public Shift addRequiredJob(Job role, int required, ShiftType shiftType) throws InnerLogicException{
         Shift shift = getCurrentShift(shiftType);
         shift.addRequiredJob(role,required);
         return shift;
     }
 
-    public Shift setAmountRequired(Job role, int required, ShiftType shiftType) throws Exception {
+    public Shift setAmountRequired(Job role, int required, ShiftType shiftType) throws InnerLogicException {
         Shift shift = getCurrentShift(shiftType);
         shift.setAmountRequired(role,required);
         return shift;
     }
 
-    public Shift getCurrentShift(ShiftType shiftType) throws Exception {
+    public Shift getCurrentShift(ShiftType shiftType) throws InnerLogicException {
         if (shiftType == ShiftType.Morning){
             if (morningShift == null){
-                throw new Exception("This WorkDay does not have a morning Shift");
+                throw new InnerLogicException("This WorkDay does not have a morning Shift");
             }
             return morningShift;
         }
         if (eveningShift == null){
-            throw new Exception("This WorkDay does not have an evening Shift");
+            throw new InnerLogicException("This WorkDay does not have an evening Shift");
         }
         return eveningShift;
     }

@@ -1,5 +1,6 @@
 package BusinessLayer.Shifts;
 
+import BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
 
@@ -36,43 +37,43 @@ public class Shift {
     }
 
     // assign new worker to the shift
-    public void addWorker(Job role, Worker worker) throws Exception {
+    public void addWorker(Job role, Worker worker) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
 
         if (jobArrangement.amountAssigned == jobArrangement.required){
-            throw new Exception("Reached maximum required, remove worker first.");
+            throw new InnerLogicException("Reached maximum required, remove worker first.");
         }
         jobArrangement.workers.add(worker);
         jobArrangement.amountAssigned++;
     }
 
     // remove worker from the shift
-    public void removeWorker(Job role, Worker worker) throws Exception {
+    public void removeWorker(Job role, Worker worker) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
         if (jobArrangement.workers.remove(worker)){
             jobArrangement.amountAssigned--;
         }
         else {
-            throw new Exception("no such worker working at this position at current shift");
+            throw new InnerLogicException("no such worker working at this position at current shift");
         }
     }
 
     // verify that shift contains the role and return the job arrangement for this role
-    private JobArrangement getJobArrangement(Job role) throws Exception {
+    private JobArrangement getJobArrangement(Job role) throws InnerLogicException {
         JobArrangement jobArrangement = currentWorkers.get(role);
         if (jobArrangement == null){
-            throw new Exception("No such role required for the shift");
+            throw new InnerLogicException("No such role required for the shift");
         }
         return jobArrangement;
     }
 
     // get the amount of required workers for specific role in the shift
-    public int getAmountRequired(Job role) throws Exception {
+    public int getAmountRequired(Job role) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
         return jobArrangement.required;
     }
 
-    public String getCurrentWorkers(Job role) throws Exception {
+    public String getCurrentWorkers(Job role) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
         StringBuilder stringBuilder = new StringBuilder();
         int i = 1;
@@ -84,23 +85,23 @@ public class Shift {
         return stringBuilder.toString();
     }
 
-    public int getCurrentWorkersAmount(Job role) throws Exception {
+    public int getCurrentWorkersAmount(Job role) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
         return jobArrangement.amountAssigned;
     }
 
 
-    public void setAmountRequired(Job role, int required) throws Exception {
+    public void setAmountRequired(Job role, int required) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
         if (jobArrangement.amountAssigned > required){
-            throw new Exception("Can not set required workers to be less than assigned worker. please remove a worker first");
+            throw new InnerLogicException("Can not set required workers to be less than assigned worker. please remove a worker first");
         }
         jobArrangement.required = required;
     }
 
-    public void addRequiredJob(Job role, int required) throws Exception {
+    public void addRequiredJob(Job role, int required) throws InnerLogicException {
         if (currentWorkers.get(role) != null){
-            throw new Exception("This role is already required for the shift");
+            throw new InnerLogicException("This role is already required for the shift");
         }
         currentWorkers.put(role, new JobArrangement(required));
     }
@@ -109,10 +110,10 @@ public class Shift {
         return approved;
     }
 
-    public void approveShift() throws Exception {
+    public void approveShift() throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(Job.Shift_Manager);
         if (jobArrangement.amountAssigned != 1){
-            throw new Exception("Can not approve a shift without a shift manager");
+            throw new InnerLogicException("Can not approve a shift without a shift manager");
         }
         approved = true;
     }
