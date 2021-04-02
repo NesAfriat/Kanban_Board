@@ -11,9 +11,9 @@ public class Facade {
     private ShiftController shiftController;
     public ResponseT<WorkerResponse> login(String id){
         try {
-            Worker loggedid = workerController.login(id);
-            shiftController.login(loggedid.getIsAdmin());
-            return new ResponseT<>(new WorkerResponse(loggedid));
+            Worker worker = workerController.login(id);
+            shiftController.login(worker.getIsAdmin());
+            return new ResponseT<>(new WorkerResponse(worker));
         }catch (Exception e){
             return new ResponseT<>(e.getMessage());
         }

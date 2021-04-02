@@ -1,10 +1,9 @@
 package BusinessLayer.Responses;
 
 public class ResponseT<T> extends Response {
-    private final T value;
+    public T value;
     public ResponseT(String errorMessage) {
         super(errorMessage);
-        value = null;
     }
 
     public ResponseT(T value) {
