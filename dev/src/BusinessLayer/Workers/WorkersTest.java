@@ -14,6 +14,7 @@ public class WorkersTest {
         try {
             worker.addConstraint("1/1/2000", ShiftType.Morning, ConstraintType.Cant);
             //worker.testPrintConstraint();
+            System.out.println("Asd");
         }catch (Exception e){
             System.out.println(e.getMessage());
         }

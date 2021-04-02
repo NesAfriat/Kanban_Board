@@ -10,10 +10,20 @@ public class ShiftController {
     private WorkDay currentDay;
     private ShiftType currentShiftType;
     private WorkersList workers;
+    private boolean isAdminAuthoried;
 
     public ShiftController(WorkersList workers){
         this.workers = workers;
         calendar = new ShiftSchedule();
+        isAdminAuthoried = false;
+    }
+
+    public void login(boolean isAdminAuthoried){
+        this.isAdminAuthoried = isAdminAuthoried;
+    }
+
+    public void logout(){
+        this.isAdminAuthoried = false;
     }
 
     public void setWorkDay(String date) throws Exception {
