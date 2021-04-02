@@ -8,6 +8,16 @@ import java.util.Scanner;
 
 
 public class Menu {
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_BLACK = "\u001B[30m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_WHITE = "\u001B[37m";
+
     private static final Scanner scanner = new Scanner(System.in);;
     private static final Facade facade = new Facade();
 
@@ -16,7 +26,7 @@ public class Menu {
         String ID = scanner.nextLine();
         ResponseT<WorkerResponse> worker = facade.login(ID);
         if (worker.ErrorOccurred()){
-            System.out.println("Invalid ID: " + ID);
+            System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
             System.exit(0);
         }
         System.out.println("Hello "+worker.value.getName()+".");
@@ -55,7 +65,7 @@ public class Menu {
         String constraintType = scanner.next();
         ResponseT<ConstraintResponse> constraint = facade.addConstraint(date, shiftType, constraintType);
         if (constraint.ErrorOccurred()){
-            System.out.println(constraint.getErrorMessage());
+            System.out.println(ANSI_RED + constraint.getErrorMessage() + ANSI_RESET);
         }
         else {
             System.out.println("Constraint added successfully");
