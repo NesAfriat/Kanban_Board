@@ -44,4 +44,13 @@ public class Facade {
         }
     }
 
+    public ResponseT<ConstraintResponse> removeConstraint(String date, String shiftType) {
+        try{
+            Constraint constraint = workerController.removeConstraint(date, shiftType);
+            return new ResponseT<>(new ConstraintResponse(constraint));
+        }
+        catch (Exception e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
 }
