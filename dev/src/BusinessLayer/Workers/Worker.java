@@ -50,12 +50,16 @@ public class Worker {
         return con;
     }
 
-    public void removeConstraint(String date, ShiftType shiftType) throws Exception {
+    public Constraint removeConstraint(String date, ShiftType shiftType) throws Exception {
+        Constraint output = null;
         for (Constraint con: constraints) {
             if(con.compareShift(date, shiftType)){
+                output = con;
                 constraints.remove(con);
             }
         }
+        if(output == null) throw new Exception("tried to remove non-existing constraint");
+        return output;
     }
 
     public boolean canWorkInShift(String date, ShiftType shiftType){

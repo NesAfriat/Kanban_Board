@@ -52,16 +52,25 @@ public class WorkerController {
     }
 
     public Constraint addConstraint(String date, String shiftType, String constraintType) throws Exception {
+        if(loggedIn == null) throw new Exception("tried to add constraint but no user was logged in");
         ShiftType st;
         ConstraintType ct;
 
-        if (shiftType.equals("Morning")) st = ShiftType.Morning;
-        else if (shiftType.equals("Evening")) st = ShiftType.Evening;
-        else throw new Exception("invalid shift type");
+        dateValidation(date);
+        st = parseShiftType(shiftType);
+        ct = parseConstraintType(constraintType);
 
-        if (constraintType.equals("Cant")) ct = ConstraintType.Cant;
-        else if (constraintType.equals("Want")) ct = ConstraintType.Want;
-        else throw new Exception("invalid constraint type");
+        return loggedIn.addConstraint(date, st, ct);
+    }
+
+    public Constraint removeConstraint(String date, String shiftType) throws Exception {
+        if(loggedIn == null) throw new Exception("tried to remove constraint but no user was logged in");
+        dateValidation(date);
+        ShiftType st = parseShiftType(shiftType);
+        return loggedIn.removeConstraint(date, st);
+    }
+
+    private void dateValidation(String date) throws Exception {
         String result;
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -71,9 +80,20 @@ public class WorkerController {
             throw new Exception("invalid date");
         }
         if (!result.equals(date)) throw new Exception("invalid date");
-
-        return loggedIn.addConstraint(date, st, ct);
     }
+
+    private ShiftType parseShiftType(String shiftType) throws Exception {
+        if (shiftType.equals("Morning")) return ShiftType.Morning;
+        else if (shiftType.equals("Evening")) return ShiftType.Evening;
+        else throw new Exception("invalid shift type");
+    }
+
+    private ConstraintType parseConstraintType(String constraintType) throws Exception {
+        if (constraintType.equals("Cant")) return ConstraintType.Cant;
+        else if (constraintType.equals("Want")) return ConstraintType.Want;
+        else throw new Exception("invalid constraint type");
+    }
+
 
 
 }
