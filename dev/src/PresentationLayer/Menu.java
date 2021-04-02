@@ -3,7 +3,9 @@ import BusinessLayer.Facade;
 import BusinessLayer.Responses.ConstraintResponse;
 import BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Responses.WorkerResponse;
+import BusinessLayer.Shifts.WorkDay;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,7 +32,7 @@ public class Menu {
             System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
             System.exit(0);
         }
-        System.out.println("Hello "+worker.value.getName()+".");
+        printPrettyConfirm("Hello, "+worker.value.getName()+"!");
         facade.addConstraint("01/02/2020", "Morning", "Cant");
         facade.addConstraint("01/02/2020", "Evening", "Cant");
         facade.addConstraint("24/04/2020", "Morning", "Want");
@@ -50,8 +52,11 @@ public class Menu {
         System.out.println("4) Remove constraint");
         System.out.println("5) Exit");
         System.out.print("Option: ");
-        int option = scanner.nextInt();
+        int option = getUserInput();
         switch (option){
+            case 1:
+                viewShiftArrangement();
+                break;;
             case 2:
                 viewWorkerConstraints();
                 break;
@@ -63,8 +68,29 @@ public class Menu {
                 break;
             case 5:
                 System.exit(0);
-            }
+            default:
+                System.out.println("No such option");
+                WorkerMenu();
+        }
 
+    }
+
+    private static void viewShiftArrangement() {
+        System.out.println("Enter Date <DD/MM/YYYY>: ");
+        String date = scanner.next();
+        ResponseT<WorkDayResponse> workDay = facade.viewShiftArrangement(date);
+
+    }
+
+    private static int getUserInput() {
+        int option = 0;
+        try {
+            option = scanner.nextInt();
+        }
+        catch (InputMismatchException e){
+            getUserInput();
+        }
+        return option;
     }
 
     private static void removeConstraint() {
@@ -77,11 +103,13 @@ public class Menu {
             printPrettyError(constraint.getErrorMessage());
         }
         else {
-            System.out.println("Constraint removed successfully, details: ");
-            System.out.println(constraint.value);
+            printPrettyConfirm("Constraint removed successfully, details: ");
+            printPrettyConfirm(constraint.value.toString());
         }
         WorkerMenu();
     }
+
+
 
     private static void addConstraint() {
         System.out.println("Enter Date <DD/MM/YYYY>: ");
@@ -95,15 +123,13 @@ public class Menu {
             printPrettyError(constraint.getErrorMessage());
         }
         else {
-            System.out.println("Constraint added successfully, details: ");
-            System.out.println(constraint.value);
+            printPrettyConfirm("Constraint added successfully, details: ");
+            printPrettyConfirm(constraint.value.toString());
         }
         WorkerMenu();
     }
 
-    private static void printPrettyError(String errorMessage) {
-        System.out.println(ANSI_RED + errorMessage + ANSI_RESET);
-    }
+
 
     private static void viewWorkerConstraints() {
         ResponseT<WorkerResponse> worker = facade.getLoggedWorker();
@@ -113,7 +139,7 @@ public class Menu {
         else {
             List<ConstraintResponse> constraintResponseList = worker.value.getConstraints();
             for (ConstraintResponse constraint: constraintResponseList){
-                System.out.println(constraint.toString());
+                printPrettyConfirm(constraint.toString());
             }
         }
         WorkerMenu();
@@ -122,5 +148,13 @@ public class Menu {
 
     private static void AdminMenu() {
 
+    }
+
+    private static void printPrettyConfirm(String message) {
+        System.out.println(ANSI_BLUE + message + ANSI_RESET);
+    }
+
+    private static void printPrettyError(String errorMessage) {
+        System.out.println(ANSI_RED + errorMessage + ANSI_RESET);
     }
 }
