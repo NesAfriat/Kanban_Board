@@ -20,7 +20,7 @@ public class Constraint {
     }
 
     public boolean compareShift(String date, ShiftType shiftType){
-        return (date.equals(date) && this.shiftType == shiftType);
+        return (this.date.equals(date) && this.shiftType == shiftType);
     }
 
     public ConstraintType getConstraintType() {
