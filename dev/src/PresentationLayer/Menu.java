@@ -3,6 +3,7 @@ import BusinessLayer.Facade;
 import BusinessLayer.Responses.ConstraintResponse;
 import BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Responses.WorkerResponse;
+import BusinessLayer.Shifts.WorkDay;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -77,6 +78,7 @@ public class Menu {
     private static void viewShiftArrangement() {
         System.out.println("Enter Date <DD/MM/YYYY>: ");
         String date = scanner.next();
+        ResponseT<WorkDayResponse> workDay = facade.viewShiftArrangement(date);
 
     }
 
