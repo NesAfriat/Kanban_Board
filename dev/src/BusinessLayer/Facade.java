@@ -66,5 +66,16 @@ public class Facade {
         }
     }
 
+    public ResponseT<WorkerResponse> addWorker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
+                            int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate){
+        try{
+            Worker newWorker = workerController.addWorker(isAdmin, name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
+                    sickDaysPerMonth, startWorkingDate);
+            return new ResponseT<>(new WorkerResponse(newWorker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
 
 }

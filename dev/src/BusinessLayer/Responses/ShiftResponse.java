@@ -37,7 +37,6 @@ public class ShiftResponse {
                 stringBuilder.append("Name: ").append(workerResponse.getName()).append(" (ID: ").append(workerResponse.getId()).append(")\n");
             }
         });
-
         return stringBuilder.toString();
     }
 
