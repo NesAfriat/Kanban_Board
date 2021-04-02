@@ -9,6 +9,12 @@ import BusinessLayer.Workers.Worker;
 public class Facade {
     private WorkerController workerController;
     private ShiftController shiftController;
+
+    public Facade(){
+        this.workerController = new WorkerController();
+        this.shiftController = new ShiftController(workerController.getWorkersList());
+    }
+
     public ResponseT<WorkerResponse> login(String id){
         try {
             Worker loggedid = workerController.login(id);
@@ -18,4 +24,5 @@ public class Facade {
             return new ResponseT<>(e.getMessage());
         }
     }
+
 }
