@@ -26,6 +26,16 @@ public class Facade {
         }
     }
 
+    public Response logout(){
+        try {
+            workerController.logout();
+            shiftController.logout();
+            return new Response();
+        }catch (InnerLogicException e){
+            return new Response(e.getMessage());
+        }
+    }
+
     public ResponseT<WorkerResponse> getLoggedWorker(){
         try{
             return new ResponseT<WorkerResponse>(new WorkerResponse(workerController.getLoggedIn()));

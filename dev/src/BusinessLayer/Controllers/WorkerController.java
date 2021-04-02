@@ -42,6 +42,11 @@ public class WorkerController {
         return loggedIn;
     }
 
+    public void logout() throws InnerLogicException {
+        if(loggedIn == null) throw new InnerLogicException("tried to log out but no worker was logged in");
+        loggedIn = null;
+    }
+
     public Worker addWorker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
                           int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
 
