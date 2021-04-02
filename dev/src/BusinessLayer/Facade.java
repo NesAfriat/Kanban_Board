@@ -27,6 +27,14 @@ public class Facade {
         }
     }
 
+    public ResponseT<WorkerResponse> getLoggedWorker(){
+        try{
+            return new ResponseT<WorkerResponse>(new WorkerResponse(workerController.getLoggedIn()));
+        }catch (Exception e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
     public ResponseT<ConstraintResponse> addConstraint(String date, String shiftType, String constraintType){
         try{
             Constraint constraint = workerController.addConstraint(date, shiftType, constraintType);
