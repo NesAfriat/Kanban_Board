@@ -31,6 +31,10 @@ public class Menu {
             System.exit(0);
         }
         System.out.println("Hello "+worker.value.getName()+".");
+        facade.addConstraint("01/02/2020", "Morning", "Cant");
+        facade.addConstraint("01/02/2020", "Evening", "Cant");
+        facade.addConstraint("24/04/2020", "Morning", "Want");
+        facade.addConstraint("01/04/2020", "Morning", "Want");
         if (worker.value.getIsAdmin()){
             AdminMenu();
         }
@@ -74,7 +78,7 @@ public class Menu {
         }
         else {
             System.out.println("Constraint removed successfully, details: ");
-            System.out.println(constraint);
+            System.out.println(constraint.value);
         }
         WorkerMenu();
     }
@@ -91,7 +95,8 @@ public class Menu {
             printPrettyError(constraint.getErrorMessage());
         }
         else {
-            System.out.println("Constraint added successfully");
+            System.out.println("Constraint added successfully, details: ");
+            System.out.println(constraint.value);
         }
         WorkerMenu();
     }
@@ -108,7 +113,7 @@ public class Menu {
         else {
             List<ConstraintResponse> constraintResponseList = worker.value.getConstraints();
             for (ConstraintResponse constraint: constraintResponseList){
-                System.out.println(constraint);
+                System.out.println(constraint.toString());
             }
         }
         WorkerMenu();
