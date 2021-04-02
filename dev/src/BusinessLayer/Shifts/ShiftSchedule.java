@@ -19,6 +19,7 @@ public class ShiftSchedule {
         WorkDay workDay = new WorkDay(hasMorningShift,hasEveningShift,date);
         workDays.put(date,workDay);
     }
+
     public WorkDay getWorkDay(String date) throws InnerLogicException {
         WorkDay workDay = workDays.get(date);
         if (workDay == null){
@@ -26,4 +27,5 @@ public class ShiftSchedule {
         }
         return workDay;
     }
+
 }

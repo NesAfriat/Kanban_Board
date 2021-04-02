@@ -1,9 +1,14 @@
 package BusinessLayer.Controllers;
 
+import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.ShiftSchedule;
 import BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers.WorkersList;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class ShiftController {
     private ShiftSchedule calendar;
@@ -26,8 +31,13 @@ public class ShiftController {
         this.isAdminAuthoried = false;
     }
 
-    public void setWorkDay(String date) throws Exception {
+    public void setCurrentDay(String date) throws Exception {
         currentDay = calendar.getWorkDay(date);
+    }
+
+    public WorkDay getWorkDay(String date) throws InnerLogicException {
+        dateValidation(date);
+        return calendar.getWorkDay(date);
     }
 
     public void setCurrentShiftType(String shiftType){
@@ -35,6 +45,18 @@ public class ShiftController {
             currentShiftType = ShiftType.Morning;
         else
             currentShiftType = ShiftType.Evening;
+    }
+
+    private void dateValidation(String date) throws InnerLogicException {
+        String result;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(date, formatter);
+            result = localDate.format(formatter);
+        } catch (DateTimeParseException e) {
+            throw new InnerLogicException("invalid date");
+        }
+        if (!result.equals(date)) throw new InnerLogicException("invalid date");
     }
 
 
