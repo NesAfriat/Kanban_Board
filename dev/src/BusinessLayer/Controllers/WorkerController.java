@@ -19,8 +19,8 @@ public class WorkerController {
         this.workersList = new WorkersList();
         //this is for testing TODO: remove this.
         try {
-            workersList.addWorker(true, "tsuri", "123", null, 123, null, 1, 1, null);
-            workersList.addWorker(false, "dan", "321", null, 123, null, 1, 1, null);
+            workersList.addWorker(true, "tsuri", "123", "a", 123, "a", 1, 1, "a");
+            workersList.addWorker(false, "dan", "321", "a", 123, "a", 1, 1, "a");
 
         } catch (Exception e) {
         }

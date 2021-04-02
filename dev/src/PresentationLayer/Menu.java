@@ -1,12 +1,6 @@
 package PresentationLayer;
 import BusinessLayer.Facade;
-import BusinessLayer.Responses.ConstraintResponse;
-import BusinessLayer.Responses.ResponseT;
-import BusinessLayer.Responses.WorkDayResponse;
-import BusinessLayer.Responses.WorkerResponse;
-import BusinessLayer.Shifts.WorkDay;
-import BusinessLayer.Workers.Worker;
-
+import BusinessLayer.Responses.*;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -35,10 +29,12 @@ public class Menu {
             System.exit(0);
         }
         printPrettyConfirm("Hello, "+worker.value.getName()+"!");
-        facade.addConstraint("01/02/2020", "Morning", "Cant");
-        facade.addConstraint("01/02/2020", "Evening", "Cant");
-        facade.addConstraint("24/04/2020", "Morning", "Want");
-        facade.addConstraint("01/04/2020", "Morning", "Want");
+        if (args != null) {
+            facade.addConstraint("01/02/2020", "Morning", "Cant");
+            facade.addConstraint("01/02/2020", "Evening", "Cant");
+            facade.addConstraint("24/04/2020", "Morning", "Want");
+            facade.addConstraint("01/04/2020", "Morning", "Want");
+        }
         if (worker.value.getIsAdmin()){
             AdminMenu();
         }
@@ -52,7 +48,8 @@ public class Menu {
         System.out.println("2) View constraints");
         System.out.println("3) Add constraint");
         System.out.println("4) Remove constraint");
-        System.out.println("5) Exit");
+        System.out.println("5) Logout");
+        System.out.println("6) Exit");
         System.out.print("Option: ");
         int option = getUserInput();
         switch (option){
@@ -69,12 +66,25 @@ public class Menu {
                 removeConstraint();
                 break;
             case 5:
+                LogOut();
+                break;
+            case 6:
                 System.exit(0);
             default:
                 System.out.println("No such option");
                 WorkerMenu();
         }
 
+    }
+
+    private static void LogOut() {
+        Response logout = facade.logout();
+        if (logout.ErrorOccurred())
+            printPrettyError(logout.getErrorMessage());
+        else {
+            printPrettyConfirm("Logout succeed");
+        }
+        main(null);
     }
 
     private static void viewShiftAsAdmin(){
@@ -165,7 +175,8 @@ public class Menu {
     private static void AdminMenu() {
         System.out.println("1) View shift arrangement");
         System.out.println("2) Manage Workers");
-        System.out.println("2) Manage Shifts");
+        System.out.println("3) Manage Shifts");
+        System.out.println("4) Logout");
         System.out.println("5) Exit");
         System.out.print("Option: ");
         int option = getUserInput();
@@ -177,7 +188,9 @@ public class Menu {
                 WorkersManageMenu();
                 break;
             case 3:
+                break;
             case 4:
+                LogOut();
                 break;
             case 5:
                 System.exit(0);
