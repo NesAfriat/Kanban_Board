@@ -5,6 +5,7 @@ import BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Responses.WorkDayResponse;
 import BusinessLayer.Responses.WorkerResponse;
 import BusinessLayer.Shifts.WorkDay;
+import BusinessLayer.Workers.Worker;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -76,6 +77,15 @@ public class Menu {
 
     }
 
+    private static void viewShiftAsAdmin(){
+        viewShiftArrangement();
+        AdminMenu();
+    }
+
+    private static void viewShiftAsWorker(){
+        viewShiftArrangement();
+        WorkerMenu();
+    }
     private static void viewShiftArrangement() {
         System.out.println("Enter Date <DD/MM/YYYY>: ");
         String date = scanner.next();
@@ -86,7 +96,6 @@ public class Menu {
         else {
                 printPrettyConfirm(workDay.value.toString());
         }
-        WorkerMenu();
     }
 
     private static int getUserInput() {
@@ -154,7 +163,85 @@ public class Menu {
     }
 
     private static void AdminMenu() {
+        System.out.println("1) View shift arrangement");
+        System.out.println("2) Manage Workers");
+        System.out.println("2) Manage Shifts");
+        System.out.println("5) Exit");
+        System.out.print("Option: ");
+        int option = getUserInput();
+        switch (option){
+            case 1:
+                viewShiftArrangement();
+                break;
+            case 2:
+                WorkersManageMenu();
+                break;
+            case 3:
+            case 4:
+                break;
+            case 5:
+                System.exit(0);
+            default:
+                System.out.println("No such option");
+                AdminMenu();
+        }
+    }
 
+    private static void WorkersManageMenu() {
+        System.out.println("1) Add Worker");
+        System.out.println("2) Fire Worker");
+        System.out.println("3) Get Worker");
+        System.out.println("5) Previous");
+        System.out.print("Option: ");
+        int option = getUserInput();
+        switch (option){
+            case 1:
+                AddWorker();
+                break;
+            case 2:
+                WorkersManageMenu();
+                break;
+            case 3:
+            case 4:
+                break;
+            case 5:
+                System.exit(0);
+            default:
+                System.out.println("No such option");
+                AdminMenu();
+        }
+    }
+
+    /*
+    boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
+                  int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate){
+     */
+    private static void AddWorker() {
+        System.out.println("ID:");
+        String ID = scanner.next();
+        System.out.println("Name:");
+        String name = scanner.next();
+        System.out.println("Bank Account:");
+        String bankAccount = scanner.next();
+        System.out.println("Salary: ");
+        double salary = scanner.nextDouble();
+        System.out.println("Education Fund:");
+        String educationFund = scanner.next();
+        System.out.println("Vacation Days Per Month:");
+        int vacationDaysPerMonth = scanner.nextInt();
+        System.out.println("Sick Days Per Month:");
+        int sickDaysPerMonth = scanner.nextInt();
+        System.out.println("Enter Start Working Date <DD/MM/YYYY>: ");
+        String date = scanner.next();
+        ResponseT<WorkerResponse> workerResponse = facade.addWorker(false, name, ID, bankAccount, salary, educationFund, vacationDaysPerMonth, sickDaysPerMonth, date);
+        if (workerResponse.ErrorOccurred()){
+            printPrettyError(workerResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("Worker added successfully to the system, details: ");
+            printPrettyConfirm(workerResponse.value.toString());
+        }
+        AdminMenu();
     }
 
     private static void printPrettyConfirm(String message) {
