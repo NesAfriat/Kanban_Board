@@ -17,7 +17,23 @@ public class Menu {
     private static final Scanner scanner = new Scanner(System.in);;
     private static final Facade facade = new Facade();
 
+    private static void testingDataUpload(){
+        facade.login("1");
+        facade.addWorker(false, "dan", "2", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "rami", "3", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "lidor", "3", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorkDay(true, true, "01/01/2000");
+        facade.addWorkDay(true, false, "02/01/2000");
+        facade.addOccupationToWorker("2", "Shift_Manager");
+        facade.addOccupationToWorker("3", "Cashier");
+        facade.logout();
+        facade.login("2");
+        facade.addConstraint("01/01/2000","Morning", "Cant");
+        facade.logout();
+    }
+
     public static void main(String[] args){
+        testingDataUpload();
         System.out.println("Enter ID number for login: ");
         String ID = scanner.next();
         ResponseT<WorkerResponse> worker = facade.login(ID);
@@ -26,12 +42,6 @@ public class Menu {
             System.exit(0);
         }
         printPrettyConfirm("Hello, "+worker.value.getName()+"!");
-        if (args != null) {
-            facade.addConstraint("01/02/2020", "Morning", "Cant");
-            facade.addConstraint("01/02/2020", "Evening", "Cant");
-            facade.addConstraint("24/04/2020", "Morning", "Want");
-            facade.addConstraint("01/04/2020", "Morning", "Want");
-        }
         if (worker.value.getIsAdmin()){
             AdminMenu();
         }

@@ -58,6 +58,12 @@ public class ShiftController {
         return calendar.getWorkDay(date);
     }
 
+    public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
+        throwIfNotAdmin();
+        dateValidation(date);
+        return calendar.addWorkDay(hasMorningShift, hasEveningShift, date);
+    }
+
 
     public void setCurrentShiftType(String shiftType) throws InnerLogicException {
         currentShiftType = parseShiftType(shiftType);
@@ -107,7 +113,7 @@ public class ShiftController {
     }
 
     private void throwIfNotAdmin() throws InnerLogicException {
-        if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shift");
+        if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");
     }
 
     private ShiftType parseShiftType(String shiftType) throws InnerLogicException {

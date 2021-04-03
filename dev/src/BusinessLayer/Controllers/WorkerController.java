@@ -30,7 +30,7 @@ public class WorkerController {
 
         //this is for testing TODO: remove this.
         try {
-            workersList.addWorker(true, "tsuri", "123", "a", 123, "a", 1, 1, "a");
+            workersList.addWorker(true, "tsuri", "1", "a", 123, "a", 1, 1, "a");
         } catch (Exception e) {
         }
         //TODO: remove until here
@@ -97,7 +97,7 @@ public class WorkerController {
     }
 
     public Worker addOccupation(String id, String job) throws InnerLogicException {
-        if(!loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
+        if(loggedIn == null || !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
         Job role = parseJob(job);
         Worker worker = workersList.getWorker(id);
         worker.addOccupation(role);
@@ -105,7 +105,7 @@ public class WorkerController {
     }
 
     public Worker removeOccupation(String id, String job) throws InnerLogicException {
-        if(!loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
+        if(loggedIn == null || !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
         Job role = parseJob(job);
         Worker worker = workersList.getWorker(id);
         worker.removeOccupation(role);
