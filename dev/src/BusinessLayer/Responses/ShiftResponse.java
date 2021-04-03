@@ -33,6 +33,7 @@ public class ShiftResponse {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Shift approved: ").append(approved).append("\n");
         currentWorkers.forEach((job, jobArrangement) -> {
             stringBuilder.append(job).append(":\n");
             for (WorkerResponse workerResponse: jobArrangement.workers){

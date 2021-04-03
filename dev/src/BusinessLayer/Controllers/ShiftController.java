@@ -45,9 +45,9 @@ public class ShiftController {
             calendar.addWorkDay(true, true, "01/02/2020");
             calendar.addWorkDay(true, false, "02/02/2020");
             calendar.addWorkDay(false, false, "03/02/2020");
-            calendar.getWorkDay("01/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("321"), ShiftType.Evening);
-            calendar.getWorkDay("01/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("123"), ShiftType.Morning);
-            calendar.getWorkDay("02/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("321"), ShiftType.Morning);
+            //calendar.getWorkDay("01/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("321"), ShiftType.Evening);
+           // calendar.getWorkDay("01/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("123"), ShiftType.Morning);
+          //  calendar.getWorkDay("02/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("321"), ShiftType.Morning);
             //calendar.getWorkDay("03/02/2020").addWorker(Job.Shift_Manager, workers.getWorker("321"), ShiftType.Evening);
         }
         catch (Exception ignored) {
@@ -145,8 +145,16 @@ public class ShiftController {
 
     public Shift getCurrentShift() throws InnerLogicException {
         if (currentDay == null){
+            throw new InnerLogicException("There's no current date");
+        }
+        if (currentShiftType == null){
             throw new InnerLogicException("There's no current shift");
         }
         return currentDay.getCurrentShift(currentShiftType);
+    }
+
+    public void clearCurrentShift() {
+        currentDay = null;
+        currentShiftType = null;
     }
 }
