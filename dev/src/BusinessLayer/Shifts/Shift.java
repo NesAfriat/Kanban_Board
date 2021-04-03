@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Shift {
 
@@ -37,12 +38,12 @@ public class Shift {
         jobArrangement.amountAssigned++;
     }
 
-    // remove worker from the shift
-    // TODO: if removed manager change approved to false
     public void removeWorker(Job role, Worker worker) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
         if (jobArrangement.workers.remove(worker)){
             jobArrangement.amountAssigned--;
+            if (role == Job.Shift_Manager)
+                approved = false;
         }
         else {
             throw new InnerLogicException("no such worker working at this position at current shift");
@@ -53,7 +54,7 @@ public class Shift {
     private JobArrangement getJobArrangement(Job role) throws InnerLogicException {
         JobArrangement jobArrangement = currentWorkers.get(role);
         if (jobArrangement == null){
-            throw new InnerLogicException("No such role required for the shift");
+            throw new InnerLogicException("No such role existing the shift");
         }
         return jobArrangement;
     }
@@ -110,6 +111,17 @@ public class Shift {
             }
         });
         return working.get();
+    }
+
+    Job getWorkerRole(Worker worker){
+        AtomicReference<Job> role = new AtomicReference<>();
+        role.set(null);
+        currentWorkers.forEach((job, jobArrangement) -> {
+            if (jobArrangement.workers.contains(worker)) {
+                role.set(job);
+            }
+        });
+        return role.get();
     }
 
     public List<Job> getJobs() {

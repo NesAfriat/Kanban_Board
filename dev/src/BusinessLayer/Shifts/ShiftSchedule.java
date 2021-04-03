@@ -2,7 +2,11 @@ package BusinessLayer.Shifts;
 
 import BusinessLayer.InnerLogicException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 public class ShiftSchedule {
@@ -29,4 +33,16 @@ public class ShiftSchedule {
         return workDay;
     }
 
+    public List<WorkDay> getWorkDaysFrom(String date) {
+        List<WorkDay> futureDays = new LinkedList<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        workDays.forEach((key, workDay) -> {
+            LocalDate inputDate = LocalDate.parse(date, formatter);
+            LocalDate keyDate = LocalDate.parse(key, formatter);
+            if (keyDate.isAfter(inputDate)){
+                futureDays.add(workDay);
+            }
+        });
+        return futureDays;
+    }
 }
