@@ -80,6 +80,7 @@ public class Shift {
         if (jobArrangement.amountAssigned > required){
             throw new InnerLogicException("Can not set required workers to be less than assigned worker. please remove a worker first");
         }
+        if(role.equals(Job.Shift_Manager)) throw new InnerLogicException("Can not change shift manager required amount");
         jobArrangement.required = required;
     }
 
