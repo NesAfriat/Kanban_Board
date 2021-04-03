@@ -91,6 +91,7 @@ public class Facade {
         try{
             Worker firedWorker = workerController.fireWorker(id, endWorkingDate);
             shiftController.removeFromFutureShifts(firedWorker, firedWorker.getEndWorkingDate());
+            return new ResponseT<>(new WorkerResponse(firedWorker));
         }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
