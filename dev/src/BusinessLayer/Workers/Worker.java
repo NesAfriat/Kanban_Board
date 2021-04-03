@@ -77,7 +77,7 @@ public class Worker {
     }
 
     public boolean canWorkInJob(Job job){
-        return occupations.contains(job) && endWorkingDate != null;
+        return occupations.contains(job) && endWorkingDate == null;
     }
 
     public void addOccupation(Job job) throws InnerLogicException {
