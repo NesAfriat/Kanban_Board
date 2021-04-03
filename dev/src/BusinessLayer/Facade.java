@@ -169,7 +169,7 @@ public class Facade {
 
     }
 
-    public ResponseT<ShiftResponse> approveShift() throws InnerLogicException {
+    public ResponseT<ShiftResponse> approveShift() {
         try {
             Shift shift = shiftController.approveShift();
             return new ResponseT<>(new ShiftResponse(shift));
@@ -190,5 +190,14 @@ public class Facade {
     public Response exitShift() {
         shiftController.clearCurrentShift();
         return new Response();
+    }
+
+    public ResponseT<ShiftResponse> removeWorkerFromCurrentShift(String id, String role) {
+        try {
+            Shift shift = shiftController.removeWorkerFromCurrentShift(id, role);
+            return new ResponseT<>(new ShiftResponse(shift));
+        } catch (InnerLogicException e) {
+            return new ResponseT<>(e.getMessage());
+        }
     }
 }
