@@ -56,7 +56,7 @@ public class Menu {
         int option = getUserInput();
         switch (option){
             case 1:
-                viewShiftArrangement();
+                viewShiftAsWorker();
                 break;
             case 2:
                 viewWorkerConstraints();
@@ -184,7 +184,7 @@ public class Menu {
         int option = getUserInput();
         switch (option){
             case 1:
-                viewShiftArrangement();
+                viewShiftAsAdmin();
                 break;
             case 2:
                 WorkersManageMenu();
@@ -243,7 +243,18 @@ public class Menu {
 
     //TODO
     private static void FireWorker(){
-
+        System.out.print("Worker ID: ");
+        String ID = scanner.next();
+        System.out.println("Enter end working date <DD/MM/YYYY>: ");
+        String date = scanner.next();
+        ResponseT<WorkerResponse> workerResponse = facade.fireWorker(ID, date);
+        if (workerResponse.ErrorOccurred()){
+            printPrettyError(workerResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("Worker fired successfully, details: ");
+            printPrettyConfirm(workerResponse.value.toString());
+        }
     }
 
 

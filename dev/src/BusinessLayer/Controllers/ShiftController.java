@@ -76,6 +76,15 @@ public class ShiftController {
             currentShiftType = ShiftType.Evening;
     }
 
+    public Worker removeFromFutureShifts(Worker worker, String date) throws InnerLogicException {
+        dateValidation(date);
+        List<WorkDay> workDays = calendar.getWorkDaysFrom(date);
+        for (WorkDay workDay: workDays) {
+            workDay.removeFromFutureShifts(worker);
+        }
+        return worker;
+    }
+
     public List<Worker> getAvailableWorkers(String job) throws InnerLogicException {
 
         Job role = parseJob(job);

@@ -73,6 +73,21 @@ public class WorkDay {
         return eveningShift;
     }
 
+    public void removeFromFutureShifts(Worker worker) throws InnerLogicException {
+        if (morningShift != null){
+            Job role = morningShift.getWorkerRole(worker);
+            if (role != null){
+                morningShift.removeWorker(role,worker);
+            }
+        }
+        if (eveningShift != null){
+            Job role = eveningShift.getWorkerRole(worker);
+            if (role != null){
+                eveningShift.removeWorker(role,worker);
+            }
+        }
+    }
+
     public Shift getEveningShift() {
         return eveningShift;
     }
