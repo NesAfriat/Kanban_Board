@@ -42,11 +42,11 @@ public class WorkDay {
         return current;
     }
 
-    public Shift approveShift(ShiftType shiftType) throws InnerLogicException {
-        Shift shift = getCurrentShift(shiftType);
-        shift.approveShift();
-        return shift;
-    }
+//    public Shift approveShift(ShiftType shiftType) throws InnerLogicException {
+//        Shift shift = getCurrentShift(shiftType);
+//        shift.approveShift();
+//        return shift;
+//    }
 
     public Shift addRequiredJob(Job role, int required, ShiftType shiftType) throws InnerLogicException{
         Shift shift = getCurrentShift(shiftType);
