@@ -155,8 +155,23 @@ public class Facade {
             Shift shift = shiftController.getCurrentShift();
             return new ResponseT<>(new ShiftResponse(shift));
         } catch (InnerLogicException e) {
+            shiftController.clearCurrentShift();
             return new ResponseT<>(e.getMessage());
         }
 
+    }
+
+    public ResponseT<ShiftResponse> viewCurrentArrangement() {
+        try {
+            Shift shift = shiftController.getCurrentShift();
+            return new ResponseT<>(new ShiftResponse(shift));
+        } catch (InnerLogicException e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public Response exitShift() {
+        shiftController.clearCurrentShift();
+        return new Response();
     }
 }

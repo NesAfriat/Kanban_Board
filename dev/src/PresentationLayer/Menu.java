@@ -1,8 +1,7 @@
 package PresentationLayer;
 import BusinessLayer.Facade;
 import BusinessLayer.Responses.*;
-import BusinessLayer.Shifts.Shift;
-import BusinessLayer.Workers.Worker;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.InputMismatchException;
 import java.util.List;
@@ -204,6 +203,7 @@ public class Menu {
         System.out.println("2) Remove shift");
         System.out.println("3) Add shifts");
         System.out.println("4) Previous");
+        System.out.println("5) Exit");
         System.out.print("Option: ");
         int option = getUserInput();
         switch (option){
@@ -211,10 +211,10 @@ public class Menu {
                 EditShift();
                 break;
             case 2:
-                FireWorker();
+                RemoveShift();
                 break;
             case 3:
-                GetWorker();
+                AddShifts();
                 break;
             case 4:
                 AdminMenu();
@@ -222,36 +222,77 @@ public class Menu {
                 System.exit(0);
             default:
                 System.out.println("No such option");
-                AdminMenu();
+                ShiftsManageMenu();
         }
     }
 
+    private static void AddShifts() {
+        throw new NotImplementedException();
+    }
+
+    private static void RemoveShift() {
+        throw new NotImplementedException();
+    }
+
     private static void EditShiftMenu() {
-        System.out.println("1) View current workers");
+        System.out.println("1) View current arrangement");
         System.out.println("2) Add worker to shift");
         System.out.println("3) Remove worker from shift");
-        System.out.println("3) Add required job");
-        System.out.println("4) Previous");
+        System.out.println("4) Add required job");
+        System.out.println("5) Previous");
         System.out.print("Option: ");
         int option = getUserInput();
         switch (option){
             case 1:
-                viewShiftArrangement();
+                viewCurrentArrangement();
                 EditShiftMenu();
                 break;
             case 2:
                 assignWorker();
+                EditShiftMenu();
                 break;
             case 3:
-                GetWorker();
+                removeWorker();
+                EditShiftMenu();
                 break;
             case 4:
-                AdminMenu();
+                AddRequiredJob();
+                EditShiftMenu();
+                break;
             case 5:
-                System.exit(0);
+                ExitEditShiftMenu();
+                ShiftsManageMenu();
+                break;
             default:
                 System.out.println("No such option");
-                AdminMenu();
+                EditShiftMenu();
+        }
+    }
+
+    private static void ExitEditShiftMenu() {
+        Response response = facade.exitShift();
+        if (response.ErrorOccurred())
+            printPrettyError(response.getErrorMessage());
+        else {
+            printPrettyConfirm("Exited from shift successfully");
+        }
+    }
+
+    private static void AddRequiredJob() {
+        throw new NotImplementedException();
+    }
+
+    private static void removeWorker() {
+        throw new NotImplementedException();
+    }
+
+    private static void viewCurrentArrangement() {
+        ResponseT<ShiftResponse> shiftResponse = facade.viewCurrentArrangement();
+        if (shiftResponse.ErrorOccurred()){
+            printPrettyError(shiftResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm(shiftResponse.value.toString());
         }
     }
 
@@ -266,7 +307,6 @@ public class Menu {
         }
         else {
             printPrettyConfirm("Worker added successfully");
-            EditShiftMenu();
         }
     }
 
@@ -278,6 +318,7 @@ public class Menu {
         ResponseT<ShiftResponse> shiftResponse = facade.chooseShift(date, shiftType);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
+            ShiftsManageMenu();
         }
         else {
             printPrettyConfirm("Shift selected successfully");
@@ -297,12 +338,15 @@ public class Menu {
         switch (option){
             case 1:
                 AddWorker();
+                WorkersManageMenu();
                 break;
             case 2:
                 FireWorker();
+                WorkersManageMenu();
                 break;
             case 3:
                 GetWorker();
+                WorkersManageMenu();
                 break;
             case 4:
                 AdminMenu();
@@ -310,8 +354,9 @@ public class Menu {
                 System.exit(0);
             default:
                 System.out.println("No such option");
-                AdminMenu();
+                WorkersManageMenu();
         }
+
     }
 
     private static void GetWorker() {
@@ -323,10 +368,8 @@ public class Menu {
         } else {
             printPrettyConfirm(workerResponse.value.toString());
         }
-        WorkersManageMenu();
     }
 
-    //TODO
     private static void FireWorker(){
         System.out.print("Worker ID: ");
         String ID = scanner.next();
@@ -340,7 +383,6 @@ public class Menu {
             printPrettyConfirm("Worker fired successfully, details: ");
             printPrettyConfirm(workerResponse.value.toString());
         }
-        WorkersManageMenu();
     }
 
 
@@ -369,7 +411,6 @@ public class Menu {
             printPrettyConfirm("Worker added successfully to the system, details: ");
             printPrettyConfirm(workerResponse.value.toString());
         }
-        WorkerMenu();
     }
 
     private static void printPrettyConfirm(String message) {
