@@ -63,6 +63,11 @@ public class WorkerController {
        return workersList.getWorker(id);
     }
 
+    public Worker fireWorker(String id, String endWorkingDate) throws InnerLogicException {
+        notPastDateValidation(endWorkingDate);
+        return  workersList.fireWorker(id, endWorkingDate);
+    }
+
     public Constraint addConstraint(String date, String shiftType, String constraintType) throws InnerLogicException {
         if(loggedIn == null) throw new InnerLogicException("tried to add constraint but no user was logged in");
         ShiftType st;
@@ -93,6 +98,18 @@ public class WorkerController {
         }
         if (!result.equals(date)) throw new InnerLogicException("invalid date");
     }
+
+    private void notPastDateValidation(String date) throws InnerLogicException {// TODO check if today's date can pass this condition
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(date, formatter);
+            if(localDate.isBefore(LocalDate.now())) throw new InnerLogicException("invalid Date (past date)");
+        } catch (DateTimeParseException e) {
+            throw new InnerLogicException("invalid date");
+        }
+    }
+
+
     private ShiftType parseShiftType(String shiftType) throws InnerLogicException {
         if ("Morning".equals(shiftType)) return ShiftType.Morning;
         else if ("Evening".equals(shiftType)) return ShiftType.Evening;

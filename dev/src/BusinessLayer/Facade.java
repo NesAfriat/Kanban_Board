@@ -87,6 +87,15 @@ public class Facade {
         }
     }
 
+    public ResponseT<WorkerResponse>fireWorker(String id, String endWorkingDate){
+        try{
+            Worker firedWorker = workerController.fireWorker(id, endWorkingDate);
+            shiftController.removeFromFutureShifts(firedWorker, firedWorker.getEndWorkingDate());
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
     public ResponseT<WorkerResponse> getWorker(String id){
         try{
             Worker worker = workerController.getWorker(id);

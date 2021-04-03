@@ -39,6 +39,12 @@ public class WorkersList {
         return newWorker;
     }
 
+    public Worker fireWorker(String id, String endWorkingDate) throws InnerLogicException {
+        Worker firedWorker = getWorker(id);// throws exception if the id not good
+        firedWorker.fireWorker(endWorkingDate);
+        return firedWorker;
+    }
+
     public boolean contains(String id){
         for (Worker worker: workers) {
             if(worker.getId().equals(id)) return true;

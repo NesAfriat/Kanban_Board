@@ -73,15 +73,21 @@ public class Worker {
                return false;
             }
         }
-        return true;
+        return endWorkingDate != null;
     }
 
     public boolean canWorkInJob(Job job){
-        return occupations.contains(job);
+        return occupations.contains(job) && endWorkingDate != null;
     }
 
-    public void addOccupations(Job job){
+    public void addOccupations(Job job) throws InnerLogicException {
+        if (occupations.contains(job)) throw new InnerLogicException("this worker already qualfied to work as " + job.name());
         this.occupations.add(job);
+    }
+
+    public void fireWorker(String endWorkingDate) throws InnerLogicException {
+        if(endWorkingDate == null) throw new InnerLogicException("tried to fire worker that was already fired");
+        this.endWorkingDate = endWorkingDate;
     }
 
     public String getId() {
