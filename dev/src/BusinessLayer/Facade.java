@@ -107,7 +107,6 @@ public class Facade {
         }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
-
     }
 
 
