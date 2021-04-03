@@ -405,7 +405,7 @@ public class Menu {
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
         else{
-            printPrettyConfirm("Removed role " + "("+job+")" + "from " + workerResponse.value.getNameID() + " successfully");
+            printPrettyConfirm("Removed role " + "("+job+")" + " from " + workerResponse.value.getNameID() + " successfully");
         }
     }
 
@@ -418,7 +418,7 @@ public class Menu {
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
         else{
-            printPrettyConfirm("Added new role " + "("+job+")" + "for " + workerResponse.value.getNameID() + " successfully");
+            printPrettyConfirm("Added new role " + "("+job+")" + " for " + workerResponse.value.getNameID() + " successfully");
         }
     }
 

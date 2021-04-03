@@ -107,7 +107,7 @@ public class WorkerResponse {
             for (Job job: occupations) {
                 stringBuilder.append(job).append(", ");
             }
-            stringBuilder.replace(stringBuilder.length()-1,stringBuilder.length(),".\n");
+            stringBuilder.replace(stringBuilder.length()-2,stringBuilder.length(),".\n");
         }
         return stringBuilder.toString();
     }
