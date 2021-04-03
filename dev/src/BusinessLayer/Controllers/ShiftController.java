@@ -1,6 +1,7 @@
 package BusinessLayer.Controllers;
 
 import BusinessLayer.InnerLogicException;
+import BusinessLayer.Shifts.Shift;
 import BusinessLayer.Shifts.ShiftSchedule;
 import BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Shifts.WorkDay;
@@ -25,6 +26,9 @@ public class ShiftController {
     private boolean isAdminAuthorized;
 
     public ShiftController(WorkersList workers){
+        currentDay = null;
+        currentShiftType = null;
+
         jobs.put("Cashier",Job.Cashier);
         jobs.put("Storekeeper",Job.Storekeeper);
         jobs.put("Usher",Job.Usher);
@@ -52,12 +56,8 @@ public class ShiftController {
         isAdminAuthorized = false;
     }
 
-    public void login(boolean isAdminAuthorized){
+    public void setAdminAuthorization(boolean isAdminAuthorized){
         this.isAdminAuthorized = isAdminAuthorized;
-    }
-
-    public void logout(){
-        this.isAdminAuthorized = false;
     }
 
     public void setCurrentDay(String date) throws Exception {
@@ -67,6 +67,15 @@ public class ShiftController {
     public WorkDay getWorkDay(String date) throws InnerLogicException {
         dateValidation(date);
         return calendar.getWorkDay(date);
+    }
+
+    public Shift addWorkerToCurrentShift(String id, String job) throws InnerLogicException {
+        throwIfNotAdmin();
+        if(currentDay == null || currentShiftType == null)
+            throw new InnerLogicException("tried to add worker to shift but no shift hav been chosen");
+        Worker workerToAdd = workersList.getWorker(id);
+        Job role = parseJob(job);
+        return currentDay.addWorker(role, workerToAdd, currentShiftType);
     }
 
     public void setCurrentShiftType(String shiftType){
@@ -106,6 +115,10 @@ public class ShiftController {
             throw new InnerLogicException("invalid date");
         }
         if (!result.equals(date)) throw new InnerLogicException("invalid date");
+    }
+
+    private void throwIfNotAdmin() throws InnerLogicException {
+        if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shift");
     }
 
     private ShiftType parseShiftType(String shiftType) throws InnerLogicException {

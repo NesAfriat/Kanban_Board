@@ -3,6 +3,7 @@ package BusinessLayer;
 import BusinessLayer.Controllers.ShiftController;
 import BusinessLayer.Controllers.WorkerController;
 import BusinessLayer.Responses.*;
+import BusinessLayer.Shifts.Shift;
 import BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers.Worker;
@@ -22,7 +23,7 @@ public class Facade {
     public ResponseT<WorkerResponse> login(String id){
         try {
             Worker worker = workerController.login(id);
-            shiftController.login(worker.getIsAdmin());
+            shiftController.setAdminAuthorization(worker.getIsAdmin());
             return new ResponseT<>(new WorkerResponse(worker));
         }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
@@ -32,7 +33,7 @@ public class Facade {
     public Response logout(){
         try {
             workerController.logout();
-            shiftController.logout();
+            shiftController.setAdminAuthorization(false);
             return new Response();
         }catch (InnerLogicException e){
             return new Response(e.getMessage());
@@ -101,6 +102,15 @@ public class Facade {
         try{
             Worker worker = workerController.getWorker(id);
             return new ResponseT<>(new WorkerResponse(worker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<ShiftResponse> addWorkerToCurrentShift(String id, String job){//assuming that current workday was chosen
+        try{
+            Shift changedShift = shiftController.addWorkerToCurrentShift(id, job);
+            return new ResponseT<>(new ShiftResponse(changedShift));
         }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
