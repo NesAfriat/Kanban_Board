@@ -298,7 +298,7 @@ public class Menu {
             printPrettyError(shiftResponse.getErrorMessage());
         }
         else{
-            printPrettyConfirm("Shift approved successfully, details: ");;
+            printPrettyConfirm("Shift approved successfully");;
         }
     }
 
@@ -322,7 +322,17 @@ public class Menu {
     }
 
     private static void removeWorker() {
-        throw new NotImplementedException();
+        System.out.print("Worker ID: ");
+        String ID = scanner.next();
+        System.out.print("Worker role: ");
+        String role = scanner.next();
+        ResponseT<ShiftResponse> shiftResponse = facade.removeWorkerFromCurrentShift(ID, role);
+        if (shiftResponse.ErrorOccurred()){
+            printPrettyError(shiftResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("Worker removed successfully from the shift.");
+        }
     }
 
     private static void viewCurrentArrangement() {
