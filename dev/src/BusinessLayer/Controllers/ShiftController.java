@@ -136,6 +136,12 @@ public class ShiftController {
         return role;
     }
 
+    public Shift approveShift() throws InnerLogicException {
+        Shift shift = getCurrentShift();
+        shift.approveShift();
+        return shift;
+    }
+
     public Shift getCurrentShift() throws InnerLogicException {
         if (currentDay == null){
             throw new InnerLogicException("There's no current date");

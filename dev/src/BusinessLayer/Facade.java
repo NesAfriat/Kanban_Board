@@ -170,6 +170,15 @@ public class Facade {
 
     }
 
+    public ResponseT<ShiftResponse> approveShift() throws InnerLogicException {
+        try {
+            Shift shift = shiftController.approveShift();
+            return new ResponseT<>(new ShiftResponse(shift));
+        } catch (InnerLogicException e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
     public ResponseT<ShiftResponse> viewCurrentArrangement() {
         try {
             Shift shift = shiftController.getCurrentShift();

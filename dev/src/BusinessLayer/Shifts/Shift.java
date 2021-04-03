@@ -95,6 +95,14 @@ public class Shift {
         return approved;
     }
 
+//    public void forceApproveShift() throws InnerLogicException {
+//        JobArrangement jobArrangement = getJobArrangement(Job.Shift_Manager);
+//        if (jobArrangement.amountAssigned != 1){
+//            throw new InnerLogicException("Can not approve a shift without a shift manager");
+//        }
+//        approved = true;
+//    }
+
     public void approveShift() throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(Job.Shift_Manager);
         if (jobArrangement.amountAssigned != 1){
@@ -102,6 +110,7 @@ public class Shift {
         }
         approved = true;
     }
+
     public boolean isWorking(Worker worker){
         AtomicBoolean working = new AtomicBoolean(false);
         currentWorkers.forEach((job, jobArrangement) -> {
