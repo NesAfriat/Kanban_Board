@@ -1,6 +1,8 @@
 package PresentationLayer;
 import BusinessLayer.Facade;
 import BusinessLayer.Responses.*;
+import BusinessLayer.Workers.Worker;
+
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -212,7 +214,7 @@ public class Menu {
                 AddWorker();
                 break;
             case 2:
-                WorkersManageMenu();
+                FireWorker();
                 break;
             case 3:
                 GetWorker();
@@ -231,18 +233,22 @@ public class Menu {
         System.out.print("Worker ID: ");
         String ID = scanner.next();
         ResponseT<WorkerResponse> workerResponse = facade.getWorker(ID);
-        if (workerResponse.ErrorOccurred()){
+        if (workerResponse.ErrorOccurred()) {
             printPrettyError(workerResponse.getErrorMessage());
-        }
-        else{
+        } else {
             printPrettyConfirm(workerResponse.value.toString());
         }
         WorkersManageMenu();
     }
 
+    //TODO
+    private static void FireWorker(){
+
+    }
+
 
     private static void AddWorker() {
-        System.out.println("ID:");
+        System.out.println("ID: ");
         String ID = scanner.next();
         System.out.println("Name:");
         String name = scanner.next();
@@ -266,7 +272,7 @@ public class Menu {
             printPrettyConfirm("Worker added successfully to the system, details: ");
             printPrettyConfirm(workerResponse.value.toString());
         }
-        AdminMenu();
+        WorkerMenu();
     }
 
     private static void printPrettyConfirm(String message) {
