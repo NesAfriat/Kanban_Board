@@ -218,6 +218,7 @@ public class Menu {
                 break;
             case 3:
                 GetWorker();
+                break;
             case 4:
                 AdminMenu();
             case 5:
@@ -232,24 +233,20 @@ public class Menu {
         System.out.print("Worker ID: ");
         String ID = scanner.next();
         ResponseT<WorkerResponse> workerResponse = facade.getWorker(ID);
-        if (workerResponse.ErrorOccurred()){
+        if (workerResponse.ErrorOccurred()) {
             printPrettyError(workerResponse.getErrorMessage());
-        }
-        else{
+        } else {
             printPrettyConfirm(workerResponse.value.toString());
         }
-        WorkerMenu();
+        WorkersManageMenu();
     }
 
     //TODO
-    private static void FireWorker() {
+    private static void FireWorker(){
 
     }
 
-    /*
-    boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
-                  int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate){
-     */
+
     private static void AddWorker() {
         System.out.println("ID: ");
         String ID = scanner.next();

@@ -4,22 +4,37 @@ import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.ShiftSchedule;
 import BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Shifts.WorkDay;
+import BusinessLayer.Workers.ConstraintType;
 import BusinessLayer.Workers.Job;
+import BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers.WorkersList;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ShiftController {
     private ShiftSchedule calendar;
+    private final HashMap<String, Job> jobs = new HashMap<>();
     private WorkDay currentDay;
     private ShiftType currentShiftType;
-    private WorkersList workers;
+    private WorkersList workersList;
     private boolean isAdminAuthorized;
 
     public ShiftController(WorkersList workers){
-        this.workers = workers;
+        jobs.put("Cashier",Job.Cashier);
+        jobs.put("Storekeeper",Job.Storekeeper);
+        jobs.put("Usher",Job.Usher);
+        jobs.put("Guard",Job.Guard);
+        jobs.put("Shift_Manager",Job.Shift_Manager);
+        jobs.put("HR_Manager",Job.HR_Manager);
+        jobs.put("Branch_Manager",Job.Branch_Manager);
+        jobs.put("Assistant_Branch_Manager",Job.Assistant_Branch_Manager);
+
+        this.workersList = workers;
         calendar = new ShiftSchedule();
         // TODO: remove this lines (testing purposes)
         try{
@@ -61,6 +76,17 @@ public class ShiftController {
             currentShiftType = ShiftType.Evening;
     }
 
+    public List<Worker> getAvailableWorkers(String job) throws InnerLogicException {
+
+        Job role = parseJob(job);
+        List<Worker> listOfWorkers= workersList.getWorkersByJob(role);
+        List<Worker> relevantWorkers = new LinkedList<>();
+        for (Worker worker: listOfWorkers) {
+            if(worker.canWorkInShift(currentDay.getDate(), currentShiftType)) relevantWorkers.add(worker);
+        }
+        return relevantWorkers;
+    }
+
     private void dateValidation(String date) throws InnerLogicException {
         String result;
         try {
@@ -73,5 +99,24 @@ public class ShiftController {
         if (!result.equals(date)) throw new InnerLogicException("invalid date");
     }
 
+    private ShiftType parseShiftType(String shiftType) throws InnerLogicException {
+        if ("Morning".equals(shiftType)) return ShiftType.Morning;
+        else if ("Evening".equals(shiftType)) return ShiftType.Evening;
+        else throw new InnerLogicException("invalid shift type");
+    }
+
+    private ConstraintType parseConstraintType(String constraintType) throws InnerLogicException {
+        if ("Cant".equals(constraintType)) return ConstraintType.Cant;
+        else if ("Want".equals(constraintType)) return ConstraintType.Want;
+        else throw new InnerLogicException("invalid constraint type");
+    }
+
+    private Job parseJob(String job) throws InnerLogicException {
+        Job role = jobs.get(job);
+        if (role == null){
+            throw new InnerLogicException("invalid constraint type");
+        }
+        return role;
+    }
 
 }

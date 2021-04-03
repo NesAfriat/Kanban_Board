@@ -7,6 +7,9 @@ import BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers.Worker;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Facade {
     private WorkerController workerController;
     private ShiftController shiftController;
@@ -82,6 +85,29 @@ public class Facade {
         }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
+    }
+
+    public ResponseT<WorkerResponse> getWorker(String id){
+        try{
+            Worker worker = workerController.getWorker(id);
+            return new ResponseT<>(new WorkerResponse(worker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<List<WorkerResponse>> getAvailableWorkers(String job){
+        try {
+            List<Worker> availableWorkers = shiftController.getAvailableWorkers(job);
+            List<WorkerResponse> availableWorkersResponse = new LinkedList<>();
+            for (Worker worker: availableWorkers) {
+                availableWorkersResponse.add(new WorkerResponse(worker));
+            }
+            return new ResponseT<>(availableWorkersResponse);
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+
     }
 
 
