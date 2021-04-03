@@ -258,7 +258,7 @@ public class Menu {
     private static void assignWorker() {
         System.out.print("Worker ID: ");
         String ID = scanner.next();
-        System.out.println("Worker Role: ");
+        System.out.print("Worker role: ");
         String role = scanner.next();
         ResponseT<ShiftResponse> shiftResponse = facade.addWorkerToCurrentShift(ID, role);
         if (shiftResponse.ErrorOccurred()){
