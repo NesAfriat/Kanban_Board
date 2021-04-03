@@ -78,6 +78,15 @@ public class ShiftController {
         return currentDay.addWorker(role, workerToAdd, currentShiftType);
     }
 
+    public Shift removeWorkerFromCurrentShift(String id, String job) throws InnerLogicException {
+        throwIfNotAdmin();
+        Shift currentShift = getCurrentShift();
+        Worker workerToRemove = workersList.getWorker(id);
+        Job role = parseJob(job);
+        currentShift.removeWorker(role, workerToRemove);
+        return currentShift;
+    }
+
 
 
     public Worker removeFromFutureShifts(Worker worker, String date) throws InnerLogicException {
@@ -144,7 +153,7 @@ public class ShiftController {
 
     public Shift getCurrentShift() throws InnerLogicException {
         if (currentDay == null){
-            throw new InnerLogicException("There's no current date");
+            throw new InnerLogicException("There's no current Day");
         }
         if (currentShiftType == null){
             throw new InnerLogicException("There's no current shift");
