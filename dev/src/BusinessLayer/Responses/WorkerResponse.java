@@ -100,7 +100,19 @@ public class WorkerResponse {
         stringBuilder.append("Start working date: ").append(startWorkingDate).append("\n");
         if (endWorkingDate != null)
             stringBuilder.append("End working date: ").append(endWorkingDate).append("\n");
-
+        stringBuilder.append("Occupations: ");
+        if (occupations.isEmpty())
+            stringBuilder.append("none.\n");
+        else {
+            for (Job job: occupations) {
+                stringBuilder.append(job).append(", ");
+            }
+            stringBuilder.replace(stringBuilder.length()-1,stringBuilder.length(),".\n");
+        }
         return stringBuilder.toString();
+    }
+
+    public String getNameID(){
+        return name + " (" + id + ")";
     }
 }

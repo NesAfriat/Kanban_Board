@@ -329,10 +329,13 @@ public class Menu {
 
 
     private static void WorkersManageMenu() {
-        System.out.println("1) Add Worker");
-        System.out.println("2) Fire Worker");
-        System.out.println("3) Get Worker");
-        System.out.println("4) Previous");
+        System.out.println("1) Add worker");
+        System.out.println("2) Fire worker");
+        System.out.println("3) Get worker details");
+        System.out.println("4) Add worker occupation");
+        System.out.println("5) Remove worker occupation");
+        System.out.println("6) View worker constraints");
+        System.out.println("7) Previous");
         System.out.print("Option: ");
         int option = getUserInput();
         switch (option){
@@ -349,14 +352,64 @@ public class Menu {
                 WorkersManageMenu();
                 break;
             case 4:
-                AdminMenu();
+                AddWorkerOccupation();
+                WorkersManageMenu();
             case 5:
-                System.exit(0);
+                RemoveWorkerOccupation();
+                WorkersManageMenu();
+            case 6:
+                ViewWorkerConstraints();
+                WorkersManageMenu();
+            case 7:
+                AdminMenu();
+
             default:
                 System.out.println("No such option");
                 WorkersManageMenu();
         }
 
+    }
+
+    private static void ViewWorkerConstraints() {
+        System.out.print("Worker ID: ");
+        String ID = scanner.next();
+        ResponseT<WorkerResponse> worker = facade.getWorker(ID);
+        if (worker.ErrorOccurred()){
+            printPrettyError(worker.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm(worker.value.getNameID() +" Constraints: \n");
+            List<ConstraintResponse> constraintResponseList = worker.value.getConstraints();
+            for (ConstraintResponse constraint: constraintResponseList){
+                printPrettyConfirm(constraint.toString());
+            }
+        }
+    }
+
+    private static void RemoveWorkerOccupation() {
+        System.out.print("Worker ID: ");
+        String ID = scanner.next();
+        System.out.print("Job title: ");
+        String job = scanner.next();
+        ResponseT<WorkerResponse> workerResponse = facade.removeOccupationToWorker(ID, job);
+        if (workerResponse.ErrorOccurred())
+            printPrettyError(workerResponse.getErrorMessage());
+        else{
+            printPrettyConfirm("Removed role " + "("+job+")" + "from " + workerResponse.value.getNameID() + " successfully");
+        }
+    }
+
+    private static void AddWorkerOccupation() {
+        System.out.print("Worker ID: ");
+        String ID = scanner.next();
+        System.out.print("Job title: ");
+        String job = scanner.next();
+        ResponseT<WorkerResponse> workerResponse = facade.addOccupationToWorker(ID, job);
+        if (workerResponse.ErrorOccurred())
+            printPrettyError(workerResponse.getErrorMessage());
+        else{
+            printPrettyConfirm("Added new role " + "("+job+")" + "for " + workerResponse.value.getNameID() + " successfully");
+        }
     }
 
     private static void GetWorker() {
