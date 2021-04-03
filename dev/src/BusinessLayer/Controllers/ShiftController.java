@@ -72,7 +72,7 @@ public class ShiftController {
     public Shift addWorkerToCurrentShift(String id, String job) throws InnerLogicException {
         throwIfNotAdmin();
         if(currentDay == null || currentShiftType == null)
-            throw new InnerLogicException("tried to add worker to shift but no shift hav been chosen");
+            throw new InnerLogicException("tried to add worker to shift but no shift have been chosen");
         Worker workerToAdd = workersList.getWorker(id);
         Job role = parseJob(job);
         return currentDay.addWorker(role, workerToAdd, currentShiftType);
