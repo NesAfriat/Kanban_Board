@@ -61,7 +61,8 @@ public class Menu {
         int option = getUserInput();
         switch (option){
             case 1:
-                viewShiftAsWorker();
+                viewShiftArrangement();
+                WorkerMenu();
                 break;
             case 2:
                 viewWorkerConstraints();
@@ -249,7 +250,10 @@ public class Menu {
         System.out.println("2) Add worker to shift");
         System.out.println("3) Remove worker from shift");
         System.out.println("4) Add required job");
-        System.out.println("5) Previous");
+        System.out.println("5) Edit job required amount");
+        System.out.println("6) Get available workers");
+        System.out.println("7) Approve shift");
+        System.out.println("8) Previous");
         System.out.print("Option: ");
         int option = getUserInput();
         switch (option){
@@ -270,6 +274,15 @@ public class Menu {
                 EditShiftMenu();
                 break;
             case 5:
+                SetRequiredAmount();
+                EditShiftMenu();
+            case 6:
+                GetAvailableWorkers();
+                EditShiftMenu();
+            case 7:
+                ApproveShift();
+                EditShiftMenu();
+            case 8:
                 ExitEditShiftMenu();
                 ShiftsManageMenu();
                 break;
@@ -277,6 +290,22 @@ public class Menu {
                 System.out.println("No such option");
                 EditShiftMenu();
         }
+    }
+
+    private static void ApproveShift() {
+        ResponseT<ShiftResponse> shiftResponse = facade.approveShift();
+        if (shiftResponse.ErrorOccurred()){
+            printPrettyError(shiftResponse.getErrorMessage());
+        }
+        else{
+            printPrettyConfirm("Shift approved successfully, details: ");;
+        }
+    }
+
+    private static void GetAvailableWorkers() {
+    }
+
+    private static void SetRequiredAmount() {
     }
 
     private static void ExitEditShiftMenu() {
@@ -443,8 +472,7 @@ public class Menu {
             printPrettyError(workerResponse.getErrorMessage());
         }
         else {
-            printPrettyConfirm("Worker fired successfully, details: ");
-            printPrettyConfirm(workerResponse.value.toString());
+            printPrettyConfirm("Worker fired successfully, details: " + workerResponse.value.getNameID());
         }
     }
 
@@ -471,8 +499,7 @@ public class Menu {
             printPrettyError(workerResponse.getErrorMessage());
         }
         else {
-            printPrettyConfirm("Worker added successfully to the system, details: ");
-            printPrettyConfirm(workerResponse.value.toString());
+            printPrettyConfirm("Worker added successfully to the system, details: " + workerResponse.value.getNameID());
         }
     }
 
