@@ -107,6 +107,24 @@ public class Facade {
         }
     }
 
+    public ResponseT<WorkerResponse> addOccupationToWorker(String id, String job){
+        try{
+            Worker worker = workerController.addOccupation(id, job);
+            return new ResponseT<>(new WorkerResponse(worker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<WorkerResponse> removeOccupationToWorker(String id, String job){
+        try{
+            Worker worker = workerController.removeOccupation(id, job);
+            return new ResponseT<>(new WorkerResponse(worker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
     public ResponseT<ShiftResponse> addWorkerToCurrentShift(String id, String job){//assuming that current workday was chosen
         try{
             Shift changedShift = shiftController.addWorkerToCurrentShift(id, job);

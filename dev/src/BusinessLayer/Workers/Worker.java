@@ -80,9 +80,14 @@ public class Worker {
         return occupations.contains(job) && endWorkingDate != null;
     }
 
-    public void addOccupations(Job job) throws InnerLogicException {
-        if (occupations.contains(job)) throw new InnerLogicException("this worker already qualfied to work as " + job.name());
+    public void addOccupation(Job job) throws InnerLogicException {
+        if (occupations.contains(job)) throw new InnerLogicException("tried to add occupation to worker but he already qualified to work as " + job.name());
         this.occupations.add(job);
+    }
+
+    public void removeOccupation(Job job) throws InnerLogicException {
+        if (!occupations.contains(job)) throw new InnerLogicException("tried to remove occupation to worker but he was not qualified to work as " + job.name());
+        this.occupations.remove(job);
     }
 
     public void fireWorker(String endWorkingDate) throws InnerLogicException {

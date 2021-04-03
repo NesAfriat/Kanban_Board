@@ -2,26 +2,35 @@ package BusinessLayer.Controllers;
 
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.ShiftType;
-import BusinessLayer.Workers.Constraint;
-import BusinessLayer.Workers.ConstraintType;
-import BusinessLayer.Workers.Worker;
-import BusinessLayer.Workers.WorkersList;
+import BusinessLayer.Workers.*;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.HashMap;
 
 
 public class WorkerController {
     private Worker loggedIn;
     private WorkersList workersList;
 
+    private final HashMap<String, Job> jobs = new HashMap<>();
+
     public WorkerController() {
         this.workersList = new WorkersList();
+
+        jobs.put("Cashier",Job.Cashier);
+        jobs.put("Storekeeper",Job.Storekeeper);
+        jobs.put("Usher",Job.Usher);
+        jobs.put("Guard",Job.Guard);
+        jobs.put("Shift_Manager",Job.Shift_Manager);
+        jobs.put("HR_Manager",Job.HR_Manager);
+        jobs.put("Branch_Manager",Job.Branch_Manager);
+        jobs.put("Assistant_Branch_Manager",Job.Assistant_Branch_Manager);
+
         //this is for testing TODO: remove this.
         try {
             workersList.addWorker(true, "tsuri", "123", "a", 123, "a", 1, 1, "a");
-            workersList.addWorker(false, "dan", "321", "a", 123, "a", 1, 1, "a");
-
         } catch (Exception e) {
         }
         //TODO: remove until here
@@ -87,6 +96,22 @@ public class WorkerController {
         return loggedIn.removeConstraint(date, st);
     }
 
+    public Worker addOccupation(String id, String job) throws InnerLogicException {
+        if(!loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
+        Job role = parseJob(job);
+        Worker worker = workersList.getWorker(id);
+        worker.addOccupation(role);
+        return worker;
+    }
+
+    public Worker removeOccupation(String id, String job) throws InnerLogicException {
+        if(!loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
+        Job role = parseJob(job);
+        Worker worker = workersList.getWorker(id);
+        worker.removeOccupation(role);
+        return worker;
+    }
+
     private void dateValidation(String date) throws InnerLogicException {
         String result;
         try {
@@ -120,6 +145,14 @@ public class WorkerController {
         if ("Cant".equals(constraintType)) return ConstraintType.Cant;
         else if ("Want".equals(constraintType)) return ConstraintType.Want;
         else throw new InnerLogicException("invalid constraint type");
+    }
+
+    private Job parseJob(String job) throws InnerLogicException {
+        Job role = jobs.get(job);
+        if (role == null){
+            throw new InnerLogicException("invalid job type");
+        }
+        return role;
     }
 
 

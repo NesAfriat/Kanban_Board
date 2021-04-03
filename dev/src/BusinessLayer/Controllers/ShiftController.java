@@ -138,7 +138,7 @@ public class ShiftController {
     private Job parseJob(String job) throws InnerLogicException {
         Job role = jobs.get(job);
         if (role == null){
-            throw new InnerLogicException("invalid constraint type");
+            throw new InnerLogicException("invalid job type");
         }
         return role;
     }
