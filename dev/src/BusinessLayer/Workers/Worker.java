@@ -73,7 +73,7 @@ public class Worker {
                return false;
             }
         }
-        return endWorkingDate != null;
+        return endWorkingDate == null;
     }
 
     public boolean canWorkInJob(Job job){

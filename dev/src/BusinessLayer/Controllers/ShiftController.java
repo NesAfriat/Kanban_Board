@@ -63,7 +63,7 @@ public class ShiftController {
 
 
     public void setCurrentDay(String date) throws InnerLogicException {
-        calendar.getWorkDay(date);
+        currentDay = calendar.getWorkDay(date);
     }
 
     public WorkDay getWorkDay(String date) throws InnerLogicException {

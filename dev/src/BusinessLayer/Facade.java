@@ -137,9 +137,8 @@ public class Facade {
             Shift shift = shiftController.getCurrentShift();
             return new ResponseT<>(new ShiftResponse(shift));
         } catch (InnerLogicException e) {
-            e.printStackTrace();
+            return new ResponseT<>(e.getMessage());
         }
 
-        return null;
     }
 }
