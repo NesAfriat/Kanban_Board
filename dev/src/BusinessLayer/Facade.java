@@ -3,6 +3,7 @@ package BusinessLayer;
 import BusinessLayer.Controllers.ShiftController;
 import BusinessLayer.Controllers.WorkerController;
 import BusinessLayer.Responses.*;
+import BusinessLayer.Shifts.Shift;
 import BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers.Worker;
@@ -120,5 +121,16 @@ public class Facade {
     }
 
 
+    public ResponseT<ShiftResponse> chooseShift(String date, String shiftType) {
+        try {
+            shiftController.setCurrentDay(date);
+            shiftController.setCurrentShiftType(shiftType);
+            Shift shift = shiftController.getCurrentShift();
+            return new ResponseT<>(new ShiftResponse(shift));
+        } catch (InnerLogicException e) {
+            e.printStackTrace();
+        }
 
+        return null;
+    }
 }

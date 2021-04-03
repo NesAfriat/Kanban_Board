@@ -28,6 +28,8 @@ public class ShiftResponse {
         }
     }
 
+    public boolean isApproved(){return approved;}
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

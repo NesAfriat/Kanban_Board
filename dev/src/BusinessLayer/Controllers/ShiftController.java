@@ -1,6 +1,7 @@
 package BusinessLayer.Controllers;
 
 import BusinessLayer.InnerLogicException;
+import BusinessLayer.Shifts.Shift;
 import BusinessLayer.Shifts.ShiftSchedule;
 import BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Shifts.WorkDay;
@@ -60,8 +61,8 @@ public class ShiftController {
         this.isAdminAuthorized = false;
     }
 
-    public void setCurrentDay(String date) throws Exception {
-        currentDay = calendar.getWorkDay(date);
+    public void setCurrentDay(String date) throws InnerLogicException {
+        calendar.getWorkDay(date);
     }
 
     public WorkDay getWorkDay(String date) throws InnerLogicException {
@@ -69,11 +70,8 @@ public class ShiftController {
         return calendar.getWorkDay(date);
     }
 
-    public void setCurrentShiftType(String shiftType){
-        if (shiftType.equals("Morning"))
-            currentShiftType = ShiftType.Morning;
-        else
-            currentShiftType = ShiftType.Evening;
+    public void setCurrentShiftType(String shiftType) throws InnerLogicException {
+        currentShiftType = parseShiftType(shiftType);
     }
 
     public Worker removeFromFutureShifts(Worker worker, String date) throws InnerLogicException {
@@ -128,4 +126,10 @@ public class ShiftController {
         return role;
     }
 
+    public Shift getCurrentShift() throws InnerLogicException {
+        if (currentDay == null){
+            throw new InnerLogicException("There's no current shift");
+        }
+        return currentDay.getCurrentShift(currentShiftType);
+    }
 }

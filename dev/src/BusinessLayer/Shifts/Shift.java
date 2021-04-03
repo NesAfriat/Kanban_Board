@@ -26,7 +26,6 @@ public class Shift {
 
 
     // assign new worker to the shift
-    // TODO: check cardinality of manager
     public void addWorker(Job role, Worker worker) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
 

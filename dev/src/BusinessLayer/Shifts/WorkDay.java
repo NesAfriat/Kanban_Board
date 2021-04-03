@@ -61,16 +61,19 @@ public class WorkDay {
     }
 
     public Shift getCurrentShift(ShiftType shiftType) throws InnerLogicException {
-        if (shiftType == ShiftType.Morning){
+        if (ShiftType.Morning.equals(shiftType)){
             if (morningShift == null){
                 throw new InnerLogicException("This WorkDay does not have a morning Shift");
             }
             return morningShift;
         }
-        if (eveningShift == null){
-            throw new InnerLogicException("This WorkDay does not have an evening Shift");
+        else if (ShiftType.Evening.equals(shiftType)) {
+            if (eveningShift == null) {
+                throw new InnerLogicException("This WorkDay does not have an evening Shift");
+            }
+            return eveningShift;
         }
-        return eveningShift;
+        throw new InnerLogicException("There's no such shift type");
     }
 
     public void removeFromFutureShifts(Worker worker) throws InnerLogicException {
