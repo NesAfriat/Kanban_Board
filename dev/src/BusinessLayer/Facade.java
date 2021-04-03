@@ -154,7 +154,6 @@ public class Facade {
         } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
-
     }
 
     public ResponseT<ShiftResponse> chooseShift(String date, String shiftType) {
