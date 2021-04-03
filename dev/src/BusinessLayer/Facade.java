@@ -130,5 +130,16 @@ public class Facade {
     }
 
 
+    public ResponseT<ShiftResponse> chooseShift(String date, String shiftType) {
+        try {
+            shiftController.setCurrentDay(date);
+            shiftController.setCurrentShiftType(shiftType);
+            Shift shift = shiftController.getCurrentShift();
+            return new ResponseT<>(new ShiftResponse(shift));
+        } catch (InnerLogicException e) {
+            e.printStackTrace();
+        }
 
+        return null;
+    }
 }

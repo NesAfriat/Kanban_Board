@@ -1,6 +1,7 @@
 package PresentationLayer;
 import BusinessLayer.Facade;
 import BusinessLayer.Responses.*;
+import BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers.Worker;
 
 import java.util.InputMismatchException;
@@ -10,14 +11,9 @@ import java.util.Scanner;
 
 public class Menu {
     public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_BLACK = "\u001B[30m";
     public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_GREEN = "\u001B[32m";
-    public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-    public static final String ANSI_CYAN = "\u001B[36m";
-    public static final String ANSI_WHITE = "\u001B[37m";
+
 
     private static final Scanner scanner = new Scanner(System.in);;
     private static final Facade facade = new Facade();
@@ -190,6 +186,7 @@ public class Menu {
                 WorkersManageMenu();
                 break;
             case 3:
+                ShiftsManageMenu();
                 break;
             case 4:
                 LogOut();
@@ -201,6 +198,94 @@ public class Menu {
                 AdminMenu();
         }
     }
+
+    private static void ShiftsManageMenu() {
+        System.out.println("1) Edit shift");
+        System.out.println("2) Remove shift");
+        System.out.println("3) Add shifts");
+        System.out.println("4) Previous");
+        System.out.print("Option: ");
+        int option = getUserInput();
+        switch (option){
+            case 1:
+                EditShift();
+                break;
+            case 2:
+                FireWorker();
+                break;
+            case 3:
+                GetWorker();
+                break;
+            case 4:
+                AdminMenu();
+            case 5:
+                System.exit(0);
+            default:
+                System.out.println("No such option");
+                AdminMenu();
+        }
+    }
+
+    private static void EditShiftMenu() {
+        System.out.println("1) View current workers");
+        System.out.println("2) Add worker to shift");
+        System.out.println("3) Remove worker from shift");
+        System.out.println("3) Add required job");
+        System.out.println("4) Previous");
+        System.out.print("Option: ");
+        int option = getUserInput();
+        switch (option){
+            case 1:
+                viewShiftArrangement();
+                EditShiftMenu();
+                break;
+            case 2:
+                assignWorker();
+                break;
+            case 3:
+                GetWorker();
+                break;
+            case 4:
+                AdminMenu();
+            case 5:
+                System.exit(0);
+            default:
+                System.out.println("No such option");
+                AdminMenu();
+        }
+    }
+
+    private static void assignWorker() {
+        System.out.print("Worker ID: ");
+        String ID = scanner.next();
+        System.out.println("Worker Role: ");
+        String role = scanner.next();
+        ResponseT<ShiftResponse> shiftResponse = facade.addWorkerToCurrentShift(ID, role);
+        if (shiftResponse.ErrorOccurred()){
+            printPrettyError(shiftResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("Worker added successfully");
+            EditShiftMenu();
+        }
+    }
+
+    private static void EditShift() {
+        System.out.println("Enter Date <DD/MM/YYYY>: ");
+        String date = scanner.next();
+        System.out.println("Enter Shift (Morning/Evening): ");
+        String shiftType = scanner.next();
+        ResponseT<ShiftResponse> shiftResponse = facade.chooseShift(date, shiftType);
+        if (shiftResponse.ErrorOccurred()){
+            printPrettyError(shiftResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("Shift selected successfully");
+            EditShiftMenu();
+        }
+    }
+
+
 
     private static void WorkersManageMenu() {
         System.out.println("1) Add Worker");
@@ -245,7 +330,7 @@ public class Menu {
     private static void FireWorker(){
         System.out.print("Worker ID: ");
         String ID = scanner.next();
-        System.out.println("Enter end working date <DD/MM/YYYY>: ");
+        System.out.print("Enter end working date <DD/MM/YYYY>: ");
         String date = scanner.next();
         ResponseT<WorkerResponse> workerResponse = facade.fireWorker(ID, date);
         if (workerResponse.ErrorOccurred()){
@@ -255,6 +340,7 @@ public class Menu {
             printPrettyConfirm("Worker fired successfully, details: ");
             printPrettyConfirm(workerResponse.value.toString());
         }
+        WorkersManageMenu();
     }
 
 

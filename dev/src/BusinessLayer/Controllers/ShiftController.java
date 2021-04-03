@@ -60,13 +60,20 @@ public class ShiftController {
         this.isAdminAuthorized = isAdminAuthorized;
     }
 
-    public void setCurrentDay(String date) throws Exception {
-        currentDay = calendar.getWorkDay(date);
+
+
+    public void setCurrentDay(String date) throws InnerLogicException {
+        calendar.getWorkDay(date);
     }
 
     public WorkDay getWorkDay(String date) throws InnerLogicException {
         dateValidation(date);
         return calendar.getWorkDay(date);
+    }
+
+
+    public void setCurrentShiftType(String shiftType) throws InnerLogicException {
+        currentShiftType = parseShiftType(shiftType);
     }
 
     public Shift addWorkerToCurrentShift(String id, String job) throws InnerLogicException {
@@ -78,12 +85,7 @@ public class ShiftController {
         return currentDay.addWorker(role, workerToAdd, currentShiftType);
     }
 
-    public void setCurrentShiftType(String shiftType){
-        if (shiftType.equals("Morning"))
-            currentShiftType = ShiftType.Morning;
-        else
-            currentShiftType = ShiftType.Evening;
-    }
+
 
     public Worker removeFromFutureShifts(Worker worker, String date) throws InnerLogicException {
         dateValidation(date);
@@ -141,4 +143,10 @@ public class ShiftController {
         return role;
     }
 
+    public Shift getCurrentShift() throws InnerLogicException {
+        if (currentDay == null){
+            throw new InnerLogicException("There's no current shift");
+        }
+        return currentDay.getCurrentShift(currentShiftType);
+    }
 }
