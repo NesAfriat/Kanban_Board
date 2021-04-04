@@ -9,6 +9,7 @@ import BusinessLayer.Workers.ConstraintType;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers.WorkersList;
+import BusinessLayer.WorkersUtils;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +20,6 @@ import java.util.List;
 
 public class ShiftController {
     private ShiftSchedule calendar;
-    private final HashMap<String, Job> jobs = new HashMap<>();
     private WorkDay currentDay;
     private ShiftType currentShiftType;
     private WorkersList workersList;
@@ -28,16 +28,6 @@ public class ShiftController {
     public ShiftController(WorkersList workers){
         currentDay = null;
         currentShiftType = null;
-
-        jobs.put("Cashier",Job.Cashier);
-        jobs.put("Storekeeper",Job.Storekeeper);
-        jobs.put("Usher",Job.Usher);
-        jobs.put("Guard",Job.Guard);
-        jobs.put("Shift_Manager",Job.Shift_Manager);
-        jobs.put("HR_Manager",Job.HR_Manager);
-        jobs.put("Branch_Manager",Job.Branch_Manager);
-        jobs.put("Assistant_Branch_Manager",Job.Assistant_Branch_Manager);
-
         this.workersList = workers;
         calendar = new ShiftSchedule();
         isAdminAuthorized = false;
@@ -54,19 +44,19 @@ public class ShiftController {
     }
 
     public WorkDay getWorkDay(String date) throws InnerLogicException {
-        dateValidation(date);
+        WorkersUtils.dateValidation(date);
         return calendar.getWorkDay(date);
     }
 
     public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
         throwIfNotAdmin();
-        dateValidation(date);
+        WorkersUtils.dateValidation(date);
         return calendar.addWorkDay(hasMorningShift, hasEveningShift, date);
     }
 
 
     public void setCurrentShiftType(String shiftType) throws InnerLogicException {
-        currentShiftType = parseShiftType(shiftType);
+        currentShiftType = WorkersUtils.parseShiftType(shiftType);
     }
 
     public Shift addWorkerToCurrentShift(String id, String job) throws InnerLogicException {
@@ -74,7 +64,7 @@ public class ShiftController {
         if(currentDay == null || currentShiftType == null)
             throw new InnerLogicException("tried to add worker to shift but no shift have been chosen");
         Worker workerToAdd = workersList.getWorker(id);
-        Job role = parseJob(job);
+        Job role = WorkersUtils.parseJob(job);
         return currentDay.addWorker(role, workerToAdd, currentShiftType);
     }
 
@@ -82,7 +72,7 @@ public class ShiftController {
         throwIfNotAdmin();
         Shift currentShift = getCurrentShift();
         Worker workerToRemove = workersList.getWorker(id);
-        Job role = parseJob(job);
+        Job role = WorkersUtils.parseJob(job);
         currentShift.removeWorker(role, workerToRemove);
         return currentShift;
     }
@@ -90,7 +80,7 @@ public class ShiftController {
     public Shift setAmountRequired(String role, int required) throws InnerLogicException {
         throwIfNotAdmin();
         Shift currentShift = getCurrentShift();
-        Job job = parseJob(role);
+        Job job = WorkersUtils.parseJob(role);
         currentShift.setAmountRequired(job, required);
         return currentShift;
     }
@@ -98,7 +88,7 @@ public class ShiftController {
     public Shift addRequiredJob(String role, int required) throws InnerLogicException {
         throwIfNotAdmin();
         Shift currentShift = getCurrentShift();
-        Job job = parseJob(role);
+        Job job = WorkersUtils.parseJob(role);
         currentShift.addRequiredJob(job, required);
         return currentShift;
     }
@@ -106,7 +96,7 @@ public class ShiftController {
 
 
     public Worker removeFromFutureShifts(Worker worker, String date) throws InnerLogicException {
-        dateValidation(date);
+        WorkersUtils.dateValidation(date);
         List<WorkDay> workDays = calendar.getWorkDaysFrom(date);
         for (WorkDay workDay: workDays) {
             workDay.removeFromFutureShifts(worker);
@@ -115,7 +105,7 @@ public class ShiftController {
     }
 
     public List<Worker> getAvailableWorkers(String job) throws InnerLogicException {
-        Job role = parseJob(job);
+        Job role = WorkersUtils.parseJob(job);
         List<Worker> listOfWorkers= workersList.getWorkersByJob(role);
         List<Worker> relevantWorkers = new LinkedList<>();
         for (Worker worker: listOfWorkers) {
@@ -124,40 +114,9 @@ public class ShiftController {
         return relevantWorkers;
     }
 
-    private void dateValidation(String date) throws InnerLogicException {
-        String result;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate localDate = LocalDate.parse(date, formatter);
-            result = localDate.format(formatter);
-        } catch (DateTimeParseException e) {
-            throw new InnerLogicException("invalid date");
-        }
-        if (!result.equals(date)) throw new InnerLogicException("invalid date");
-    }
 
     private void throwIfNotAdmin() throws InnerLogicException {
         if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");
-    }
-
-    private ShiftType parseShiftType(String shiftType) throws InnerLogicException {
-        if ("Morning".equals(shiftType)) return ShiftType.Morning;
-        else if ("Evening".equals(shiftType)) return ShiftType.Evening;
-        else throw new InnerLogicException("invalid shift type");
-    }
-
-    private ConstraintType parseConstraintType(String constraintType) throws InnerLogicException {
-        if ("Cant".equals(constraintType)) return ConstraintType.Cant;
-        else if ("Want".equals(constraintType)) return ConstraintType.Want;
-        else throw new InnerLogicException("invalid constraint type");
-    }
-
-    private Job parseJob(String job) throws InnerLogicException {
-        Job role = jobs.get(job);
-        if (role == null){
-            throw new InnerLogicException("invalid job type");
-        }
-        return role;
     }
 
     public Shift approveShift() throws InnerLogicException {

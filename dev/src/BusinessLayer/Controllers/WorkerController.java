@@ -3,37 +3,25 @@ package BusinessLayer.Controllers;
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Workers.*;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.HashMap;
+import BusinessLayer.WorkersUtils;
 
 
 public class WorkerController {
     private Worker loggedIn;
     private WorkersList workersList;
 
-    private final HashMap<String, Job> jobs = new HashMap<>();
 
     public WorkerController() {
         this.workersList = new WorkersList();
 
-        jobs.put("Cashier",Job.Cashier);
-        jobs.put("Storekeeper",Job.Storekeeper);
-        jobs.put("Usher",Job.Usher);
-        jobs.put("Guard",Job.Guard);
-        jobs.put("Shift_Manager",Job.Shift_Manager);
-        jobs.put("HR_Manager",Job.HR_Manager);
-        jobs.put("Branch_Manager",Job.Branch_Manager);
-        jobs.put("Assistant_Branch_Manager",Job.Assistant_Branch_Manager);
-
         //this is for testing TODO: remove this.
         try {
             workersList.addWorker(true, "tsuri", "1", "a", 123, "a", 1, 1, "a");
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         //TODO: remove until here
+
+
     }
 
     public WorkersList getWorkersList() {
@@ -63,12 +51,10 @@ public class WorkerController {
         if (!loggedIn.getIsAdmin())
             throw new InnerLogicException("cant add new worker to the system because loggedIn is not admin");
         if (workersList.contains(id)) throw new InnerLogicException("the system already has worker with the ID: " + id);
-        dateValidation(startWorkingDate);
+        WorkersUtils.dateValidation(startWorkingDate);
         return workersList.addWorker(isAdmin, name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                 sickDaysPerMonth, startWorkingDate);
     }
-
-
 
     public Worker getWorker(String id) throws InnerLogicException {
        if(!loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to get details of another worker");
@@ -76,7 +62,7 @@ public class WorkerController {
     }
 
     public Worker fireWorker(String id, String endWorkingDate) throws InnerLogicException {
-        notPastDateValidation(endWorkingDate);
+        WorkersUtils.notPastDateValidation(endWorkingDate);
         return  workersList.fireWorker(id, endWorkingDate);
     }
 
@@ -85,23 +71,23 @@ public class WorkerController {
         ShiftType st;
         ConstraintType ct;
 
-        dateValidation(date);
-        st = parseShiftType(shiftType);
-        ct = parseConstraintType(constraintType);
+        WorkersUtils.dateValidation(date);
+        st = WorkersUtils.parseShiftType(shiftType);
+        ct = WorkersUtils.parseConstraintType(constraintType);
 
         return loggedIn.addConstraint(date, st, ct);
     }
 
     public Constraint removeConstraint(String date, String shiftType) throws InnerLogicException {
         if(loggedIn == null) throw new InnerLogicException("tried to remove constraint but no user was logged in");
-        dateValidation(date);
-        ShiftType st = parseShiftType(shiftType);
+        WorkersUtils.dateValidation(date);
+        ShiftType st = WorkersUtils.parseShiftType(shiftType);
         return loggedIn.removeConstraint(date, st);
     }
 
     public Worker addOccupation(String id, String job) throws InnerLogicException {
         if(loggedIn == null || !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
-        Job role = parseJob(job);
+        Job role = WorkersUtils.parseJob(job);
         Worker worker = workersList.getWorker(id);
         worker.addOccupation(role);
         return worker;
@@ -109,54 +95,10 @@ public class WorkerController {
 
     public Worker removeOccupation(String id, String job) throws InnerLogicException {
         if(loggedIn == null || !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
-        Job role = parseJob(job);
+        Job role = WorkersUtils.parseJob(job);
         Worker worker = workersList.getWorker(id);
         worker.removeOccupation(role);
         return worker;
     }
-
-    private void dateValidation(String date) throws InnerLogicException {
-        String result;
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate localDate = LocalDate.parse(date, formatter);
-            result = localDate.format(formatter);
-        } catch (DateTimeParseException e) {
-            throw new InnerLogicException("invalid date");
-        }
-        if (!result.equals(date)) throw new InnerLogicException("invalid date");
-    }
-
-    private void notPastDateValidation(String date) throws InnerLogicException {// TODO check if today's date can pass this condition
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate localDate = LocalDate.parse(date, formatter);
-            if(localDate.isBefore(LocalDate.now())) throw new InnerLogicException("invalid Date (past date)");
-        } catch (DateTimeParseException e) {
-            throw new InnerLogicException("invalid date");
-        }
-    }
-
-
-    private ShiftType parseShiftType(String shiftType) throws InnerLogicException {
-        if ("Morning".equals(shiftType)) return ShiftType.Morning;
-        else if ("Evening".equals(shiftType)) return ShiftType.Evening;
-        else throw new InnerLogicException("invalid shift type");
-    }
-
-    private ConstraintType parseConstraintType(String constraintType) throws InnerLogicException {
-        if ("Cant".equals(constraintType)) return ConstraintType.Cant;
-        else if ("Want".equals(constraintType)) return ConstraintType.Want;
-        else throw new InnerLogicException("invalid constraint type");
-    }
-
-    private Job parseJob(String job) throws InnerLogicException {
-        Job role = jobs.get(job);
-        if (role == null){
-            throw new InnerLogicException("invalid job type");
-        }
-        return role;
-    }
-
 }
 
