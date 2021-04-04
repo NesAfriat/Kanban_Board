@@ -37,24 +37,6 @@ public class WorkDay {
         return current;
     }
 
-//    public Shift removeWorker(Job job, Worker worker, ShiftType shiftType) throws InnerLogicException {
-//        Shift current = getCurrentShift(shiftType);
-//        current.removeWorker(job,worker);
-//        return current;
-//    }
-
-
-//    public Shift addRequiredJob(Job role, int required, ShiftType shiftType) throws InnerLogicException{
-//        Shift shift = getCurrentShift(shiftType);
-//        shift.addRequiredJob(role,required);
-//        return shift;
-//    }
-//
-//    public Shift setAmountRequired(Job role, int required, ShiftType shiftType) throws InnerLogicException {
-//        Shift shift = getCurrentShift(shiftType);
-//        shift.setAmountRequired(role,required);
-//        return shift;
-//    }
     public Shift removeShift(ShiftType shiftType) throws InnerLogicException {
         Shift output = null;
         try {
@@ -74,6 +56,29 @@ public class WorkDay {
         }
         return  output;
     }
+
+
+
+
+    public Shift addShift(ShiftType shiftType) throws InnerLogicException {
+        if (ShiftType.Morning == shiftType){
+            if (morningShift != null){
+                throw new InnerLogicException("This WorkDay already have a morning Shift");
+            }else{
+                morningShift = new Shift();
+            }
+        }
+        else if (ShiftType.Evening.equals(shiftType)) {
+            if (eveningShift != null) {
+                throw new InnerLogicException("This WorkDay already have an evening Shift");
+            }else{
+                eveningShift = new Shift();
+            }
+        }
+        throw new InnerLogicException("There's no such shift type");
+    }
+
+
 
     public Shift getCurrentShift(ShiftType shiftType) throws InnerLogicException {
         if (ShiftType.Morning.equals(shiftType)){
