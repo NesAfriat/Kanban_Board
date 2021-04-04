@@ -139,4 +139,9 @@ public class ShiftController {
         currentDay = null;
         currentShiftType = null;
     }
+
+    public Shift removeShift(String date, String shiftType) {
+
+        return null;
+    }
 }

@@ -185,28 +185,23 @@ public class Menu {
     }
 
     private static void AdminMenu() {
-        System.out.println("1) View shift arrangement");
-        System.out.println("2) Manage Workers");
-        System.out.println("3) Manage Shifts");
-        System.out.println("4) Logout");
-        System.out.println("5) Exit");
+        System.out.println("1) Manage Workers");
+        System.out.println("2) Manage Shifts");
+        System.out.println("3) Logout");
+        System.out.println("4) Exit");
         System.out.print("Option: ");
         int option = getUserInput();
         switch (option){
             case 1:
-                adminViewShiftArrangement();
-                AdminMenu();
-                break;
-            case 2:
                 WorkersManageMenu();
                 break;
-            case 3:
+            case 2:
                 ShiftsManageMenu();
                 break;
-            case 4:
+            case 3:
                 LogOut();
                 break;
-            case 5:
+            case 4:
                 System.exit(0);
             default:
                 System.out.println("No such option");
@@ -215,26 +210,31 @@ public class Menu {
     }
 
     private static void ShiftsManageMenu() {
-        System.out.println("1) Edit shift");
-        System.out.println("2) Remove shift");
-        System.out.println("3) Add shifts");
-        System.out.println("4) Previous");
-        System.out.println("5) Exit");
+        System.out.println("1) View shift arrangement");
+        System.out.println("2) Edit shift");
+        System.out.println("3) Add new shifts");
+        System.out.println("4) Remove shift");
+        System.out.println("5) Previous");
+        System.out.println("6) Exit");
         System.out.print("Option: ");
         int option = getUserInput();
         switch (option){
             case 1:
-                EditShift();
+                adminViewShiftArrangement();
+                AdminMenu();
                 break;
             case 2:
-                RemoveShift();
+                EditShift();
                 break;
             case 3:
                 AddShifts();
                 break;
             case 4:
-                AdminMenu();
+                RemoveShift();
+                break;
             case 5:
+                AdminMenu();
+            case 6:
                 System.exit(0);
             default:
                 System.out.println("No such option");
@@ -247,7 +247,15 @@ public class Menu {
     }
 
     private static void RemoveShift() {
-        throw new NotImplementedException();
+        String date = getInputDate();
+        String shiftType = getInputShiftType();
+        ResponseT<ShiftResponse> shiftResponse = facade.removeShift(date, shiftType);
+        if (shiftResponse.ErrorOccurred()){
+            printPrettyError(shiftResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm(shiftType + " Shift removed successfully at date: " + date);
+        }
     }
 
     private static void EditShiftMenu() {
@@ -308,8 +316,7 @@ public class Menu {
     }
 
     private static void GetAvailableWorkers() {
-        System.out.print("Job: ");
-        String role = scanner.next();
+        String role = getInputJob();
         ResponseT<List<WorkerResponse>> availableWorkers = facade.getAvailableWorkers(role);
         if (availableWorkers.ErrorOccurred()){
             printPrettyError(availableWorkers.getErrorMessage());
@@ -327,8 +334,7 @@ public class Menu {
     }
 
     private static void SetRequiredAmount() {
-        System.out.print("Job: ");
-        String role = scanner.next();
+        String role = getInputJob();
         System.out.print("Amount required: ");
         int required = scanner.nextInt();
         ResponseT<ShiftResponse> shiftResponse = facade.setAmountRequired(role, required);
@@ -350,8 +356,7 @@ public class Menu {
     }
 
     private static void AddRequiredJob() {
-        System.out.print("Job: ");
-        String role = scanner.next();
+        String role = getInputJob();
         System.out.print("Amount required: ");
         int required = scanner.nextInt();
         ResponseT<ShiftResponse> shiftResponse = facade.addRequiredJob(role, required);
@@ -364,10 +369,8 @@ public class Menu {
     }
 
     private static void removeWorker() {
-        System.out.print("Worker ID: ");
-        String ID = scanner.next();
-        System.out.print("Worker role: ");
-        String role = scanner.next();
+        String ID = getInputWorkerID();
+        String role = getInputJob();
         ResponseT<ShiftResponse> shiftResponse = facade.removeWorkerFromCurrentShift(ID, role);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
@@ -388,10 +391,8 @@ public class Menu {
     }
 
     private static void assignWorker() {
-        System.out.print("Worker ID: ");
-        String ID = scanner.next();
-        System.out.print("Worker role: ");
-        String role = scanner.next();
+        String ID = getInputWorkerID();
+        String role = getInputJob();
         ResponseT<ShiftResponse> shiftResponse = facade.addWorkerToCurrentShift(ID, role);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
@@ -401,11 +402,30 @@ public class Menu {
         }
     }
 
-    private static void EditShift() {
+    private static String getInputDate(){
         System.out.println("Enter Date <DD/MM/YYYY>: ");
-        String date = scanner.next();
+        return scanner.next();
+    }
+
+    private static String getInputShiftType(){
         System.out.println("Enter Shift (Morning/Evening): ");
-        String shiftType = scanner.next();
+        return scanner.next();
+    }
+
+    public static String getInputJob(){
+        System.out.print("Job title: ");
+        return scanner.next();
+    }
+
+    public static String getInputWorkerID(){
+        System.out.print("Worker ID: ");
+        return scanner.next();
+    }
+
+    private static void EditShift() {
+        String date = getInputDate();
+        String shiftType = getInputShiftType();
+
         ResponseT<ShiftResponse> shiftResponse = facade.chooseShift(date, shiftType);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
@@ -462,8 +482,7 @@ public class Menu {
     }
 
     private static void ViewWorkerConstraints() {
-        System.out.print("Worker ID: ");
-        String ID = scanner.next();
+        String ID = getInputWorkerID();
         ResponseT<WorkerResponse> worker = facade.getWorker(ID);
         if (worker.ErrorOccurred()){
             printPrettyError(worker.getErrorMessage());
@@ -478,10 +497,8 @@ public class Menu {
     }
 
     private static void RemoveWorkerOccupation() {
-        System.out.print("Worker ID: ");
-        String ID = scanner.next();
-        System.out.print("Job title: ");
-        String job = scanner.next();
+        String ID = getInputWorkerID();
+        String job = getInputJob();
         ResponseT<WorkerResponse> workerResponse = facade.removeOccupationToWorker(ID, job);
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
@@ -491,10 +508,8 @@ public class Menu {
     }
 
     private static void AddWorkerOccupation() {
-        System.out.print("Worker ID: ");
-        String ID = scanner.next();
-        System.out.print("Job title: ");
-        String job = scanner.next();
+        String ID = getInputWorkerID();
+        String job = getInputJob();
         ResponseT<WorkerResponse> workerResponse = facade.addOccupationToWorker(ID, job);
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
@@ -504,8 +519,7 @@ public class Menu {
     }
 
     private static void GetWorker() {
-        System.out.print("Worker ID: ");
-        String ID = scanner.next();
+        String ID = getInputWorkerID();
         ResponseT<WorkerResponse> workerResponse = facade.getWorker(ID);
         if (workerResponse.ErrorOccurred()) {
             printPrettyError(workerResponse.getErrorMessage());
@@ -515,8 +529,7 @@ public class Menu {
     }
 
     private static void FireWorker(){
-        System.out.print("Worker ID: ");
-        String ID = scanner.next();
+        String ID = getInputWorkerID();
         System.out.print("Enter end working date <DD/MM/YYYY>: ");
         String date = scanner.next();
         ResponseT<WorkerResponse> workerResponse = facade.fireWorker(ID, date);
@@ -530,8 +543,7 @@ public class Menu {
 
 
     private static void AddWorker() {
-        System.out.println("ID: ");
-        String ID = scanner.next();
+        String ID = getInputWorkerID();
         System.out.println("Name:");
         String name = scanner.next();
         System.out.println("Bank Account:");
