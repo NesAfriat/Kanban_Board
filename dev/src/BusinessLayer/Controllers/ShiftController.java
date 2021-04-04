@@ -140,8 +140,10 @@ public class ShiftController {
         currentShiftType = null;
     }
 
-    public Shift removeShift(String date, String shiftType) {
-
-        return null;
+    public Shift removeShift(String date, String shift) throws InnerLogicException {
+        WorkersUtils.dateValidation(date);
+        ShiftType shiftType = WorkersUtils.parseShiftType(shift);
+        WorkDay workDay = calendar.getWorkDay(date);
+        return workDay.removeShift(shiftType);
     }
 }
