@@ -113,6 +113,6 @@ public class WorkerResponse {
     }
 
     public String getNameID(){
-        return name + " (" + id + ")";
+        return name + " (ID: " + id + ")";
     }
 }

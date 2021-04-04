@@ -308,9 +308,36 @@ public class Menu {
     }
 
     private static void GetAvailableWorkers() {
+        System.out.print("Job: ");
+        String role = scanner.next();
+        ResponseT<List<WorkerResponse>> availableWorkers = facade.getAvailableWorkers(role);
+        if (availableWorkers.ErrorOccurred()){
+            printPrettyError(availableWorkers.getErrorMessage());
+        }
+        else {
+            if (availableWorkers.value.isEmpty()){
+                printPrettyConfirm("No available workers to work as " + role +" at current shift.");
+            }
+            else {
+                for (WorkerResponse workerRes : availableWorkers.value) {
+                    printPrettyConfirm(workerRes.getNameID());
+                }
+            }
+        }
     }
 
     private static void SetRequiredAmount() {
+        System.out.print("Job: ");
+        String role = scanner.next();
+        System.out.print("Amount required: ");
+        int required = scanner.nextInt();
+        ResponseT<ShiftResponse> shiftResponse = facade.setAmountRequired(role, required);
+        if (shiftResponse.ErrorOccurred()){
+            printPrettyError(shiftResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("The amount of workers required for role " + role + " has updated successfully to "+ required);
+        }
     }
 
     private static void ExitEditShiftMenu() {
@@ -323,7 +350,17 @@ public class Menu {
     }
 
     private static void AddRequiredJob() {
-        throw new NotImplementedException();
+        System.out.print("Job: ");
+        String role = scanner.next();
+        System.out.print("Amount required: ");
+        int required = scanner.nextInt();
+        ResponseT<ShiftResponse> shiftResponse = facade.addRequiredJob(role, required);
+        if (shiftResponse.ErrorOccurred()){
+            printPrettyError(shiftResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("Job "+ role + " added successfully to the shift.");
+        }
     }
 
     private static void removeWorker() {
