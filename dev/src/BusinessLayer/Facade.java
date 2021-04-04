@@ -200,4 +200,22 @@ public class Facade {
             return new ResponseT<>(e.getMessage());
         }
     }
+
+    public ResponseT<ShiftResponse> setAmountRequired(String role, int required) {
+        try {
+            Shift shift = shiftController.setAmountRequired(role, required);
+            return new ResponseT<>(new ShiftResponse(shift));
+        } catch (InnerLogicException e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<ShiftResponse> addRequiredJob(String role, int required) {
+        try {
+            Shift shift = shiftController.addRequiredJob(role, required);
+            return new ResponseT<>(new ShiftResponse(shift));
+        } catch (InnerLogicException e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
 }
