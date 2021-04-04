@@ -1,6 +1,7 @@
 package BusinessLayer.Shifts;
 
 import BusinessLayer.InnerLogicException;
+import BusinessLayer.Workers.Job;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,7 +15,6 @@ public class ShiftSchedule {
 
     public ShiftSchedule(){
         workDays = new HashMap<>();
-
     }
 
     public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
@@ -47,5 +47,22 @@ public class ShiftSchedule {
         return futureDays;
     }
 
+    private static class DefaultWorkDayHolder{
+        private Map<Job, Integer[]> weekDayMorningDefault = new HashMap<Job, Integer>(){{
+            put(Job.Cashier, );
+            put("Storekeeper",Job.Storekeeper);
+            put("Usher",Job.Usher);
+            put("Guard",Job.Guard);
+            put("Shift_Manager",Job.Shift_Manager);
+            put("HR_Manager",Job.HR_Manager);
+            put("Branch_Manager",Job.Branch_Manager);
+            put("Assistant_Branch_Manager",Job.Assistant_Branch_Manager);
+        }};
+        private Map<Job, Integer> weekDayEveningDefault;
+        private Map<Job, Integer> fridayMorningDefault;
+        private Map<Job, Integer> fridayEveningDefault;
+        private Map<Job, Integer> saturdayMorningDefault;
+        private Map<Job, Integer> saturdayEveningDefault;
 
+    }
 }
