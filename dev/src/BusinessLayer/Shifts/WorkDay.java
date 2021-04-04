@@ -37,30 +37,26 @@ public class WorkDay {
         return current;
     }
 
-    public Shift removeWorker(Job job, Worker worker, ShiftType shiftType) throws InnerLogicException {
-        Shift current = getCurrentShift(shiftType);
-        current.removeWorker(job,worker);
-        return current;
-    }
-
-//    public Shift approveShift(ShiftType shiftType) throws InnerLogicException {
-//        Shift shift = getCurrentShift(shiftType);
-//        shift.approveShift();
-//        return shift;
+//    public Shift removeWorker(Job job, Worker worker, ShiftType shiftType) throws InnerLogicException {
+//        Shift current = getCurrentShift(shiftType);
+//        current.removeWorker(job,worker);
+//        return current;
 //    }
 
-    public Shift addRequiredJob(Job role, int required, ShiftType shiftType) throws InnerLogicException{
-        Shift shift = getCurrentShift(shiftType);
-        shift.addRequiredJob(role,required);
-        return shift;
-    }
 
-    public Shift setAmountRequired(Job role, int required, ShiftType shiftType) throws InnerLogicException {
-        Shift shift = getCurrentShift(shiftType);
-        shift.setAmountRequired(role,required);
-        return shift;
-    }
+//    public Shift addRequiredJob(Job role, int required, ShiftType shiftType) throws InnerLogicException{
+//        Shift shift = getCurrentShift(shiftType);
+//        shift.addRequiredJob(role,required);
+//        return shift;
+//    }
+//
+//    public Shift setAmountRequired(Job role, int required, ShiftType shiftType) throws InnerLogicException {
+//        Shift shift = getCurrentShift(shiftType);
+//        shift.setAmountRequired(role,required);
+//        return shift;
+//    }
     public Shift removeShift(ShiftType shiftType) throws InnerLogicException {
+        Shift output = null;
         try {
             WorkersUtils.notPastDateValidation(date);
         }catch (InnerLogicException e){
@@ -68,8 +64,15 @@ public class WorkDay {
         }
         if(shiftType == ShiftType.Morning){
             if (morningShift == null) throw new InnerLogicException("tried to remove shift that is not exist");
-                      
+            output = morningShift;
+            morningShift =null;
         }
+        if(shiftType == ShiftType.Evening){
+            if (eveningShift == null) throw new InnerLogicException("tried to remove shift that is not exist");
+            output = eveningShift;
+            eveningShift =null;
+        }
+        return  output;
     }
 
     public Shift getCurrentShift(ShiftType shiftType) throws InnerLogicException {
