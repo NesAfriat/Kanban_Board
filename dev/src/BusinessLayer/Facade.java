@@ -218,4 +218,13 @@ public class Facade {
             return new ResponseT<>(e.getMessage());
         }
     }
+
+    public ResponseT<ShiftResponse> removeShift(String date, String shiftType) {
+        try {
+            Shift shift = shiftController.removeShift(date, shiftType);
+            return new ResponseT<>(new ShiftResponse(shift));
+        } catch (InnerLogicException e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
 }
