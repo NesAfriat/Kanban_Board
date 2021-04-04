@@ -4,6 +4,7 @@ import BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers.WorkersList;
+import BusinessLayer.WorkersUtils;
 
 import java.time.LocalDate;
 
@@ -58,6 +59,17 @@ public class WorkDay {
         Shift shift = getCurrentShift(shiftType);
         shift.setAmountRequired(role,required);
         return shift;
+    }
+    public Shift removeShift(ShiftType shiftType) throws InnerLogicException {
+        try {
+            WorkersUtils.notPastDateValidation(date);
+        }catch (InnerLogicException e){
+            throw new InnerLogicException("tried to remove shift that already happened");
+        }
+        if(shiftType == ShiftType.Morning){
+            if (morningShift == null) throw new InnerLogicException("tried to remove shift that is not exist");
+            
+        }
     }
 
     public Shift getCurrentShift(ShiftType shiftType) throws InnerLogicException {
