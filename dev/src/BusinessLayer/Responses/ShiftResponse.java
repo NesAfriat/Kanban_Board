@@ -35,13 +35,15 @@ public class ShiftResponse {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Shift approved: ").append(approved).append("\n");
         currentWorkers.forEach((job, jobArrangement) -> {
-            stringBuilder.append(job).append(" (").append(jobArrangement.amountAssigned).append("/").append(jobArrangement.required).append(")").append(": ");
-            for (WorkerResponse workerResponse: jobArrangement.workers){
-                stringBuilder.append(workerResponse.getNameID()).append(", ");
+            if (jobArrangement.required != 0) {
+                stringBuilder.append(job).append(" (").append(jobArrangement.amountAssigned).append("/").append(jobArrangement.required).append(")").append(": ");
+                for (WorkerResponse workerResponse : jobArrangement.workers) {
+                    stringBuilder.append(workerResponse.getNameID()).append(", ");
+                }
+                if (!jobArrangement.workers.isEmpty())
+                    stringBuilder.replace(stringBuilder.length() - 2, stringBuilder.length() - 1, ".");
+                stringBuilder.append("\n");
             }
-            if (!jobArrangement.workers.isEmpty())
-                stringBuilder.replace(stringBuilder.length()-2,stringBuilder.length()-1,".");
-            stringBuilder.append("\n");
         });
         return stringBuilder.toString();
     }

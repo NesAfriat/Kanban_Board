@@ -24,6 +24,7 @@ public class Menu {
         facade.addWorker(false, "lidor", "4", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorkDay(true, true, "01/01/2000");
         facade.addWorkDay(true, false, "02/01/2000");
+        facade.addWorkDay(true, true, "02/05/2021");
         facade.addOccupationToWorker("2", "Shift_Manager");
         facade.addOccupationToWorker("3", "Cashier");
         facade.logout();
@@ -92,7 +93,6 @@ public class Menu {
         else {
             printPrettyConfirm("Logout succeed");
         }
-        main(null);
     }
 
 
@@ -200,6 +200,7 @@ public class Menu {
                 break;
             case 3:
                 LogOut();
+                main(null);
                 break;
             case 4:
                 System.exit(0);
@@ -221,16 +222,17 @@ public class Menu {
         switch (option){
             case 1:
                 adminViewShiftArrangement();
-                AdminMenu();
+                ShiftsManageMenu();
                 break;
             case 2:
                 EditShift();
                 break;
             case 3:
-                AddShifts();
+                AddShiftsMenu();
                 break;
             case 4:
                 RemoveShift();
+                ShiftsManageMenu();
                 break;
             case 5:
                 AdminMenu();
@@ -242,11 +244,52 @@ public class Menu {
         }
     }
 
-    private static void AddShifts() {
+    private static void AddShiftsMenu() {
+        System.out.println("1) Add new shift");
+        System.out.println("2) Add new workday");
+        System.out.println("3) Add new month");
+        System.out.println("4) Previous");
+        System.out.println("5) Exit");
+        System.out.print("Option: ");
+        int option = getUserInput();
+        switch (option) {
+            case 1:
+                addShift();
+                AddShiftsMenu();
+                break;
+            case 2:
+                addWorkDay();
+                AddShiftsMenu();
+                break;
+            case 3:
+                addMonth();
+                AddShiftsMenu();
+                break;
+            case 4:
+                ShiftsManageMenu();
+                break;
+            case 5:
+                LogOut();
+                System.exit(0);
+            default:
+                System.out.println("No such option");
+                AddShiftsMenu();
+        }
+    }
+
+    private static void addShift() {
         throw new NotImplementedException();
     }
 
-    private static void RemoveShift() {
+    private static void addMonth() {
+        throw new NotImplementedException();
+    }
+
+    private static void addWorkDay() {
+        throw new NotImplementedException();
+    }
+
+    private static void RemoveShift(){
         String date = getInputDate();
         String shiftType = getInputShiftType();
         ResponseT<ShiftResponse> shiftResponse = facade.removeShift(date, shiftType);

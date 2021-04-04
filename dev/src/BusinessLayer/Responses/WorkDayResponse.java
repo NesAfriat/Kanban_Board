@@ -27,6 +27,9 @@ public class WorkDayResponse {
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Date: ").append(date).append("\n");
+        if (morningShift == null && eveningShift == null){
+            stringBuilder.append("There's no shifts at this work day\n");
+        }
         if (morningShift != null)
             stringBuilder.append("Morning shift details:\n").append(morningShift.toString());
         if (eveningShift != null)
@@ -37,6 +40,9 @@ public class WorkDayResponse {
     public String approvedToString(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Date: ").append(date).append("\n");
+        if (morningShift == null && eveningShift == null){
+            stringBuilder.append("There's no shifts at this work day\n");
+        }
         if (morningShift != null)
             if(morningShift.isApproved()){
                 stringBuilder.append("Morning shift details:\n").append(morningShift.toString());
