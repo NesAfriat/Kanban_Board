@@ -115,7 +115,6 @@ public class ShiftController {
     }
 
     public List<Worker> getAvailableWorkers(String job) throws InnerLogicException {
-
         Job role = parseJob(job);
         List<Worker> listOfWorkers= workersList.getWorkersByJob(role);
         List<Worker> relevantWorkers = new LinkedList<>();

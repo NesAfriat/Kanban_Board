@@ -21,7 +21,7 @@ public class Menu {
         facade.login("1");
         facade.addWorker(false, "dan", "2", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker(false, "rami", "3", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "lidor", "3", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "lidor", "4", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorkDay(true, true, "01/01/2000");
         facade.addWorkDay(true, false, "02/01/2000");
         facade.addOccupationToWorker("2", "Shift_Manager");
@@ -61,7 +61,7 @@ public class Menu {
         int option = getUserInput();
         switch (option){
             case 1:
-                viewShiftArrangement();
+                nonAdminViewShiftArrangement();
                 WorkerMenu();
                 break;
             case 2:
@@ -95,16 +95,8 @@ public class Menu {
         main(null);
     }
 
-    private static void viewShiftAsAdmin(){
-        viewShiftArrangement();
-        AdminMenu();
-    }
 
-    private static void viewShiftAsWorker(){
-        viewShiftArrangement();
-        WorkerMenu();
-    }
-    private static void viewShiftArrangement() {
+    private static void adminViewShiftArrangement() {
         System.out.println("Enter Date <DD/MM/YYYY>: ");
         String date = scanner.next();
         ResponseT<WorkDayResponse> workDay = facade.viewShiftArrangement(date);
@@ -112,7 +104,19 @@ public class Menu {
             printPrettyError(workDay.getErrorMessage());
         }
         else {
-                printPrettyConfirm(workDay.value.toString());
+            printPrettyConfirm(workDay.value.toString());
+        }
+    }
+
+    private static void nonAdminViewShiftArrangement() {
+        System.out.println("Enter Date <DD/MM/YYYY>: ");
+        String date = scanner.next();
+        ResponseT<WorkDayResponse> workDay = facade.viewShiftArrangement(date);
+        if (workDay.ErrorOccurred()){
+            printPrettyError(workDay.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm(workDay.value.approvedToString());
         }
     }
 
@@ -190,7 +194,8 @@ public class Menu {
         int option = getUserInput();
         switch (option){
             case 1:
-                viewShiftAsAdmin();
+                adminViewShiftArrangement();
+                AdminMenu();
                 break;
             case 2:
                 WorkersManageMenu();

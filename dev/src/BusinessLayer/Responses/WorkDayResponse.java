@@ -33,4 +33,23 @@ public class WorkDayResponse {
             stringBuilder.append("Evening shift details:\n").append(eveningShift.toString());
         return stringBuilder.toString();
     }
+
+    public String approvedToString(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Date: ").append(date).append("\n");
+        if (morningShift != null)
+            if(morningShift.isApproved()){
+                stringBuilder.append("Morning shift details:\n").append(morningShift.toString());
+            }else{
+                stringBuilder.append("Morning shift is not yet approved\n");
+            }
+
+        if (eveningShift != null)
+            if(eveningShift.isApproved()){
+                stringBuilder.append("Evening shift details:\n").append(eveningShift.toString());
+            }else{
+                stringBuilder.append("Evening shift is not yet approved\n");
+            }
+        return stringBuilder.toString();
+    }
 }
