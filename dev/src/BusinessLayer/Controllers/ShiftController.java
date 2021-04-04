@@ -87,6 +87,22 @@ public class ShiftController {
         return currentShift;
     }
 
+    public Shift setAmountRequired(String role, int required) throws InnerLogicException {
+        throwIfNotAdmin();
+        Shift currentShift = getCurrentShift();
+        Job job = parseJob(role);
+        currentShift.setAmountRequired(job, required);
+        return currentShift;
+    }
+
+    public Shift addRequiredJob(String role, int required) throws InnerLogicException {
+        throwIfNotAdmin();
+        Shift currentShift = getCurrentShift();
+        Job job = parseJob(role);
+        currentShift.addRequiredJob(job, required);
+        return currentShift;
+    }
+
 
 
     public Worker removeFromFutureShifts(Worker worker, String date) throws InnerLogicException {

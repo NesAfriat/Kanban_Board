@@ -76,6 +76,7 @@ public class Shift {
 
 
     public void setAmountRequired(Job role, int required) throws InnerLogicException {
+        if(required < 0 )throw new InnerLogicException("Can not set required workers to negative value");
         JobArrangement jobArrangement = getJobArrangement(role);
         if (jobArrangement.amountAssigned > required){
             throw new InnerLogicException("Can not set required workers to be less than assigned worker. please remove a worker first");
@@ -85,6 +86,7 @@ public class Shift {
     }
 
     public void addRequiredJob(Job role, int required) throws InnerLogicException {
+        if(required < 0 )throw new InnerLogicException("Can not set required workers to negative value");
         if (currentWorkers.get(role) != null){
             throw new InnerLogicException("This role is already required for the shift");
         }
@@ -95,13 +97,6 @@ public class Shift {
         return approved;
     }
 
-//    public void forceApproveShift() throws InnerLogicException {
-//        JobArrangement jobArrangement = getJobArrangement(Job.Shift_Manager);
-//        if (jobArrangement.amountAssigned != 1){
-//            throw new InnerLogicException("Can not approve a shift without a shift manager");
-//        }
-//        approved = true;
-//    }
 
     public void approveShift() throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(Job.Shift_Manager);
