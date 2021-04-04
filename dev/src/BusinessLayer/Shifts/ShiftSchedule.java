@@ -47,22 +47,23 @@ public class ShiftSchedule {
         return futureDays;
     }
 
-    private static class DefaultWorkDayHolder{
-        private Map<Job, Integer[]> weekDayMorningDefault = new HashMap<Job, Integer>(){{
-            put(Job.Cashier, );
-            put("Storekeeper",Job.Storekeeper);
-            put("Usher",Job.Usher);
-            put("Guard",Job.Guard);
-            put("Shift_Manager",Job.Shift_Manager);
-            put("HR_Manager",Job.HR_Manager);
-            put("Branch_Manager",Job.Branch_Manager);
-            put("Assistant_Branch_Manager",Job.Assistant_Branch_Manager);
-        }};
-        private Map<Job, Integer> weekDayEveningDefault;
-        private Map<Job, Integer> fridayMorningDefault;
-        private Map<Job, Integer> fridayEveningDefault;
-        private Map<Job, Integer> saturdayMorningDefault;
-        private Map<Job, Integer> saturdayEveningDefault;
-
-    }
+//    private static class DefaultWorkDayHolder{
+//        final int weekDayMorning = 0;
+//        final int weekDayEvening = 1;
+//        final int fridayMorning = 2;
+//        final int fridayEvening = 3;
+//        final int saturdayMorning = 4;
+//        final int saturdayEvening = 5;
+//
+//
+//        private Map<Job, int[]> defaultSetup = new HashMap<Job, int[]>(){{
+//            put(Job.Cashier, new int[6]);
+//            put(Job.Storekeeper, new int[6]);
+//            put(Job.Usher, new int[6]);
+//            put(Job.Guard, new int[6]);
+//        }};
+//
+//
+//
+//    }
 }
