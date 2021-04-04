@@ -303,6 +303,22 @@ public class Menu {
     }
 
     private static void GetAvailableWorkers() {
+        System.out.print("Job: ");
+        String role = scanner.next();
+        ResponseT<List<WorkerResponse>> availableWorkers = facade.getAvailableWorkers(role);
+        if (availableWorkers.ErrorOccurred()){
+            printPrettyError(availableWorkers.getErrorMessage());
+        }
+        else {
+            if (availableWorkers.value.isEmpty()){
+                printPrettyConfirm("No available workers to work as " + role +" at current shift.");
+            }
+            else {
+                for (WorkerResponse workerRes : availableWorkers.value) {
+                    printPrettyConfirm(workerRes.getNameID());
+                }
+            }
+        }
     }
 
     private static void SetRequiredAmount() {
