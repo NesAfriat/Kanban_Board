@@ -58,4 +58,8 @@ public class WorkDayResponse {
             }
         return stringBuilder.toString();
     }
+
+    public String getDate() {
+        return date;
+    }
 }

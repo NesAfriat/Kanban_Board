@@ -3,7 +3,6 @@ import BusinessLayer.Facade;
 import BusinessLayer.Responses.*;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,15 +33,18 @@ public class Menu {
     }
 
     public static void main(String[] args){
-        testingDataUpload();
+        if (args != null) {
+            testingDataUpload();
+        }
+
         System.out.println("Enter ID number for login: ");
         String ID = scanner.next();
         ResponseT<WorkerResponse> worker = facade.login(ID);
         if (worker.ErrorOccurred()){
             System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
-            System.exit(0);
+            main(null);
         }
-        printPrettyConfirm("Hello, "+worker.value.getName()+"!");
+        printPrettyConfirm("Hello, "+ worker.value.getName()+ "!");
         if (worker.value.getIsAdmin()){
             AdminMenu();
         }
@@ -59,32 +61,38 @@ public class Menu {
         System.out.println("5) Logout");
         System.out.println("6) Exit");
         System.out.print("Option: ");
-        int option = getUserInput();
+        int option = getInputOptionNumber();
         switch (option){
             case 1:
                 nonAdminViewShiftArrangement();
                 WorkerMenu();
                 break;
             case 2:
-                viewWorkerConstraints();
+                viewLoggedWorkerConstraints();
+                WorkerMenu();
                 break;
             case 3:
                 addConstraint();
+                WorkerMenu();
                 break;
             case 4:
                 removeConstraint();
+                WorkerMenu();
                 break;
             case 5:
                 LogOut();
+                main(null);
                 break;
             case 6:
+                LogOut();
                 System.exit(0);
             default:
                 System.out.println("No such option");
                 WorkerMenu();
         }
-
     }
+
+
 
     private static void LogOut() {
         Response logout = facade.logout();
@@ -97,8 +105,7 @@ public class Menu {
 
 
     private static void adminViewShiftArrangement() {
-        System.out.println("Enter Date <DD/MM/YYYY>: ");
-        String date = scanner.next();
+        String date = getInputDate();
         ResponseT<WorkDayResponse> workDay = facade.viewShiftArrangement(date);
         if (workDay.ErrorOccurred()){
             printPrettyError(workDay.getErrorMessage());
@@ -109,8 +116,7 @@ public class Menu {
     }
 
     private static void nonAdminViewShiftArrangement() {
-        System.out.println("Enter Date <DD/MM/YYYY>: ");
-        String date = scanner.next();
+        String date = getInputDate();
         ResponseT<WorkDayResponse> workDay = facade.viewShiftArrangement(date);
         if (workDay.ErrorOccurred()){
             printPrettyError(workDay.getErrorMessage());
@@ -120,22 +126,10 @@ public class Menu {
         }
     }
 
-    private static int getUserInput() {
-        int option = 0;
-        try {
-            option = scanner.nextInt();
-        }
-        catch (InputMismatchException e){
-            getUserInput();
-        }
-        return option;
-    }
 
     private static void removeConstraint() {
-        System.out.println("Enter Date <DD/MM/YYYY>: ");
-        String date = scanner.next();
-        System.out.println("Enter Shift (Morning/Evening): ");
-        String shiftType = scanner.next();
+        String date = getInputDate();
+        String shiftType = getInputShiftType();
         ResponseT<ConstraintResponse> constraint = facade.removeConstraint(date, shiftType);
         if (constraint.ErrorOccurred()){
             printPrettyError(constraint.getErrorMessage());
@@ -144,16 +138,12 @@ public class Menu {
             printPrettyConfirm("Constraint removed successfully, details: ");
             printPrettyConfirm(constraint.value.toString());
         }
-        WorkerMenu();
     }
 
 
-
     private static void addConstraint() {
-        System.out.println("Enter Date <DD/MM/YYYY>: ");
-        String date = scanner.next();
-        System.out.println("Enter Shift (Morning/Evening): ");
-        String shiftType = scanner.next();
+        String date = getInputDate();
+        String shiftType = getInputShiftType();
         System.out.println("Enter Constraint Type (Cant/Want): ");
         String constraintType = scanner.next();
         ResponseT<ConstraintResponse> constraint = facade.addConstraint(date, shiftType, constraintType);
@@ -164,12 +154,11 @@ public class Menu {
             printPrettyConfirm("Constraint added successfully, details: ");
             printPrettyConfirm(constraint.value.toString());
         }
-        WorkerMenu();
     }
 
 
 
-    private static void viewWorkerConstraints() {
+    private static void viewLoggedWorkerConstraints() {
         ResponseT<WorkerResponse> worker = facade.getLoggedWorker();
         if (worker.ErrorOccurred()){
             printPrettyError(worker.getErrorMessage());
@@ -180,9 +169,9 @@ public class Menu {
                 printPrettyConfirm(constraint.toString());
             }
         }
-        WorkerMenu();
-        
     }
+
+
 
     private static void AdminMenu() {
         System.out.println("1) Manage Workers");
@@ -190,7 +179,7 @@ public class Menu {
         System.out.println("3) Logout");
         System.out.println("4) Exit");
         System.out.print("Option: ");
-        int option = getUserInput();
+        int option = getInputOptionNumber();
         switch (option){
             case 1:
                 WorkersManageMenu();
@@ -203,12 +192,15 @@ public class Menu {
                 main(null);
                 break;
             case 4:
+                LogOut();
                 System.exit(0);
             default:
                 System.out.println("No such option");
                 AdminMenu();
         }
     }
+
+
 
     private static void ShiftsManageMenu() {
         System.out.println("1) View shift arrangement");
@@ -218,7 +210,7 @@ public class Menu {
         System.out.println("5) Previous");
         System.out.println("6) Exit");
         System.out.print("Option: ");
-        int option = getUserInput();
+        int option = getInputOptionNumber();
         switch (option){
             case 1:
                 adminViewShiftArrangement();
@@ -251,14 +243,14 @@ public class Menu {
         System.out.println("4) Previous");
         System.out.println("5) Exit");
         System.out.print("Option: ");
-        int option = getUserInput();
+        int option = getInputOptionNumber();
         switch (option) {
             case 1:
-                addShift();
+                addDefaultShift();
                 AddShiftsMenu();
                 break;
             case 2:
-                addWorkDay();
+                addDefaultWorkDay();
                 AddShiftsMenu();
                 break;
             case 3:
@@ -277,16 +269,31 @@ public class Menu {
         }
     }
 
-    private static void addShift() {
-        throw new NotImplementedException();
+    private static void addDefaultShift() {
+        String date = getInputDate();
+        String shiftType = getInputShiftType();
+        ResponseT<WorkDayResponse> workDayResponse = facade.addDefaultShift(date, shiftType);
+        if (workDayResponse.ErrorOccurred()){
+            printPrettyError(workDayResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm(shiftType + "shift added successfully to workday at " + workDayResponse.value.getDate());
+        }
     }
 
     private static void addMonth() {
         throw new NotImplementedException();
     }
 
-    private static void addWorkDay() {
-        throw new NotImplementedException();
+    private static void addDefaultWorkDay() {
+//        String date = getInputDate();
+//        ResponseT<WorkDayResponse> workDayResponse = facade.addDefaultWorkDay(date);
+//        if (workDayResponse.ErrorOccurred()){
+//            printPrettyError(workDayResponse.getErrorMessage());
+//        }
+//        else {
+//            printPrettyConfirm("A workday added successfully at " + workDayResponse.value.getDate());
+//        }
     }
 
     private static void RemoveShift(){
@@ -311,7 +318,7 @@ public class Menu {
         System.out.println("7) Approve shift");
         System.out.println("8) Previous");
         System.out.print("Option: ");
-        int option = getUserInput();
+        int option = getInputOptionNumber();
         switch (option){
             case 1:
                 viewCurrentArrangement();
@@ -356,6 +363,7 @@ public class Menu {
         else{
             printPrettyConfirm("Shift approved successfully");;
         }
+
     }
 
     private static void GetAvailableWorkers() {
@@ -445,25 +453,6 @@ public class Menu {
         }
     }
 
-    private static String getInputDate(){
-        System.out.println("Enter Date <DD/MM/YYYY>: ");
-        return scanner.next();
-    }
-
-    private static String getInputShiftType(){
-        System.out.println("Enter Shift (Morning/Evening): ");
-        return scanner.next();
-    }
-
-    public static String getInputJob(){
-        System.out.print("Job title: ");
-        return scanner.next();
-    }
-
-    public static String getInputWorkerID(){
-        System.out.print("Worker ID: ");
-        return scanner.next();
-    }
 
     private static void EditShift() {
         String date = getInputDate();
@@ -491,7 +480,7 @@ public class Menu {
         System.out.println("6) View worker constraints");
         System.out.println("7) Previous");
         System.out.print("Option: ");
-        int option = getUserInput();
+        int option = getInputOptionNumber();
         switch (option){
             case 1:
                 AddWorker();
@@ -616,5 +605,30 @@ public class Menu {
 
     private static void printPrettyError(String errorMessage) {
         System.out.println(ANSI_RED + errorMessage + ANSI_RESET);
+    }
+
+
+    private static String getInputDate(){
+        System.out.println("Enter Date <DD/MM/YYYY>: ");
+        return scanner.next();
+    }
+
+    private static String getInputShiftType(){
+        System.out.println("Enter Shift (Morning/Evening): ");
+        return scanner.next();
+    }
+
+    private static String getInputJob(){
+        System.out.print("Job title: ");
+        return scanner.next();
+    }
+
+    private static String getInputWorkerID(){
+        System.out.print("Worker ID: ");
+        return scanner.next();
+    }
+
+    private static int getInputOptionNumber() {
+        return scanner.nextInt();
     }
 }
