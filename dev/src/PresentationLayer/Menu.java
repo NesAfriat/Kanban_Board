@@ -292,14 +292,14 @@ public class Menu {
     }
 
     private static void addDefaultWorkDay() {
-//        String date = getInputDate();
-//        ResponseT<WorkDayResponse> workDayResponse = facade.addDefaultWorkDay(date);
-//        if (workDayResponse.ErrorOccurred()){
-//            printPrettyError(workDayResponse.getErrorMessage());
-//        }
-//        else {
-//            printPrettyConfirm("A workday added successfully at " + workDayResponse.value.getDate());
-//        }
+        String date = getInputDate();
+        ResponseT<WorkDayResponse> workDayResponse = facade.addDefaultWorkDay(date);
+        if (workDayResponse.ErrorOccurred()){
+            printPrettyError(workDayResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("A workday added successfully at " + workDayResponse.value.getDate());
+        }
     }
 
     private static void RemoveShift(){

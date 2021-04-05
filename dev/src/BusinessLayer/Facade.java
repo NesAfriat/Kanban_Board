@@ -246,12 +246,13 @@ public class Facade {
         }
     }
 
-//    public ResponseT<WorkDayResponse> addDefaultWorkDay(String date) {
-//        try {
-//            WorkDay workDay = shiftController.addDefaultWorkDay(date);
-//            return new ResponseT<>(new WorkDayResponse(workDay));
-//        } catch (InnerLogicException e) {
-//            return new ResponseT<>(e.getMessage());
-//        }
-//    }
+
+    public ResponseT<WorkDayResponse> addDefaultWorkDay(String date) {
+        try {
+            WorkDay workDay = shiftController.addDefaultWorkDay(date);
+            return new ResponseT<>(new WorkDayResponse(workDay));
+        } catch (InnerLogicException e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
 }
