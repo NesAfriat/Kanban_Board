@@ -89,7 +89,7 @@ public class ShiftSchedule {
         }
         int dayOfTheWeek = WorkersUtils.getWeekDayFromDate(date);
         boolean hasMorning = defaultWorkDayHolder.getDefaultShiftInDay(dayOfTheWeek, ShiftType.Morning);
-        boolean hasEvening = defaultWorkDayHolder.getDefaultShiftInDay(dayOfTheWeek, ShiftType.Morning);
+        boolean hasEvening = defaultWorkDayHolder.getDefaultShiftInDay(dayOfTheWeek, ShiftType.Evening);
         WorkDay workDay = new WorkDay(hasMorning,hasEvening,date);
         List<Job> shiftWorkersRoles = WorkersUtils.getShiftWorkers();
 
@@ -106,7 +106,7 @@ public class ShiftSchedule {
                 shift.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, dayOfTheWeek, ShiftType.Evening));
             }
         }
-
+        workDays.put(date,workDay);
         return workDay;
     }
 
@@ -171,13 +171,13 @@ public class ShiftSchedule {
                 throw new InnerLogicException("day must be between 1 to 7");
             int numShiftType = 0;
             if(shiftType == ShiftType.Evening) numShiftType = 1;
-            defaultWorkDaySetup[dayOfTheWeek][numShiftType] = changeTo;
+            defaultWorkDaySetup[dayOfTheWeek-1][numShiftType] = changeTo;
         }
 
         private boolean getDefaultShiftInDay(int dayOfTheWeek, ShiftType shiftType) throws InnerLogicException {
             int numShiftType = 0;
             if(shiftType == ShiftType.Evening) numShiftType = 1;
-            return defaultWorkDaySetup[dayOfTheWeek][numShiftType];
+            return defaultWorkDaySetup[dayOfTheWeek-1][numShiftType];
         }
 
         private int getShiftKind(int day, ShiftType shiftType) throws InnerLogicException {
