@@ -36,6 +36,19 @@ public class WorkersUtils {
         if (!result.equals(date)) throw new InnerLogicException("invalid date");
     }
 
+    public static int getWeekDayFromDate(String date) throws InnerLogicException {
+        dateValidation(date);
+        int dayOfWeek;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(date, formatter);
+            dayOfWeek =localDate.getDayOfWeek().getValue();
+            return (dayOfWeek  % 7)+ 1; // adjust to israeli numbering of the week days.
+        } catch (DateTimeParseException e) {
+            throw new InnerLogicException("invalid date");
+        }
+    }
+
     public static void notPastDateValidation(String date) throws InnerLogicException {// TODO check if today's date can pass this condition
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");

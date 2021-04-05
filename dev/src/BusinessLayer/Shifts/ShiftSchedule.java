@@ -12,9 +12,11 @@ import java.util.Map;
 
 public class ShiftSchedule {
     private Map<String, WorkDay> workDays;
+    private DefaultWorkDayHolder defaultWorkDayHolder;
 
     public ShiftSchedule(){
         workDays = new HashMap<>();
+        defaultWorkDayHolder = new DefaultWorkDayHolder();
     }
 
     public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
@@ -44,26 +46,50 @@ public class ShiftSchedule {
                 futureDays.add(workDay);
             }
         });
+
         return futureDays;
     }
 
-//    private static class DefaultWorkDayHolder{
-//        final int weekDayMorning = 0;
-//        final int weekDayEvening = 1;
-//        final int fridayMorning = 2;
-//        final int fridayEvening = 3;
-//        final int saturdayMorning = 4;
-//        final int saturdayEvening = 5;
-//
-//
-//        private Map<Job, int[]> defaultSetup = new HashMap<Job, int[]>(){{
-//            put(Job.Cashier, new int[6]);
-//            put(Job.Storekeeper, new int[6]);
-//            put(Job.Usher, new int[6]);
-//            put(Job.Guard, new int[6]);
-//        }};
-//
-//
-//
-//    }
+
+
+    public void setDefault(int day, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
+        if(day < 1 || day > 7) throw new InnerLogicException("day must be between 1 to 7");
+        if(amount < 0) throw new InnerLogicException("cannot have a negative amount of workers");
+        defaultWorkDayHolder.setDefault(day, shiftType, job, amount);
+    }
+
+
+
+    private class DefaultWorkDayHolder{
+        final int weekDayMorning = 0;
+        final int weekDayEvening = 1;
+        final int fridayMorning = 2;
+        final int fridayEvening = 3;
+        final int saturdayMorning = 4;
+        final int saturdayEvening = 5;
+
+        private Map<Job, int[]> defaultSetup;
+
+        private DefaultWorkDayHolder(){
+            int[] cashiers = {1, 2, 2, 0, 0, 0};
+            int[] storekeeper = {1, 0, 1, 0, 0, 0};
+            int[] Usher = {2, 2, 2, 0, 0, 0};
+            int[] guard = {1, 1, 1, 0, 0, 0};
+            defaultSetup = new HashMap<Job, int[]>(){{
+                put(Job.Cashier, cashiers);
+                put(Job.Storekeeper, storekeeper);
+                put(Job.Usher, Usher);
+                put(Job.Guard, guard);
+            }};
+        }
+
+
+        private void setDefault(int day, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
+            int shiftKind = 0;
+            day = day - 5;
+            if(day > 0) shiftKind = shiftKind + day * 2;
+            if(shiftType == ShiftType.Evening) shiftKind = shiftKind + 1;
+            this.defaultSetup.get(job)[shiftKind] = amount;
+        }
+    }
 }

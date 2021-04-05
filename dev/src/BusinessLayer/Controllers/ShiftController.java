@@ -146,4 +146,10 @@ public class ShiftController {
         WorkDay workDay = calendar.getWorkDay(date);
         return workDay.removeShift(shiftType);
     }
+
+    public WorkDay addDefaultShift(String date, String shiftType) throws InnerLogicException {
+        int dayOfWeak = WorkersUtils.getWeekDayFromDate(date);
+        ShiftType type = WorkersUtils.parseShiftType(shiftType);
+
+    }
 }
