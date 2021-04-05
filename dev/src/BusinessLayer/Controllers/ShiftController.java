@@ -46,6 +46,7 @@ public class ShiftController {
     public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
         throwIfNotAdmin();
         WorkersUtils.dateValidation(date);
+        WorkersUtils.notPastDateValidation(date);
         return calendar.addWorkDay(hasMorningShift, hasEveningShift, date);
     }
 

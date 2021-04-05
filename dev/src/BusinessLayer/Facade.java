@@ -237,6 +237,15 @@ public class Facade {
         }
     }
 
+    public Response setDefaultJobsInShift(int day, String shiftType, String role, int amount) {
+        try {
+            shiftController.setDefaultJobsInShift(day, shiftType, role, amount);
+            return new Response();
+        } catch (InnerLogicException e) {
+            return new Response(e.getMessage());
+        }
+    }
+
 //    public ResponseT<WorkDayResponse> addDefaultWorkDay(String date) {
 //        try {
 //            WorkDay workDay = shiftController.addDefaultWorkDay(date);

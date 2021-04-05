@@ -17,13 +17,19 @@ public class Menu {
     private static final Facade facade = new Facade();
 
     private static void testingDataUpload(){
+
         facade.login("1");
+        facade.setDefaultJobsInShift(1 ,"Morning", "Cashier", 2);
+        facade.setDefaultJobsInShift(6 ,"Morning", "Cashier", 3);
+        facade.setDefaultJobsInShift(1 ,"Morning", "Usher", 3);
+        facade.setDefaultJobsInShift(1 ,"Evening", "Usher", 0);
+        facade.setDefaultJobsInShift(6 ,"Morning", "Usher", 0);
         facade.addWorker(false, "dan", "2", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker(false, "rami", "3", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker(false, "lidor", "4", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorkDay(true, true, "01/01/2000");
-        facade.addWorkDay(true, false, "02/01/2000");
-        facade.addWorkDay(true, true, "02/05/2021");
+        facade.addWorkDay(true, true, "01/05/2021");
+        facade.addWorkDay(true, false, "02/05/2021");
+        facade.addWorkDay(true, true, "03/05/2021");
         facade.addOccupationToWorker("2", "Shift_Manager");
         facade.addOccupationToWorker("3", "Cashier");
         facade.logout();

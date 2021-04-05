@@ -85,6 +85,7 @@ public class ShiftSchedule {
 
 
     private class DefaultWorkDayHolder{
+
         final int weekDayMorning = 0;
         final int weekDayEvening = 1;
         final int fridayMorning = 2;
@@ -96,6 +97,11 @@ public class ShiftSchedule {
 
         private DefaultWorkDayHolder(){
             defaultSetup = new HashMap<>();
+            List<Job> jobs = WorkersUtils.getShiftWorkers();
+            for (Job job: jobs) {
+                int[] arr = {1, 1, 1, 1, 1, 1};
+                defaultSetup.put(job, arr);
+            }
 //            int[] cashiers = {1, 2, 2, 0 ,0, 0};
 //            int[] storekeeper = {1, 0, 1, 0, 0, 0};
 //            int[] Usher = {2, 2, 2, 0, 0, 0};
