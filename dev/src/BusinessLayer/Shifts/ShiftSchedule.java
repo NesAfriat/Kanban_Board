@@ -54,7 +54,7 @@ public class ShiftSchedule {
 
 
     public void setDefaultJobsInShift(int day, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
-        defaultWorkDayHolder.setDefaultJobRequiredForShift(day, shiftType, job, amount);
+        defaultWorkDayHolder.setDefaultJobInShift(day, shiftType, job, amount);
     }
 
     public WorkDay addDefaultShift(String date, ShiftType shiftType) throws InnerLogicException {
@@ -77,7 +77,7 @@ public class ShiftSchedule {
         }
         List<Job> shiftWorkersRoles = WorkersUtils.getShiftWorkers();
         for (Job role: shiftWorkersRoles){
-            shift.addRequiredJob(role, defaultWorkDayHolder.getDefault(role, dayOfTheWeek, shiftType));
+            shift.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, dayOfTheWeek, shiftType));
         }
 
         return workDay;
@@ -115,7 +115,7 @@ public class ShiftSchedule {
             defaultWorkDaySetup[6][1] = false;
         }
 
-        private void setDefaultJobRequiredForShift(int dayOfTheWeek, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
+        private void setDefaultJobInShift(int dayOfTheWeek, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
             if (job == Job.Shift_Manager){
                 throw new InnerLogicException("Cannot change the default amount of shift manager role");
             }
@@ -127,6 +127,29 @@ public class ShiftSchedule {
                 throw new InnerLogicException("There's no a default number workers for job: " + job);
             }
             defaults[shiftKind] = amount;
+        }
+
+        private int getDefaultJobInShift(Job role, int dayOfTheWeek, ShiftType shiftType) throws InnerLogicException {
+            int shiftKind = getShiftKind(dayOfTheWeek, shiftType);
+            int[] defaults = defaultShiftSetup.get(role);
+            if (defaults == null){
+                throw new InnerLogicException("There's no a default number workers for job: " + role);
+            }
+            return defaults[shiftKind];
+        }
+
+        private void setDefaultShiftInDay(int dayOfTheWeek, ShiftType shiftType, boolean changeTo) throws InnerLogicException {
+            if (dayOfTheWeek < 1 || dayOfTheWeek > 7)
+                throw new InnerLogicException("day must be between 1 to 7");
+            int numShiftType = 0;
+            if(shiftType == ShiftType.Evening) numShiftType = 1;
+            defaultWorkDaySetup[dayOfTheWeek][numShiftType] = changeTo;
+        }
+
+        private boolean getDefaultShiftInDay(int dayOfTheWeek, ShiftType shiftType) throws InnerLogicException {
+            int numShiftType = 0;
+            if(shiftType == ShiftType.Evening) numShiftType = 1;
+            return defaultWorkDaySetup[dayOfTheWeek][numShiftType];
         }
 
         private int getShiftKind(int day, ShiftType shiftType) throws InnerLogicException {
@@ -144,15 +167,6 @@ public class ShiftSchedule {
                 if(shiftType == ShiftType.Morning) return saturdayMorning;
                 else return saturdayEvening;
             }
-        }
-
-        private int getDefault(Job role, int dayOfTheWeek, ShiftType shiftType) throws InnerLogicException {
-            int shiftKind = getShiftKind(dayOfTheWeek, shiftType);
-            int[] defaults = defaultShiftSetup.get(role);
-            if (defaults == null){
-                throw new InnerLogicException("There's no a default number workers for job: " + role);
-            }
-            return defaults[shiftKind];
         }
     }
 }
