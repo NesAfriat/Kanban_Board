@@ -5,16 +5,11 @@ import BusinessLayer.Shifts.Shift;
 import BusinessLayer.Shifts.ShiftSchedule;
 import BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Shifts.WorkDay;
-import BusinessLayer.Workers.ConstraintType;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers.WorkersList;
 import BusinessLayer.WorkersUtils;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -132,8 +127,13 @@ public class ShiftController {
         if (currentShiftType == null){
             throw new InnerLogicException("There's no current shift");
         }
-        return currentDay.getCurrentShift(currentShiftType);
+        Shift currentShift = currentDay.getShift(currentShiftType);
+        if (currentShift == null){
+            throw new InnerLogicException("This workday does not have a " + currentShiftType + "shift");
+        }
+        return currentShift;
     }
+
 
     public void clearCurrentShift() {
         currentDay = null;
@@ -148,8 +148,10 @@ public class ShiftController {
     }
 
     public WorkDay addDefaultShift(String date, String shiftType) throws InnerLogicException {
-        int dayOfWeak = WorkersUtils.getWeekDayFromDate(date);
+        WorkersUtils.dateValidation(date);
+        WorkersUtils.notPastDateValidation(date);
         ShiftType type = WorkersUtils.parseShiftType(shiftType);
-
+        WorkDay workDay = calendar.addDefaultShift(date, type);
+        return workDay;
     }
 }

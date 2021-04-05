@@ -3,10 +3,7 @@ package BusinessLayer.Shifts;
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
-import BusinessLayer.Workers.WorkersList;
 import BusinessLayer.WorkersUtils;
-
-import java.time.LocalDate;
 
 public class WorkDay {
 
@@ -18,12 +15,14 @@ public class WorkDay {
         if (hasMorning) morningShift = new Shift();
         if (hasEvening) eveningShift = new Shift();
         this.date = date;
-        //TODO: remove
     }
 
-    // TODO: check worker has no constraints
+
     public Shift addWorker(Job job, Worker worker, ShiftType shiftType) throws InnerLogicException {
-        Shift current = getCurrentShift(shiftType);
+        Shift current = getShift(shiftType);
+        if (current == null){
+            throw new InnerLogicException("This work day does not have a " + shiftType +" shift");
+        }
         if (morningShift != null && morningShift.isWorking(worker)){
             throw new InnerLogicException(worker.getName() + " is already working at this day");
         }
@@ -66,6 +65,7 @@ public class WorkDay {
                 throw new InnerLogicException("This WorkDay already have a morning Shift");
             }else{
                 morningShift = new Shift();
+                return morningShift;
             }
         }
         else if (ShiftType.Evening.equals(shiftType)) {
@@ -73,6 +73,7 @@ public class WorkDay {
                 throw new InnerLogicException("This WorkDay already have an evening Shift");
             }else{
                 eveningShift = new Shift();
+                return eveningShift;
             }
         }
         throw new InnerLogicException("There's no such shift type");
@@ -80,20 +81,15 @@ public class WorkDay {
 
 
 
-    public Shift getCurrentShift(ShiftType shiftType) throws InnerLogicException {
+    public Shift getShift(ShiftType shiftType) {
         if (ShiftType.Morning.equals(shiftType)){
-            if (morningShift == null){
-                throw new InnerLogicException("This WorkDay does not have a morning Shift");
-            }
             return morningShift;
         }
         else if (ShiftType.Evening.equals(shiftType)) {
-            if (eveningShift == null) {
-                throw new InnerLogicException("This WorkDay does not have an evening Shift");
-            }
             return eveningShift;
         }
-        throw new InnerLogicException("There's no such shift type");
+        else
+            return null;
     }
 
     public void removeFromFutureShifts(Worker worker) throws InnerLogicException {

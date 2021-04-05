@@ -11,16 +11,20 @@ public class WorkDayResponse {
     private String date;
 
     public WorkDayResponse(WorkDay workDay){
-        try {
-            this.morningShift = new ShiftResponse(workDay.getCurrentShift(ShiftType.Morning));
-        } catch (InnerLogicException e) {
-            this.morningShift = null;
+
+        if (workDay.getShift(ShiftType.Morning) != null){
+             this.morningShift = new ShiftResponse(workDay.getShift(ShiftType.Morning));
         }
-        try {
-            this.eveningShift = new ShiftResponse(workDay.getCurrentShift(ShiftType.Evening));
-        } catch (InnerLogicException e) {
-            this.eveningShift = null;
+        else {
+            morningShift = null;
         }
+        if (workDay.getShift(ShiftType.Evening) != null){
+            this.eveningShift = new ShiftResponse(workDay.getShift(ShiftType.Evening));
+        }
+        else {
+            eveningShift = null;
+        }
+
         this.date = workDay.getDate();
     }
 
@@ -33,7 +37,7 @@ public class WorkDayResponse {
         if (morningShift != null)
             stringBuilder.append("Morning shift details:\n").append(morningShift.toString());
         if (eveningShift != null)
-            stringBuilder.append("Evening shift details:\n").append(eveningShift.toString());
+            stringBuilder.append("\nEvening shift details:\n").append(eveningShift.toString());
         return stringBuilder.toString();
     }
 
@@ -52,7 +56,7 @@ public class WorkDayResponse {
 
         if (eveningShift != null)
             if(eveningShift.isApproved()){
-                stringBuilder.append("Evening shift details:\n").append(eveningShift.toString());
+                stringBuilder.append("\nEvening shift details:\n").append(eveningShift.toString());
             }else{
                 stringBuilder.append("Evening shift is not yet approved\n");
             }

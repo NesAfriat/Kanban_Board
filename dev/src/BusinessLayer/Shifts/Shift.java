@@ -20,8 +20,10 @@ public class Shift {
     public Shift(){
         approved = false;
         currentWorkers = new HashMap<>();
-        currentWorkers.put(Job.Shift_Manager, new JobArrangement(1));
+        //currentWorkers.put(Job.Shift_Manager, new JobArrangement(1));
     }
+
+
 
 
     // assign new worker to the shift
@@ -57,12 +59,22 @@ public class Shift {
         return jobArrangement;
     }
 
+
     public void addRequiredJob(Job role, int required) throws InnerLogicException {
         if(required < 0 )throw new InnerLogicException("Can not set required workers to negative value");
-        if (currentWorkers.get(role) != null){
-            throw new InnerLogicException("This role is already required for the shift");
+        JobArrangement jobArrangement = currentWorkers.get(role);
+        if (jobArrangement == null){
+            jobArrangement = new JobArrangement(required);
+            currentWorkers.put(role, jobArrangement);
         }
-        currentWorkers.put(role, new JobArrangement(required));
+
+        else {
+            if (jobArrangement.required != 0) {
+                throw new InnerLogicException("This role is already required for the shift");
+            } else {
+                jobArrangement.required = required;
+            }
+        }
     }
 
     public void setAmountRequired(Job role, int required) throws InnerLogicException {

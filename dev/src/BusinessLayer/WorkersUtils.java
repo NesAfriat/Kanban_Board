@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class WorkersUtils {
 
@@ -78,5 +80,15 @@ public class WorkersUtils {
             throw new InnerLogicException("invalid job type");
         }
         return role;
+    }
+
+    public static List<Job> getShiftWorkers() {
+        List<Job> shiftWorkers = new LinkedList<>();
+        shiftWorkers.add(Job.Cashier);
+        shiftWorkers.add(Job.Storekeeper);
+        shiftWorkers.add(Job.Usher);
+        shiftWorkers.add(Job.Guard);
+        shiftWorkers.add(Job.Shift_Manager);
+        return shiftWorkers;
     }
 }

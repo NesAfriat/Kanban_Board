@@ -277,7 +277,7 @@ public class Menu {
             printPrettyError(workDayResponse.getErrorMessage());
         }
         else {
-            printPrettyConfirm(shiftType + "shift added successfully to workday at " + workDayResponse.value.getDate());
+            printPrettyConfirm(shiftType + " shift added successfully to workday at " + workDayResponse.value.getDate());
         }
     }
 
