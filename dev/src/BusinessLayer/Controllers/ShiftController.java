@@ -157,6 +157,6 @@ public class ShiftController {
     }
 
     public void setDefaultJobsInShift(int day, String shiftType, String job, int amount) throws InnerLogicException {
-        calendar.setDefault(day, WorkersUtils.parseShiftType(shiftType), WorkersUtils.parseJob(job), amount);
+        calendar.setDefaultJobsInShift(day, WorkersUtils.parseShiftType(shiftType), WorkersUtils.parseJob(job), amount);
     }
 }

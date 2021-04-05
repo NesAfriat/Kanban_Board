@@ -53,8 +53,8 @@ public class ShiftSchedule {
 
 
 
-    public void setDefault(int day, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
-        defaultWorkDayHolder.setDefault(day, shiftType, job, amount);
+    public void setDefaultJobsInShift(int day, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
+        defaultWorkDayHolder.setDefaultJobRequiredForShift(day, shiftType, job, amount);
     }
 
     public WorkDay addDefaultShift(String date, ShiftType shiftType) throws InnerLogicException {
@@ -93,39 +93,36 @@ public class ShiftSchedule {
         final int saturdayMorning = 4;
         final int saturdayEvening = 5;
 
-        private final Map<Job, int[]> defaultSetup;
-
+        private final Map<Job, int[]> defaultShiftSetup;
+        private final boolean[][] defaultWorkDaySetup;
+        
         private DefaultWorkDayHolder(){
-            defaultSetup = new HashMap<>();
+            defaultShiftSetup = new HashMap<>();
             List<Job> jobs = WorkersUtils.getShiftWorkers();
             for (Job job: jobs) {
                 int[] arr = {1, 1, 1, 1, 1, 1};
-                defaultSetup.put(job, arr);
+                defaultShiftSetup.put(job, arr);
             }
-//            int[] cashiers = {1, 2, 2, 0 ,0, 0};
-//            int[] storekeeper = {1, 0, 1, 0, 0, 0};
-//            int[] Usher = {2, 2, 2, 0, 0, 0};
-//            int[] guard = {1, 1, 1, 0, 0, 0};
-//            int[] shift_manager = {1, 1, 1, 1, 1, 1};
-//            defaultSetup = new HashMap<Job, int[]>(){{
-//                put(Job.Cashier, cashiers);
-//                put(Job.Storekeeper, storekeeper);
-//                put(Job.Usher, Usher);
-//                put(Job.Guard, guard);
-//                put(Job.Shift_Manager, shift_manager);
-//            }};
-//
-
+            
+            defaultWorkDaySetup = new boolean[7][2];
+            for (int i = 0; i < 5; i++){
+                defaultWorkDaySetup[i][0] = true;
+                defaultWorkDaySetup[i][1] = true;
+            }
+            defaultWorkDaySetup[5][0] = true;
+            defaultWorkDaySetup[5][1] = false;
+            defaultWorkDaySetup[6][0] = false;
+            defaultWorkDaySetup[6][1] = false;
         }
 
-        private void setDefault(int dayOfTheWeek, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
+        private void setDefaultJobRequiredForShift(int dayOfTheWeek, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
             if (job == Job.Shift_Manager){
                 throw new InnerLogicException("Cannot change the default amount of shift manager role");
             }
             if (amount < 0)
                 throw new InnerLogicException("cannot have a negative amount of workers");
             int shiftKind = getShiftKind(dayOfTheWeek, shiftType);
-            int[] defaults = defaultSetup.get(job);
+            int[] defaults = defaultShiftSetup.get(job);
             if (defaults == null){
                 throw new InnerLogicException("There's no a default number workers for job: " + job);
             }
@@ -151,7 +148,7 @@ public class ShiftSchedule {
 
         private int getDefault(Job role, int dayOfTheWeek, ShiftType shiftType) throws InnerLogicException {
             int shiftKind = getShiftKind(dayOfTheWeek, shiftType);
-            int[] defaults = defaultSetup.get(role);
+            int[] defaults = defaultShiftSetup.get(role);
             if (defaults == null){
                 throw new InnerLogicException("There's no a default number workers for job: " + role);
             }
