@@ -71,8 +71,10 @@ public class ShiftSchedule {
         Shift morningSkeleton = skeleton.getShift(ShiftType.Morning);
         Shift eveningSkeleton = skeleton.getShift(ShiftType.Evening);
         for (Job role: shiftWorkersRoles){
-            morningSkeleton.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, day, ShiftType.Morning));
-            eveningSkeleton.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, day, ShiftType.Evening));
+            if(morningSkeleton != null)
+                morningSkeleton.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, day, ShiftType.Morning));
+            if(eveningSkeleton != null)
+                eveningSkeleton.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, day, ShiftType.Evening));
         }
         return skeleton;
     }
