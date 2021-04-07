@@ -61,6 +61,23 @@ public class WorkersUtils {
         }
     }
 
+    //return true is the date is in <= "range" days then new
+    public static boolean isDateIsInMoreThanNumDays(String date, int num) throws InnerLogicException {
+        dateValidation(date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        LocalDate now = LocalDate.now();
+        return localDate.minusDays(num).isAfter(now);
+    }
+
+    public static boolean isInPastMonth(String date) throws InnerLogicException {
+        dateValidation(date);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate localDate = LocalDate.parse(date, formatter);
+        LocalDate now = LocalDate.now();
+        if(now.getYear() > localDate.getYear()) return true;
+        return now.getYear() == localDate.getYear() && now.getMonthValue() < localDate.getMonthValue();
+    }
 
     public static ShiftType parseShiftType(String shiftType) throws InnerLogicException {
         if ("Morning".equals(shiftType)) return ShiftType.Morning;

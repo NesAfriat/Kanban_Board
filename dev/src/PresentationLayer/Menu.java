@@ -1,10 +1,10 @@
 package PresentationLayer;
 import BusinessLayer.Facade;
 import BusinessLayer.Responses.*;
-import BusinessLayer.Workers.Job;
-import BusinessLayer.WorkersUtils;
+//import BusinessLayer.Shifts.ShiftType;
+//import BusinessLayer.Shifts.WorkDay;
 
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,16 +27,39 @@ public class Menu {
         facade.setDefaultJobsInShift(1 ,"Evening", "Usher", 0);
         facade.setDefaultJobsInShift(6 ,"Morning", "Usher", 0);
         facade.addWorker(false, "dan", "222222222", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "rami", "3333333333", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "rami", "333333333", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker(false, "lidor", "444444444", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorkDay(true, true, "01/05/2021");
-        facade.addWorkDay(true, false, "02/05/2021");
-        facade.addWorkDay(true, true, "03/05/2021");
-        facade.addOccupationToWorker("2", "Shift_Manager");
-        facade.addOccupationToWorker("3", "Cashier");
+//        WorkDay workday = facade.addWorkDay(true, false, "01/04/2021");
+//        workday.getShift(ShiftType.Morning).addRequiredJob("");
+        facade.addDefaultWorkDay( "01/05/2021");
+        facade.addDefaultWorkDay("02/05/2021");
+        facade.addDefaultWorkDay("03/05/2021");
+        facade.addDefaultWorkDay("04/05/2021");
+        facade.addDefaultWorkDay("05/05/2021");
+        facade.addDefaultWorkDay("06/05/2021");
+        facade.addDefaultWorkDay("07/05/2021");
+        facade.addDefaultWorkDay("08/05/2021");
+        facade.addDefaultWorkDay("09/05/2021");
+        facade.addDefaultWorkDay("10/05/2021");
+        facade.addDefaultWorkDay("11/05/2021");
+        facade.addDefaultWorkDay("12/05/2021");
+        facade.addDefaultWorkDay("13/05/2021");
+        facade.addDefaultWorkDay("14/05/2021");
+        facade.addDefaultWorkDay("15/05/2021");
+        facade.addDefaultWorkDay("16/05/2021");
+        facade.addDefaultWorkDay("17/05/2021");
+        facade.addDefaultWorkDay("18/05/2021");
+        facade.addDefaultWorkDay("19/05/2021");
+        facade.addDefaultWorkDay("20/05/2021");
+
+
+
+        facade.addOccupationToWorker("222222222", "Shift_Manager");
+        facade.addOccupationToWorker("333333333", "Usher");
+        facade.addOccupationToWorker("333333333", "Cashier");
         facade.logout();
-        facade.login("2");
-        facade.addConstraint("01/01/2000","Morning", "Cant");
+        facade.login("222222222");
+        facade.addConstraint("01/05/2021","Morning", "Cant");
         facade.logout();
     }
 

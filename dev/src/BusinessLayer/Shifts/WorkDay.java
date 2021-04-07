@@ -107,14 +107,6 @@ public class WorkDay {
         }
     }
 
-    public Shift getEveningShift() {
-        return eveningShift;
-    }
-
-    public Shift getMorningShift(){
-        return morningShift;
-    }
-
     public String getDate(){return date;}
 
 }

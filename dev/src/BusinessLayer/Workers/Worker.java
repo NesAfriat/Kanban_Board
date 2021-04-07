@@ -1,6 +1,7 @@
 package BusinessLayer.Workers;
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.*;
+import BusinessLayer.WorkersUtils;
 import org.omg.CORBA.CODESET_INCOMPATIBLE;
 
 import java.util.LinkedList;
@@ -46,6 +47,8 @@ public class Worker {
                 throw new InnerLogicException("this shift already has constraint");
             }
         }
+        WorkersUtils.notPastDateValidation(date);
+        if(!WorkersUtils.isDateIsInMoreThanNumDays(date, 14)) throw new InnerLogicException("Worker cant add constraint in less then two weeks");
         Constraint con = new Constraint(date, shiftType, constraintType);
         this.constraints.add(con);
         return con;

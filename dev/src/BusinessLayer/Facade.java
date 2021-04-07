@@ -147,14 +147,7 @@ public class Facade {
         }
     }
 
-    public ResponseT<WorkDayResponse> addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) {
-        try {
-            WorkDay newWorkDay = shiftController.addWorkDay(hasMorningShift, hasEveningShift, date);
-            return new ResponseT<>(new WorkDayResponse(newWorkDay));
-        } catch (InnerLogicException e) {
-            return new ResponseT<>(e.getMessage());
-        }
-    }
+
 
     public ResponseT<ShiftResponse> chooseShift(String date, String shiftType) {
         try {
@@ -287,6 +280,15 @@ public class Facade {
             return new ResponseT<>(new WorkDayResponse(workDay));
         } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
+        }
+    }
+
+
+    public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) {
+        try {
+            return shiftController.addWorkDay(hasMorningShift, hasEveningShift, date);
+        } catch (InnerLogicException e) {
+            return null;
         }
     }
 
