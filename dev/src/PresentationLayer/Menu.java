@@ -66,7 +66,7 @@ public class Menu {
         System.out.println("5) Logout");
         System.out.println("6) Exit");
         System.out.print("Option: ");
-        int option = getInputOptionNumber();
+        int option = getInputInt();
         switch (option){
             case 1:
                 nonAdminViewShiftArrangement();
@@ -184,7 +184,7 @@ public class Menu {
         System.out.println("3) Logout");
         System.out.println("4) Exit");
         System.out.print("Option: ");
-        int option = getInputOptionNumber();
+        int option = getInputInt();
         switch (option){
             case 1:
                 WorkersManageMenu();
@@ -216,7 +216,7 @@ public class Menu {
         System.out.println("6) Previous");
         System.out.println("7) Exit");
         System.out.print("Option: ");
-        int option = getInputOptionNumber();
+        int option = getInputInt();
         switch (option){
             case 1:
                 adminViewShiftArrangement();
@@ -252,7 +252,7 @@ public class Menu {
         System.out.println("5) Previous");
         System.out.println("6) Exit");
         System.out.print("Option: ");
-        int option = getInputOptionNumber();
+        int option = getInputInt();
         switch (option) {
             case 1:
                 getDefaultShift();
@@ -292,8 +292,28 @@ public class Menu {
     }
 
     private static void setDefaultWorkDay() {
-        System.out.println("Not implemented yet");
+        int day = getInputDay();
+        System.out.println("Set default morning shift: ");
+        boolean hasMorning = getInputYesNo();
+        System.out.println("Set default evening shift: ");
+        boolean hasEvening = getInputYesNo();
+        Response m_response = facade.setDefaultShiftInDay(day, "Morning", hasMorning);
+        Response e_response = facade.setDefaultShiftInDay(day, "Evening", hasEvening);
+        if (m_response.ErrorOccurred()){
+            printPrettyError(m_response.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("Workday now has default morning shift");
+        }
+        if (e_response.ErrorOccurred())
+            printPrettyError(e_response.getErrorMessage());
+        else {
+            printPrettyConfirm("Workday now has default evening shift");
+        }
     }
+
+
+
 
     private static void getDefaultShift(){
         int day = getInputDayType();
@@ -330,7 +350,7 @@ public class Menu {
         System.out.println("3) Previous");
         System.out.println("4) Exit");
         System.out.print("Option: ");
-        int option = getInputOptionNumber();
+        int option = getInputInt();
         switch (option) {
             case 1:
                 addDefaultShift();
@@ -398,7 +418,7 @@ public class Menu {
         System.out.println("7) Approve shift");
         System.out.println("8) Previous");
         System.out.print("Option: ");
-        int option = getInputOptionNumber();
+        int option = getInputInt();
         switch (option){
             case 1:
                 viewCurrentArrangement();
@@ -560,7 +580,7 @@ public class Menu {
         System.out.println("6) View worker constraints");
         System.out.println("7) Previous");
         System.out.print("Option: ");
-        int option = getInputOptionNumber();
+        int option = getInputInt();
         switch (option){
             case 1:
                 AddWorker();
@@ -708,16 +728,13 @@ public class Menu {
         return scanner.next();
     }
 
-    private static int getInputOptionNumber() {
-        return scanner.nextInt();
-    }
 
     private static int getInputDayType() {
         System.out.println("Choose day type:");
         System.out.println("1) Weekday");
         System.out.println("2) Friday");
         System.out.println("3) Saturday");
-        int day = scanner.nextInt();
+        int day = getInputInt();
         if (day == 2) day = 6;
         else if (day == 3) day = 7;
         else if (day == 1) day = 1;
@@ -736,11 +753,35 @@ public class Menu {
         System.out.println("5) Thursday");
         System.out.println("6) Friday");
         System.out.println("7) Saturday");
-        int day = scanner.nextInt();
+        int day = getInputInt();
         if (day < 1 | day > 7){
             printPrettyError("There's no such option");
             return getInputDay();
         }
         return day;
     }
+
+    private static boolean getInputYesNo() {
+        System.out.println("Choose your option:");
+        System.out.println("1) Yes");
+        System.out.println("2) No");
+        int option = getInputInt();
+        if (option == 1)
+            return true;
+        else if (option == 2)
+            return false;
+        else{
+            printPrettyError("There's no such option");
+            return getInputYesNo();
+        }
+    }
+
+    private static int getInputInt() {
+        while (!scanner.hasNextInt()){
+            printPrettyError("Please enter a number");
+            scanner.next();
+        }
+        return scanner.nextInt();
+    }
+
 }

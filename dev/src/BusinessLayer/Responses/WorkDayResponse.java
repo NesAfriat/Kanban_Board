@@ -72,12 +72,12 @@ public class WorkDayResponse {
         if (morningShift != null)
             stringBuilder.append("Morning shift: \n").append(morningShift.Settings()).append("\n");
         else {
-            stringBuilder.append("No default morning shift for this work day\n");
+            stringBuilder.append("By default there is no morning shift for this work day\n");
         }
         if (eveningShift != null)
             stringBuilder.append("Evening shift: \n").append(eveningShift.Settings()).append("\n");
         else
-            stringBuilder.append("No default evening shift for this work day\n");
+            stringBuilder.append("By default there is no evening shift for this work day\n");
         return stringBuilder.toString();
     }
 }
