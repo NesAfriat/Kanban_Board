@@ -43,7 +43,7 @@ public class WorkerUnitTests {
     public void addConstraint_FutureShift_InLegalRange_Allow(){
         //arrange
         LocalDate now = LocalDate.now();
-        String date = (now.plusDays(LEGAL_DAYS_RANGE)).format(formatter);
+        String date = (now.plusDays(LEGAL_DAYS_RANGE+1)).format(formatter);
 
         //act
         try {
@@ -61,7 +61,7 @@ public class WorkerUnitTests {
     public void addConstraint_FutureShift_LegalRange_SameShift_DifferentConstraint_Fail(){
         //arrange
         LocalDate now = LocalDate.now();
-        String date = (now.plusDays(LEGAL_DAYS_RANGE)).format(formatter);
+        String date = (now.plusDays(LEGAL_DAYS_RANGE+1)).format(formatter);
 
         //act
         try {
@@ -83,7 +83,7 @@ public class WorkerUnitTests {
     public void addConstraint_ToFutureShift_Before2Weeks_Fail(){
         //arrange
         LocalDate now = LocalDate.now();
-        String date = (now.plusDays(LEGAL_DAYS_RANGE-1)).format(formatter);
+        String date = (now.plusDays(LEGAL_DAYS_RANGE)).format(formatter);
 
         //act
         try {
