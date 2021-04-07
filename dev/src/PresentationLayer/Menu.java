@@ -281,7 +281,7 @@ public class Menu {
     }
 
     private static void getDefaultWorkDay() {
-        int day = getInputDayType();
+        int day = getInputDay();
         ResponseT<WorkDayResponse> workDayResponse = facade.getDefaultShiftInDay(day);
         if (workDayResponse.ErrorOccurred()){
             printPrettyError(workDayResponse.getErrorMessage());
