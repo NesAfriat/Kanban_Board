@@ -1,7 +1,6 @@
 package PresentationLayer;
 import BusinessLayer.Facade;
 import BusinessLayer.Responses.*;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 import java.util.Scanner;
@@ -282,7 +281,7 @@ public class Menu {
     }
 
     private static void getDefaultWorkDay() {
-        int day = getInputDay();
+        int day = getInputDayType();
         ResponseT<WorkDayResponse> workDayResponse = facade.getDefaultShiftInDay(day);
         if (workDayResponse.ErrorOccurred()){
             printPrettyError(workDayResponse.getErrorMessage());
@@ -297,7 +296,7 @@ public class Menu {
     }
 
     private static void getDefaultShift(){
-        int day = getInputDay();
+        int day = getInputDayType();
         String shiftType = getInputShiftType();
         ResponseT<ShiftResponse> response = facade.getDefaultJobsInShift(day, shiftType);
         if (response.ErrorOccurred()){
@@ -309,7 +308,7 @@ public class Menu {
     }
 
     private static void setDefaultShift() {
-        int day = getInputDay();
+        int day = getInputDayType();
         String shiftType = getInputShiftType();
         String role = getInputJob();
         System.out.println("Enter new amount required: ");
@@ -713,7 +712,7 @@ public class Menu {
         return scanner.nextInt();
     }
 
-    private static int getInputDay() {
+    private static int getInputDayType() {
         System.out.println("Choose day type:");
         System.out.println("1) Weekday");
         System.out.println("2) Friday");
@@ -723,6 +722,22 @@ public class Menu {
         else if (day == 3) day = 7;
         else if (day == 1) day = 1;
         else {
+            printPrettyError("There's no such option");
+            return getInputDayType();
+        }
+        return day;
+    }
+    private static int getInputDay() {
+        System.out.println("Choose day:");
+        System.out.println("1) Sunday");
+        System.out.println("2) Monday");
+        System.out.println("3) Tuesday");
+        System.out.println("4) Wednesday");
+        System.out.println("5) Thursday");
+        System.out.println("6) Friday");
+        System.out.println("7) Saturday");
+        int day = scanner.nextInt();
+        if (day < 1 | day > 7){
             printPrettyError("There's no such option");
             return getInputDay();
         }

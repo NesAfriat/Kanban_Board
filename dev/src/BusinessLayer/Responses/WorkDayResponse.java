@@ -69,15 +69,15 @@ public class WorkDayResponse {
 
     public String Settings() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Date: ").append(date).append("\n");
-        if (morningShift == null && eveningShift == null){
-            stringBuilder.append("There's no shifts at this work day\n");
-        }
         if (morningShift != null)
-            stringBuilder.append(morningShift.Settings());
-
+            stringBuilder.append("Morning shift: \n").append(morningShift.Settings()).append("\n");
+        else {
+            stringBuilder.append("No default morning shift for this work day\n");
+        }
         if (eveningShift != null)
-            stringBuilder.append(eveningShift.Settings());
+            stringBuilder.append("Evening shift: \n").append(eveningShift.Settings()).append("\n");
+        else
+            stringBuilder.append("No default evening shift for this work day\n");
         return stringBuilder.toString();
     }
 }
