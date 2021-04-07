@@ -167,6 +167,22 @@ public class ShiftController {
         calendar.setDefaultJobsInShift(day, WorkersUtils.parseShiftType(shiftType), WorkersUtils.parseJob(job), amount);
     }
 
+    public void setDefaultShiftInDay(int dayOfTheWeek, String shiftType, boolean changeTo) throws InnerLogicException {
+        throwIfNotAdmin();
+        calendar.setDefaultShiftInDay(dayOfTheWeek, WorkersUtils.parseShiftType(shiftType), changeTo);
+    }
+
+    public Shift getDefaultJobsInShift(int day, String shiftType) throws InnerLogicException {
+        throwIfNotAdmin();
+        return calendar.getDefaultShiftSkeleton(day, WorkersUtils.parseShiftType(shiftType));
+    }
+
+    public WorkDay getDefaultShiftInDay(int day) throws InnerLogicException {
+        throwIfNotAdmin();
+        return calendar.getDefaultWorkDaySkeleton(day);
+    }
+
+
     public WorkDay addDefaultWorkDay(String date) throws InnerLogicException {
         throwIfNotAdmin();
         WorkersUtils.dateValidation(date);

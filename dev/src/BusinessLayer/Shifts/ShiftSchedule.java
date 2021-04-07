@@ -47,19 +47,43 @@ public class ShiftSchedule {
                 futureDays.add(workDay);
             }
         });
-
         return futureDays;
     }
-
-
 
     public void setDefaultJobsInShift(int day, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
         defaultWorkDayHolder.setDefaultJobInShift(day, shiftType, job, amount);
     }
 
+    public Shift getDefaultShiftSkeleton(int day, ShiftType shiftType) throws InnerLogicException {
+        Shift skeleton = new Shift();
+        List<Job> shiftWorkersRoles = WorkersUtils.getShiftWorkers();
+        for (Job role: shiftWorkersRoles){
+            skeleton.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, day, shiftType));
+        }
+        return skeleton;
+    }
+
+    public WorkDay getDefaultWorkDaySkeleton(int day) throws InnerLogicException {
+        boolean hasMorning = defaultWorkDayHolder.getDefaultShiftInDay(day, ShiftType.Morning);
+        boolean hasEvening = defaultWorkDayHolder.getDefaultShiftInDay(day, ShiftType.Evening);
+        WorkDay skeleton = new WorkDay(hasMorning, hasEvening,"");
+        List<Job> shiftWorkersRoles = WorkersUtils.getShiftWorkers();
+        Shift morningSkeleton = skeleton.getShift(ShiftType.Morning);
+        Shift eveningSkeleton = skeleton.getShift(ShiftType.Evening);
+        for (Job role: shiftWorkersRoles){
+            morningSkeleton.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, day, ShiftType.Morning));
+            eveningSkeleton.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, day, ShiftType.Evening));
+        }
+        return skeleton;
+    }
+
+
+    public void setDefaultShiftInDay(int dayOfTheWeek, ShiftType shiftType, boolean changeTo) throws InnerLogicException {
+        defaultWorkDayHolder.setDefaultShiftInDay(dayOfTheWeek, shiftType, changeTo);
+    }
+
     public WorkDay addDefaultShift(String date, ShiftType shiftType) throws InnerLogicException {
         WorkDay workDay = workDays.get(date);
-
         if (workDay != null && workDay.getShift(shiftType) != null){
             throw new InnerLogicException("Tried to add shift to a workday that already has the shift");
         }

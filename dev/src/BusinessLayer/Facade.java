@@ -244,10 +244,19 @@ public class Facade {
             return new ResponseT<>(e.getMessage());
         }
     }
-
+//day: 0 if weekday, 1 if friday, 2 if saturday.
     public Response setDefaultJobsInShift(int day, String shiftType, String role, int amount) {
         try {
             shiftController.setDefaultJobsInShift(day, shiftType, role, amount);
+            return new Response();
+        } catch (InnerLogicException e) {
+            return new Response(e.getMessage());
+        }
+    }
+//day: number between 1 - 7.
+    public Response setDefaultShiftInDay(int day, String shiftType, boolean changeTo) {
+        try {
+            shiftController.setDefaultShiftInDay(day, shiftType, changeTo);
             return new Response();
         } catch (InnerLogicException e) {
             return new Response(e.getMessage());
