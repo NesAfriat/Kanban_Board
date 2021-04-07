@@ -13,16 +13,14 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class Shift {
 
-
+    private static final int DEFAULT_SHIFT_MANAGER_AMOUNT_REQUIRED = 1;
     private boolean approved;
     private final Map<Job,JobArrangement> currentWorkers;
 
     public Shift(){
         approved = false;
         currentWorkers = new HashMap<>();
-        //currentWorkers.put(Job.Shift_Manager, new JobArrangement(1));
     }
-
 
 
 
@@ -42,7 +40,7 @@ public class Shift {
         JobArrangement jobArrangement = getJobArrangement(role);
         if (jobArrangement.workers.remove(worker)){
             jobArrangement.amountAssigned--;
-            if (role == Job.Shift_Manager)
+            if (role == Job.Shift_Manager && jobArrangement.amountAssigned != DEFAULT_SHIFT_MANAGER_AMOUNT_REQUIRED)
                 approved = false;
         }
         else {
@@ -108,8 +106,8 @@ public class Shift {
     }
 
     public void approveShift() throws InnerLogicException {
-        JobArrangement jobArrangement = getJobArrangement(Job.Shift_Manager);
-        if (jobArrangement.amountAssigned != 1){
+        JobArrangement jobArrangement = currentWorkers.get(Job.Shift_Manager);
+        if (jobArrangement == null || jobArrangement.amountAssigned != DEFAULT_SHIFT_MANAGER_AMOUNT_REQUIRED){
             throw new InnerLogicException("Can not approve a shift without a shift manager");
         }
         approved = true;

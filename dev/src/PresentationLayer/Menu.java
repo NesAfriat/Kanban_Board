@@ -1,10 +1,7 @@
 package PresentationLayer;
 import BusinessLayer.Facade;
 import BusinessLayer.Responses.*;
-import BusinessLayer.Workers.Job;
-import BusinessLayer.WorkersUtils;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -330,7 +327,7 @@ public class Menu {
     private static void setDefaultShift() {
         int day = getInputDayType();
         String shiftType = getInputShiftType();
-        String role = getInputShiftJob();
+        String role = getInputJob();
         System.out.println("Enter new amount required: ");
         int amountRequired = scanner.nextInt();
         Response response = facade.setDefaultJobsInShift(day, shiftType, role, amountRequired);
@@ -475,7 +472,7 @@ public class Menu {
     }
 
     private static void GetAvailableWorkers() {
-        String role = getInputShiftJob();
+        String role = getInputJob();
         ResponseT<List<WorkerResponse>> availableWorkers = facade.getAvailableWorkers(role);
         if (availableWorkers.ErrorOccurred()){
             printPrettyError(availableWorkers.getErrorMessage());
@@ -493,7 +490,7 @@ public class Menu {
     }
 
     private static void SetRequiredAmount() {
-        String role = getInputShiftJob();
+        String role = getInputJob();
         System.out.print("Amount required: ");
         int required = scanner.nextInt();
         ResponseT<ShiftResponse> shiftResponse = facade.setAmountRequired(role, required);
@@ -515,7 +512,7 @@ public class Menu {
     }
 
     private static void AddRequiredJob() {
-        String role = getInputShiftJob();
+        String role = getInputJob();
         System.out.print("Amount required: ");
         int required = scanner.nextInt();
         ResponseT<ShiftResponse> shiftResponse = facade.addRequiredJob(role, required);
@@ -529,7 +526,7 @@ public class Menu {
 
     private static void removeWorker() {
         String ID = getInputWorkerID();
-        String role = getInputShiftJob();
+        String role = getInputJob();
         ResponseT<ShiftResponse> shiftResponse = facade.removeWorkerFromCurrentShift(ID, role);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
@@ -551,7 +548,7 @@ public class Menu {
 
     private static void assignWorker() {
         String ID = getInputWorkerID();
-        String role = getInputShiftJob();
+        String role = getInputJob();
         ResponseT<ShiftResponse> shiftResponse = facade.addWorkerToCurrentShift(ID, role);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
@@ -638,7 +635,7 @@ public class Menu {
 
     private static void RemoveWorkerOccupation() {
         String ID = getInputWorkerID();
-        String job = getInputShiftJob();
+        String job = getInputJob();
         ResponseT<WorkerResponse> workerResponse = facade.removeOccupationToWorker(ID, job);
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
@@ -649,7 +646,7 @@ public class Menu {
 
     private static void AddWorkerOccupation() {
         String ID = getInputWorkerID();
-        String job = getInputShiftJob();
+        String job = getInputJob();
         ResponseT<WorkerResponse> workerResponse = facade.addOccupationToWorker(ID, job);
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
@@ -689,13 +686,13 @@ public class Menu {
         System.out.println("Bank Account:");
         String bankAccount = scanner.next();
         System.out.println("Salary: ");
-        double salary = scanner.nextDouble();
+        double salary = getInputDouble();
         System.out.println("Education Fund:");
         String educationFund = scanner.next();
         System.out.println("Vacation Days Per Month:");
-        int vacationDaysPerMonth = scanner.nextInt();
+        int vacationDaysPerMonth = getInputInt();
         System.out.println("Sick Days Per Month:");
-        int sickDaysPerMonth = scanner.nextInt();
+        int sickDaysPerMonth = getInputInt();
         System.out.println("Enter Start Working Date <DD/MM/YYYY>: ");
         String date = scanner.next();
         ResponseT<WorkerResponse> workerResponse = facade.addWorker(false, name, ID, bankAccount, salary, educationFund, vacationDaysPerMonth, sickDaysPerMonth, date);
@@ -706,6 +703,8 @@ public class Menu {
             printPrettyConfirm("Worker added successfully to the system, details: " + workerResponse.value.getNameID());
         }
     }
+
+
 
     private static void printPrettyConfirm(String message) {
         System.out.println(ANSI_BLUE + message + ANSI_RESET);
@@ -736,7 +735,7 @@ public class Menu {
         }
     }
 
-    private static String getInputShiftJob(){
+    private static String getInputJob(){
         System.out.print("Enter job name: ");
         return scanner.next();
     }
@@ -801,6 +800,14 @@ public class Menu {
             scanner.next();
         }
         return scanner.nextInt();
+    }
+
+    private static double getInputDouble() {
+        while (!scanner.hasNextDouble()){
+            printPrettyError("Please enter a number");
+            scanner.next();
+        }
+        return scanner.nextDouble();
     }
 
     private static String getInputConstraintType() {
