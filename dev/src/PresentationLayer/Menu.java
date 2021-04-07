@@ -1,7 +1,10 @@
 package PresentationLayer;
 import BusinessLayer.Facade;
 import BusinessLayer.Responses.*;
+import BusinessLayer.Workers.Job;
+import BusinessLayer.WorkersUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -149,8 +152,7 @@ public class Menu {
     private static void addConstraint() {
         String date = getInputDate();
         String shiftType = getInputShiftType();
-        System.out.println("Enter Constraint Type (Cant/Want): ");
-        String constraintType = scanner.next();
+        String constraintType = getInputConstraintType();
         ResponseT<ConstraintResponse> constraint = facade.addConstraint(date, shiftType, constraintType);
         if (constraint.ErrorOccurred()){
             printPrettyError(constraint.getErrorMessage());
@@ -160,6 +162,7 @@ public class Menu {
             printPrettyConfirm(constraint.value.toString());
         }
     }
+
 
 
 
@@ -293,22 +296,19 @@ public class Menu {
 
     private static void setDefaultWorkDay() {
         int day = getInputDay();
-        System.out.println("Set default morning shift: ");
+        System.out.println("Do you want morning shift?");
         boolean hasMorning = getInputYesNo();
-        System.out.println("Set default evening shift: ");
+        System.out.println("Do you want morning shift? ");
         boolean hasEvening = getInputYesNo();
         Response m_response = facade.setDefaultShiftInDay(day, "Morning", hasMorning);
         Response e_response = facade.setDefaultShiftInDay(day, "Evening", hasEvening);
         if (m_response.ErrorOccurred()){
             printPrettyError(m_response.getErrorMessage());
         }
-        else {
-            printPrettyConfirm("Workday now has default morning shift");
-        }
         if (e_response.ErrorOccurred())
             printPrettyError(e_response.getErrorMessage());
-        else {
-            printPrettyConfirm("Workday now has default evening shift");
+        if (!m_response.ErrorOccurred() & !e_response.ErrorOccurred()){
+            printPrettyConfirm("New workday setting updated successfully");
         }
     }
 
@@ -330,7 +330,7 @@ public class Menu {
     private static void setDefaultShift() {
         int day = getInputDayType();
         String shiftType = getInputShiftType();
-        String role = getInputJob();
+        String role = getInputShiftJob();
         System.out.println("Enter new amount required: ");
         int amountRequired = scanner.nextInt();
         Response response = facade.setDefaultJobsInShift(day, shiftType, role, amountRequired);
@@ -345,10 +345,12 @@ public class Menu {
 
 
     private static void AddShiftsMenu() {
-        System.out.println("1) Add new shift");
-        System.out.println("2) Add new workday");
-        System.out.println("3) Previous");
-        System.out.println("4) Exit");
+        System.out.println("1) Add default shift");
+        System.out.println("2) Add default workday");
+        System.out.println("3) View default shift settings");
+        System.out.println("4) View default workday settings");
+        System.out.println("5) Previous");
+        System.out.println("6) Exit");
         System.out.print("Option: ");
         int option = getInputInt();
         switch (option) {
@@ -361,9 +363,15 @@ public class Menu {
                 AddShiftsMenu();
                 break;
             case 3:
+                getDefaultShift();
+                AddShiftsMenu();
+            case 4:
+                getDefaultWorkDay();
+                AddShiftsMenu();
+            case 5:
                 ShiftsManageMenu();
                 break;
-            case 4:
+            case 6:
                 LogOut();
                 System.exit(0);
             default:
@@ -467,7 +475,7 @@ public class Menu {
     }
 
     private static void GetAvailableWorkers() {
-        String role = getInputJob();
+        String role = getInputShiftJob();
         ResponseT<List<WorkerResponse>> availableWorkers = facade.getAvailableWorkers(role);
         if (availableWorkers.ErrorOccurred()){
             printPrettyError(availableWorkers.getErrorMessage());
@@ -485,7 +493,7 @@ public class Menu {
     }
 
     private static void SetRequiredAmount() {
-        String role = getInputJob();
+        String role = getInputShiftJob();
         System.out.print("Amount required: ");
         int required = scanner.nextInt();
         ResponseT<ShiftResponse> shiftResponse = facade.setAmountRequired(role, required);
@@ -507,7 +515,7 @@ public class Menu {
     }
 
     private static void AddRequiredJob() {
-        String role = getInputJob();
+        String role = getInputShiftJob();
         System.out.print("Amount required: ");
         int required = scanner.nextInt();
         ResponseT<ShiftResponse> shiftResponse = facade.addRequiredJob(role, required);
@@ -521,7 +529,7 @@ public class Menu {
 
     private static void removeWorker() {
         String ID = getInputWorkerID();
-        String role = getInputJob();
+        String role = getInputShiftJob();
         ResponseT<ShiftResponse> shiftResponse = facade.removeWorkerFromCurrentShift(ID, role);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
@@ -543,7 +551,7 @@ public class Menu {
 
     private static void assignWorker() {
         String ID = getInputWorkerID();
-        String role = getInputJob();
+        String role = getInputShiftJob();
         ResponseT<ShiftResponse> shiftResponse = facade.addWorkerToCurrentShift(ID, role);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
@@ -630,7 +638,7 @@ public class Menu {
 
     private static void RemoveWorkerOccupation() {
         String ID = getInputWorkerID();
-        String job = getInputJob();
+        String job = getInputShiftJob();
         ResponseT<WorkerResponse> workerResponse = facade.removeOccupationToWorker(ID, job);
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
@@ -641,7 +649,7 @@ public class Menu {
 
     private static void AddWorkerOccupation() {
         String ID = getInputWorkerID();
-        String job = getInputJob();
+        String job = getInputShiftJob();
         ResponseT<WorkerResponse> workerResponse = facade.addOccupationToWorker(ID, job);
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
@@ -714,17 +722,28 @@ public class Menu {
     }
 
     private static String getInputShiftType(){
-        System.out.println("Enter Shift (Morning/Evening): ");
+        System.out.println("Choose shift:");
+        System.out.println("1) Morning");
+        System.out.println("2) Evening");
+        int option = getInputInt();
+        if (option == 1)
+            return "Morning";
+        else if (option == 2)
+            return "Evening";
+        else {
+            printPrettyError("There's no such option.");
+            return getInputShiftType();
+        }
+    }
+
+    private static String getInputShiftJob(){
+        System.out.print("Enter job name: ");
         return scanner.next();
     }
 
-    private static String getInputJob(){
-        System.out.print("Job title: ");
-        return scanner.next();
-    }
 
     private static String getInputWorkerID(){
-        System.out.print("Worker ID: ");
+        System.out.print("Enter worker id: ");
         return scanner.next();
     }
 
@@ -762,9 +781,9 @@ public class Menu {
     }
 
     private static boolean getInputYesNo() {
-        System.out.println("Choose your option:");
         System.out.println("1) Yes");
         System.out.println("2) No");
+        System.out.print("Option: ");
         int option = getInputInt();
         if (option == 1)
             return true;
@@ -782,6 +801,21 @@ public class Menu {
             scanner.next();
         }
         return scanner.nextInt();
+    }
+
+    private static String getInputConstraintType() {
+        System.out.println("Choose constraint type: ");
+        System.out.println("1) Can't");
+        System.out.println("2) Want");
+        int option = getInputInt();
+        if (option == 1)
+            return "Cant";
+        else if (option == 2)
+            return "Want";
+        else {
+            printPrettyError("There's no such option");
+            return getInputConstraintType();
+        }
     }
 
 }
