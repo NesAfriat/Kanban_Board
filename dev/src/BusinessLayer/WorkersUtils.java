@@ -91,4 +91,5 @@ public class WorkersUtils {
         shiftWorkers.add(Job.Shift_Manager);
         return shiftWorkers;
     }
+
 }
