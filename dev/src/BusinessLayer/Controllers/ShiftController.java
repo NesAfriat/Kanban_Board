@@ -162,6 +162,13 @@ public class ShiftController {
         return workDay;
     }
 
+    public WorkDay addDefaultWorkDay(String date) throws InnerLogicException {
+        throwIfNotAdmin();
+        WorkersUtils.dateValidation(date);
+        WorkersUtils.notPastDateValidation(date);
+        return calendar.addDefaultWorkDay(date);
+    }
+
     public void setDefaultJobsInShift(int day, String shiftType, String job, int amount) throws InnerLogicException {
         throwIfNotAdmin();
         calendar.setDefaultJobsInShift(day, WorkersUtils.parseShiftType(shiftType), WorkersUtils.parseJob(job), amount);
@@ -183,12 +190,7 @@ public class ShiftController {
     }
 
 
-    public WorkDay addDefaultWorkDay(String date) throws InnerLogicException {
-        throwIfNotAdmin();
-        WorkersUtils.dateValidation(date);
-        WorkersUtils.notPastDateValidation(date);
-        return calendar.addDefaultWorkDay(date);
-    }
+
 
     private void throwIfNotAdmin() throws InnerLogicException {
         if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");
