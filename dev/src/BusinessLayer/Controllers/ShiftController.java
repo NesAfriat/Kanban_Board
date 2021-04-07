@@ -52,6 +52,7 @@ public class ShiftController {
 
 
     public void setCurrentShiftType(String shiftType) throws InnerLogicException {
+        throwIfNotAdmin();
         currentShiftType = WorkersUtils.parseShiftType(shiftType);
     }
 
@@ -92,6 +93,7 @@ public class ShiftController {
 
 
     public Worker removeFromFutureShifts(Worker worker, String date) throws InnerLogicException {
+        throwIfNotAdmin();
         WorkersUtils.dateValidation(date);
         List<WorkDay> workDays = calendar.getWorkDaysFrom(date);
         for (WorkDay workDay: workDays) {
@@ -101,6 +103,7 @@ public class ShiftController {
     }
 
     public List<Worker> getAvailableWorkers(String job) throws InnerLogicException {
+        throwIfNotAdmin();
         Job role = WorkersUtils.parseJob(job);
         List<Worker> listOfWorkers= workersList.getWorkersByJob(role);
         List<Worker> relevantWorkers = new LinkedList<>();
@@ -111,17 +114,17 @@ public class ShiftController {
     }
 
 
-    private void throwIfNotAdmin() throws InnerLogicException {
-        if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");
-    }
+
 
     public Shift approveShift() throws InnerLogicException {
+        throwIfNotAdmin();
         Shift shift = getCurrentShift();
         shift.approveShift();
         return shift;
     }
 
     public Shift getCurrentShift() throws InnerLogicException {
+        throwIfNotAdmin();
         if (currentDay == null){
             throw new InnerLogicException("There's no current Day");
         }
@@ -136,12 +139,14 @@ public class ShiftController {
     }
 
 
-    public void clearCurrentShift() {
+    public void clearCurrentShift() throws InnerLogicException {
+        throwIfNotAdmin();
         currentDay = null;
         currentShiftType = null;
     }
 
     public Shift removeShift(String date, String shift) throws InnerLogicException {
+        throwIfNotAdmin();
         WorkersUtils.dateValidation(date);
         ShiftType shiftType = WorkersUtils.parseShiftType(shift);
         WorkDay workDay = calendar.getWorkDay(date);
@@ -149,6 +154,7 @@ public class ShiftController {
     }
 
     public WorkDay addDefaultShift(String date, String shiftType) throws InnerLogicException {
+        throwIfNotAdmin();
         WorkersUtils.dateValidation(date);
         WorkersUtils.notPastDateValidation(date);
         ShiftType type = WorkersUtils.parseShiftType(shiftType);
@@ -157,12 +163,18 @@ public class ShiftController {
     }
 
     public void setDefaultJobsInShift(int day, String shiftType, String job, int amount) throws InnerLogicException {
+        throwIfNotAdmin();
         calendar.setDefaultJobsInShift(day, WorkersUtils.parseShiftType(shiftType), WorkersUtils.parseJob(job), amount);
     }
 
     public WorkDay addDefaultWorkDay(String date) throws InnerLogicException {
+        throwIfNotAdmin();
         WorkersUtils.dateValidation(date);
         WorkersUtils.notPastDateValidation(date);
         return calendar.addDefaultWorkDay(date);
+    }
+
+    private void throwIfNotAdmin() throws InnerLogicException {
+        if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");
     }
 }

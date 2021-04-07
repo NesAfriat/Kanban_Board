@@ -106,7 +106,6 @@ public class ShiftSchedule {
                 shift.addRequiredJob(role, defaultWorkDayHolder.getDefaultJobInShift(role, dayOfTheWeek, ShiftType.Evening));
             }
         }
-
         return workDay;
     }
 
