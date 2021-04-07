@@ -254,6 +254,14 @@ public class Facade {
         }
     }
 
+    public ResponseT<ShiftResponse> getDefaultJobsInShift(int day, String shiftType) {
+        try {
+            Shift shift = shiftController.getDefaultJobsInShift(day, shiftType);
+            return new ResponseT<>(new ShiftResponse(shift));
+        } catch (InnerLogicException e) {
+            return new ResponseT<>(e.getMessage());
+        }
+    }
 
     public ResponseT<WorkDayResponse> addDefaultWorkDay(String date) {
         try {
@@ -263,4 +271,6 @@ public class Facade {
             return new ResponseT<>(e.getMessage());
         }
     }
+
+
 }

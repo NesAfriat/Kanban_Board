@@ -246,7 +246,70 @@ public class Menu {
     }
 
     private static void EditDefaultWorkDayShiftMenu() {
+        System.out.println("1) Get shift default settings");
+        System.out.println("2) Edit shift default");
+        System.out.println("3) Get workday default settings");
+        System.out.println("4) Edit workday default");
+        System.out.println("5) Previous");
+        System.out.println("6) Exit");
+        System.out.print("Option: ");
+        int option = getInputOptionNumber();
+        switch (option) {
+            case 1:
+                getDefaultShift();
+                EditDefaultWorkDayShiftMenu();
+            case 2:
+                setDefaultShift();
+                EditDefaultWorkDayShiftMenu();
+                break;
+            case 4:
+                setDefaultWorkDay();
+                EditDefaultWorkDayShiftMenu();
+                break;
+            case 5:
+                ShiftsManageMenu();
+                break;
+            case 6:
+                LogOut();
+                System.exit(0);
+            default:
+                System.out.println("No such option");
+                EditDefaultWorkDayShiftMenu();
+        }
     }
+
+    private static void setDefaultWorkDay() {
+        System.out.println("Not implemented yet");
+    }
+
+    private static void getDefaultShift(){
+        int day = getInputDay();
+        String shiftType = getInputShiftType();
+        ResponseT<ShiftResponse> response = facade.getDefaultJobsInShift(day, shiftType);
+        if (response.ErrorOccurred()){
+            printPrettyError(response.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm(response.value.Settings());
+        }
+    }
+
+    private static void setDefaultShift() {
+        int day = getInputDay();
+        String shiftType = getInputShiftType();
+        String role = getInputJob();
+        System.out.println("Enter new amount required: ");
+        int amountRequired = scanner.nextInt();
+        Response response = facade.setDefaultJobsInShift(day, shiftType, role, amountRequired);
+        if (response.ErrorOccurred()){
+            printPrettyError(response.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm("New shift default updated successfully");
+        }
+    }
+
+
 
     private static void AddShiftsMenu() {
         System.out.println("1) Add new shift");
@@ -634,5 +697,21 @@ public class Menu {
 
     private static int getInputOptionNumber() {
         return scanner.nextInt();
+    }
+
+    private static int getInputDay() {
+        System.out.println("Choose day type:");
+        System.out.println("1) Weekday");
+        System.out.println("2) Friday");
+        System.out.println("3) Saturday");
+        int day = scanner.nextInt();
+        if (day == 2) day = 6;
+        else if (day == 3) day = 7;
+        else if (day == 1) day = 1;
+        else {
+            System.out.println("There's no such option");
+            return getInputDay();
+        }
+        return day;
     }
 }
