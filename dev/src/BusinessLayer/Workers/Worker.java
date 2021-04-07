@@ -27,6 +27,7 @@ public class Worker {
             throw new InnerLogicException("invalid worker details");
         this.isAdmin = isAdmin;
         this.name = name;
+        validationLegalId(id);
         this.id = id;
         this.bankAccount = bankAccount;
         this.salary = salary;
@@ -38,11 +39,7 @@ public class Worker {
         this.constraints = new LinkedList<>();
         this.occupations = new LinkedList<>();
     }
-    public Worker(String name){
-        this.name = name;
-        this.constraints = new LinkedList<>();
-        this.occupations = new LinkedList<>();
-    }
+
     public Constraint addConstraint(String date, ShiftType shiftType, ConstraintType constraintType ) throws InnerLogicException {
         for (Constraint con: constraints) {
             if(con.compareShift(date, shiftType)){
@@ -145,5 +142,12 @@ public class Worker {
             output.add(new Constraint(constraint));
         }
         return output;
+    }
+
+    private void validationLegalId(String id) throws InnerLogicException {
+        if(id.length() != 9) throw new InnerLogicException("ID must be in length of 9");
+        for(int i = 0; i < id.length(); i++){
+            if(id.charAt(i) < '0' || id.charAt(i) > '9') throw new InnerLogicException("ID Can contain only numbers");
+        }
     }
 }
