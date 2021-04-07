@@ -163,7 +163,11 @@ public class Facade {
             Shift shift = shiftController.getCurrentShift();
             return new ResponseT<>(new ShiftResponse(shift));
         } catch (InnerLogicException e) {
-            shiftController.clearCurrentShift();
+            try{
+                shiftController.clearCurrentShift();
+            }catch (InnerLogicException err){
+                return new ResponseT<>(err.getMessage());
+            }
             return new ResponseT<>(e.getMessage());
         }
 
@@ -188,8 +192,12 @@ public class Facade {
     }
 
     public Response exitShift() {
-        shiftController.clearCurrentShift();
-        return new Response();
+        try {
+            shiftController.clearCurrentShift();
+            return new Response();
+        }catch (InnerLogicException e){
+            return new Response(e.getMessage());
+        }
     }
 
     public ResponseT<ShiftResponse> removeWorkerFromCurrentShift(String id, String role) {
