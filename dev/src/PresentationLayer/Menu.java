@@ -213,8 +213,9 @@ public class Menu {
         System.out.println("2) Edit shift");
         System.out.println("3) Add new shifts");
         System.out.println("4) Remove shift");
-        System.out.println("5) Previous");
-        System.out.println("6) Exit");
+        System.out.println("5) Edit default shift/workday");
+        System.out.println("6) Previous");
+        System.out.println("7) Exit");
         System.out.print("Option: ");
         int option = getInputOptionNumber();
         switch (option){
@@ -233,8 +234,10 @@ public class Menu {
                 ShiftsManageMenu();
                 break;
             case 5:
-                AdminMenu();
+                EditDefaultWorkDayShiftMenu();
             case 6:
+                AdminMenu();
+            case 7:
                 System.exit(0);
             default:
                 System.out.println("No such option");
@@ -242,12 +245,14 @@ public class Menu {
         }
     }
 
+    private static void EditDefaultWorkDayShiftMenu() {
+    }
+
     private static void AddShiftsMenu() {
         System.out.println("1) Add new shift");
         System.out.println("2) Add new workday");
-        System.out.println("3) Add new month");
-        System.out.println("4) Previous");
-        System.out.println("5) Exit");
+        System.out.println("3) Previous");
+        System.out.println("4) Exit");
         System.out.print("Option: ");
         int option = getInputOptionNumber();
         switch (option) {
@@ -260,13 +265,9 @@ public class Menu {
                 AddShiftsMenu();
                 break;
             case 3:
-                addMonth();
-                AddShiftsMenu();
-                break;
-            case 4:
                 ShiftsManageMenu();
                 break;
-            case 5:
+            case 4:
                 LogOut();
                 System.exit(0);
             default:
@@ -287,9 +288,6 @@ public class Menu {
         }
     }
 
-    private static void addMonth() {
-        throw new NotImplementedException();
-    }
 
     private static void addDefaultWorkDay() {
         String date = getInputDate();
