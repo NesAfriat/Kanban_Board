@@ -62,8 +62,15 @@ public class ShiftController {
         if(currentDay == null || currentShiftType == null)
             throw new InnerLogicException("tried to add worker to shift but no shift have been chosen");
         Worker workerToAdd = workersList.getWorker(id);
+        VerifyActiveWorker(workerToAdd);
         Job role = WorkersUtils.parseJob(job);
         return currentDay.addWorker(role, workerToAdd, currentShiftType);
+    }
+
+    private void VerifyActiveWorker(Worker worker) throws InnerLogicException {
+        if (worker.getEndWorkingDate() != null){
+            throw new InnerLogicException(worker.getName() + " (ID: " + worker.getId() +") is no longer working");
+        }
     }
 
     public Shift removeWorkerFromCurrentShift(String id, String job) throws InnerLogicException {

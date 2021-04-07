@@ -3,9 +3,9 @@ import BusinessLayer.Shifts.ShiftType;
 
 
 public class Constraint {
-    private String date;
-    private ShiftType shiftType;
-    private ConstraintType constraintType;
+    private final String date;
+    private final ShiftType shiftType;
+    private final ConstraintType constraintType;
 
     public Constraint(String date, ShiftType shiftType, ConstraintType constraintType) {
         this.date = date;
