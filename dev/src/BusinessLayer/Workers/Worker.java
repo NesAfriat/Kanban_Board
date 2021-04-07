@@ -40,7 +40,7 @@ public class Worker {
         this.occupations = new LinkedList<>();
     }
 
-    public Constraint addConstraint(String date, ShiftType shiftType, ConstraintType constraintType ) throws InnerLogicException {
+    public Constraint addConstraint(String date, ShiftType shiftType, ConstraintType constraintType) throws InnerLogicException {
         for (Constraint con: constraints) {
             if(con.compareShift(date, shiftType)){
                 throw new InnerLogicException("this shift already has constraint");
