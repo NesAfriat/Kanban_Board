@@ -66,4 +66,18 @@ public class WorkDayResponse {
     public String getDate() {
         return date;
     }
+
+    public String Settings() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("Date: ").append(date).append("\n");
+        if (morningShift == null && eveningShift == null){
+            stringBuilder.append("There's no shifts at this work day\n");
+        }
+        if (morningShift != null)
+            stringBuilder.append(morningShift.Settings());
+
+        if (eveningShift != null)
+            stringBuilder.append(eveningShift.Settings());
+        return stringBuilder.toString();
+    }
 }

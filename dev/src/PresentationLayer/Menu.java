@@ -262,6 +262,9 @@ public class Menu {
                 setDefaultShift();
                 EditDefaultWorkDayShiftMenu();
                 break;
+            case 3:
+                getDefaultWorkDay();
+                EditDefaultWorkDayShiftMenu();
             case 4:
                 setDefaultWorkDay();
                 EditDefaultWorkDayShiftMenu();
@@ -275,6 +278,17 @@ public class Menu {
             default:
                 System.out.println("No such option");
                 EditDefaultWorkDayShiftMenu();
+        }
+    }
+
+    private static void getDefaultWorkDay() {
+        int day = getInputDay();
+        ResponseT<WorkDayResponse> workDayResponse = facade.getDefaultShiftInDay(day);
+        if (workDayResponse.ErrorOccurred()){
+            printPrettyError(workDayResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm(workDayResponse.value.Settings());
         }
     }
 
@@ -709,7 +723,7 @@ public class Menu {
         else if (day == 3) day = 7;
         else if (day == 1) day = 1;
         else {
-            System.out.println("There's no such option");
+            printPrettyError("There's no such option");
             return getInputDay();
         }
         return day;

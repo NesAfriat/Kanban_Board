@@ -51,7 +51,7 @@ public class ShiftResponse {
     public String Settings() {
         StringBuilder stringBuilder = new StringBuilder();
         currentWorkers.forEach((job, jobArrangement) -> {
-                stringBuilder.append("Job: ").append(job).append(" amount required: ").append(jobArrangement.required).append("\n");
+                stringBuilder.append("Job: ").append(job).append(" ,amount required: ").append(jobArrangement.required).append("\n");
         });
         return stringBuilder.toString();
     }
