@@ -63,10 +63,7 @@ public class Menu {
         facade.addOccupationToWorker("000000009", "Usher");
         facade.addOccupationToWorker("000000010", "Usher");
         facade.addOccupationToWorker("000000011", "Usher");
-
-
-
-
+        facade.addOccupationToWorker("000000012", "Usher");
 
 
         facade.addDefaultWorkDay( LocalDate.now().format(formatter));
@@ -95,9 +92,112 @@ public class Menu {
         facade.addDefaultWorkDay( LocalDate.now().plusDays(23).format(formatter));
         facade.addDefaultWorkDay( LocalDate.now().plusDays(24).format(formatter));
         facade.addDefaultWorkDay( LocalDate.now().plusDays(25).format(formatter));
+
+        facade.chooseShift(LocalDate.now().format(formatter), "Morning");
+        facade.addWorkerToCurrentShift("000000002", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000006", "Cashier");
+        facade.addWorkerToCurrentShift("000000007", "Cashier");
+        facade.addWorkerToCurrentShift("000000014", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000011", "Usher");
+
+        facade.chooseShift(LocalDate.now().format(formatter), "Evening");
+        facade.addWorkerToCurrentShift("000000003", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000008", "Cashier");
+        facade.addWorkerToCurrentShift("000000009", "Cashier");
+        facade.addWorkerToCurrentShift("000000013", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000012", "Usher");
+
+        facade.chooseShift(LocalDate.now().plusDays(1).format(formatter), "Morning");
+        facade.addWorkerToCurrentShift("000000004", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000006", "Cashier");
+        facade.addWorkerToCurrentShift("000000007", "Cashier");
+        facade.addWorkerToCurrentShift("000000014", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000011", "Usher");
+
+        facade.chooseShift(LocalDate.now().plusDays(1).format(formatter), "Evening");
+        facade.addWorkerToCurrentShift("000000005", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000008", "Cashier");
+        facade.addWorkerToCurrentShift("000000009", "Cashier");
+        facade.addWorkerToCurrentShift("000000013", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000012", "Usher");
+
+        facade.chooseShift(LocalDate.now().plusDays(2).format(formatter), "Morning");
+        facade.addWorkerToCurrentShift("000000002", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000006", "Cashier");
+        facade.addWorkerToCurrentShift("000000007", "Cashier");
+        facade.addWorkerToCurrentShift("000000014", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000011", "Usher");
+
+        facade.chooseShift(LocalDate.now().plusDays(2).format(formatter), "Evening");
+        facade.addWorkerToCurrentShift("000000003", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000008", "Cashier");
+        facade.addWorkerToCurrentShift("000000009", "Cashier");
+        facade.addWorkerToCurrentShift("000000013", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000012", "Usher");
+
+        facade.chooseShift(LocalDate.now().plusDays(3).format(formatter), "Morning");
+        facade.addWorkerToCurrentShift("000000004", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000006", "Cashier");
+        facade.addWorkerToCurrentShift("000000007", "Cashier");
+        facade.addWorkerToCurrentShift("000000014", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000011", "Usher");
+
+        facade.chooseShift(LocalDate.now().plusDays(3).format(formatter), "Evening");
+        facade.addWorkerToCurrentShift("000000005", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000008", "Cashier");
+        facade.addWorkerToCurrentShift("000000009", "Cashier");
+        facade.addWorkerToCurrentShift("000000013", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000012", "Usher");
+
+        facade.chooseShift(LocalDate.now().plusDays(4).format(formatter), "Morning");
+        facade.addWorkerToCurrentShift("000000004", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000006", "Cashier");
+        facade.addWorkerToCurrentShift("000000007", "Cashier");
+        facade.addWorkerToCurrentShift("000000014", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000011", "Usher");
+
+        facade.chooseShift(LocalDate.now().plusDays(4).format(formatter), "Evening");
+        facade.addWorkerToCurrentShift("000000005", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000008", "Cashier");
+        facade.addWorkerToCurrentShift("000000009", "Cashier");
+        facade.addWorkerToCurrentShift("000000013", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000012", "Usher");
+
+
+        facade.chooseShift(LocalDate.now().plusDays(5).format(formatter), "Morning");
+        facade.addWorkerToCurrentShift("000000004", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000006", "Cashier");
+        facade.addWorkerToCurrentShift("000000007", "Cashier");
+        facade.addWorkerToCurrentShift("000000014", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000012", "Usher");
+
+        facade.chooseShift(LocalDate.now().plusDays(5).format(formatter), "Evening");
+        facade.addWorkerToCurrentShift("000000005", "Shift_Manager");
+        facade.addWorkerToCurrentShift("000000008", "Cashier");
+        facade.addWorkerToCurrentShift("000000009", "Cashier");
+        facade.addWorkerToCurrentShift("000000013", "Guard");
+        facade.addWorkerToCurrentShift("000000010", "Storekeeper");
+        facade.addWorkerToCurrentShift("0000000012", "Usher");
+
+
+
+
+
         facade.logout();
-        facade.login("222222222");
-        facade.addConstraint("01/05/2021","Morning", "Cant");
+        facade.login("000000002");
+        facade.addConstraint(LocalDate.now().plusDays(17).format(formatter),"Morning", "Cant");
+        facade.addConstraint(LocalDate.now().plusDays(17).format(formatter),"Evening", "Cant");
         facade.logout();
     }
 
@@ -393,7 +493,7 @@ public class Menu {
         String shiftType = getInputShiftType();
         String role = getInputJob();
         System.out.println("Enter new amount required: ");
-        int amountRequired = scanner.nextInt();
+        int amountRequired = getInputInt();
         Response response = facade.setDefaultJobsInShift(day, shiftType, role, amountRequired);
         if (response.ErrorOccurred()){
             printPrettyError(response.getErrorMessage());
@@ -561,7 +661,7 @@ public class Menu {
     private static void SetRequiredAmount() {
         String role = getInputJob();
         System.out.print("Amount required: ");
-        int required = scanner.nextInt();
+        int required = getInputInt();
         ResponseT<ShiftResponse> shiftResponse = facade.setAmountRequired(role, required);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
@@ -583,7 +683,7 @@ public class Menu {
     private static void AddRequiredJob() {
         String role = getInputJob();
         System.out.print("Amount required: ");
-        int required = scanner.nextInt();
+        int required = getInputInt();
         ResponseT<ShiftResponse> shiftResponse = facade.addRequiredJob(role, required);
         if (shiftResponse.ErrorOccurred()){
             printPrettyError(shiftResponse.getErrorMessage());
