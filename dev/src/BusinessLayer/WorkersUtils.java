@@ -76,7 +76,7 @@ public class WorkersUtils {
         LocalDate localDate = LocalDate.parse(date, formatter);
         LocalDate now = LocalDate.now();
         if(now.getYear() > localDate.getYear()) return true;
-        return now.getYear() == localDate.getYear() && now.getMonthValue() < localDate.getMonthValue();
+        return now.getYear() == localDate.getYear() && now.getMonthValue() > localDate.getMonthValue();
     }
 
     public static ShiftType parseShiftType(String shiftType) throws InnerLogicException {

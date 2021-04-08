@@ -70,6 +70,7 @@ public class ShiftController {
 
     public void setCurrentShiftType(String shiftType) throws InnerLogicException {
         throwIfNotAdmin();
+        throwIfCurrentWorkDayIsNotChangeable();
         currentShiftType = WorkersUtils.parseShiftType(shiftType);
     }
 
@@ -209,6 +210,6 @@ public class ShiftController {
         if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");
     }
     private void throwIfCurrentWorkDayIsNotChangeable() throws InnerLogicException {
-        if(WorkersUtils.isInPastMonth(currentDay.getDate())) throw new InnerLogicException("this shift can not longer be changed");
+        if(WorkersUtils.isInPastMonth(currentDay.getDate())) throw new InnerLogicException("edit shift isn't possible after the month it has occurred");
     }
 }
