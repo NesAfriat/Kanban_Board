@@ -18,7 +18,6 @@ public class ShiftSchedule {
     public ShiftSchedule(){
         workDays = new HashMap<>();
         defaultWorkDayHolder = new DefaultWorkDayHolder();
-        workDays.put("01/03/2021", new WorkDay(true, true, "01/03/2021"));
     }
 
     public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
@@ -146,6 +145,7 @@ public class ShiftSchedule {
         final int fridayEvening = 3;
         final int saturdayMorning = 4;
         final int saturdayEvening = 5;
+
 
         private final Map<Job, int[]> defaultShiftSetup;
         private final boolean[][] defaultWorkDaySetup;

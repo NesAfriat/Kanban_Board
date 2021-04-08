@@ -35,7 +35,9 @@ public class WorkerController {
 
     public Worker login(String id) throws InnerLogicException {
         if (loggedIn != null) throw new InnerLogicException("tried to login while another user is already logged in");
-        loggedIn = workersList.getWorker(id); // if the id isn't belong to any user this line will throw the right exception.
+         Worker worker = workersList.getWorker(id); // if the id isn't belong to any user this line will throw the right exception.
+        if(worker.getEndWorkingDate() != null) throw new InnerLogicException("this worker is no longer employed");
+        loggedIn = worker;
         return loggedIn;
     }
 
