@@ -530,7 +530,12 @@ public class Menu {
             printPrettyError(shiftResponse.getErrorMessage());
         }
         else{
-            printPrettyConfirm("Shift approved successfully");;
+            if (shiftResponse.value.isFullyOccupied())
+                printPrettyConfirm("Shift approved successfully");
+            else{
+                printPrettyConfirm("Shift approved successfully.");
+                printPrettyError("BEWARE: Not all roles are fully occupied.");
+            }
         }
 
     }

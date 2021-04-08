@@ -30,7 +30,7 @@ public class Shift {
 
         if(!worker.canWorkInJob(role)) throw new InnerLogicException("tried to add worker for job he is not qualified to do");
         if (jobArrangement.amountAssigned == jobArrangement.required){
-            throw new InnerLogicException("Reached maximum required, remove worker first.");
+            throw new InnerLogicException("Reached maximum required, remove a worker first.");
         }
         jobArrangement.workers.add(worker);
         jobArrangement.amountAssigned++;
