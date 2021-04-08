@@ -16,10 +16,9 @@ public class WorkerController {
 
         //this is for testing TODO: remove this.
         try {
-            workersList.addWorker(true, "admin", "000000000", "a", 123, "a", 1, 1, "a");
+            workersList.addWorker(true, "admin", "000000000", "a", 123, "a", 0, 0, "01/01/0001");
         } catch (Exception ignored) {
         }
-        //TODO: remove until here
 
 
     }

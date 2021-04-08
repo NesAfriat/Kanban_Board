@@ -1,14 +1,9 @@
 package Tests;
-import BusinessLayer.Controllers.ShiftController;
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.Shift;
-import BusinessLayer.Shifts.ShiftType;
-import BusinessLayer.Workers.ConstraintType;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
-import PresentationLayer.Menu;
 import org.junit.*;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 
@@ -157,9 +152,9 @@ public class ShiftUnitTests {
         //assert
         if (exception != null) {
             try {
-                Assert.assertTrue(shift.getCurrentWorkersAmount(workerRole) == 0);
+                Assert.assertEquals(0, shift.getCurrentWorkersAmount(workerRole));
             } catch (InnerLogicException e) {
-                e.printStackTrace();
+                Assert.fail("Failed during assertion test part. error: "+ e.getMessage());
             }
         }
         else {
@@ -191,7 +186,6 @@ public class ShiftUnitTests {
         else {
             Assert.fail(exception.getMessage());
         }
-
 
     }
 

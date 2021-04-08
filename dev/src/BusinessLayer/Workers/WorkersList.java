@@ -10,6 +10,10 @@ public class WorkersList {
 
     public WorkersList(){
         this.workers = new LinkedList<>();
+        try {
+            workers.add(new Worker(true, "admin", "000000000", "a", 123, "a", 0, 0, "01/01/0001"));
+        } catch (InnerLogicException ignored) { }
+
     }
 
     public List<Worker> getWorkersByJob(Job job){
