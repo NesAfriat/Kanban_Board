@@ -131,9 +131,7 @@ public class Shift {
 
     public List<Job> getJobs() {
         List<Job> jobs = new LinkedList<>();
-        currentWorkers.forEach((job, jobArrangement) -> {
-            jobs.add(job);
-        });
+        currentWorkers.forEach((job, jobArrangement) -> jobs.add(job));
         return jobs;
     }
 
