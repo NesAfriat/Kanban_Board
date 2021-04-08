@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ShiftResponse {
     private boolean approved;
@@ -29,6 +30,18 @@ public class ShiftResponse {
     }
 
     public boolean isApproved(){return approved;}
+
+    public boolean isFullyOccupied(){
+        AtomicBoolean output = new AtomicBoolean(true);
+        currentWorkers.forEach((job, jobArrangementResponse) -> {
+            if (jobArrangementResponse.amountAssigned != jobArrangementResponse.required) {
+                output.set(false);
+            }
+        });
+        return output.get();
+    }
+
+
 
     @Override
     public String toString() {
@@ -70,5 +83,6 @@ public class ShiftResponse {
                 this.workers.add(workerResponse);
             }
         }
+
     }
 }
