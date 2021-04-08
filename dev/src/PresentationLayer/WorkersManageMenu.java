@@ -52,19 +52,19 @@ class WorkersManageMenu extends HRManagerMenu {
     private void AddWorker() {
         String ID = getInputWorkerID();
         System.out.println("Name: ");
-        String name = scanner.next();
+        String name = getInputString();
         System.out.println("Bank Account: ");
-        String bankAccount = scanner.next();
+        String bankAccount = getInputString();
         System.out.println("Salary: ");
         double salary = getInputDouble();
         System.out.println("Education Fund: ");
-        String educationFund = scanner.next();
+        String educationFund = getInputString();
         System.out.println("Vacation Days Per Month: ");
         int vacationDaysPerMonth = getInputInt();
         System.out.println("Sick Days Per Month: ");
         int sickDaysPerMonth = getInputInt();
         System.out.println("Enter Start Working Date <DD/MM/YYYY>: ");
-        String date = scanner.next();
+        String date = getInputString();
         ResponseT<WorkerResponse> workerResponse = facade.addWorker(false, name, ID, bankAccount, salary, educationFund, vacationDaysPerMonth, sickDaysPerMonth, date);
         if (workerResponse.ErrorOccurred()){
             printPrettyError(workerResponse.getErrorMessage());
@@ -124,7 +124,7 @@ class WorkersManageMenu extends HRManagerMenu {
     private void FireWorker(){
         String ID = getInputWorkerID();
         System.out.print("Enter end working date <DD/MM/YYYY>: ");
-        String date = scanner.next();
+        String date = getInputString();
         ResponseT<WorkerResponse> workerResponse = facade.fireWorker(ID, date);
         if (workerResponse.ErrorOccurred()){
             printPrettyError(workerResponse.getErrorMessage());

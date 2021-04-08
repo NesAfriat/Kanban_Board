@@ -218,7 +218,7 @@ public class Menu {
             int option = getInputInt();
             if (option == 1){
                 System.out.println("ID: ");
-                String ID = scanner.next();
+                String ID = getInputString();
                 ResponseT<WorkerResponse> worker = facade.login(ID);
                 if (worker.ErrorOccurred()) {
                     System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
@@ -241,6 +241,7 @@ public class Menu {
             }
 
         }
+
     }
 
 
@@ -296,7 +297,7 @@ public class Menu {
 
     protected String getInputDate(){
         System.out.println("Enter Date <DD/MM/YYYY>: ");
-        return scanner.next();
+        return getInputString();
     }
 
     protected String getInputShiftType(){
@@ -316,13 +317,13 @@ public class Menu {
 
     protected String getInputJob(){
         System.out.print("Enter job name: ");
-        return scanner.next();
+        return getInputString();
     }
 
 
     protected String getInputWorkerID(){
         System.out.print("Enter worker id: ");
-        return scanner.next();
+        return getInputString();
     }
 
 
@@ -386,6 +387,12 @@ public class Menu {
             scanner.next();
         }
         return scanner.nextDouble();
+    }
+
+    protected String getInputString() {
+        String output = scanner.next();
+        output += scanner.nextLine();
+        return output;
     }
 
     protected String getInputConstraintType() {
