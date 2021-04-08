@@ -1,18 +1,17 @@
 package PresentationLayer;
 import BusinessLayer.Facade;
 import BusinessLayer.Responses.*;
-//import BusinessLayer.Shifts.ShiftType;
-//import BusinessLayer.Shifts.WorkDay;
 
-
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
 
 public class Menu {
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[31m";
-    public static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_BLUE = "\u001B[34m";
 
 
     private static final Scanner scanner = new Scanner(System.in);;
@@ -20,43 +19,82 @@ public class Menu {
 
     private static void testingDataUpload(){
 
-        facade.login("111111111");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        //LocalDate localDate = LocalDate.parse(date, formatter);
+
+        facade.login("000000000");
         facade.setDefaultJobsInShift(1 ,"Morning", "Cashier", 2);
         facade.setDefaultJobsInShift(6 ,"Morning", "Cashier", 3);
         facade.setDefaultJobsInShift(1 ,"Morning", "Usher", 3);
         facade.setDefaultJobsInShift(1 ,"Evening", "Usher", 0);
         facade.setDefaultJobsInShift(6 ,"Morning", "Usher", 0);
-        facade.addWorker(false, "dan", "222222222", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "rami", "333333333", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "lidor", "444444444", "1", 1, "1", 1, 1 , "01/01/2018");
-//        WorkDay workday = facade.addWorkDay(true, false, "01/04/2021");
-//        workday.getShift(ShiftType.Morning).addRequiredJob("");
-        facade.addDefaultWorkDay( "01/05/2021");
-        facade.addDefaultWorkDay("02/05/2021");
-        facade.addDefaultWorkDay("03/05/2021");
-        facade.addDefaultWorkDay("04/05/2021");
-        facade.addDefaultWorkDay("05/05/2021");
-        facade.addDefaultWorkDay("06/05/2021");
-        facade.addDefaultWorkDay("07/05/2021");
-        facade.addDefaultWorkDay("08/05/2021");
-        facade.addDefaultWorkDay("09/05/2021");
-        facade.addDefaultWorkDay("10/05/2021");
-        facade.addDefaultWorkDay("11/05/2021");
-        facade.addDefaultWorkDay("12/05/2021");
-        facade.addDefaultWorkDay("13/05/2021");
-        facade.addDefaultWorkDay("14/05/2021");
-        facade.addDefaultWorkDay("15/05/2021");
-        facade.addDefaultWorkDay("16/05/2021");
-        facade.addDefaultWorkDay("17/05/2021");
-        facade.addDefaultWorkDay("18/05/2021");
-        facade.addDefaultWorkDay("19/05/2021");
-        facade.addDefaultWorkDay("20/05/2021");
+        facade.addWorker(false, "dan", "000000001", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "avi", "000000002", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "kobi", "000000003", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "moshe", "000000004", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "eli", "000000005", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "moti", "000000006", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "shaol", "000000007", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "ronen", "000000008", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "ronen", "000000009", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "moshe", "000000010", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "dolev", "000000011", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "eliad", "000000012", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "micha", "000000013", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "meni", "000000014", "1", 1, "1", 1, 1 , "01/01/2018");
+
+        facade.addOccupationToWorker("000000001", "HR_Manager");
+        facade.addOccupationToWorker("000000002", "Shift_Manager");
+        facade.addOccupationToWorker("000000003", "Shift_Manager");
+        facade.addOccupationToWorker("000000004", "Shift_Manager");
+        facade.addOccupationToWorker("000000005", "Shift_Manager");
+        facade.addOccupationToWorker("000000006", "Cashier");
+        facade.addOccupationToWorker("000000007", "Cashier");
+        facade.addOccupationToWorker("000000008", "Cashier");
+        facade.addOccupationToWorker("000000009", "Cashier");
+        facade.addOccupationToWorker("000000010", "Cashier");
+        facade.addOccupationToWorker("000000014", "Guard");
+        facade.addOccupationToWorker("000000013", "Guard");
+        facade.addOccupationToWorker("000000012", "Guard");
+        facade.addOccupationToWorker("000000008", "Storekeeper");
+        facade.addOccupationToWorker("000000009", "Storekeeper");
+        facade.addOccupationToWorker("000000010", "Storekeeper");
+        facade.addOccupationToWorker("000000011", "Storekeeper");
+        facade.addOccupationToWorker("000000009", "Usher");
+        facade.addOccupationToWorker("000000010", "Usher");
+        facade.addOccupationToWorker("000000011", "Usher");
 
 
 
-        facade.addOccupationToWorker("222222222", "Shift_Manager");
-        facade.addOccupationToWorker("333333333", "Usher");
-        facade.addOccupationToWorker("333333333", "Cashier");
+
+
+
+        facade.addDefaultWorkDay( LocalDate.now().format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(1).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(2).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(3).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(4).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(5).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(6).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(7).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(8).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(9).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(10).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(11).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(12).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(13).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(14).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(15).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(16).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(17).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(18).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(19).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(20).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(21).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(22).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(23).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(24).format(formatter));
+        facade.addDefaultWorkDay( LocalDate.now().plusDays(25).format(formatter));
         facade.logout();
         facade.login("222222222");
         facade.addConstraint("01/05/2021","Morning", "Cant");

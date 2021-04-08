@@ -50,6 +50,23 @@ public class ShiftController {
         return calendar.addWorkDay(hasMorningShift, hasEveningShift, date);
     }
 
+    public WorkDay addDefaultShift(String date, String shiftType) throws InnerLogicException {
+        throwIfNotAdmin();
+        WorkersUtils.dateValidation(date);
+        //WorkersUtils.notPastDateValidation(date);
+        WorkersUtils.isInPastMonth(date);
+        ShiftType type = WorkersUtils.parseShiftType(shiftType);
+        WorkDay workDay = calendar.addDefaultShift(date, type);
+        return workDay;
+    }
+
+    public WorkDay addDefaultWorkDay(String date) throws InnerLogicException {
+        throwIfNotAdmin();
+        WorkersUtils.dateValidation(date);
+        WorkersUtils.notPastDateValidation(date);
+        return calendar.addDefaultWorkDay(date);
+    }
+
 
     public void setCurrentShiftType(String shiftType) throws InnerLogicException {
         throwIfNotAdmin();
@@ -166,21 +183,7 @@ public class ShiftController {
         return workDay.removeShift(shiftType);
     }
 
-    public WorkDay addDefaultShift(String date, String shiftType) throws InnerLogicException {
-        throwIfNotAdmin();
-        WorkersUtils.dateValidation(date);
-        WorkersUtils.notPastDateValidation(date);
-        ShiftType type = WorkersUtils.parseShiftType(shiftType);
-        WorkDay workDay = calendar.addDefaultShift(date, type);
-        return workDay;
-    }
 
-    public WorkDay addDefaultWorkDay(String date) throws InnerLogicException {
-        throwIfNotAdmin();
-        WorkersUtils.dateValidation(date);
-        WorkersUtils.notPastDateValidation(date);
-        return calendar.addDefaultWorkDay(date);
-    }
 
     public void setDefaultJobsInShift(int day, String shiftType, String job, int amount) throws InnerLogicException {
         throwIfNotAdmin();
