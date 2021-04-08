@@ -87,11 +87,6 @@ public class Menu {
         facade.addDefaultWorkDay( LocalDate.now().plusDays(18).format(formatter));
         facade.addDefaultWorkDay( LocalDate.now().plusDays(19).format(formatter));
         facade.addDefaultWorkDay( LocalDate.now().plusDays(20).format(formatter));
-        facade.addDefaultWorkDay( LocalDate.now().plusDays(21).format(formatter));
-        facade.addDefaultWorkDay( LocalDate.now().plusDays(22).format(formatter));
-        facade.addDefaultWorkDay( LocalDate.now().plusDays(23).format(formatter));
-        facade.addDefaultWorkDay( LocalDate.now().plusDays(24).format(formatter));
-        facade.addDefaultWorkDay( LocalDate.now().plusDays(25).format(formatter));
 
         facade.chooseShift(LocalDate.now().format(formatter), "Morning");
         facade.addWorkerToCurrentShift("000000002", "Shift_Manager");
@@ -100,6 +95,7 @@ public class Menu {
         facade.addWorkerToCurrentShift("000000014", "Guard");
         facade.addWorkerToCurrentShift("000000010", "Storekeeper");
         facade.addWorkerToCurrentShift("0000000011", "Usher");
+        facade.approveShift();
 
         facade.chooseShift(LocalDate.now().format(formatter), "Evening");
         facade.addWorkerToCurrentShift("000000003", "Shift_Manager");
@@ -108,6 +104,7 @@ public class Menu {
         facade.addWorkerToCurrentShift("000000013", "Guard");
         facade.addWorkerToCurrentShift("000000010", "Storekeeper");
         facade.addWorkerToCurrentShift("0000000012", "Usher");
+        facade.approveShift();
 
         facade.chooseShift(LocalDate.now().plusDays(1).format(formatter), "Morning");
         facade.addWorkerToCurrentShift("000000004", "Shift_Manager");
@@ -116,6 +113,7 @@ public class Menu {
         facade.addWorkerToCurrentShift("000000014", "Guard");
         facade.addWorkerToCurrentShift("000000010", "Storekeeper");
         facade.addWorkerToCurrentShift("0000000011", "Usher");
+        facade.approveShift();
 
         facade.chooseShift(LocalDate.now().plusDays(1).format(formatter), "Evening");
         facade.addWorkerToCurrentShift("000000005", "Shift_Manager");
@@ -124,6 +122,7 @@ public class Menu {
         facade.addWorkerToCurrentShift("000000013", "Guard");
         facade.addWorkerToCurrentShift("000000010", "Storekeeper");
         facade.addWorkerToCurrentShift("0000000012", "Usher");
+        facade.approveShift();
 
         facade.chooseShift(LocalDate.now().plusDays(2).format(formatter), "Morning");
         facade.addWorkerToCurrentShift("000000002", "Shift_Manager");

@@ -147,8 +147,8 @@ public class ShiftController {
 
     public Shift approveShift() throws InnerLogicException {
         throwIfNotAdmin();
-        throwIfCurrentWorkDayIsNotChangeable();
         Shift shift = getCurrentShift();
+        throwIfCurrentWorkDayIsNotChangeable();
         shift.approveShift();
         return shift;
     }
