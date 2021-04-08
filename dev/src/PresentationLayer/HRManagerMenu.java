@@ -66,8 +66,10 @@ class HRManagerMenu extends Menu{
                     break;
                 case 5:
                     new EditDefaultWorkDayShiftMenu().run();
+                    break;
                 case 6:
                     prev = true;
+                    break;
                 case 7:
                     super.exit();
                 default:

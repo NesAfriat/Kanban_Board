@@ -1,8 +1,8 @@
 package BusinessLayer.Responses;
+
 import BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -86,8 +86,6 @@ public class WorkerResponse {
         return this.constraints;
     }
 
-    //boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
-    //                  int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate
     public String toString(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Name: ").append(name).append("\n");

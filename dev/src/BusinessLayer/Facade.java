@@ -7,7 +7,6 @@ import BusinessLayer.Shifts.Shift;
 import BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers.Worker;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -147,8 +146,6 @@ public class Facade {
         }
     }
 
-
-
     public ResponseT<ShiftResponse> chooseShift(String date, String shiftType) {
         try {
             shiftController.setCurrentDay(date);
@@ -237,7 +234,8 @@ public class Facade {
             return new ResponseT<>(e.getMessage());
         }
     }
-//day: 0 if weekday, 1 if friday, 2 if saturday.
+
+    //day: 0 if weekday, 1 if friday, 2 if saturday.
     public Response setDefaultJobsInShift(int day, String shiftType, String role, int amount) {
         try {
             shiftController.setDefaultJobsInShift(day, shiftType, role, amount);
@@ -246,7 +244,8 @@ public class Facade {
             return new Response(e.getMessage());
         }
     }
-//day: number between 1 - 7.
+
+    //day: number between 1 - 7.
     public Response setDefaultShiftInDay(int day, String shiftType, boolean changeTo) {
         try {
             shiftController.setDefaultShiftInDay(day, shiftType, changeTo);
@@ -283,7 +282,6 @@ public class Facade {
         }
     }
 
-
     public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) {
         try {
             return shiftController.addWorkDay(hasMorningShift, hasEveningShift, date);
@@ -291,6 +289,5 @@ public class Facade {
             return null;
         }
     }
-
 
 }

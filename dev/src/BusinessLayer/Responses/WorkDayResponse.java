@@ -1,6 +1,5 @@
 package BusinessLayer.Responses;
 
-import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Shifts.WorkDay;
 
