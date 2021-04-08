@@ -186,7 +186,7 @@ public class ShiftUnitTests {
         else {
             Assert.fail(exception.getMessage());
         }
-        
+
     }
 
 }

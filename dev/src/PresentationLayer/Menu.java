@@ -20,7 +20,6 @@ public class Menu {
     private static void testingDataUpload(){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        //LocalDate localDate = LocalDate.parse(date, formatter);
 
         facade.login("000000000");
         facade.setDefaultJobsInShift(1 ,"Morning", "Cashier", 2);
@@ -191,9 +190,6 @@ public class Menu {
         facade.addWorkerToCurrentShift("0000000012", "Usher");
 
 
-
-
-
         facade.logout();
         facade.login("000000002");
         facade.addConstraint(LocalDate.now().plusDays(17).format(formatter),"Morning", "Cant");
@@ -203,7 +199,12 @@ public class Menu {
 
     public static void main(String[] args){
         if (args != null) {
-            testingDataUpload();
+            System.out.println("Welcome to Super-Lee system");
+            System.out.println("Do you want to load database?");
+            boolean load = getInputYesNo();
+            if (load) {
+                testingDataUpload();
+            }
         }
 
         System.out.println("Enter ID number for login: ");
@@ -213,6 +214,7 @@ public class Menu {
             System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
             main(null);
         }
+
         printPrettyConfirm("Hello, "+ worker.value.getName()+ "!");
         if (worker.value.getIsAdmin()){
             AdminMenu();
@@ -221,6 +223,8 @@ public class Menu {
             WorkerMenu();
         }
     }
+
+
 
     private static void WorkerMenu() {
         System.out.println("1) View shift arrangement");
@@ -848,19 +852,22 @@ public class Menu {
     }
 
 
+
+
+
     private static void AddWorker() {
         String ID = getInputWorkerID();
-        System.out.println("Name:");
+        System.out.println("Name: ");
         String name = scanner.next();
-        System.out.println("Bank Account:");
+        System.out.println("Bank Account: ");
         String bankAccount = scanner.next();
         System.out.println("Salary: ");
         double salary = getInputDouble();
-        System.out.println("Education Fund:");
+        System.out.println("Education Fund: ");
         String educationFund = scanner.next();
-        System.out.println("Vacation Days Per Month:");
+        System.out.println("Vacation Days Per Month: ");
         int vacationDaysPerMonth = getInputInt();
-        System.out.println("Sick Days Per Month:");
+        System.out.println("Sick Days Per Month: ");
         int sickDaysPerMonth = getInputInt();
         System.out.println("Enter Start Working Date <DD/MM/YYYY>: ");
         String date = scanner.next();
