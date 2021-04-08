@@ -22,12 +22,10 @@ public class WorkDay {
         if (current == null){
             throw new InnerLogicException("This work day does not have a " + shiftType +" shift");
         }
-        if (morningShift != null && morningShift.isWorking(worker)){
+
+        if (isWorking(worker))
             throw new InnerLogicException(worker.getName() + " is already working at this day");
-        }
-        if (eveningShift != null && eveningShift.isWorking(worker)){
-            throw new InnerLogicException(worker.getName() + " is already working at this day");
-        }
+
         if (!worker.canWorkInShift(date,shiftType)){
             throw new InnerLogicException(worker.getName() + " cant work at this shift");
         }
@@ -104,4 +102,14 @@ public class WorkDay {
 
     public String getDate(){return date;}
 
+    public boolean isWorking(Worker worker) {
+        if (morningShift != null && morningShift.isWorking(worker)){
+            return true;
+        }
+        if (eveningShift != null && eveningShift.isWorking(worker)){
+            return true;
+        }
+
+        return false;
+    }
 }

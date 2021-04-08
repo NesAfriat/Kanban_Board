@@ -133,7 +133,8 @@ public class ShiftController {
         List<Worker> listOfWorkers= workersList.getWorkersByJob(role);
         List<Worker> relevantWorkers = new LinkedList<>();
         for (Worker worker: listOfWorkers) {
-            if(worker.canWorkInShift(currentDay.getDate(), currentShiftType)) relevantWorkers.add(worker);
+            if(worker.canWorkInShift(currentDay.getDate(), currentShiftType) && !currentDay.isWorking(worker))
+                relevantWorkers.add(worker);
         }
         return relevantWorkers;
     }
