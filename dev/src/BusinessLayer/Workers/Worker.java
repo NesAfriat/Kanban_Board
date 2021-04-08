@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Worker {
+    private static final int DEFAULT_MIN_RANGE_TO_ADD_CONSTRAINT = 14;
+    private static final int DEFAULT_ID_LENGTH = 9;
+
     private boolean isAdmin;
     private List<Job> occupations;
     private List<Constraint> constraints;
@@ -47,7 +50,7 @@ public class Worker {
             }
         }
         WorkersUtils.notPastDateValidation(date);
-        if(!WorkersUtils.isDateIsInMoreThanNumDays(date, 14)) throw new InnerLogicException("Worker cant add constraint in less then two weeks");
+        if(!WorkersUtils.isDateIsInMoreThanNumDays(date, DEFAULT_MIN_RANGE_TO_ADD_CONSTRAINT)) throw new InnerLogicException("Worker cant add constraint in less then two weeks");
         Constraint con = new Constraint(date, shiftType, constraintType);
         this.constraints.add(con);
         return con;
@@ -81,11 +84,13 @@ public class Worker {
 
     public void addOccupation(Job job) throws InnerLogicException {
         if (occupations.contains(job)) throw new InnerLogicException("tried to add occupation to worker but he already qualified to work as " + job.name());
+        if (job.equals(Job.HR_Manager)) isAdmin = true;
         this.occupations.add(job);
     }
 
     public void removeOccupation(Job job) throws InnerLogicException {
-        if (!occupations.contains(job)) throw new InnerLogicException("tried to remove occupation to worker but he was not qualified to work as " + job.name());
+        if (!occupations.contains(job)) throw new InnerLogicException("tried to remove occupation to worker but he was never qualified to work as " + job.name());
+        if (job.equals(Job.HR_Manager)) throw new InnerLogicException("Can not remove the HR Manager occupation");
         this.occupations.remove(job);
     }
 
@@ -147,7 +152,7 @@ public class Worker {
     }
 
     private void validationLegalId(String id) throws InnerLogicException {
-        if(id.length() != 9) throw new InnerLogicException("ID must be in length of 9");
+        if(id.length() != DEFAULT_ID_LENGTH) throw new InnerLogicException("ID must be in length of 9");
         for(int i = 0; i < id.length(); i++){
             if(id.charAt(i) < '0' || id.charAt(i) > '9') throw new InnerLogicException("ID Can contain only numbers");
         }

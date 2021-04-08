@@ -1,33 +1,22 @@
 package Tests;
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.ShiftType;
-import BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers.ConstraintType;
-import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
-import BusinessLayer.WorkersUtils;
 import org.junit.*;
-import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 
 public class WorkerUnitTests {
     private static Worker worker;
-
-    static {
-
-    }
-
     private static DateTimeFormatter formatter;
-    private static final int LEGAL_DAYS_RANGE = 14;
+    private static final int LEGAL_DAYS_RANGE = 15;
 
 
     @BeforeClass
     public static void initFields() {
         formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
     }
 
     @Before
@@ -97,12 +86,67 @@ public class WorkerUnitTests {
 
 
     @Test
-    public void addConstraint_ShiftInThePast_Fail(){
+    public void addConstraint_ToShiftInThePast_Fail(){
         //arrange
+        LocalDate now = LocalDate.now();
+        String date = (now.minusDays(1)).format(formatter);
 
         //act
+        try {
+            worker.addConstraint(date, ShiftType.Morning, ConstraintType.Cant);
+            Assert.fail("Should have not allowed to add a constraint to a shift that happened already");
+        }
+        catch (InnerLogicException e){
+            Assert.assertTrue(true);
+        }
+    }
 
-        //assert
+    @Test
+    public void removeConstraint_Allow(){
+        //arrange
+        ShiftType shiftType = ShiftType.Morning;
+        LocalDate now = LocalDate.now();
+        String date = (now.plusDays(LEGAL_DAYS_RANGE)).format(formatter);
+        try {
+            worker.addConstraint(date, shiftType, ConstraintType.Cant);
+        }
+        catch (InnerLogicException e){
+            Assert.fail("Failed trying to add constraint in the test arrange part");
+        }
+
+        InnerLogicException error = null;
+        //act
+        try {
+            worker.removeConstraint(date, shiftType);
+        }
+        catch (InnerLogicException e){
+            error = e;
+        }
+
+        if (error == null)
+            Assert.assertTrue(worker.canWorkInShift(date, shiftType));
+        else
+            Assert.fail("Should have allowed to remove the constraint");
+
+    }
+
+
+    @Test
+    public void removeConstraint_NoConstraint_Fail(){
+        //arrange
+        ShiftType shiftType = ShiftType.Morning;
+        LocalDate now = LocalDate.now();
+        String date = (now.plusDays(LEGAL_DAYS_RANGE)).format(formatter);
+
+        //act
+        try {
+            worker.removeConstraint(date, shiftType);
+            Assert.fail("Removing non-existing constraint should have failed");
+        }
+        catch (InnerLogicException e){
+            Assert.assertTrue(true);
+        }
+
     }
 
 
