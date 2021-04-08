@@ -12,6 +12,7 @@ public class Menu {
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
 
 
     private static final Scanner scanner = new Scanner(System.in);;
@@ -197,6 +198,33 @@ public class Menu {
         facade.logout();
     }
 
+    public void start(boolean firstRun) {
+        if (firstRun) {
+            printPrettyHeadline("Welcome to Super-Lee system!");
+            System.out.println("Do you want to load database?");
+            boolean load = getInputYesNo();
+            if (load) {
+                testingDataUpload();
+            }
+        }
+
+        System.out.println("Enter ID number for login: ");
+        String ID = scanner.next();
+        ResponseT<WorkerResponse> worker = facade.login(ID);
+        if (worker.ErrorOccurred()){
+            System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
+            main(null);
+        }
+
+        printPrettyConfirm("Hello, "+ worker.value.getName()+ "!");
+        if (worker.value.getIsAdmin()){
+            AdminMenu();
+        }
+        else {
+            WorkerMenu();
+        }
+    }
+
     public static void main(String[] args){
         if (args != null) {
             System.out.println("Welcome to Super-Lee system");
@@ -227,6 +255,8 @@ public class Menu {
 
 
     private static void WorkerMenu() {
+        printPrettyHeadline("\n\nWorker Menu");
+        System.out.println("/n/nWorker Menu");
         System.out.println("1) View shift arrangement");
         System.out.println("2) View constraints");
         System.out.println("3) Add constraint");
@@ -264,6 +294,7 @@ public class Menu {
                 WorkerMenu();
         }
     }
+
 
 
 
@@ -347,6 +378,7 @@ public class Menu {
 
 
     private static void AdminMenu() {
+        printPrettyHeadline("\n\nHR Manager Menu");
         System.out.println("1) Manage Workers");
         System.out.println("2) Manage Shifts");
         System.out.println("3) Logout");
@@ -376,6 +408,7 @@ public class Menu {
 
 
     private static void ShiftsManageMenu() {
+        printPrettyHeadline("\n\nShifts Manage Menu");
         System.out.println("1) View shift arrangement");
         System.out.println("2) Edit shift");
         System.out.println("3) Add new shifts");
@@ -413,6 +446,7 @@ public class Menu {
     }
 
     private static void EditDefaultWorkDayShiftMenu() {
+        printPrettyHeadline("\n\nEdit Default Settings Menu");
         System.out.println("1) Get shift default settings");
         System.out.println("2) Edit shift default");
         System.out.println("3) Get workday default settings");
@@ -510,6 +544,7 @@ public class Menu {
 
 
     private static void AddShiftsMenu() {
+        printPrettyHeadline("\n\nAdd Shifts Menu");
         System.out.println("1) Add default shift");
         System.out.println("2) Add default workday");
         System.out.println("3) View default shift settings");
@@ -582,6 +617,7 @@ public class Menu {
     }
 
     private static void EditShiftMenu() {
+        printPrettyHeadline("\n\n Edit Shift Menu");
         System.out.println("1) View current arrangement");
         System.out.println("2) Add worker to shift");
         System.out.println("3) Remove worker from shift");
@@ -750,6 +786,7 @@ public class Menu {
 
 
     private static void WorkersManageMenu() {
+        printPrettyHeadline("\n\nWorkers Manage Menu");
         System.out.println("1) Add worker");
         System.out.println("2) Fire worker");
         System.out.println("3) Get worker details");
@@ -880,7 +917,9 @@ public class Menu {
         }
     }
 
-
+    private static void printPrettyHeadline(String s) {
+        System.out.println(ANSI_PURPLE + s + ANSI_RESET);
+    }
 
     private static void printPrettyConfirm(String message) {
         System.out.println(ANSI_BLUE + message + ANSI_RESET);
@@ -1000,5 +1039,6 @@ public class Menu {
             return getInputConstraintType();
         }
     }
+
 
 }
