@@ -33,12 +33,16 @@ class WorkersManageMenu extends HRManagerMenu {
                     break;
                 case 4:
                     AddWorkerOccupation();
+                    break;
                 case 5:
                     RemoveWorkerOccupation();
+                    break;
                 case 6:
                     ViewWorkerConstraints();
+                    break;
                 case 7:
                     prev = true;
+                    break;
                 default:
                     printPrettyError("No such option");
             }

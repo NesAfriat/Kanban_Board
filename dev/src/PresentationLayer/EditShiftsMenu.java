@@ -37,10 +37,13 @@ class EditShiftsMenu extends HRManagerMenu {
                     break;
                 case 5:
                     SetRequiredAmount();
+                    break;
                 case 6:
                     GetAvailableWorkers();
+                    break;
                 case 7:
                     ApproveShift();
+                    break;
                 case 8:
                     ExitEditShiftMenu();
                     prev = true;
