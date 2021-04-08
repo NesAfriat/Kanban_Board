@@ -256,7 +256,6 @@ public class Menu {
 
     private static void WorkerMenu() {
         printPrettyHeadline("\n\nWorker Menu");
-        System.out.println("/n/nWorker Menu");
         System.out.println("1) View shift arrangement");
         System.out.println("2) View constraints");
         System.out.println("3) Add constraint");
