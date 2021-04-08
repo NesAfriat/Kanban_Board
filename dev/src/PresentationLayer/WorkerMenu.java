@@ -10,42 +10,39 @@ import java.util.List;
 class WorkerMenu extends Menu {
 
      void run() {
-         printPrettyHeadline("\n\nWorker Menu");
-         System.out.println("1) View shift arrangement");
-         System.out.println("2) View constraints");
-         System.out.println("3) Add constraint");
-         System.out.println("4) Remove constraint");
-         System.out.println("5) Logout");
-         System.out.println("6) Exit");
-         System.out.print("Option: ");
-         int option = getInputInt();
-         switch (option){
-             case 1:
-                 nonAdminViewShiftArrangement();
-                 run();
-                 break;
-             case 2:
-                 viewLoggedWorkerConstraints();
-                 run();
-                 break;
-             case 3:
-                 addConstraint();
-                 run();
-                 break;
-             case 4:
-                 removeConstraint();
-                 run();
-                 break;
-             case 5:
-                 LogOut();
-                 start();
-                 break;
-             case 6:
-                 LogOut();
-                 System.exit(0);
-             default:
-                 printPrettyError("No such option");
-                 run();
+         boolean prev = false;
+         while (!prev) {
+             printPrettyHeadline("\n\nWorker Menu");
+             System.out.println("1) View shift arrangement");
+             System.out.println("2) View constraints");
+             System.out.println("3) Add constraint");
+             System.out.println("4) Remove constraint");
+             System.out.println("5) Logout");
+             System.out.println("6) Exit");
+             System.out.print("Option: ");
+             int option = getInputInt();
+             switch (option) {
+                 case 1:
+                     nonAdminViewShiftArrangement();
+                     break;
+                 case 2:
+                     viewLoggedWorkerConstraints();
+                     break;
+                 case 3:
+                     addConstraint();
+                     break;
+                 case 4:
+                     removeConstraint();
+                     break;
+                 case 5:
+                     LogOut();
+                     prev = true;
+                     break;
+                 case 6:
+                     super.exit();
+                 default:
+                     printPrettyError("No such option");
+             }
          }
     }
 

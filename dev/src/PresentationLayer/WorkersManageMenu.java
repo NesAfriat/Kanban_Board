@@ -6,46 +6,42 @@ import BusinessLayer.Responses.WorkerResponse;
 
 import java.util.List;
 
-class WorkersManageMenu extends AdminMenu{
+class WorkersManageMenu extends HRManagerMenu {
 
     void run() {
-        printPrettyHeadline("\n\nWorkers Manage Menu");
-        System.out.println("1) Add worker");
-        System.out.println("2) Fire worker");
-        System.out.println("3) Get worker details");
-        System.out.println("4) Add worker occupation");
-        System.out.println("5) Remove worker occupation");
-        System.out.println("6) View worker constraints");
-        System.out.println("7) Previous");
-        System.out.print("Option: ");
-        int option = getInputInt();
-        switch (option){
-            case 1:
-                AddWorker();
-                run();
-                break;
-            case 2:
-                FireWorker();
-                run();
-                break;
-            case 3:
-                GetWorker();
-                run();
-                break;
-            case 4:
-                AddWorkerOccupation();
-                run();
-            case 5:
-                RemoveWorkerOccupation();
-                run();
-            case 6:
-                ViewWorkerConstraints();
-                run();
-            case 7:
-                super.run();
-            default:
-                printPrettyError("No such option");
-                run();
+        boolean prev = false;
+        while (!prev) {
+            printPrettyHeadline("\n\nWorkers Manage Menu");
+            System.out.println("1) Add worker");
+            System.out.println("2) Fire worker");
+            System.out.println("3) Get worker details");
+            System.out.println("4) Add worker occupation");
+            System.out.println("5) Remove worker occupation");
+            System.out.println("6) View worker constraints");
+            System.out.println("7) Previous");
+            System.out.print("Option: ");
+            int option = getInputInt();
+            switch (option) {
+                case 1:
+                    AddWorker();
+                    break;
+                case 2:
+                    FireWorker();
+                    break;
+                case 3:
+                    GetWorker();
+                    break;
+                case 4:
+                    AddWorkerOccupation();
+                case 5:
+                    RemoveWorkerOccupation();
+                case 6:
+                    ViewWorkerConstraints();
+                case 7:
+                    prev = true;
+                default:
+                    printPrettyError("No such option");
+            }
         }
     }
 

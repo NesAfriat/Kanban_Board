@@ -7,7 +7,10 @@ import java.util.Scanner;
 
 
 public class Menu {
-    private boolean firstRun = true;
+    private boolean firstRun;
+    public Menu(){
+        firstRun = true;
+    }
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_BLUE = "\u001B[34m";
@@ -205,21 +208,36 @@ public class Menu {
             }
             firstRun = false;
         }
+        boolean run = true;
+        while (run){
+            System.out.println("1) Enter ID number for login");
+            System.out.println("2) Exit");
+            System.out.print("Option: ");
+            int option = getInputInt();
+            if (option == 1){
+                System.out.println("ID: ");
+                String ID = scanner.next();
+                ResponseT<WorkerResponse> worker = facade.login(ID);
+                if (worker.ErrorOccurred()) {
+                    System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
+                }
+                else {
+                    printPrettyConfirm("Hello, " + worker.value.getName() + "!");
+                    if (worker.value.getIsAdmin()) {
+                        new HRManagerMenu().run();
+                    } else {
+                        new WorkerMenu().run();
+                    }
+                }
+            }
+            else if (option == 2){
+                run = false;
+                printPrettyConfirm("Goodbye!");
+            }
+            else {
+                printPrettyError("There's no such option");
+            }
 
-        System.out.println("Enter ID number for login: ");
-        String ID = scanner.next();
-        ResponseT<WorkerResponse> worker = facade.login(ID);
-        if (worker.ErrorOccurred()){
-            System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
-            start();
-        }
-
-        printPrettyConfirm("Hello, "+ worker.value.getName()+ "!");
-        if (worker.value.getIsAdmin()){
-            new AdminMenu().run();
-        }
-        else {
-            new WorkerMenu().run();
         }
     }
 
@@ -383,4 +401,9 @@ public class Menu {
         }
     }
 
+    protected void exit() {
+        LogOut();
+        printPrettyConfirm("Goodbye!");
+        System.exit(0);
+    }
 }

@@ -7,53 +7,47 @@ import BusinessLayer.Responses.WorkerResponse;
 
 import java.util.List;
 
-class EditShiftsMenu extends AdminMenu {
-
+class EditShiftsMenu extends HRManagerMenu {
     void run() {
-        printPrettyHeadline("\n\n Edit Shift Menu");
-        System.out.println("1) View current arrangement");
-        System.out.println("2) Add worker to shift");
-        System.out.println("3) Remove worker from shift");
-        System.out.println("4) Add required job");
-        System.out.println("5) Edit job required amount");
-        System.out.println("6) Get available workers");
-        System.out.println("7) Approve shift");
-        System.out.println("8) Previous");
-        System.out.print("Option: ");
-        int option = getInputInt();
-        switch (option){
-            case 1:
-                viewCurrentArrangement();
-                run();
-                break;
-            case 2:
-                assignWorker();
-                run();
-                break;
-            case 3:
-                removeWorker();
-                run();
-                break;
-            case 4:
-                AddRequiredJob();
-                run();
-                break;
-            case 5:
-                SetRequiredAmount();
-                run();
-            case 6:
-                GetAvailableWorkers();
-                run();
-            case 7:
-                ApproveShift();
-                run();
-            case 8:
-                ExitEditShiftMenu();
-                super.run();
-                break;
-            default:
-                System.out.println("No such option");
-                run();
+        boolean prev = false;
+        while (!prev) {
+            printPrettyHeadline("\n\n Edit Shift Menu");
+            System.out.println("1) View current arrangement");
+            System.out.println("2) Add worker to shift");
+            System.out.println("3) Remove worker from shift");
+            System.out.println("4) Add required job");
+            System.out.println("5) Edit job required amount");
+            System.out.println("6) Get available workers");
+            System.out.println("7) Approve shift");
+            System.out.println("8) Previous");
+            System.out.print("Option: ");
+            int option = getInputInt();
+            switch (option) {
+                case 1:
+                    viewCurrentArrangement();
+                    break;
+                case 2:
+                    assignWorker();
+                    break;
+                case 3:
+                    removeWorker();
+                    break;
+                case 4:
+                    AddRequiredJob();
+                    break;
+                case 5:
+                    SetRequiredAmount();
+                case 6:
+                    GetAvailableWorkers();
+                case 7:
+                    ApproveShift();
+                case 8:
+                    ExitEditShiftMenu();
+                    prev = true;
+                    break;
+                default:
+                    System.out.println("No such option");
+            }
         }
     }
 

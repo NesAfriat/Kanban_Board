@@ -3,41 +3,40 @@ package PresentationLayer;
 import BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Responses.WorkDayResponse;
 
-class AddShiftsMenu extends AdminMenu {
+class AddShiftsMenu extends HRManagerMenu {
     void run(){
-        printPrettyHeadline("\n\nAdd Shifts Menu");
-        System.out.println("1) Add default shift");
-        System.out.println("2) Add default workday");
-        System.out.println("3) View default shift settings");
-        System.out.println("4) View default workday settings");
-        System.out.println("5) Previous");
-        System.out.println("6) Exit");
-        System.out.print("Option: ");
-        int option = getInputInt();
-        switch (option) {
-            case 1:
-                addDefaultShift();
-                run();
-                break;
-            case 2:
-                addDefaultWorkDay();
-                run();
-                break;
-            case 3:
-                getDefaultShift();
-                run();
-            case 4:
-                getDefaultWorkDay();
-                run();
-            case 5:
-                super.run();
-                break;
-            case 6:
-                LogOut();
-                System.exit(0);
-            default:
-                System.out.println("No such option");
-                run();
+        boolean prev = false;
+        while (!prev) {
+            printPrettyHeadline("\n\nAdd Shifts Menu");
+            System.out.println("1) Add default shift");
+            System.out.println("2) Add default workday");
+            System.out.println("3) View default shift settings");
+            System.out.println("4) View default workday settings");
+            System.out.println("5) Previous");
+            System.out.println("6) Exit");
+            System.out.print("Option: ");
+            int option = getInputInt();
+            switch (option) {
+                case 1:
+                    addDefaultShift();
+                    break;
+                case 2:
+                    addDefaultWorkDay();
+                    break;
+                case 3:
+                    getDefaultShift();
+                    break;
+                case 4:
+                    getDefaultWorkDay();
+                    break;
+                case 5:
+                    prev = true;
+                    break;
+                case 6:
+                    super.exit();
+                default:
+                    System.out.println("No such option");
+            }
         }
     }
 
