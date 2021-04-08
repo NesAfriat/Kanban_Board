@@ -58,7 +58,7 @@ class EditDefaultWorkDayShiftMenu extends HRManagerMenu {
         int day = getInputDay();
         System.out.println("Do you want morning shift?");
         boolean hasMorning = getInputYesNo();
-        System.out.println("Do you want morning shift? ");
+        System.out.println("Do you want evening shift? ");
         boolean hasEvening = getInputYesNo();
         Response m_response = facade.setDefaultShiftInDay(day, "Morning", hasMorning);
         Response e_response = facade.setDefaultShiftInDay(day, "Evening", hasEvening);

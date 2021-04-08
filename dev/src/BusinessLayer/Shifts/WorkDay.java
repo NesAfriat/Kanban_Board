@@ -17,7 +17,6 @@ public class WorkDay {
         this.date = date;
     }
 
-
     public Shift addWorker(Job job, Worker worker, ShiftType shiftType) throws InnerLogicException {
         Shift current = getShift(shiftType);
         if (current == null){
@@ -57,8 +56,6 @@ public class WorkDay {
     }
 
 
-
-
     public Shift addShift(ShiftType shiftType) throws InnerLogicException {
         if (ShiftType.Morning == shiftType){
             if (morningShift != null){
@@ -78,8 +75,6 @@ public class WorkDay {
         }
         throw new InnerLogicException("There's no such shift type");
     }
-
-
 
     public Shift getShift(ShiftType shiftType) {
         if (ShiftType.Morning.equals(shiftType)){

@@ -3,7 +3,6 @@ package BusinessLayer.Shifts;
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.Workers.Worker;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,8 +20,6 @@ public class Shift {
         approved = false;
         currentWorkers = new HashMap<>();
     }
-
-
 
     // assign new worker to the shift
     public void addWorker(Job role, Worker worker) throws InnerLogicException {
@@ -56,7 +53,6 @@ public class Shift {
         }
         return jobArrangement;
     }
-
 
     public void addRequiredJob(Job role, int required) throws InnerLogicException {
         if(required < 0 )throw new InnerLogicException("Can not set required workers to negative value");
@@ -92,7 +88,7 @@ public class Shift {
     }
 
     public List<Worker> getCurrentWorkers(Job role) throws InnerLogicException {
-        // TODO: return a copy of the list
+        // TODO: return a copy of the list?
         return getJobArrangement(role).workers;
     }
 

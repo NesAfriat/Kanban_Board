@@ -30,10 +30,10 @@ public class Menu {
         facade.setDefaultJobsInShift(6 ,"Morning", "Usher", 0);
         facade.addWorker(false, "dan", "000000001", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker(false, "avi", "000000002", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "kobi", "000000003", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "kobi", "000000003", "1", 1, "1", 1, 1 , "01/01/2021");
         facade.addWorker(false, "moshe", "000000004", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker(false, "eli", "000000005", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "moti", "000000006", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker(false, "moti", "000000006", "1", 1, "1", 1, 1 , "01/01/2016");
         facade.addWorker(false, "shaol", "000000007", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker(false, "ronen", "000000008", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker(false, "ronen", "000000009", "1", 1, "1", 1, 1 , "01/01/2018");

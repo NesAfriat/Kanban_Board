@@ -7,6 +7,7 @@ import BusinessLayer.WorkersUtils;
 
 
 public class WorkerController {
+    private final static String DEFAULT_ADMINISTRATOR_ID = "000000000";
     private Worker loggedIn;
     private WorkersList workersList;
 
@@ -14,13 +15,10 @@ public class WorkerController {
     public WorkerController() {
         this.workersList = new WorkersList();
 
-        //this is for testing TODO: remove this.
+        // default administrator user, will be loaded from database in next iteration
         try {
-            workersList.addWorker(true, "admin", "000000000", "a", 123, "a", 0, 0, "01/01/0001");
-        } catch (Exception ignored) {
-        }
-
-
+            workersList.addWorker(true, "admin", DEFAULT_ADMINISTRATOR_ID, "", 123, "", 0, 0, "");
+        } catch (Exception ignored) { }
     }
 
     public WorkersList getWorkersList() {
@@ -63,6 +61,7 @@ public class WorkerController {
     }
 
     public Worker fireWorker(String id, String endWorkingDate) throws InnerLogicException {
+        VerifyNotAdministrator(id);
         WorkersUtils.notPastDateValidation(endWorkingDate);
         return  workersList.fireWorker(id, endWorkingDate);
     }
@@ -71,11 +70,9 @@ public class WorkerController {
         if(loggedIn == null) throw new InnerLogicException("tried to add constraint but no user was logged in");
         ShiftType st;
         ConstraintType ct;
-
         WorkersUtils.dateValidation(date);
         st = WorkersUtils.parseShiftType(shiftType);
         ct = WorkersUtils.parseConstraintType(constraintType);
-
         return loggedIn.addConstraint(date, st, ct);
     }
 
@@ -88,6 +85,7 @@ public class WorkerController {
 
     public Worker addOccupation(String id, String job) throws InnerLogicException {
         if(loggedIn == null || !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
+        VerifyNotAdministrator(id);
         Job role = WorkersUtils.parseJob(job);
         Worker worker = workersList.getWorker(id);
         worker.addOccupation(role);
@@ -96,10 +94,17 @@ public class WorkerController {
 
     public Worker removeOccupation(String id, String job) throws InnerLogicException {
         if(loggedIn == null || !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
+        VerifyNotAdministrator(id);
         Job role = WorkersUtils.parseJob(job);
         Worker worker = workersList.getWorker(id);
         worker.removeOccupation(role);
         return worker;
+    }
+
+    private void VerifyNotAdministrator(String id) throws InnerLogicException {
+        if (DEFAULT_ADMINISTRATOR_ID.equals(id)){
+            throw new InnerLogicException("Cannot do this operation on administrator user");
+        }
     }
 }
 

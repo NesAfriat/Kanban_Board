@@ -1,8 +1,8 @@
 package BusinessLayer.Workers;
+
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Shifts.*;
 import BusinessLayer.WorkersUtils;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,8 +26,9 @@ public class Worker {
     public Worker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
                   int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
         if(name == null || id == null || bankAccount == null || educationFund == null || startWorkingDate == null ||
-                salary < 0 || sickDaysPerMonth < 0 || vacationDaysPerMonth < 0)
+                salary < 0 || sickDaysPerMonth < 0|| vacationDaysPerMonth < 0) {
             throw new InnerLogicException("invalid worker details");
+        }
         this.isAdmin = isAdmin;
         this.name = name;
         validationLegalId(id);

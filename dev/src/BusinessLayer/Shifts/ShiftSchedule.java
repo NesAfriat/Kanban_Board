@@ -3,7 +3,6 @@ package BusinessLayer.Shifts;
 import BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers.Job;
 import BusinessLayer.WorkersUtils;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -139,12 +138,12 @@ public class ShiftSchedule {
 
     private class DefaultWorkDayHolder{
 
-        final int weekDayMorning = 0;
-        final int weekDayEvening = 1;
-        final int fridayMorning = 2;
-        final int fridayEvening = 3;
-        final int saturdayMorning = 4;
-        final int saturdayEvening = 5;
+        static final int weekDayMorning = 0;
+        static final int weekDayEvening = 1;
+        static final int fridayMorning = 2;
+        static final int fridayEvening = 3;
+        static final int saturdayMorning = 4;
+        static final int saturdayEvening = 5;
 
 
         private final Map<Job, int[]> defaultShiftSetup;
@@ -157,9 +156,10 @@ public class ShiftSchedule {
                 int[] arr = {1, 1, 1, 1, 1, 1};
                 defaultShiftSetup.put(job, arr);
             }
-            
-            defaultWorkDaySetup = new boolean[7][2];
-            for (int i = 0; i < 5; i++){
+            int numberOfDays = 7;
+            int numberOfShifts = 2;
+            defaultWorkDaySetup = new boolean[numberOfDays][numberOfShifts];
+            for (int i = 0; i < numberOfDays-2; i++){
                 defaultWorkDaySetup[i][0] = true;
                 defaultWorkDaySetup[i][1] = true;
             }

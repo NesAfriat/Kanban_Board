@@ -1,7 +1,6 @@
 package BusinessLayer.Workers;
 
 import BusinessLayer.InnerLogicException;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class WorkersList {
     }
 
     public Worker addWorker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
-                          int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
+                            int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
         for (Worker worker: workers) {
             if (worker.getId().equals(id)) throw new InnerLogicException("the system already have worker with the id: " + id);
         }

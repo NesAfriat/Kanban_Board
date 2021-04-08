@@ -3,7 +3,6 @@ package BusinessLayer;
 import BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Workers.ConstraintType;
 import BusinessLayer.Workers.Job;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -12,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WorkersUtils {
+
+    private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private static final HashMap<String, Job> jobs = new HashMap<String, Job>(){{
         put("Cashier",Job.Cashier);
@@ -25,11 +26,9 @@ public class WorkersUtils {
     }};
 
 
-
     public static void dateValidation(String date) throws InnerLogicException {
         String result;
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate localDate = LocalDate.parse(date, formatter);
             result = localDate.format(formatter);
         } catch (DateTimeParseException e) {
@@ -42,7 +41,6 @@ public class WorkersUtils {
         dateValidation(date);
         int dayOfWeek;
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate localDate = LocalDate.parse(date, formatter);
             dayOfWeek =localDate.getDayOfWeek().getValue();
             return (dayOfWeek  % 7)+ 1; // adjust to israeli numbering of the week days.
@@ -53,7 +51,6 @@ public class WorkersUtils {
 
     public static void notPastDateValidation(String date) throws InnerLogicException {// TODO check if today's date can pass this condition
         try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
             LocalDate localDate = LocalDate.parse(date, formatter);
             if(localDate.isBefore(LocalDate.now())) throw new InnerLogicException("invalid Date (past date)");
         } catch (DateTimeParseException e) {
@@ -64,7 +61,6 @@ public class WorkersUtils {
     //return true is the date is in <= "range" days then new
     public static boolean isDateIsInMoreThanNumDays(String date, int num) throws InnerLogicException {
         dateValidation(date);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.parse(date, formatter);
         LocalDate now = LocalDate.now();
         return localDate.minusDays(num).isAfter(now);
@@ -72,7 +68,6 @@ public class WorkersUtils {
 
     public static boolean isInPastMonth(String date) throws InnerLogicException {
         dateValidation(date);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         LocalDate localDate = LocalDate.parse(date, formatter);
         LocalDate now = LocalDate.now();
         if(now.getYear() > localDate.getYear()) return true;
