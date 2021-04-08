@@ -283,16 +283,15 @@ public class Menu {
     }
 
 
+    // can't print in colors in cmd terminal :(
     protected void printPrettyHeadline(String s) {
-        System.out.println(ANSI_PURPLE + s + ANSI_RESET);
+        System.out.println(s);
     }
-
     protected void printPrettyConfirm(String message) {
-        System.out.println(ANSI_BLUE + message + ANSI_RESET);
+        System.out.println(message);
     }
-
     protected void printPrettyError(String errorMessage) {
-        System.out.println(ANSI_RED + errorMessage + ANSI_RESET);
+        System.out.println(errorMessage);
     }
 
 
