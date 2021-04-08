@@ -39,7 +39,7 @@ class WorkerMenu extends Menu {
                  break;
              case 5:
                  LogOut();
-                 start(false);
+                 start();
                  break;
              case 6:
                  LogOut();

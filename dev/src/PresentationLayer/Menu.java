@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 
 public class Menu {
+    private boolean firstRun = true;
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_BLUE = "\u001B[34m";
@@ -196,7 +197,7 @@ public class Menu {
         facade.logout();
     }
 
-    public void start(boolean firstRun) {
+    public void start() {
         if (firstRun) {
             printPrettyHeadline("Welcome to Super-Lee system!");
             System.out.println("Do you want to load database?");
@@ -204,6 +205,7 @@ public class Menu {
             if (load) {
                 testingDataUpload();
             }
+            firstRun = false;
         }
 
         System.out.println("Enter ID number for login: ");
@@ -211,7 +213,7 @@ public class Menu {
         ResponseT<WorkerResponse> worker = facade.login(ID);
         if (worker.ErrorOccurred()){
             System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
-            start(false);
+            start();
         }
 
         printPrettyConfirm("Hello, "+ worker.value.getName()+ "!");
@@ -236,54 +238,7 @@ public class Menu {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-    private  void EditDefaultWorkDayShiftMenu() {
-        printPrettyHeadline("\n\nEdit Default Settings Menu");
-        System.out.println("1) Get shift default settings");
-        System.out.println("2) Edit shift default");
-        System.out.println("3) Get workday default settings");
-        System.out.println("4) Edit workday default");
-        System.out.println("5) Previous");
-        System.out.println("6) Exit");
-        System.out.print("Option: ");
-        int option = getInputInt();
-        switch (option) {
-            case 1:
-                getDefaultShift();
-                EditDefaultWorkDayShiftMenu();
-            case 2:
-                setDefaultShift();
-                EditDefaultWorkDayShiftMenu();
-                break;
-            case 3:
-                getDefaultWorkDay();
-                EditDefaultWorkDayShiftMenu();
-            case 4:
-                setDefaultWorkDay();
-                EditDefaultWorkDayShiftMenu();
-                break;
-            case 5:
-                ShiftsManageMenu();
-                break;
-            case 6:
-                LogOut();
-                System.exit(0);
-            default:
-                System.out.println("No such option");
-                EditDefaultWorkDayShiftMenu();
-        }
-    }
-
-    private void getDefaultWorkDay() {
+    protected void getDefaultWorkDay() {
         int day = getInputDay();
         ResponseT<WorkDayResponse> workDayResponse = facade.getDefaultShiftInDay(day);
         if (workDayResponse.ErrorOccurred()){
@@ -294,28 +249,8 @@ public class Menu {
         }
     }
 
-    private void setDefaultWorkDay() {
-        int day = getInputDay();
-        System.out.println("Do you want morning shift?");
-        boolean hasMorning = getInputYesNo();
-        System.out.println("Do you want morning shift? ");
-        boolean hasEvening = getInputYesNo();
-        Response m_response = facade.setDefaultShiftInDay(day, "Morning", hasMorning);
-        Response e_response = facade.setDefaultShiftInDay(day, "Evening", hasEvening);
-        if (m_response.ErrorOccurred()){
-            printPrettyError(m_response.getErrorMessage());
-        }
-        if (e_response.ErrorOccurred())
-            printPrettyError(e_response.getErrorMessage());
-        if (!m_response.ErrorOccurred() & !e_response.ErrorOccurred()){
-            printPrettyConfirm("New workday setting updated successfully");
-        }
-    }
 
-
-
-
-    private void getDefaultShift(){
+    protected void getDefaultShift(){
         int day = getInputDayType();
         String shiftType = getInputShiftType();
         ResponseT<ShiftResponse> response = facade.getDefaultJobsInShift(day, shiftType);
@@ -326,261 +261,6 @@ public class Menu {
             printPrettyConfirm(response.value.Settings());
         }
     }
-
-    private void setDefaultShift() {
-        int day = getInputDayType();
-        String shiftType = getInputShiftType();
-        String role = getInputJob();
-        System.out.println("Enter new amount required: ");
-        int amountRequired = getInputInt();
-        Response response = facade.setDefaultJobsInShift(day, shiftType, role, amountRequired);
-        if (response.ErrorOccurred()){
-            printPrettyError(response.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm("New shift default updated successfully");
-        }
-    }
-
-
-
-    private void AddShiftsMenu() {
-        printPrettyHeadline("\n\nAdd Shifts Menu");
-        System.out.println("1) Add default shift");
-        System.out.println("2) Add default workday");
-        System.out.println("3) View default shift settings");
-        System.out.println("4) View default workday settings");
-        System.out.println("5) Previous");
-        System.out.println("6) Exit");
-        System.out.print("Option: ");
-        int option = getInputInt();
-        switch (option) {
-            case 1:
-                addDefaultShift();
-                AddShiftsMenu();
-                break;
-            case 2:
-                addDefaultWorkDay();
-                AddShiftsMenu();
-                break;
-            case 3:
-                getDefaultShift();
-                AddShiftsMenu();
-            case 4:
-                getDefaultWorkDay();
-                AddShiftsMenu();
-            case 5:
-                ShiftsManageMenu();
-                break;
-            case 6:
-                LogOut();
-                System.exit(0);
-            default:
-                System.out.println("No such option");
-                AddShiftsMenu();
-        }
-    }
-
-    private void addDefaultShift() {
-        String date = getInputDate();
-        String shiftType = getInputShiftType();
-        ResponseT<WorkDayResponse> workDayResponse = facade.addDefaultShift(date, shiftType);
-        if (workDayResponse.ErrorOccurred()){
-            printPrettyError(workDayResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm(shiftType + " shift added successfully to workday at " + workDayResponse.value.getDate());
-        }
-    }
-
-
-    private void addDefaultWorkDay() {
-        String date = getInputDate();
-        ResponseT<WorkDayResponse> workDayResponse = facade.addDefaultWorkDay(date);
-        if (workDayResponse.ErrorOccurred()){
-            printPrettyError(workDayResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm("A workday added successfully at " + workDayResponse.value.getDate());
-        }
-    }
-
-    private void RemoveShift(){
-        String date = getInputDate();
-        String shiftType = getInputShiftType();
-        ResponseT<ShiftResponse> shiftResponse = facade.removeShift(date, shiftType);
-        if (shiftResponse.ErrorOccurred()){
-            printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm(shiftType + " Shift removed successfully at date: " + date);
-        }
-    }
-
-    private void EditShiftMenu() {
-        printPrettyHeadline("\n\n Edit Shift Menu");
-        System.out.println("1) View current arrangement");
-        System.out.println("2) Add worker to shift");
-        System.out.println("3) Remove worker from shift");
-        System.out.println("4) Add required job");
-        System.out.println("5) Edit job required amount");
-        System.out.println("6) Get available workers");
-        System.out.println("7) Approve shift");
-        System.out.println("8) Previous");
-        System.out.print("Option: ");
-        int option = getInputInt();
-        switch (option){
-            case 1:
-                viewCurrentArrangement();
-                EditShiftMenu();
-                break;
-            case 2:
-                assignWorker();
-                EditShiftMenu();
-                break;
-            case 3:
-                removeWorker();
-                EditShiftMenu();
-                break;
-            case 4:
-                AddRequiredJob();
-                EditShiftMenu();
-                break;
-            case 5:
-                SetRequiredAmount();
-                EditShiftMenu();
-            case 6:
-                GetAvailableWorkers();
-                EditShiftMenu();
-            case 7:
-                ApproveShift();
-                EditShiftMenu();
-            case 8:
-                ExitEditShiftMenu();
-                ShiftsManageMenu();
-                break;
-            default:
-                System.out.println("No such option");
-                EditShiftMenu();
-        }
-    }
-
-    private void ApproveShift() {
-        ResponseT<ShiftResponse> shiftResponse = facade.approveShift();
-        if (shiftResponse.ErrorOccurred()){
-            printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else{
-            if (shiftResponse.value.isFullyOccupied())
-                printPrettyConfirm("Shift approved successfully");
-            else{
-                printPrettyConfirm("Shift approved successfully.");
-                printPrettyError("BEWARE: Not all roles are fully occupied.");
-            }
-        }
-
-    }
-
-    private void GetAvailableWorkers() {
-        String role = getInputJob();
-        ResponseT<List<WorkerResponse>> availableWorkers = facade.getAvailableWorkers(role);
-        if (availableWorkers.ErrorOccurred()){
-            printPrettyError(availableWorkers.getErrorMessage());
-        }
-        else {
-            if (availableWorkers.value.isEmpty()){
-                printPrettyConfirm("No available workers to work as " + role +" at current shift.");
-            }
-            else {
-                for (WorkerResponse workerRes : availableWorkers.value) {
-                    printPrettyConfirm(workerRes.getNameID());
-                }
-            }
-        }
-    }
-
-    private void SetRequiredAmount() {
-        String role = getInputJob();
-        System.out.print("Amount required: ");
-        int required = getInputInt();
-        ResponseT<ShiftResponse> shiftResponse = facade.setAmountRequired(role, required);
-        if (shiftResponse.ErrorOccurred()){
-            printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm("The amount of workers required for role " + role + " has updated successfully to "+ required);
-        }
-    }
-
-    private void ExitEditShiftMenu() {
-        Response response = facade.exitShift();
-        if (response.ErrorOccurred())
-            printPrettyError(response.getErrorMessage());
-        else {
-            printPrettyConfirm("Exited from shift successfully");
-        }
-    }
-
-    private void AddRequiredJob() {
-        String role = getInputJob();
-        System.out.print("Amount required: ");
-        int required = getInputInt();
-        ResponseT<ShiftResponse> shiftResponse = facade.addRequiredJob(role, required);
-        if (shiftResponse.ErrorOccurred()){
-            printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm("Job "+ role + " added successfully to the shift.");
-        }
-    }
-
-    private void removeWorker() {
-        String ID = getInputWorkerID();
-        String role = getInputJob();
-        ResponseT<ShiftResponse> shiftResponse = facade.removeWorkerFromCurrentShift(ID, role);
-        if (shiftResponse.ErrorOccurred()){
-            printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm("Worker removed successfully from the shift.");
-        }
-    }
-
-    private void viewCurrentArrangement() {
-        ResponseT<ShiftResponse> shiftResponse = facade.viewCurrentArrangement();
-        if (shiftResponse.ErrorOccurred()){
-            printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm(shiftResponse.value.toString());
-        }
-    }
-
-    private void assignWorker() {
-        String ID = getInputWorkerID();
-        String role = getInputJob();
-        ResponseT<ShiftResponse> shiftResponse = facade.addWorkerToCurrentShift(ID, role);
-        if (shiftResponse.ErrorOccurred()){
-            printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm("Worker added successfully");
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     protected void printPrettyHeadline(String s) {
@@ -628,7 +308,7 @@ public class Menu {
     }
 
 
-    private int getInputDayType() {
+    protected int getInputDayType() {
         System.out.println("Choose day type:");
         System.out.println("1) Weekday");
         System.out.println("2) Friday");
@@ -642,7 +322,7 @@ public class Menu {
         }
         return day;
     }
-    private int getInputDay() {
+    protected int getInputDay() {
         System.out.println("Choose day:");
         System.out.println("1) Sunday");
         System.out.println("2) Monday");
@@ -659,7 +339,7 @@ public class Menu {
         return day;
     }
 
-    private boolean getInputYesNo() {
+    protected boolean getInputYesNo() {
         System.out.println("1) Yes");
         System.out.println("2) No");
         System.out.print("Option: ");
@@ -704,6 +384,5 @@ public class Menu {
             return getInputConstraintType();
         }
     }
-
 
 }

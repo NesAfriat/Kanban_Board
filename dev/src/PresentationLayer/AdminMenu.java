@@ -23,7 +23,7 @@ class AdminMenu extends Menu{
                 break;
             case 3:
                 LogOut();
-                start(false);
+                start();
                 break;
             case 4:
                 LogOut();
@@ -56,16 +56,16 @@ class AdminMenu extends Menu{
                 EditShift();
                 break;
             case 3:
-                AddShiftsMenu();
+                new AddShiftsMenu().run();
                 break;
             case 4:
                 RemoveShift();
                 ShiftsManageMenu();
                 break;
             case 5:
-                EditDefaultWorkDayShiftMenu();
+                new EditDefaultWorkDayShiftMenu().run();
             case 6:
-                AdminMenu();
+                run();
             case 7:
                 System.exit(0);
             default:
@@ -85,7 +85,7 @@ class AdminMenu extends Menu{
         }
         else {
             printPrettyConfirm("Shift selected successfully");
-            EditShiftMenu();
+            new EditShiftsMenu().run();
         }
     }
 
@@ -99,5 +99,19 @@ class AdminMenu extends Menu{
             printPrettyConfirm(workDay.value.toString());
         }
     }
+
+    private void RemoveShift(){
+        String date = getInputDate();
+        String shiftType = getInputShiftType();
+        ResponseT<ShiftResponse> shiftResponse = facade.removeShift(date, shiftType);
+        if (shiftResponse.ErrorOccurred()){
+            printPrettyError(shiftResponse.getErrorMessage());
+        }
+        else {
+            printPrettyConfirm(shiftType + " Shift removed successfully at date: " + date);
+        }
+    }
+
+
 
 }
