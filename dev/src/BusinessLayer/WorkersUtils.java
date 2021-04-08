@@ -49,7 +49,7 @@ public class WorkersUtils {
         }
     }
 
-    public static void notPastDateValidation(String date) throws InnerLogicException {// TODO check if today's date can pass this condition
+    public static void notPastDateValidation(String date) throws InnerLogicException {
         try {
             LocalDate localDate = LocalDate.parse(date, formatter);
             if(localDate.isBefore(LocalDate.now())) throw new InnerLogicException("invalid Date (past date)");

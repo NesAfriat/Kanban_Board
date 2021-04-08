@@ -88,7 +88,6 @@ public class Shift {
     }
 
     public List<Worker> getCurrentWorkers(Job role) throws InnerLogicException {
-        // TODO: return a copy of the list?
         return getJobArrangement(role).workers;
     }
 
