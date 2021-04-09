@@ -22,10 +22,12 @@ public class TransportDoc {
     HashMap<Integer, Store> destinationStore;
     HashMap<Integer, Supplier> destinationSupplier;
     ArrayList<Integer> allStops = new ArrayList<>();
+
     Area area=null;
     double truckWeightDep=-1;
     //Product,int
     List<Triple<Product, Integer, Store>> productList;
+
     public TransportDoc upDates=null;
 
     public TransportDoc(int id) {

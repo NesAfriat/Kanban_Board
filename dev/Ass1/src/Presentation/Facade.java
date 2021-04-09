@@ -317,7 +317,7 @@ public class Facade {
 
 
 
-    public void loadData() throws Exception {
+    public void loadData()  {
 
         bc.loadData();
     }

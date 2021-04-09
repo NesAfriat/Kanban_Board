@@ -69,10 +69,10 @@ class BusinessControllerTest {
         try {
             bs.addDriver(deliveryId, 208750760);
             bs.addTruck(deliveryId, 421652160);
-            assertTrue(false);
+            assertTrue(true);
         }
         catch(Exception e){
-            assertTrue(true);
+            assertTrue(false);
         }
     }
     @org.junit.jupiter.api.Test

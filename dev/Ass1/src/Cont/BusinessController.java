@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class BusinessController {
-//todo no one free the truck and driver
+
     private DriversController driversController;
     private DocCont docCont;
     private ControllerShops controllerShops;
@@ -327,101 +327,108 @@ public class BusinessController {
     public String getAllSuppliers(){
         return controllerShops.getSupplierList().toString();
     }
-    public void loadData() throws Exception {
+    public void loadData()  {
+
+try {
+    ControllerShops cs = this.controllerShops;
+    Supplier sp1 = new Supplier("Rami   Levi", 2, "0507133213", "Rami Ach", Area.B);
+    Supplier sp2 = new Supplier("Shufersal", 3, "050713123213", "Shuf Ach", Area.A);
+    Supplier sp3 = new Supplier("Mega", 4, "0501231231", "meg Ach", Area.A);
+    Supplier sp4 = new Supplier("Tiv Taam", 5, "052312312", "Taami Ach", Area.A);
+
+    cs.addSupplier(sp1);
+    cs.addSupplier(sp2);
+    cs.addSupplier(sp3);
+    cs.addSupplier(sp4);
+    //cs.ToStringSuppliers();
+
+    Product pr1 = new Product("Cheese", 2);
+    Product pr2 = new Product("Milk", 3);
+    Product pr3 = new Product("Chocolate", 4);
+    Product pr4 = new Product("Water", 5);
+
+    cs.addProductToSupp(sp1, pr1);
+    cs.addProductToSupp(sp1, pr2);
+    cs.addProductToSupp(sp1, pr3);
+    cs.addProductToSupp(sp1, pr4);
+    cs.addProductToSupp(sp2, pr1);
+    cs.addProductToSupp(sp2, pr2);
+    cs.addProductToSupp(sp2, pr3);
+    cs.addProductToSupp(sp3, pr4);
+    cs.addProductToSupp(sp3, pr1);
+    cs.addProductToSupp(sp3, pr2);
+    cs.addProductToSupp(sp4, pr3);
+    cs.addProductToSupp(sp4, pr4);
+    cs.addProductToSupp(sp4, pr1);
+    cs.addProductToSupp(sp4, pr2);
 
 
-        ControllerShops cs = this.controllerShops;
-        Supplier sp1 = new Supplier("Rami   Levi", 2, "0507133213", "Rami Ach", Area.B);
-        Supplier sp2 = new Supplier("Shufersal", 3, "050713123213", "Shuf Ach", Area.A);
-        Supplier sp3 = new Supplier("Mega", 4, "0501231231", "meg Ach", Area.A);
-        Supplier sp4 = new Supplier("Tiv Taam", 5, "052312312", "Taami Ach", Area.A);
-
-        cs.addSupplier(sp1);
-        cs.addSupplier(sp2);
-        cs.addSupplier(sp3);
-        cs.addSupplier(sp4);
-        //cs.ToStringSuppliers();
-
-        Product pr1 = new Product("Cheese", 2);
-        Product pr2 = new Product("Milk", 3);
-        Product pr3 = new Product("Chocolate", 4);
-        Product pr4 = new Product("Water", 5);
-
-        cs.addProductToSupp(sp1,pr1);
-        cs.addProductToSupp(sp1,pr2);
-        cs.addProductToSupp(sp1,pr3);
-        cs.addProductToSupp(sp1,pr4);
-        cs.addProductToSupp(sp2,pr1);
-        cs.addProductToSupp(sp2,pr2);
-        cs.addProductToSupp(sp2,pr3);
-        cs.addProductToSupp(sp3,pr4);
-        cs.addProductToSupp(sp3,pr1);
-        cs.addProductToSupp(sp3,pr2);
-        cs.addProductToSupp(sp4,pr3);
-        cs.addProductToSupp(sp4,pr4);
-        cs.addProductToSupp(sp4,pr1);
-        cs.addProductToSupp(sp4,pr2);
+    cs.addProduct(pr1);
+    cs.addProduct(pr2);
+    cs.addProduct(pr3);
+    cs.addProduct(pr4);
 
 
+    Store st1 = new Store("shufersal 1", 2, "0501231213", "mr man", Area.A);
+    Store st2 = new Store("shufersal 2", 3, "0501465213", "mr man", Area.B);
+    Store st3 = new Store("shufersal 3", 4, "0507553113", "mr man", Area.B);
+    Store st4 = new Store("shufersal 4", 5, "0507993113", "mr man", Area.B);
+    Store st5 = new Store("shufersal 5", 6, "0501299913", "mr man", Area.C);
 
-        cs.addProduct(pr1);
-        cs.addProduct(pr2);
-        cs.addProduct(pr3);
-        cs.addProduct(pr4);
-
-
-        Store st1 = new Store("shufersal 1", 2, "0501231213", "mr man", Area.A);
-        Store st2 = new Store("shufersal 2", 3, "0501465213", "mr man", Area.B);
-        Store st3 = new Store("shufersal 3", 4, "0507553113", "mr man", Area.B);
-        Store st4 = new Store("shufersal 4", 5, "0507993113", "mr man", Area.B);
-        Store st5 = new Store("shufersal 5", 6, "0501299913", "mr man", Area.C);
-
-        cs.addStore(st1);
-        cs.addStore(st2);
-        cs.addStore(st3);
-        cs.addStore(st4);
+    cs.addStore(st1);
+    cs.addStore(st2);
+    cs.addStore(st3);
+    cs.addStore(st4);
 
 
-        DriversController drivers=this.driversController;
-        Driver dr = new Driver("Dan",209889510, License.typeA);
-        drivers.AddNewDriver("Guy",208750760, License.typeA);
-        drivers.AddNewDriver("Dan",209889510, License.typeA);
-        drivers.AddNewDriver("Lebron James",986750760, License.typeB);
-        drivers.AddNewDriver("Steph Curry",308450560, License.typeB);
-        drivers.AddNewDriver("Omri Caspi",208750760, License.typeC);
-        drivers.AddNewDriver("Deni Avdija",208750760, License.typeC);
+    DriversController drivers = this.driversController;
+    Driver dr = new Driver("Dan", 209889510, License.typeA);
+    drivers.AddNewDriver("Guy", 208750760, License.typeA);
+    drivers.AddNewDriver("Dan", 209889510, License.typeA);
+    drivers.AddNewDriver("Lebron James", 986750760, License.typeB);
+    drivers.AddNewDriver("Steph Curry", 308450560, License.typeB);
+    drivers.AddNewDriver("Omri Caspi", 208750760, License.typeC);
+    drivers.AddNewDriver("Deni Avdija", 208750760, License.typeC);
 
-        List<License> licenseList1=new LinkedList<License>();licenseList1.add(License.typeA);licenseList1.add(License.typeB);
-        List<License> licenseList2=new LinkedList<License>();licenseList2.add(License.typeA);licenseList2.add(License.typeB);licenseList2.add(License.typeC);
-        List<License> licenseList3=new LinkedList<License>();licenseList3.add(License.typeA);
+    List<License> licenseList1 = new LinkedList<License>();
+    licenseList1.add(License.typeA);
+    licenseList1.add(License.typeB);
+    List<License> licenseList2 = new LinkedList<License>();
+    licenseList2.add(License.typeA);
+    licenseList2.add(License.typeB);
+    licenseList2.add(License.typeC);
+    List<License> licenseList3 = new LinkedList<License>();
+    licenseList3.add(License.typeA);
 
-        Truck tk = new Truck("The Tank", 421652160, new TruckType("honda", 2000, 700,licenseList3));
-        drivers.AddNewTruck("The Tank", 421652160, new TruckType("honda", 2000, 700,licenseList3));
-        drivers.AddNewTruck("The Hunk", 421652160, new TruckType("honda", 2000, 700,licenseList3));
-        drivers.AddNewTruck("Mad Max", 421652160, new TruckType("mazda", 3000, 1000,licenseList1));
-        drivers.AddNewTruck("Big Daddy", 421652160, new TruckType("honda", 4000, 1200,licenseList2));
+    Truck tk = new Truck("The Tank", 421652160, new TruckType("honda", 2000, 700, licenseList3));
+    drivers.AddNewTruck("The Tank", 421652160, new TruckType("honda", 2000, 700, licenseList3));
+    drivers.AddNewTruck("The Hunk", 421652160, new TruckType("honda", 2000, 700, licenseList3));
+    drivers.AddNewTruck("Mad Max", 421652160, new TruckType("mazda", 3000, 1000, licenseList1));
+    drivers.AddNewTruck("Big Daddy", 421652160, new TruckType("honda", 4000, 1200, licenseList2));
 
-        DocCont docContro=this.docCont;
+    DocCont docContro = this.docCont;
 
-        Date date = new SimpleDateFormat("dd/MM/yyyy").parse("11/03/1998");
-
-
-        SimpleDateFormat formatter=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-        Date date2=formatter.parse("03-11-1998 16:32:08");
-        docCont.newDelivery();
-        docCont.setDepartureTime(0,date2);
-        docCont.setTranportDate(0,date);
-        addDriver(0,208750760);
-        addTruck(0,421652160);
-
-        setOrigin(0,st2.getId());
-        addStore(0,st3.getId(),1);
-        addStore(0,st4.getId(),2);
-        addSupplier(0,sp1.getId(),3);
-        addWeightWhenLeaving(0,1500);
-        addProductsToDoc(0,new Tuple<>(2,3),st3.getId());
-        addProductsToDoc(0,new Tuple<>(3,1),st4.getId());
+    Date date = new SimpleDateFormat("dd/MM/yyyy").parse("11/03/1998");
 
 
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+    Date date2 = formatter.parse("03-11-1998 16:32:08");
+    docCont.newDelivery();
+    docCont.setDepartureTime(0, date2);
+    docCont.setTranportDate(0, date);
+    addDriver(0, 208750760);
+    addTruck(0, 421652160);
+
+    setOrigin(0, st2.getId());
+    addStore(0, st3.getId(), 1);
+    addStore(0, st4.getId(), 2);
+    addSupplier(0, sp1.getId(), 3);
+    addWeightWhenLeaving(0, 1500);
+    addProductsToDoc(0, new Tuple<>(2, 3), st3.getId());
+    addProductsToDoc(0, new Tuple<>(3, 1), st4.getId());
+
+}catch(Exception e){
+
+}
     }
 }
