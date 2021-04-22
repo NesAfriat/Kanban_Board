@@ -22,7 +22,7 @@ public class WorkerUnitTests {
     @Before
     public void initTest(){
         try {
-            worker = new Worker(false, "rami", "333333333", "1", 1, "1", 1, 1, "01/01/2018");
+            worker = new Worker("rami", "333333333", "1", 1, "1", 1, 1, "01/01/2018");
         } catch (InnerLogicException e) {
             e.printStackTrace();
         }

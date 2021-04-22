@@ -76,10 +76,10 @@ public class Facade {
         }
     }
 
-    public ResponseT<WorkerResponse> addWorker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
+    public ResponseT<WorkerResponse> addWorker(String name, String id, String bankAccount, double salary, String educationFund,
                             int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate){
         try{
-            Worker newWorker = workerController.addWorker(isAdmin, name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
+            Worker newWorker = workerController.addWorker(name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                     sickDaysPerMonth, startWorkingDate);
             return new ResponseT<>(new WorkerResponse(newWorker));
         }catch (InnerLogicException e){
@@ -290,4 +290,30 @@ public class Facade {
         }
     }
 
+    public ResponseT<WorkerResponse> setWorkerID(String id, String newID) {
+        try{
+            Worker worker = workerController.setWorkerID(id, newID);
+            return new ResponseT<>(new WorkerResponse(worker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<WorkerResponse> setWorkerName(String id, String name) {
+        try{
+            Worker worker = workerController.setWorkerName(id, name);
+            return new ResponseT<>(new WorkerResponse(worker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<WorkerResponse> setWorkerSalary(String id, double salary) {
+        try{
+            Worker worker = workerController.setWorkerSalary(id, salary);
+            return new ResponseT<>(new WorkerResponse(worker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
 }

@@ -14,11 +14,6 @@ public class WorkerController {
 
     public WorkerController() {
         this.workersList = new WorkersList();
-
-        // default administrator user, will be loaded from database in next iteration
-        try {
-            workersList.addWorker(true, "admin", DEFAULT_ADMINISTRATOR_ID, "", 123, "", 0, 0, "");
-        } catch (Exception ignored) { }
     }
 
     public WorkersList getWorkersList() {
@@ -43,15 +38,14 @@ public class WorkerController {
         loggedIn = null;
     }
 
-    public Worker addWorker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
+    public Worker addWorker(String name, String id, String bankAccount, double salary, String educationFund,
                           int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
 
         if (loggedIn == null) throw new InnerLogicException("cant add new worker to the system because no worker is logged in");
         if (!loggedIn.getIsAdmin())
             throw new InnerLogicException("cant add new worker to the system because loggedIn is not admin");
-        if (workersList.contains(id)) throw new InnerLogicException("the system already has worker with the ID: " + id);
         WorkersUtils.dateValidation(startWorkingDate);
-        return workersList.addWorker(isAdmin, name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
+        return workersList.addWorker(name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                 sickDaysPerMonth, startWorkingDate);
     }
 
@@ -105,6 +99,33 @@ public class WorkerController {
         if (DEFAULT_ADMINISTRATOR_ID.equals(id)){
             throw new InnerLogicException("Cannot do this operation on administrator user");
         }
+    }
+
+    public Worker setWorkerID(String id, String newID) throws InnerLogicException {
+        if(loggedIn == null || !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
+        VerifyNotAdministrator(id);
+        Worker worker = workersList.getWorker(id);
+        if (workersList.contains(newID)){
+            throw new InnerLogicException("new id is already existing in the system");
+        }
+        worker.setID(newID);
+        return worker;
+    }
+
+    public Worker setWorkerName(String id, String name) throws InnerLogicException {
+        if(loggedIn == null || !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
+        VerifyNotAdministrator(id);
+        Worker worker = workersList.getWorker(id);
+        worker.setName(name);
+        return worker;
+    }
+
+    public Worker setWorkerSalary(String id, double salary) throws InnerLogicException {
+        if(loggedIn == null || !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to add occupation to a worker");
+        VerifyNotAdministrator(id);
+        Worker worker = workersList.getWorker(id);
+        worker.setSalary(salary);
+        return worker;
     }
 }
 

@@ -32,8 +32,6 @@ public class ShiftController {
         this.isAdminAuthorized = isAdminAuthorized;
     }
 
-
-
     public void setCurrentDay(String date) throws InnerLogicException {
         currentDay = calendar.getWorkDay(date);
     }
@@ -54,8 +52,7 @@ public class ShiftController {
         WorkersUtils.dateValidation(date);
         WorkersUtils.isInPastMonth(date);
         ShiftType type = WorkersUtils.parseShiftType(shiftType);
-        WorkDay workDay = calendar.addDefaultShift(date, type);
-        return workDay;
+        return calendar.addDefaultShift(date, type);
     }
 
     public WorkDay addDefaultWorkDay(String date) throws InnerLogicException {

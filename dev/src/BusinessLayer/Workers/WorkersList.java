@@ -9,10 +9,11 @@ public class WorkersList {
 
     public WorkersList(){
         this.workers = new LinkedList<>();
-        try {
-            workers.add(new Worker(true, "admin", "000000000", "a", 123, "a", 0, 0, "01/01/0001"));
+        try { // default administrator worker
+            Worker worker = new Worker( "admin", "000000000", "a", 123, "a", 0, 0, "01/01/0001");
+            workers.add(worker);
+            worker.addOccupation(Job.HR_Manager); // administrator is admin
         } catch (InnerLogicException ignored) { }
-
     }
 
     public List<Worker> getWorkersByJob(Job job){
@@ -30,12 +31,10 @@ public class WorkersList {
         throw new InnerLogicException("there is no worker with that id in the system");
     }
 
-    public Worker addWorker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
+    public Worker addWorker(String name, String id, String bankAccount, double salary, String educationFund,
                             int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
-        for (Worker worker: workers) {
-            if (worker.getId().equals(id)) throw new InnerLogicException("the system already have worker with the id: " + id);
-        }
-        Worker newWorker =new Worker(isAdmin, name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
+        if (contains(id)) throw new InnerLogicException("the system already have worker with the id: " + id);
+        Worker newWorker =new Worker( name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                 sickDaysPerMonth, startWorkingDate);
         workers.add(newWorker);
         return newWorker;

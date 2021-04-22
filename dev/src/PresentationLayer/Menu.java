@@ -32,20 +32,20 @@ public class Menu {
         facade.setDefaultJobsInShift(1 ,"Evening", "Usher", 0);
         facade.setDefaultJobsInShift(6 ,"Morning", "Usher", 0);
         
-        facade.addWorker(false, "dan", "000000001", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "avi", "000000002", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "kobi", "000000003", "1", 1, "1", 1, 1 , "01/01/2021");
-        facade.addWorker(false, "moshe", "000000004", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "eli", "000000005", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "moti", "000000006", "1", 1, "1", 1, 1 , "01/01/2016");
-        facade.addWorker(false, "shaol", "000000007", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "ronen", "000000008", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "ronen", "000000009", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "moshe", "000000010", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "dolev", "000000011", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "eliad", "000000012", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "micha", "000000013", "1", 1, "1", 1, 1 , "01/01/2018");
-        facade.addWorker(false, "meni", "000000014", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "dan", "000000001", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "avi", "000000002", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "kobi", "000000003", "1", 1, "1", 1, 1 , "01/01/2021");
+        facade.addWorker( "moshe", "000000004", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "eli", "000000005", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "moti", "000000006", "1", 1, "1", 1, 1 , "01/01/2016");
+        facade.addWorker( "shaol", "000000007", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "ronen", "000000008", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "ronen", "000000009", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "moshe", "000000010", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "dolev", "000000011", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "eliad", "000000012", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "micha", "000000013", "1", 1, "1", 1, 1 , "01/01/2018");
+        facade.addWorker( "meni", "000000014", "1", 1, "1", 1, 1 , "01/01/2018");
 
         facade.addOccupationToWorker("000000001", "HR_Manager");
         facade.addOccupationToWorker("000000002", "Shift_Manager");

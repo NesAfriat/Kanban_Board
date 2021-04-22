@@ -18,7 +18,8 @@ class WorkersManageMenu extends HRManagerMenu {
             System.out.println("4) Add worker occupation");
             System.out.println("5) Remove worker occupation");
             System.out.println("6) View worker constraints");
-            System.out.println("7) Previous");
+            System.out.println("7) Edit worker details");
+            System.out.println("8) Previous");
             System.out.print("Option: ");
             int option = getInputInt();
             switch (option) {
@@ -41,6 +42,9 @@ class WorkersManageMenu extends HRManagerMenu {
                     ViewWorkerConstraints();
                     break;
                 case 7:
+                    new EditWorkerMenu().run();
+                    break;
+                case 8:
                     prev = true;
                     break;
                 default:
@@ -65,7 +69,7 @@ class WorkersManageMenu extends HRManagerMenu {
         int sickDaysPerMonth = getInputInt();
         System.out.println("Enter Start Working Date <DD/MM/YYYY>: ");
         String date = getInputString();
-        ResponseT<WorkerResponse> workerResponse = facade.addWorker(false, name, ID, bankAccount, salary, educationFund, vacationDaysPerMonth, sickDaysPerMonth, date);
+        ResponseT<WorkerResponse> workerResponse = facade.addWorker( name, ID, bankAccount, salary, educationFund, vacationDaysPerMonth, sickDaysPerMonth, date);
         if (workerResponse.ErrorOccurred()){
             printPrettyError(workerResponse.getErrorMessage());
         }

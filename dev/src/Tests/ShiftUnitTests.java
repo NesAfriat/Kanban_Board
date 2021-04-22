@@ -21,7 +21,7 @@ public class ShiftUnitTests {
         workerRole = Job.Shift_Manager;
         notWorkersRole = Job.Guard;
         try {
-            worker = new Worker(false, "rami", "333333333", "1", 1, "1", 1, 1, "01/01/2018");
+            worker = new Worker("rami", "333333333", "1", 1, "1", 1, 1, "01/01/2018");
             worker.addOccupation(workerRole);
         } catch (InnerLogicException e) {
             e.printStackTrace();

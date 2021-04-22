@@ -9,8 +9,8 @@ import java.util.List;
 public class Worker {
     private static final int DEFAULT_MIN_RANGE_TO_ADD_CONSTRAINT = 14;
     private static final int DEFAULT_ID_LENGTH = 9;
+    private static final double DEFAULT_MIN_SALARY = 0;
 
-    private boolean isAdmin;
     private List<Job> occupations;
     private List<Constraint> constraints;
     private String name;
@@ -23,13 +23,12 @@ public class Worker {
     private String startWorkingDate;
     private String endWorkingDate;
 
-    public Worker(boolean isAdmin, String name, String id, String bankAccount, double salary, String educationFund,
+    public Worker(String name, String id, String bankAccount, double salary, String educationFund,
                   int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
         if(name == null || id == null || bankAccount == null || educationFund == null || startWorkingDate == null ||
-                salary < 0 || sickDaysPerMonth < 0|| vacationDaysPerMonth < 0) {
+                salary < DEFAULT_MIN_SALARY || sickDaysPerMonth < 0|| vacationDaysPerMonth < 0) {
             throw new InnerLogicException("invalid worker details");
         }
-        this.isAdmin = isAdmin;
         this.name = name;
         validationLegalId(id);
         this.id = id;
@@ -85,7 +84,6 @@ public class Worker {
 
     public void addOccupation(Job job) throws InnerLogicException {
         if (occupations.contains(job)) throw new InnerLogicException("tried to add occupation to worker but he already qualified to work as " + job.name());
-        if (job.equals(Job.HR_Manager)) isAdmin = true;
         this.occupations.add(job);
     }
 
@@ -105,7 +103,7 @@ public class Worker {
     }
 
     public boolean getIsAdmin(){
-        return isAdmin;
+        return occupations.contains(Job.HR_Manager);
     }
 
     public String getName() {
@@ -157,5 +155,27 @@ public class Worker {
         for(int i = 0; i < id.length(); i++){
             if(id.charAt(i) < '0' || id.charAt(i) > '9') throw new InnerLogicException("ID Can contain only numbers");
         }
+    }
+
+    public void setID(String newID) throws InnerLogicException {
+        if (newID == null){
+            throw new InnerLogicException("cannot set a null ID");
+        }
+        validationLegalId(newID);
+        this.id = newID;
+    }
+
+    public void setName(String name) throws InnerLogicException {
+        if (name == null){
+            throw new InnerLogicException("cannot set a null name");
+        }
+        this.name = name;
+    }
+
+    public void setSalary(double salary) throws InnerLogicException {
+        if (salary < DEFAULT_MIN_SALARY){
+            throw new InnerLogicException("cannot set salary under minimum");
+        }
+        this.salary = salary;
     }
 }

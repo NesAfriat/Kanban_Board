@@ -144,6 +144,7 @@ public class ShiftSchedule {
         static final int fridayEvening = 3;
         static final int saturdayMorning = 4;
         static final int saturdayEvening = 5;
+        static final int INITIAL_DEFAULT_WORKERS_AMOUNT = 1;
 
 
         private final Map<Job, int[]> defaultShiftSetup;
@@ -153,7 +154,10 @@ public class ShiftSchedule {
             defaultShiftSetup = new HashMap<>();
             List<Job> jobs = WorkersUtils.getShiftWorkers();
             for (Job job: jobs) {
-                int[] arr = {1, 1, 1, 1, 1, 1};
+                int[] arr = new int[6];
+                arr[weekDayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[fridayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
+                arr[weekDayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT;
+                arr[fridayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
                 defaultShiftSetup.put(job, arr);
             }
             int numberOfDays = 7;
