@@ -28,6 +28,11 @@ public class ShiftController {
         isAdminAuthorized = false;
     }
 
+    public  List<Worker> getWorkersInShiftByJob(String date, String shiftType, String job) throws InnerLogicException {
+        Shift shift = calendar.getWorkDay(date).getShift(WorkersUtils.parseShiftType(shiftType));
+        return shift.getCurrentWorkers(WorkersUtils.parseJob(job));
+    }
+
     public void setAdminAuthorization(boolean isAdminAuthorized){
         this.isAdminAuthorized = isAdminAuthorized;
     }

@@ -10,7 +10,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Facade {
+public class Facade implements Workers_Integration{
     private WorkerController workerController;
     private ShiftController shiftController;
 
@@ -304,6 +304,19 @@ public class Facade {
         try{
             Worker worker = workerController.setWorkerSalary(id, salary);
             return new ResponseT<>(new WorkerResponse(worker));
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    public ResponseT<List<WorkerResponse>> getWorkersInShiftByJob(String date, String shiftType, String job) {
+        try {
+            List<Worker> workers = shiftController.getWorkersInShiftByJob(date, shiftType, job);
+            List<WorkerResponse> workersResponse = new LinkedList<>();
+            for (Worker worker: workers) {
+                workersResponse.add(new WorkerResponse(worker));
+            }
+            return new ResponseT<>(workersResponse);
         }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
