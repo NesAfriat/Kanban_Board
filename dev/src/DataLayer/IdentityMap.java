@@ -13,4 +13,8 @@ public class IdentityMap {
         this.workDayMap = new HashMap<>();
         this.workerMap = new HashMap<>();
     }
+
+    public void addWorkDay(WorkDay workDay) {
+        workDayMap.put(workDay.getDate(),workDay);
+    }
 }
