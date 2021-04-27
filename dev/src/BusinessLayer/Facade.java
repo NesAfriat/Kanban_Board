@@ -282,14 +282,6 @@ public class Facade {
         }
     }
 
-    public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) {
-        try {
-            return shiftController.addWorkDay(hasMorningShift, hasEveningShift, date);
-        } catch (InnerLogicException e) {
-            return null;
-        }
-    }
-
     public ResponseT<WorkerResponse> setWorkerID(String id, String newID) {
         try{
             Worker worker = workerController.setWorkerID(id, newID);
