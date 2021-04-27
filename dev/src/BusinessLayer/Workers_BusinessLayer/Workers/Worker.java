@@ -11,10 +11,8 @@ public class Worker {
     private static final int DEFAULT_ID_LENGTH = 9;
     private static final double DEFAULT_MIN_SALARY = 0;
 
-    private List<Job> occupations;
-    private List<Constraint> constraints;
-    private String name;
     private String id;
+    private String name;
     private String bankAccount;
     private double salary;
     private String educationFund;
@@ -22,6 +20,8 @@ public class Worker {
     private int sickDaysPerMonth;
     private String startWorkingDate;
     private String endWorkingDate;
+    private List<Job> occupations;
+    private List<Constraint> constraints;
 
     public Worker(String name, String id, String bankAccount, double salary, String educationFund,
                   int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
