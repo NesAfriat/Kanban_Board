@@ -13,7 +13,6 @@ public class WorkerDataController {
             String url = "jdbc:sqlite:WorkersDB.db";
             // create a connection to the database
             conn = DriverManager.getConnection(url);
-
             System.out.println("Connection to SQLite has been established.");
 
         } catch (SQLException e) {
