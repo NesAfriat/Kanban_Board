@@ -28,6 +28,7 @@ public class WorkersList {
         for (Worker worker: workers) {
             if(worker.getId().equals(id)) return  worker;
         }
+        //search in db
         throw new InnerLogicException("there is no worker with that id in the system");
     }
 
@@ -36,6 +37,7 @@ public class WorkersList {
         if (contains(id)) throw new InnerLogicException("the system already have worker with the id: " + id);
         Worker newWorker =new Worker( name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                 sickDaysPerMonth, startWorkingDate);
+        // add to map
         workers.add(newWorker);
         return newWorker;
     }
