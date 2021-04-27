@@ -1,9 +1,12 @@
 package PresentationLayer.Workers_PresentationLayer;
 
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.*;
 
-class HRManagerMenu extends Menu{
-
+class HRManagerMenu extends Workers_Main_Menu {
+    HRManagerMenu(Workers_Facade facade){
+        super(facade);
+    }
     void run() {
         boolean prev = false;
         while (!prev) {
@@ -16,7 +19,7 @@ class HRManagerMenu extends Menu{
             int option = getInputInt();
             switch (option) {
                 case 1:
-                    new WorkersManageMenu().run();
+                    new WorkersManageMenu(facade).run();
                     break;
                 case 2:
                     ShiftsManageMenu();
@@ -57,13 +60,13 @@ class HRManagerMenu extends Menu{
                     EditShift();
                     break;
                 case 3:
-                    new AddShiftsMenu().run();
+                    new AddShiftsMenu(facade).run();
                     break;
                 case 4:
                     RemoveShift();
                     break;
                 case 5:
-                    new EditDefaultWorkDayShiftMenu().run();
+                    new EditDefaultWorkDayShiftMenu(facade).run();
                     break;
                 case 6:
                     prev = true;
@@ -86,7 +89,7 @@ class HRManagerMenu extends Menu{
         }
         else {
             printPrettyConfirm("Shift selected successfully");
-            new EditShiftsMenu().run();
+            new EditShiftsMenu(facade).run();
         }
     }
 

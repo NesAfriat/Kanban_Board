@@ -1,5 +1,6 @@
 package PresentationLayer.Workers_PresentationLayer;
 
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.ConstraintResponse;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
@@ -7,7 +8,9 @@ import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
 import java.util.List;
 
 class WorkersManageMenu extends HRManagerMenu {
-
+    WorkersManageMenu(Workers_Facade facade){
+        super(facade);
+    }
     void run() {
         boolean prev = false;
         while (!prev) {
@@ -42,7 +45,7 @@ class WorkersManageMenu extends HRManagerMenu {
                     ViewWorkerConstraints();
                     break;
                 case 7:
-                    new EditWorkerMenu().run();
+                    new EditWorkerMenu(facade).run();
                     break;
                 case 8:
                     prev = true;

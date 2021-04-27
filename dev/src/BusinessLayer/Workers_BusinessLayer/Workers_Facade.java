@@ -10,11 +10,11 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Facade implements Workers_Integration{
+public class Workers_Facade implements Workers_Integration{
     private WorkerController workerController;
     private ShiftController shiftController;
 
-    public Facade(){
+    public Workers_Facade(){
         this.workerController = new WorkerController();
         this.shiftController = new ShiftController(workerController.getWorkersList());
     }

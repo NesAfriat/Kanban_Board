@@ -1,5 +1,6 @@
 package PresentationLayer.Workers_PresentationLayer;
 
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.Response;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.ShiftResponse;
@@ -8,6 +9,9 @@ import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
 import java.util.List;
 
 class EditShiftsMenu extends HRManagerMenu {
+    EditShiftsMenu(Workers_Facade facade){
+        super(facade);
+    }
     void run() {
         boolean prev = false;
         while (!prev) {

@@ -1,5 +1,6 @@
 package PresentationLayer.Workers_PresentationLayer;
 
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.ConstraintResponse;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkDayResponse;
@@ -7,8 +8,10 @@ import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
 
 import java.util.List;
 
-class WorkerMenu extends Menu {
-
+class WorkerMenu extends Workers_Main_Menu {
+    WorkerMenu(Workers_Facade facade){
+        super(facade);
+    }
      void run() {
          boolean prev = false;
          while (!prev) {
