@@ -1,7 +1,7 @@
 package BusinessLayer;
 
-import BusinessLayer.Responses.ResponseT;
-import BusinessLayer.Responses.WorkerResponse;
+import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
+import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
 
 import java.util.List;
 
