@@ -9,4 +9,7 @@ public enum Job {
     HR_Manager,
     Branch_Manager,
     Assistant_Branch_Manager,
+    DriverA,
+    DriverB,
+    DriverC
     }

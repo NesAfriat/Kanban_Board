@@ -23,6 +23,10 @@ public class WorkersUtils {
         put("HR_Manager",Job.HR_Manager);
         put("Branch_Manager",Job.Branch_Manager);
         put("Assistant_Branch_Manager",Job.Assistant_Branch_Manager);
+        put("DriverA",Job.DriverA);
+        put("DriverB",Job.DriverB);
+        put("DriverC",Job.DriverC);
+
     }};
 
 
@@ -101,6 +105,9 @@ public class WorkersUtils {
         shiftWorkers.add(Job.Usher);
         shiftWorkers.add(Job.Guard);
         shiftWorkers.add(Job.Shift_Manager);
+        shiftWorkers.add(Job.DriverA);
+        shiftWorkers.add(Job.DriverB);
+        shiftWorkers.add(Job.DriverC);
         return shiftWorkers;
     }
 
