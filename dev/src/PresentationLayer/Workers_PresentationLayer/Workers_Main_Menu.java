@@ -1,5 +1,5 @@
 package PresentationLayer.Workers_PresentationLayer;
-import BusinessLayer.Workers_BusinessLayer.Facade;
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.*;
 
 
@@ -8,20 +8,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 
-public class Menu {
+public class Workers_Main_Menu {
     private boolean firstRun;
-    public Menu(){
+    public Workers_Main_Menu(Workers_Facade facade){
         firstRun = true;
+        this.facade = facade;
     }
+
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_BLUE = "\u001B[34m";
     public static final String ANSI_PURPLE = "\u001B[35m";
 
     protected static final Scanner scanner = new Scanner(System.in);
-    protected static final Facade facade = new Facade();
+    protected Workers_Facade facade;
 
-    private void testingDataUpload(){
+    public void testingDataUpload(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         facade.login("000000000");
@@ -201,15 +203,6 @@ public class Menu {
     }
 
     public void start() {
-        if (firstRun) {
-            printPrettyHeadline("Welcome to Super-Lee system!");
-            System.out.println("Do you want to load database?");
-            boolean load = getInputYesNo();
-            if (load) {
-                testingDataUpload();
-            }
-            firstRun = false;
-        }
         boolean run = true;
         while (run){
             System.out.println("1) Enter ID number for login");
@@ -226,15 +219,15 @@ public class Menu {
                 else {
                     printPrettyConfirm("Hello, " + worker.value.getName() + "!");
                     if (worker.value.getIsAdmin()) {
-                        new HRManagerMenu().run();
+                        new HRManagerMenu(facade).run();
                     } else {
-                        new WorkerMenu().run();
+                        new WorkerMenu(facade).run();
                     }
                 }
             }
             else if (option == 2){
                 run = false;
-                printPrettyConfirm("Goodbye!");
+                printPrettyConfirm("Exited workers manage system");
             }
             else {
                 printPrettyError("There's no such option");

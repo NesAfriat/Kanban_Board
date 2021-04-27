@@ -1,9 +1,14 @@
 package PresentationLayer.Workers_PresentationLayer;
 
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkDayResponse;
 
 class AddShiftsMenu extends HRManagerMenu {
+    AddShiftsMenu(Workers_Facade facade){
+        super(facade);
+    }
+
     void run(){
         boolean prev = false;
         while (!prev) {
