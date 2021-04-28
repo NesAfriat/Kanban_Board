@@ -2,7 +2,7 @@
   <artifact type="jar" name="HelloWorld:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/HelloWorld_jar</output-path>
     <root id="archive" name="adss_v0.jar">
-      <element id="module-output" name="Workers" />
+      <element id="module-output" name="Workers_Transport" />
     </root>
   </artifact>
 </component>

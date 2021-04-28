@@ -206,7 +206,7 @@ public class Workers_Main_Menu {
         boolean run = true;
         while (run){
             System.out.println("1) Enter ID number for login");
-            System.out.println("2) Exit");
+            System.out.println("2) Previous");
             System.out.print("Option: ");
             int option = getInputInt();
             if (option == 1){

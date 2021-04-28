@@ -30,7 +30,6 @@ public class Main_Menu {
     public void start() {
         Workers_Main_Menu workers_menu = new Workers_Main_Menu(workers_facade);
         Transport_Menu transport_menu = new Transport_Menu(transport_facade);
-
         if (firstRun) {
             System.out.println("Welcome to Super-Lee system!");
             System.out.println("Do you want to load database?");

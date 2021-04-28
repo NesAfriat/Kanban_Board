@@ -1,4 +1,4 @@
-package DataLayer;
+package DataLayer.Workers_DAL;
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
