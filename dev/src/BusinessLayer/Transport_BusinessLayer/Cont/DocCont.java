@@ -8,7 +8,11 @@ import BusinessLayer.Transport_BusinessLayer.Shops.Area;
 import BusinessLayer.Transport_BusinessLayer.Shops.Product;
 import BusinessLayer.Transport_BusinessLayer.Shops.Store;
 import BusinessLayer.Transport_BusinessLayer.Shops.Supplier;
+import DataLayer.Transport_DAL.DALController;
+import DataLayer.Transport_DAL.ProductDAL;
+import DataLayer.Transport_DAL.TransportDocDAL;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -192,6 +196,21 @@ public class DocCont {
         TransportDoc td= origin.copyDeep();
         origin.change(td);
         td.setLeftOrigin(date);
+    }
+
+
+
+    public void save(int DocId){
+        DALController con=DALController.getInstance();
+        con.tra.saveDoc(theTransportBible.get(DocId));
+    }
+    public void load() throws Exception {
+        DALController con=DALController.getInstance();
+        try {
+            theTransportBible=con.tra.LoadProducts();
+        } catch (SQLException throwables) {
+            throw new Exception("Error Loading Documents");
+        }
     }
 
 }

@@ -156,7 +156,7 @@ public class Transport_Facade {
     }
 
     private List<Truck> getAvaliableTrucksP() {
-        return driversController.getNotOccupiedTrucks();
+        return driversController.getTrucks();
     }
     public String getTrucksString(){
         return buildListToString(getAvaliableTrucksP());
@@ -176,19 +176,18 @@ public class Transport_Facade {
         docCont.addTruck(doc,truck.get());
     }
     public void addDriver(int doc, int driverId) throws Exception {
-
-        Optional<Driver> driver = driversController.getDrivers().stream().filter(x -> x.getId() == driverId).findFirst();
-        if (!driver.isPresent()) {
-            throw new Exception("driver not found");
-        }
         if(docCont.getDriver(doc)!=null){
             throw new Exception("document already contain Driver");
         }
+        //todo need to get all drivers
+        Driver driver = driversController.getDrivers(driverId,);
+
+
         if(docCont.getTruck(doc)!=null){
-            driversController.connectDriverAndTruck(driver.get(), docCont.getTruck(doc));
+            driversController.connectDriverAndTruck(driver, docCont.getTruck(doc));
         }
 
-        docCont.addDriver(doc,driver.get());
+        docCont.addDriver(doc,driver);
     }
     public void addTruckAndDriver(int doc, int truckLicensePlate, int DriverId) throws Exception {//connect driver and truck ONLY in the driverController
         Optional<Truck> truck = driversController.getTrucks().stream().filter(x -> x.getLicensePlate() == truckLicensePlate).findFirst();
@@ -239,7 +238,7 @@ public class Transport_Facade {
         docCont.setDepartureTime(doc,date);
     }
     public void editDocTruck(int doc, int tkId) throws Exception {
-        Optional<Truck> newTruck = driversController.getNotOccupiedTrucks().stream().filter(c -> c.getLicensePlate() == tkId).findFirst();
+        Optional<Truck> newTruck = driversController.getTrucks().stream().filter(c -> c.getLicensePlate() == tkId).findFirst();
         if (!newTruck.isPresent()) {
             throw new Exception("no truck with this id");
         }
