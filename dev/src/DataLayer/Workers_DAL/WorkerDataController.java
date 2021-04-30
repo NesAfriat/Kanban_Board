@@ -38,7 +38,7 @@ public class WorkerDataController {
         if(evening != null){
             addShift(workDay.getDate(), evening, "Evening");
         }
-        identityMap.addWorkDay(workDay);
+        IdentityMap.getInstance().addWorkDay(workDay);
     }
 
     private void addShift(String date, Shift shift, String shiftType){
@@ -99,8 +99,6 @@ public class WorkerDataController {
         String statement = "INSERT INTO Workers (ID, Name, BankAccount, Salary, EducationFund, vacationDaysPerMonth, " +
                 "sickDaysPerMonth, startWorkingDate, endWorkingDate) VALUES (?,?,?,?,?,?,?,?,?)";
         String ID = worker.getId();
-        addOccupation(ID, worker.getOccupations());
-        addConstraint(ID, worker.getConstraints());
         String Name = worker.getName();
         String BankAccount = worker.getBankAccount();
         double Salary = worker.getSalary();
@@ -125,6 +123,9 @@ public class WorkerDataController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        addOccupation(ID, worker.getOccupations());
+        addConstraint(ID, worker.getConstraints());
     }
 
     private void addOccupation(String Worker_ID, List<Job> occupations){
