@@ -7,7 +7,6 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
-import DataLayer.Transport_DAL.Connect;
 
 import java.sql.*;
 import java.util.List;
@@ -74,7 +73,7 @@ public class WorkerDataController {
         try (PreparedStatement pstmt = conn.prepareStatement(statement)){
                     pstmt.setString(1, Worker_ID);
                     pstmt.setString(2, occupation.toString());
-                    pstmt.executeUpdate() != 0;
+                    pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
