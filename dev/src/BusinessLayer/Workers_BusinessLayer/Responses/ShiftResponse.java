@@ -20,12 +20,10 @@ public class ShiftResponse {
         currentWorkers = new HashMap<>();
         List<Job> jobs = shift.getJobs();
         for (Job job: jobs) {
-            try{
-                List<Worker> workers = shift.getCurrentWorkers(job);
-                int required = shift.getAmountRequired(job);
-                int amountAssigned = shift.getCurrentWorkersAmount(job);
-                currentWorkers.put(job, new JobArrangementResponse(workers,required,amountAssigned));
-            }catch (InnerLogicException ignored){}
+            List<Worker> workers = shift.getCurrentWorkers(job);
+            int required = shift.getAmountRequired(job);
+            int amountAssigned = shift.getCurrentWorkersAmount(job);
+            currentWorkers.put(job, new JobArrangementResponse(workers,required,amountAssigned));
         }
     }
 

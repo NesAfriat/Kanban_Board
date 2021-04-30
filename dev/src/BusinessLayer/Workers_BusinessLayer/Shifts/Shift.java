@@ -46,11 +46,11 @@ public class Shift {
     }
 
     // verify that shift contains the role and return the job arrangement for this role
-    private JobArrangement getJobArrangement(Job role) throws InnerLogicException {
+    private JobArrangement getJobArrangement(Job role){ //throws InnerLogicException {
         JobArrangement jobArrangement = currentWorkers.get(role);
-        if (jobArrangement == null){
+        /*if (jobArrangement == null){
             throw new InnerLogicException("No such role existing the shift");
-        }
+        }*/
         return jobArrangement;
     }
 
@@ -82,17 +82,27 @@ public class Shift {
     }
 
     // get the amount of required workers for specific role in the shift
-    public int getAmountRequired(Job role) throws InnerLogicException {
+    public int getAmountRequired(Job role){
         JobArrangement jobArrangement = getJobArrangement(role);
+        if (jobArrangement == null){
+            return 0;
+        }
         return jobArrangement.required;
     }
 
-    public List<Worker> getCurrentWorkers(Job role) throws InnerLogicException {
-        return getJobArrangement(role).workers;
+    public List<Worker> getCurrentWorkers(Job role){ //throws InnerLogicException {
+        List<Worker> currentWorkers = getJobArrangement(role).workers;
+        if(currentWorkers != null){
+            return currentWorkers;
+        }
+        return new LinkedList<Worker>();
     }
 
-    public int getCurrentWorkersAmount(Job role) throws InnerLogicException {
+    public int getCurrentWorkersAmount(Job role) {//throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
+        if(jobArrangement == null){
+            return 0;
+        }
         return jobArrangement.amountAssigned;
     }
 
