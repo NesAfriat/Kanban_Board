@@ -151,11 +151,7 @@ public class ShiftUnitTests {
 
         //assert
         if (exception != null) {
-            try {
-                Assert.assertEquals(0, shift.getCurrentWorkersAmount(workerRole));
-            } catch (InnerLogicException e) {
-                Assert.fail("Failed during assertion test part. error: "+ e.getMessage());
-            }
+            Assert.assertEquals(0, shift.getCurrentWorkersAmount(workerRole));
         }
         else {
             Assert.fail(exception.getMessage());

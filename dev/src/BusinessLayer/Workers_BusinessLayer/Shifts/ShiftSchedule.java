@@ -19,14 +19,14 @@ public class ShiftSchedule {
         defaultWorkDayHolder = new DefaultWorkDayHolder();
     }
 
-    public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
+    /*public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
         if (workDays.get(date) != null){
             throw new InnerLogicException("There's already a WorkDay at date "+ date);
         }
         WorkDay workDay = new WorkDay(hasMorningShift,hasEveningShift,date);
         workDays.put(date,workDay);
         return  workDay;
-    }
+    }*/
 
     public WorkDay getWorkDay(String date) throws InnerLogicException {
         WorkDay workDay = workDays.get(date);

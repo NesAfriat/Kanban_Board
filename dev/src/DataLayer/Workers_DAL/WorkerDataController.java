@@ -4,8 +4,11 @@ import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Workers_BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
+import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
+import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 
 import java.sql.*;
+import java.util.List;
 
 public class WorkerDataController {
     private IdentityMap identityMap;
@@ -75,39 +78,18 @@ public class WorkerDataController {
     private void addShift(String date, Shift shift, String shiftType){
         String statement = "INSERT INTO Shift (Date, ShiftType, Cashier_Amount,  Storekeeper_Amount, Usher_Amount," +
                 " Guard_Amount, DriverA_Amount, DriverB_Amount, DriverC_Amount) VALUES (?,?,?,?,?,?,?,?,?)";
-        int Cashier_Amount = 0;
-        int Storekeeper_Amount = 0;
-        int Usher_Amount = 0;
-        int Guard_Amount = 0;
-        int DriverA_Amount = 0;
-        int DriverB_Amount = 0;
-        int DriverC_Amount = 0;
+
         try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(statement)) {
 
             if(shift != null) {
 
-                try{
-                    Cashier_Amount = shift.getAmountRequired(Job.Cashier);
-                }catch (InnerLogicException ignored){}
-                try{
-                    Storekeeper_Amount = shift.getAmountRequired(Job.Storekeeper);
-                }catch (InnerLogicException ignored){
-                }
-                try{
-                    Usher_Amount = shift.getAmountRequired(Job.Usher);
-                }catch (InnerLogicException ignored){}
-                try{
-                    Guard_Amount = shift.getAmountRequired(Job.Guard);
-                }catch (InnerLogicException ignored){}
-                try{
-                    DriverA_Amount = shift.getAmountRequired(Job.DriverA);
-                }catch (InnerLogicException ignored){}
-                try{
-                    DriverB_Amount = shift.getAmountRequired(Job.DriverB);
-                }catch (InnerLogicException ignored){}
-                try{
-                    DriverC_Amount = shift.getAmountRequired(Job.DriverC);
-                }catch (InnerLogicException ignored){}
+                int Cashier_Amount = shift.getAmountRequired(Job.Cashier);
+                int Storekeeper_Amount = shift.getAmountRequired(Job.Storekeeper);
+                int Usher_Amount = shift.getAmountRequired(Job.Usher);
+                int Guard_Amount = shift.getAmountRequired(Job.Guard);
+                int DriverA_Amount = shift.getAmountRequired(Job.DriverA);
+                int DriverB_Amount = shift.getAmountRequired(Job.DriverB);
+                int DriverC_Amount = shift.getAmountRequired(Job.DriverC);
 
                 pstmt.setString(1, date);
                 pstmt.setString(2, shiftType);
@@ -122,6 +104,28 @@ public class WorkerDataController {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+        for (Job job:WorkersUtils.getShiftWorkers()) {
+            if(shift != null) {
+                for (Worker worker: shift.getCurrentWorkers(job)){
+
+                    addWorkerToShift(worker.getId(), date, shiftType, job.toString());
+                }
+            }
+        }
+    }
+
+    private void addWorkerToShift(String workerID, String date, String shiftType, String job){
+        String statement = "INSERT INTO Workers_In_Shift (Worker_ID, Date, ShiftType, Job) VALUES (?,?,?,?)";
+
+        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(statement)) {
+            pstmt.setString(1, workerID);
+            pstmt.setString(2, date);
+            pstmt.setString(3, shiftType);
+            pstmt.setString(4, job);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 }
