@@ -29,15 +29,11 @@ public class WorkerDataController {
         return conn;
     }
 
+    public void addWorker(Worker worker){
+        IdentityMap.getInstance().addWorker(worker);
+    }
+
     public void addWorkDay(WorkDay workDay){
-        Shift morning = workDay.getShift(ShiftType.Morning);
-        Shift evening = workDay.getShift(ShiftType.Evening);
-        if(morning != null){
-            addShift(workDay.getDate(), morning, "Morning");
-        }
-        if(evening != null){
-            addShift(workDay.getDate(), evening, "Evening");
-        }
         IdentityMap.getInstance().addWorkDay(workDay);
     }
 
@@ -95,7 +91,7 @@ public class WorkerDataController {
         }
     }
 
-    public boolean insertOrIgnoreWorker(Worker worker, Connection conn){
+    private boolean insertOrIgnoreWorker(Worker worker, Connection conn){
         boolean inserted = false;
         String statement = "INSERT OR IGNORE INTO Workers (ID, Name, BankAccount, Salary, EducationFund, vacationDaysPerMonth, " +
                 "sickDaysPerMonth, startWorkingDate, endWorkingDate) VALUES (?,?,?,?,?,?,?,?,?)";
@@ -126,33 +122,25 @@ public class WorkerDataController {
         return inserted;
     }
 
-    private void addOccupation(String Worker_ID, List<Job> occupations){
-        String statement = "INSERT INTO Occupation (Worker_ID, Job) VALUES (?,?)";
-        try (Connection conn = connect()){
-            for (Job occupation: occupations){
-                try (PreparedStatement pstmt = conn.prepareStatement(statement)){
+    private void insertOrIgnoreOccupation(String Worker_ID, Job occupation, Connection conn){
+        String statement = "INSERT OR IGNORE INTO Occupation (Worker_ID, Job) VALUES (?,?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(statement)){
                     pstmt.setString(1, Worker_ID);
                     pstmt.setString(2, occupation.toString());
-                    pstmt.executeUpdate();
-                }
-            }
+                    pstmt.executeUpdate() != 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void addConstraint(String Worker_ID, List<Constraint> constraints){
-        String statement = "INSERT INTO Constraint (Worker_ID, Date, ShiftType, ConstraintType) VALUES (?,?,?,?)";
-        try (Connection conn = connect()){
-            for (Constraint constraint: constraints){
-                try (PreparedStatement pstmt = conn.prepareStatement(statement)){
-                    pstmt.setString(1, Worker_ID);
-                    pstmt.setString(2, constraint.getDate());
-                    pstmt.setString(3, constraint.getShiftType().toString());
-                    pstmt.setString(4, constraint.getConstraintType().toString());
-                    pstmt.executeUpdate();
-                }
-            }
+    private void insertOrIgnoreConstraint(String Worker_ID, Constraint constraint, Connection conn){
+        String statement = "INSERT OR IGNORE INTO Constraint (Worker_ID, Date, ShiftType, ConstraintType) VALUES (?,?,?,?)";
+        try (PreparedStatement pstmt = conn.prepareStatement(statement)){
+            pstmt.setString(1, Worker_ID);
+            pstmt.setString(2, constraint.getDate());
+            pstmt.setString(3, constraint.getShiftType().toString());
+            pstmt.setString(4, constraint.getConstraintType().toString());
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -169,6 +157,7 @@ public class WorkerDataController {
                 + "startWorkingDate = ? "
                 + "endWorkingDate = ? "
                 + "WHERE ID = ?";
+
         String ID = worker.getId();
         String Name = worker.getName();
         String BankAccount = worker.getBankAccount();
@@ -194,19 +183,30 @@ public class WorkerDataController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        addOccupation(ID, worker.getOccupations());
-        addConstraint(ID, worker.getConstraints());
     }
 
     private void saveWorker(Worker worker){
         try (Connection conn = connect()){
             if (!insertOrIgnoreWorker(worker, conn))
                 updateWorker(worker, conn);
+            saveOccupations(worker.getId(), worker.getOccupations(), conn);
+            saveConstraints(worker.getId(), worker.getConstraints(), conn);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        saveConstraints(ID, worker.getOccupations());
-        saveOccupations(ID, worker.getConstraints());
+
     }
+
+    private void saveConstraints(String Worker_ID, List<Constraint> constraints, Connection conn) {
+        for (Constraint constraint : constraints) {
+            insertOrIgnoreConstraint(Worker_ID, constraint, conn);
+        }
+    }
+
+    private void saveOccupations(String Worker_ID, List<Job> occupations, Connection conn){
+        for (Job occupation : occupations) {
+           insertOrIgnoreOccupation(Worker_ID, occupation, conn);
+        }
+    }
+
 }
