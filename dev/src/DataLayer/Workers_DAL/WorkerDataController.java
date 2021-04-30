@@ -95,8 +95,9 @@ public class WorkerDataController {
         }
     }
 
-    public void addWorker(Worker worker){
-        String statement = "INSERT INTO Workers (ID, Name, BankAccount, Salary, EducationFund, vacationDaysPerMonth, " +
+    public boolean insertOrIgnoreWorker(Worker worker, Connection conn){
+        boolean inserted = false;
+        String statement = "INSERT OR IGNORE INTO Workers (ID, Name, BankAccount, Salary, EducationFund, vacationDaysPerMonth, " +
                 "sickDaysPerMonth, startWorkingDate, endWorkingDate) VALUES (?,?,?,?,?,?,?,?,?)";
         String ID = worker.getId();
         String Name = worker.getName();
@@ -108,8 +109,7 @@ public class WorkerDataController {
         String startWorkingDate = worker.getStartWorkingDate();
         String endWorkingDate = worker.getEndWorkingDate();
 
-        try (Connection conn = connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement)){
+        try (PreparedStatement pstmt = conn.prepareStatement(statement)){
             pstmt.setString(1, ID);
             pstmt.setString(2, Name);
             pstmt.setString(3, BankAccount);
@@ -119,13 +119,11 @@ public class WorkerDataController {
             pstmt.setInt(7, sickDaysPerMonth);
             pstmt.setString(8, startWorkingDate);
             pstmt.setString(9, endWorkingDate);
-            pstmt.executeUpdate();
+            inserted = pstmt.executeUpdate() != 0;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        addOccupation(ID, worker.getOccupations());
-        addConstraint(ID, worker.getConstraints());
+        return inserted;
     }
 
     private void addOccupation(String Worker_ID, List<Job> occupations){
@@ -158,5 +156,57 @@ public class WorkerDataController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void updateWorker(Worker worker, Connection conn){
+        String statement = "UPDATE Workers SET ID = ? , "
+                + "Name = ? "
+                + "BankAccount = ? "
+                + "Salary = ? "
+                + "EducationFund = ? "
+                + "vacationDaysPerMonth = ? "
+                + "sickDaysPerMonth = ? "
+                + "startWorkingDate = ? "
+                + "endWorkingDate = ? "
+                + "WHERE ID = ?";
+        String ID = worker.getId();
+        String Name = worker.getName();
+        String BankAccount = worker.getBankAccount();
+        double Salary = worker.getSalary();
+        String EducationFund = worker.getEducationFund();
+        int vacationDaysPerMonth = worker.getVacationDaysPerMonth();
+        int sickDaysPerMonth = worker.getSickDaysPerMonth();
+        String startWorkingDate = worker.getStartWorkingDate();
+        String endWorkingDate = worker.getEndWorkingDate();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(statement)){
+            pstmt.setString(1, ID);
+            pstmt.setString(2, Name);
+            pstmt.setString(3, BankAccount);
+            pstmt.setDouble(4, Salary);
+            pstmt.setString(5, EducationFund);
+            pstmt.setInt(6, vacationDaysPerMonth);
+            pstmt.setInt(7, sickDaysPerMonth);
+            pstmt.setString(8, startWorkingDate);
+            pstmt.setString(9, endWorkingDate);
+            pstmt.setString(10, ID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        addOccupation(ID, worker.getOccupations());
+        addConstraint(ID, worker.getConstraints());
+    }
+
+    private void saveWorker(Worker worker){
+        try (Connection conn = connect()){
+            if (!insertOrIgnoreWorker(worker, conn))
+                updateWorker(worker, conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        saveConstraints(ID, worker.getOccupations());
+        saveOccupations(ID, worker.getConstraints());
     }
 }
