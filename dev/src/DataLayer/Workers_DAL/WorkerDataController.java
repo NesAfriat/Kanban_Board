@@ -7,6 +7,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
+import DataLayer.Transport_DAL.Connect;
 
 import java.sql.*;
 import java.util.List;
@@ -35,60 +36,6 @@ public class WorkerDataController {
 
     public void addWorkDay(WorkDay workDay){
         IdentityMap.getInstance().addWorkDay(workDay);
-    }
-
-    private void addShift(String date, Shift shift, String shiftType){
-        String statement = "INSERT INTO Shift (Date, ShiftType, Cashier_Amount,  Storekeeper_Amount, Usher_Amount," +
-                " Guard_Amount, DriverA_Amount, DriverB_Amount, DriverC_Amount) VALUES (?,?,?,?,?,?,?,?,?)";
-
-        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(statement)) {
-
-            if(shift != null) {
-
-                int Cashier_Amount = shift.getAmountRequired(Job.Cashier);
-                int Storekeeper_Amount = shift.getAmountRequired(Job.Storekeeper);
-                int Usher_Amount = shift.getAmountRequired(Job.Usher);
-                int Guard_Amount = shift.getAmountRequired(Job.Guard);
-                int DriverA_Amount = shift.getAmountRequired(Job.DriverA);
-                int DriverB_Amount = shift.getAmountRequired(Job.DriverB);
-                int DriverC_Amount = shift.getAmountRequired(Job.DriverC);
-
-                pstmt.setString(1, date);
-                pstmt.setString(2, shiftType);
-                pstmt.setInt(3, Cashier_Amount);
-                pstmt.setInt(4, Storekeeper_Amount);
-                pstmt.setInt(5, Usher_Amount);
-                pstmt.setInt(6, Guard_Amount);
-                pstmt.setInt(7, DriverA_Amount);
-                pstmt.setInt(8, DriverB_Amount);
-                pstmt.setInt(9, DriverC_Amount);
-                pstmt.executeUpdate();
-            }
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        for (Job job:WorkersUtils.getShiftWorkers()) {
-            if(shift != null) {
-                for (Worker worker: shift.getCurrentWorkers(job)){
-
-                    addWorkerToShift(worker.getId(), date, shiftType, job.toString());
-                }
-            }
-        }
-    }
-
-    private void addWorkerToShift(String workerID, String date, String shiftType, String job){
-        String statement = "INSERT INTO Workers_In_Shift (Worker_ID, Date, ShiftType, Job) VALUES (?,?,?,?)";
-
-        try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(statement)) {
-            pstmt.setString(1, workerID);
-            pstmt.setString(2, date);
-            pstmt.setString(3, shiftType);
-            pstmt.setString(4, job);
-            pstmt.executeUpdate();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
     }
 
     private boolean insertOrIgnoreWorker(Worker worker, Connection conn){
@@ -143,6 +90,122 @@ public class WorkerDataController {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void saveWorkDay(WorkDay workDay){
+        Shift morning = workDay.getShift(ShiftType.Morning);
+        Shift evening = workDay.getShift(ShiftType.Evening);
+        if(morning != null){
+            saveShift(workDay.getDate(), morning, "Morning");
+        }
+        if(evening != null){
+            saveShift(workDay.getDate(), evening, "Evening");
+        }
+    }
+
+    private void saveShift(String date, Shift shift, String shiftType){
+        try (Connection conn = connect()) {
+            boolean inserted = insertOrIgnoreShift(date, shift, shiftType, conn);
+            if(!inserted) updateShift(date, shift, shiftType, conn);
+            for (Job job:WorkersUtils.getShiftWorkers()) {
+                if(shift != null) {
+                    for (Worker worker: shift.getCurrentWorkers(job)){
+                        insertOrWorkerInShift(worker.getId(), date, shiftType, job.toString(), conn);
+                    }
+                }
+            }
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private boolean insertOrIgnoreShift(String date, Shift shift, String shiftType, Connection conn){
+        String statement = "INSERT OR IGNORE INTO Shift (Date, ShiftType, Cashier_Amount,  Storekeeper_Amount, Usher_Amount," +
+                " Guard_Amount, DriverA_Amount, DriverB_Amount, DriverC_Amount) VALUES (?,?,?,?,?,?,?,?,?)";
+        boolean inserted = false;
+        try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+
+            if(shift != null) {
+
+                int Cashier_Amount = shift.getAmountRequired(Job.Cashier);
+                int Storekeeper_Amount = shift.getAmountRequired(Job.Storekeeper);
+                int Usher_Amount = shift.getAmountRequired(Job.Usher);
+                int Guard_Amount = shift.getAmountRequired(Job.Guard);
+                int DriverA_Amount = shift.getAmountRequired(Job.DriverA);
+                int DriverB_Amount = shift.getAmountRequired(Job.DriverB);
+                int DriverC_Amount = shift.getAmountRequired(Job.DriverC);
+
+                pstmt.setString(1, date);
+                pstmt.setString(2, shiftType);
+                pstmt.setInt(3, Cashier_Amount);
+                pstmt.setInt(4, Storekeeper_Amount);
+                pstmt.setInt(5, Usher_Amount);
+                pstmt.setInt(6, Guard_Amount);
+                pstmt.setInt(7, DriverA_Amount);
+                pstmt.setInt(8, DriverB_Amount);
+                pstmt.setInt(9, DriverC_Amount);
+                int sqlRetVal = pstmt.executeUpdate();
+                if(sqlRetVal != 0) inserted = true;
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return inserted;
+    }
+
+    private void updateShift(String date, Shift shift, String shiftType, Connection conn){
+        String statement = "UPDATE Workers SET Date = ? , "
+                + "ShiftType = ? "
+                + "Cashier_Amount = ? "
+                + "Storekeeper_Amount = ? "
+                + "Usher_Amount = ? "
+                + "Guard_Amount = ? "
+                + "DriverA_Amount = ? "
+                + "DriverB_Amount = ? "
+                + "DriverC_Amount = ? "
+                + "WHERE Date = ? AND ShiftType = ?";
+        try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+
+            if(shift != null) {
+
+                int Cashier_Amount = shift.getAmountRequired(Job.Cashier);
+                int Storekeeper_Amount = shift.getAmountRequired(Job.Storekeeper);
+                int Usher_Amount = shift.getAmountRequired(Job.Usher);
+                int Guard_Amount = shift.getAmountRequired(Job.Guard);
+                int DriverA_Amount = shift.getAmountRequired(Job.DriverA);
+                int DriverB_Amount = shift.getAmountRequired(Job.DriverB);
+                int DriverC_Amount = shift.getAmountRequired(Job.DriverC);
+
+                pstmt.setString(1, date);
+                pstmt.setString(2, shiftType);
+                pstmt.setInt(3, Cashier_Amount);
+                pstmt.setInt(4, Storekeeper_Amount);
+                pstmt.setInt(5, Usher_Amount);
+                pstmt.setInt(6, Guard_Amount);
+                pstmt.setInt(7, DriverA_Amount);
+                pstmt.setInt(8, DriverB_Amount);
+                pstmt.setInt(9, DriverC_Amount);
+                pstmt.setString(10, date);
+                pstmt.setString(11, shiftType);
+                pstmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void insertOrWorkerInShift(String workerID, String date, String shiftType, String job, Connection conn){
+        String statement = "INSERT OR IGNORE INTO Workers_In_Shift (Worker_ID, Date, ShiftType, Job) VALUES (?,?,?,?)";
+
+        try ( PreparedStatement pstmt = conn.prepareStatement(statement)) {
+            pstmt.setString(1, workerID);
+            pstmt.setString(2, date);
+            pstmt.setString(3, shiftType);
+            pstmt.setString(4, job);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
     }
 

@@ -16,6 +16,7 @@ class IdentityMap {
         return instance;
     }
 
+
     private final Map<String, Worker> workerMap;
     private final Map<String, WorkDay> workDayMap;
     private IdentityMap(){
