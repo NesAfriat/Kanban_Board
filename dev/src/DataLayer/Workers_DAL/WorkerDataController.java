@@ -3,57 +3,25 @@ import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Workers_BusinessLayer.Shifts.WorkDay;
+import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
+import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 
 import java.sql.*;
+import java.util.List;
 
 public class WorkerDataController {
-    private IdentityMap identityMap;
-    private Connection conn;
+    private final IdentityMap identityMap;
+    private final String connectionPath = "jdbc:sqlite:WorkersDB.db";
 
     public WorkerDataController(){
-        this.identityMap = new IdentityMap();
-        conn = null;
-        try {
-            // db parameters
-            String url = "jdbc:sqlite:WorkersDB.db";
-            // create a connection to the database
-            conn = DriverManager.getConnection(url);
-            System.out.println("Connection to SQLite has been established.");
-            String statement = "INSERT INTO Shift (Date, ShiftType, Cashier_Amount,  Storekeeper_Amount, Usher_Amount," +
-                    " Guard_Amount, DriverA_Amount, DriverB_Amount, DriverC_Amount) VALUES (?,?,?,?,?,?,?,?,?)";
-            PreparedStatement pstmt = conn.prepareStatement(statement);
-            pstmt.setString(1, "21/20/2020");
-            pstmt.setString(2, "Morning");
-            pstmt.setInt(3, 0);
-            pstmt.setInt(4, 0);
-            pstmt.setInt(5, 0);
-            pstmt.setInt(6, 0);
-            pstmt.setInt(7, 0);
-            pstmt.setInt(8, 0);
-            pstmt.setInt(9, 0);
-
-            pstmt.executeUpdate();
-
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        } finally {
-            try {
-                if (conn != null) {
-                    conn.close();
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
+        this.identityMap = IdentityMap.getInstance();
     }
+
     private Connection connect() {
-        // SQLite connection string
-        String url = "jdbc:sqlite:WorkersDB.db";
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(url);
+            conn = DriverManager.getConnection(connectionPath);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -122,6 +90,70 @@ public class WorkerDataController {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public void addWorker(Worker worker){
+        String statement = "INSERT INTO Workers (ID, Name, BankAccount, Salary, EducationFund, vacationDaysPerMonth, " +
+                "sickDaysPerMonth, startWorkingDate, endWorkingDate) VALUES (?,?,?,?,?,?,?,?,?)";
+        String ID = worker.getId();
+        addOccupation(ID, worker.getOccupations());
+        addConstraint(ID, worker.getConstraints());
+        String Name = worker.getName();
+        String BankAccount = worker.getBankAccount();
+        double Salary = worker.getSalary();
+        String EducationFund = worker.getEducationFund();
+        int vacationDaysPerMonth = worker.getVacationDaysPerMonth();
+        int sickDaysPerMonth = worker.getSickDaysPerMonth();
+        String startWorkingDate = worker.getStartWorkingDate();
+        String endWorkingDate = worker.getEndWorkingDate();
+
+        try (Connection conn = connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement)){
+            pstmt.setString(1, ID);
+            pstmt.setString(2, Name);
+            pstmt.setString(3, BankAccount);
+            pstmt.setDouble(4, Salary);
+            pstmt.setString(5, EducationFund);
+            pstmt.setInt(6, vacationDaysPerMonth);
+            pstmt.setInt(7, sickDaysPerMonth);
+            pstmt.setString(8, startWorkingDate);
+            pstmt.setString(9, endWorkingDate);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addOccupation(String Worker_ID, List<Job> occupations){
+        String statement = "INSERT INTO Occupation (Worker_ID, Job) VALUES (?,?)";
+        try (Connection conn = connect()){
+            for (Job occupation: occupations){
+                try (PreparedStatement pstmt = conn.prepareStatement(statement)){
+                    pstmt.setString(1, Worker_ID);
+                    pstmt.setString(2, occupation.toString());
+                    pstmt.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void addConstraint(String Worker_ID, List<Constraint> constraints){
+        String statement = "INSERT INTO Constraint (Worker_ID, Date, ShiftType, ConstraintType) VALUES (?,?,?,?)";
+        try (Connection conn = connect()){
+            for (Constraint constraint: constraints){
+                try (PreparedStatement pstmt = conn.prepareStatement(statement)){
+                    pstmt.setString(1, Worker_ID);
+                    pstmt.setString(2, constraint.getDate());
+                    pstmt.setString(3, constraint.getShiftType().toString());
+                    pstmt.setString(4, constraint.getConstraintType().toString());
+                    pstmt.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -6,11 +6,19 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import java.util.HashMap;
 import java.util.Map;
 
-//TODO: make as singleton
-public class IdentityMap {
+class IdentityMap {
+    private static IdentityMap instance = null;
+
+    public static IdentityMap getInstance() {
+        if (instance == null){
+            instance = new IdentityMap();
+        }
+        return instance;
+    }
+
     private Map<String, Worker> workerMap;
     private Map<String, WorkDay> workDayMap;
-    public IdentityMap(){
+    private IdentityMap(){
         this.workDayMap = new HashMap<>();
         this.workerMap = new HashMap<>();
     }
