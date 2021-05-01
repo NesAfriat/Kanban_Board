@@ -74,9 +74,6 @@ public class WorkerDataController {
         } catch (SQLException | InnerLogicException e) {
             e.printStackTrace();
         }
-        if (worker != null){
-            identityMap.addWorker(worker);
-        }
         return worker;
     }
 
