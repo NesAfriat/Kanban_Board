@@ -24,7 +24,9 @@ public class Shift {
     // assign new worker to the shift
     public void addWorker(Job role, Worker worker) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
-
+        if (jobArrangement == null){
+            throw new InnerLogicException("tried to add worker to a job that is not required to the shift");
+        }
         if(!worker.canWorkInJob(role)) throw new InnerLogicException("tried to add worker for job he is not qualified to do");
         if (jobArrangement.amountAssigned == jobArrangement.required){
             throw new InnerLogicException("Reached maximum required, remove a worker first.");
@@ -35,6 +37,9 @@ public class Shift {
 
     public void removeWorker(Job role, Worker worker) throws InnerLogicException {
         JobArrangement jobArrangement = getJobArrangement(role);
+        if (jobArrangement == null){
+            throw new InnerLogicException("tried to remove a worker from a job that is not required for the shift");
+        }
         if (jobArrangement.workers.remove(worker)){
             jobArrangement.amountAssigned--;
             if (role == Job.Shift_Manager && jobArrangement.amountAssigned != DEFAULT_SHIFT_MANAGER_AMOUNT_REQUIRED)
@@ -90,15 +95,18 @@ public class Shift {
         return jobArrangement.required;
     }
 
-    public List<Worker> getCurrentWorkers(Job role){ //throws InnerLogicException {
-        List<Worker> currentWorkers = getJobArrangement(role).workers;
-        if(currentWorkers != null){
-            return currentWorkers;
+    public List<Worker> getCurrentWorkers(Job role){
+        JobArrangement jobArrangement = getJobArrangement(role);
+        if (jobArrangement != null) {
+            List<Worker> currentWorkers = jobArrangement.workers;
+            if (currentWorkers != null) {
+                return currentWorkers;
+            }
         }
         return new LinkedList<Worker>();
     }
 
-    public int getCurrentWorkersAmount(Job role) {//throws InnerLogicException {
+    public int getCurrentWorkersAmount(Job role) {
         JobArrangement jobArrangement = getJobArrangement(role);
         if(jobArrangement == null){
             return 0;
