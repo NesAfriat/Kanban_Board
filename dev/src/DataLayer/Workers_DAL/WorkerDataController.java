@@ -77,7 +77,7 @@ public class WorkerDataController {
                 int sickDaysPerMonth = rs.getInt(7);
                 String startWorkingDate = rs.getString(8);
                 String endWorkingDate = rs.getString(9);
-                worker = new Worker(ID, Name, BankAccount, Salary, EducationFund, vacationDaysPerMonth, sickDaysPerMonth, startWorkingDate);
+                worker = new Worker(Name, ID, BankAccount, Salary, EducationFund, vacationDaysPerMonth, sickDaysPerMonth, startWorkingDate);
                 if (endWorkingDate != null)
                     worker.fireWorker(endWorkingDate);
                 worker.setConstraints(constraints);
