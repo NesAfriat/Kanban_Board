@@ -32,7 +32,13 @@ class IdentityMap {
         workerMap.put(worker.getId(), worker);
     }
 
+
     public WorkDay getWorkDay(String date) {
         return workDayMap.get(date);
     }
+
+    public Worker getWorker(String id) {
+        return workerMap.get(id);
+    }
+
 }
