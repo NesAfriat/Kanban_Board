@@ -1,14 +1,17 @@
 package DataLayer.Workers_DAL;
 
+import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Workers_BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
+import BusinessLayer.Workers_BusinessLayer.Workers.ConstraintType;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 
 import java.sql.*;
+import java.util.LinkedList;
 import java.util.List;
 
 public class WorkerDataController {
@@ -27,6 +30,93 @@ public class WorkerDataController {
             System.out.println(e.getMessage());
         }
         return conn;
+    }
+
+    public Worker getWorker(String ID){
+        Worker worker = identityMap.getWorker(ID);
+        if (worker == null){
+            worker = selectWorker(ID);
+            identityMap.addWorker(worker);
+        }
+        
+        return worker;
+    }
+
+    private Worker selectWorker(String id) {
+        Worker worker = null;
+        List<Job> occupations = selectOccupations(id);
+        List<Constraint> constraints = selectConstraints(id);
+
+        String sql = "SELECT * FROM Worker WHERE ID = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql);){
+            pstmt.setString(1,id);
+            ResultSet rs = pstmt.executeQuery(sql);
+            if (rs.next()) {
+                String ID = rs.getString(1);
+                String Name = rs.getString(2);
+                String BankAccount = rs.getString(3);
+                double Salary = rs.getDouble(4);
+                String EducationFund = rs.getString(5);
+                int vacationDaysPerMonth = rs.getInt(6);
+                int sickDaysPerMonth = rs.getInt(7);
+                String startWorkingDate = rs.getString(8);
+                String endWorkingDate = rs.getString(9);
+                worker = new Worker(ID, Name, BankAccount, Salary, EducationFund, vacationDaysPerMonth, sickDaysPerMonth, startWorkingDate);
+                if (endWorkingDate != null)
+                    worker.fireWorker(endWorkingDate);
+                worker.setConstraints(constraints);
+                for (Job occupation : occupations) {
+                    worker.addOccupation(occupation);
+                }
+            }
+        } catch (SQLException | InnerLogicException e) {
+            e.printStackTrace();
+        }
+        if (worker != null){
+            identityMap.addWorker(worker);
+        }
+        return worker;
+    }
+
+    private List<Constraint> selectConstraints(String id) {
+        List<Constraint> constraints = new LinkedList<>();
+        String sql = "SELECT * FROM Constraint WHERE ID = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql);){
+            pstmt.setString(1,id);
+            ResultSet rs = pstmt.executeQuery(sql);
+            while (rs.next()) {
+                String Date = rs.getString(2);
+                String ShiftType = rs.getString(3);
+                String ConstraintType = rs.getString(4);
+                Constraint constraint = new Constraint(Date, WorkersUtils.parseShiftType(ShiftType), WorkersUtils.parseConstraintType(ConstraintType));
+                constraints.add(constraint);
+            }
+        } catch (SQLException | InnerLogicException e) {
+            e.printStackTrace();
+        }
+        return constraints;
+    }
+
+    private List<Job> selectOccupations(String id) {
+        List<Job> occupations = new LinkedList<>();
+        String sql = "SELECT * FROM Occupation WHERE ID = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql);){
+            pstmt.setString(1,id);
+            ResultSet rs = pstmt.executeQuery(sql);
+            while (rs.next()) {
+                String job = rs.getString(2);
+                occupations.add(WorkersUtils.parseJob(job));
+            }
+        } catch (SQLException | InnerLogicException e) {
+            e.printStackTrace();
+        }
+        return occupations;
     }
 
     public void addWorker(Worker worker){
@@ -79,6 +169,22 @@ public class WorkerDataController {
         }
     }
 
+    public void removeOccupation(String Worker_ID, Job occupation){
+        String sql = "DELETE FROM Occupation WHERE Worker_ID = ? AND Job = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // set the corresponding param
+            pstmt.setString(1, Worker_ID);
+            pstmt.setString(2, occupation.toString());
+            // execute the delete statement
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void insertOrIgnoreConstraint(String Worker_ID, Constraint constraint, Connection conn){
         String statement = "INSERT OR IGNORE INTO Constraint (Worker_ID, Date, ShiftType, ConstraintType) VALUES (?,?,?,?)";
         try (PreparedStatement pstmt = conn.prepareStatement(statement)){
@@ -87,6 +193,23 @@ public class WorkerDataController {
             pstmt.setString(3, constraint.getShiftType().toString());
             pstmt.setString(4, constraint.getConstraintType().toString());
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void removeConstraint(String Worker_ID, String Date, ShiftType ShiftType){
+        String sql = "DELETE FROM Constraint WHERE Worker_ID = ? AND Date = ? AND ShiftType = ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            // set the corresponding param
+            pstmt.setString(1, Worker_ID);
+            pstmt.setString(2, Date);
+            pstmt.setString(3, ShiftType.toString());
+            // execute the delete statement
+            pstmt.executeUpdate();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

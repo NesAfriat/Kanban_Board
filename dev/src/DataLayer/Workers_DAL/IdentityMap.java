@@ -31,4 +31,6 @@ class IdentityMap {
     public void addWorker(Worker worker) {
         workerMap.put(worker.getId(), worker);
     }
+
+    public Worker getWorker(String id) { return workerMap.get(id); }
 }

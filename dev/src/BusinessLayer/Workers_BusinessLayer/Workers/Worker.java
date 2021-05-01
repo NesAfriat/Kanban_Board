@@ -56,6 +56,13 @@ public class Worker {
         return con;
     }
 
+    public void setConstraints(List<Constraint> constraints) throws InnerLogicException {
+        if (constraints == null){
+            throw new InnerLogicException("Cannot add a null list of constraints");
+        }
+        this.constraints = constraints;
+    }
+
     public Constraint removeConstraint(String date, ShiftType shiftType) throws InnerLogicException {
         Constraint output = null;
         for (Constraint con: constraints) {
@@ -94,7 +101,8 @@ public class Worker {
     }
 
     public void fireWorker(String endWorkingDate) throws InnerLogicException {
-        if(endWorkingDate == null) throw new InnerLogicException("tried to fire worker that was already fired");
+        if(this.endWorkingDate != null) throw new InnerLogicException("tried to fire worker that was already fired");
+        if(endWorkingDate == null) throw new InnerLogicException("can not set endWorkingDate to null");
         this.endWorkingDate = endWorkingDate;
     }
 
