@@ -11,6 +11,8 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,13 +34,24 @@ public class WorkerDataController {
         return conn;
     }
 
+    public void SaveData(){
+        Collection<Worker> workers = identityMap.getAllWorkers();
+        for (Worker worker : workers){
+            saveWorker(worker);
+        }
+
+        Collection<WorkDay> workDays = identityMap.getAllWorkDays();
+        for (WorkDay workDay : workDays){
+            saveWorkDay(workDay);
+        }
+    }
     public Worker getWorker(String ID){
         Worker worker = identityMap.getWorker(ID);
         if (worker == null){
             worker = selectWorker(ID);
-            identityMap.addWorker(worker);
+            if (worker != null)
+                identityMap.addWorker(worker);
         }
-        
         return worker;
     }
 
