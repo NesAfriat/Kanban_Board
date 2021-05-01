@@ -74,11 +74,19 @@ public class Shift {
     public void setAmountRequired(Job role, int required) throws InnerLogicException {
         if(required < 0 )throw new InnerLogicException("Can not set required workers to negative value");
         JobArrangement jobArrangement = getJobArrangement(role);
-        if (jobArrangement.amountAssigned > required){
-            throw new InnerLogicException("Can not set required workers to be less than assigned worker. please remove a worker first");
+        if (jobArrangement == null) {
+            if(role == Job.Shift_Manager && required != 1) throw new InnerLogicException("Can not change shift manager required amount");
+            jobArrangement = new JobArrangement(required);
+            currentWorkers.put(role, jobArrangement);
         }
-        if(role.equals(Job.Shift_Manager)) throw new InnerLogicException("Can not change shift manager required amount");
-        jobArrangement.required = required;
+        else {
+            if (jobArrangement.amountAssigned > required) {
+                throw new InnerLogicException("Can not set required workers to be less than assigned worker. please remove a worker first");
+            }
+            if (role.equals(Job.Shift_Manager))
+                throw new InnerLogicException("Can not change shift manager required amount");
+            jobArrangement.required = required;
+        }
     }
 
     // get the amount of required workers for specific role in the shift

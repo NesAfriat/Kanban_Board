@@ -31,4 +31,8 @@ class IdentityMap {
     public void addWorker(Worker worker) {
         workerMap.put(worker.getId(), worker);
     }
+
+    public WorkDay getWorkDay(String date) {
+        return workDayMap.get(date);
+    }
 }

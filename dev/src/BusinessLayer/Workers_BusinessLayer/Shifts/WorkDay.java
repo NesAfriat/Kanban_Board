@@ -53,7 +53,6 @@ public class WorkDay {
         return  output;
     }
 
-
     public Shift addShift(ShiftType shiftType) throws InnerLogicException {
         if (ShiftType.Morning == shiftType){
             if (morningShift != null){
