@@ -92,6 +92,69 @@ public class WorkerDataController {
         }
     }
 
+    private void updateWorker(Worker worker, Connection conn){
+        String statement = "UPDATE Workers SET ID = ? , "
+                + "Name = ? "
+                + "BankAccount = ? "
+                + "Salary = ? "
+                + "EducationFund = ? "
+                + "vacationDaysPerMonth = ? "
+                + "sickDaysPerMonth = ? "
+                + "startWorkingDate = ? "
+                + "endWorkingDate = ? "
+                + "WHERE ID = ?";
+
+        String ID = worker.getId();
+        String Name = worker.getName();
+        String BankAccount = worker.getBankAccount();
+        double Salary = worker.getSalary();
+        String EducationFund = worker.getEducationFund();
+        int vacationDaysPerMonth = worker.getVacationDaysPerMonth();
+        int sickDaysPerMonth = worker.getSickDaysPerMonth();
+        String startWorkingDate = worker.getStartWorkingDate();
+        String endWorkingDate = worker.getEndWorkingDate();
+
+        try (PreparedStatement pstmt = conn.prepareStatement(statement)){
+            pstmt.setString(1, ID);
+            pstmt.setString(2, Name);
+            pstmt.setString(3, BankAccount);
+            pstmt.setDouble(4, Salary);
+            pstmt.setString(5, EducationFund);
+            pstmt.setInt(6, vacationDaysPerMonth);
+            pstmt.setInt(7, sickDaysPerMonth);
+            pstmt.setString(8, startWorkingDate);
+            pstmt.setString(9, endWorkingDate);
+            pstmt.setString(10, ID);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void saveWorker(Worker worker){
+        try (Connection conn = connect()){
+            if (!insertOrIgnoreWorker(worker, conn))
+                updateWorker(worker, conn);
+            saveOccupations(worker.getId(), worker.getOccupations(), conn);
+            saveConstraints(worker.getId(), worker.getConstraints(), conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void saveConstraints(String Worker_ID, List<Constraint> constraints, Connection conn) {
+        for (Constraint constraint : constraints) {
+            insertOrIgnoreConstraint(Worker_ID, constraint, conn);
+        }
+    }
+
+    private void saveOccupations(String Worker_ID, List<Job> occupations, Connection conn){
+        for (Job occupation : occupations) {
+           insertOrIgnoreOccupation(Worker_ID, occupation, conn);
+        }
+    }
+
     private void saveWorkDay(WorkDay workDay){
         Shift morning = workDay.getShift(ShiftType.Morning);
         Shift evening = workDay.getShift(ShiftType.Evening);
@@ -207,68 +270,4 @@ public class WorkerDataController {
             ex.printStackTrace();
         }
     }
-
-    private void updateWorker(Worker worker, Connection conn){
-        String statement = "UPDATE Workers SET ID = ? , "
-                + "Name = ? "
-                + "BankAccount = ? "
-                + "Salary = ? "
-                + "EducationFund = ? "
-                + "vacationDaysPerMonth = ? "
-                + "sickDaysPerMonth = ? "
-                + "startWorkingDate = ? "
-                + "endWorkingDate = ? "
-                + "WHERE ID = ?";
-
-        String ID = worker.getId();
-        String Name = worker.getName();
-        String BankAccount = worker.getBankAccount();
-        double Salary = worker.getSalary();
-        String EducationFund = worker.getEducationFund();
-        int vacationDaysPerMonth = worker.getVacationDaysPerMonth();
-        int sickDaysPerMonth = worker.getSickDaysPerMonth();
-        String startWorkingDate = worker.getStartWorkingDate();
-        String endWorkingDate = worker.getEndWorkingDate();
-
-        try (PreparedStatement pstmt = conn.prepareStatement(statement)){
-            pstmt.setString(1, ID);
-            pstmt.setString(2, Name);
-            pstmt.setString(3, BankAccount);
-            pstmt.setDouble(4, Salary);
-            pstmt.setString(5, EducationFund);
-            pstmt.setInt(6, vacationDaysPerMonth);
-            pstmt.setInt(7, sickDaysPerMonth);
-            pstmt.setString(8, startWorkingDate);
-            pstmt.setString(9, endWorkingDate);
-            pstmt.setString(10, ID);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void saveWorker(Worker worker){
-        try (Connection conn = connect()){
-            if (!insertOrIgnoreWorker(worker, conn))
-                updateWorker(worker, conn);
-            saveOccupations(worker.getId(), worker.getOccupations(), conn);
-            saveConstraints(worker.getId(), worker.getConstraints(), conn);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    private void saveConstraints(String Worker_ID, List<Constraint> constraints, Connection conn) {
-        for (Constraint constraint : constraints) {
-            insertOrIgnoreConstraint(Worker_ID, constraint, conn);
-        }
-    }
-
-    private void saveOccupations(String Worker_ID, List<Job> occupations, Connection conn){
-        for (Job occupation : occupations) {
-           insertOrIgnoreOccupation(Worker_ID, occupation, conn);
-        }
-    }
-
 }
