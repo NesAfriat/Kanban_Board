@@ -9,6 +9,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.Workers.WorkersList;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
+import DataLayer.Workers_DAL.WorkerDataController;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -176,7 +177,11 @@ public class ShiftController {
         WorkersUtils.notPastDateValidation(date);
         ShiftType shiftType = WorkersUtils.parseShiftType(shift);
         WorkDay workDay = calendar.getWorkDay(date);
-        return workDay.removeShift(shiftType);
+        Shift output =workDay.removeShift(shiftType);
+        WorkerDataController workerDataController = new WorkerDataController();
+        workerDataController.removeShift(date, shift);
+        return output;
+
     }
 
     public void setDefaultJobsInShift(int day, String shiftType, String job, int amount) throws InnerLogicException {

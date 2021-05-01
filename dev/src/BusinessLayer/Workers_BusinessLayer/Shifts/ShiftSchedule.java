@@ -3,6 +3,8 @@ package BusinessLayer.Workers_BusinessLayer.Shifts;
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
+import DataLayer.Workers_DAL.WorkerDataController;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -31,7 +33,10 @@ public class ShiftSchedule {
     public WorkDay getWorkDay(String date) throws InnerLogicException {
         WorkDay workDay = workDays.get(date);
         if (workDay == null){
-            throw new InnerLogicException("There's no WorkDay at date: " + date);
+            WorkerDataController workerDataController = new WorkerDataController();
+            workDay = workerDataController.getWorkDay(date);
+            if(workDay == null) throw new InnerLogicException("There's no WorkDay at date: " + date);
+            else workDays.put(date,workDay);
         }
         return workDay;
     }
@@ -39,13 +44,20 @@ public class ShiftSchedule {
     public List<WorkDay> getWorkDaysFrom(String date) {
         List<WorkDay> futureDays = new LinkedList<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        workDays.forEach((key, workDay) -> {
+        /*workDays.forEach((key, workDay) -> {
             LocalDate inputDate = LocalDate.parse(date, formatter);
             LocalDate keyDate = LocalDate.parse(key, formatter);
             if (keyDate.isAfter(inputDate)){
                 futureDays.add(workDay);
             }
-        });
+        });*/
+        WorkerDataController workerDataController = new WorkerDataController();
+        futureDays = workerDataController.getWorkDaysFromDate(date);
+        for (WorkDay workDay: futureDays) {
+            if(!workDays.containsValue(workDay)){
+                workDays.put(workDay.getDate(),workDay);
+            }
+        }
         return futureDays;
     }
 
@@ -95,6 +107,8 @@ public class ShiftSchedule {
             boolean hasEvening = shiftType.equals(ShiftType.Evening);
             workDay = new WorkDay(hasMorning, hasEvening, date);
             workDays.put(date, workDay);
+            WorkerDataController workerDataController = new WorkerDataController();
+            workerDataController.addWorkDay(workDay);
             shift = workDay.getShift(shiftType);
         }
         else {
@@ -132,6 +146,8 @@ public class ShiftSchedule {
             }
         }
         workDays.put(date,workDay);
+        WorkerDataController workerDataController = new WorkerDataController();
+        workerDataController.addWorkDay(workDay);
         return workDay;
     }
 

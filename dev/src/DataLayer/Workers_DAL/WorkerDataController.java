@@ -9,6 +9,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.ConstraintType;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -417,6 +418,35 @@ public class WorkerDataController {
         }
         return workDay;
     }
+
+    public List<WorkDay> getWorkDaysFromDate(String date){
+        List<String> dates = selectDateOfFromDate(date);
+        List<WorkDay> workDays = new LinkedList<>();
+        for (String d: dates) {
+            workDays.add(getWorkDay(d));
+        }
+        return workDays;
+    }
+
+    private List<String> selectDateOfFromDate(String date){
+        List<String> dates = new LinkedList<>();
+        String sql = "SELECT Date FROM Shift WHERE Date >= ?";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            pstmt.setString(1,date);
+            ResultSet rs  = pstmt.executeQuery();
+
+            while(rs.next()){
+                dates.add(rs.getString("Date"));
+            }
+        }catch (SQLException  e) {
+            e.printStackTrace();
+        }
+        return dates;
+    }
+
 
     private WorkDay buildWorkDay(String date){
         Shift DBmorning = selectShift(date, "Morning");
