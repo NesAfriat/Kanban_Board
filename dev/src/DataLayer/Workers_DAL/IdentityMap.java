@@ -3,8 +3,10 @@ package DataLayer.Workers_DAL;
 import BusinessLayer.Workers_BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+
 
 class IdentityMap {
     private static IdentityMap instance = null;
@@ -41,4 +43,11 @@ class IdentityMap {
         return workerMap.get(id);
     }
 
+    Collection<Worker> getAllWorkers(){
+        return workerMap.values();
+    }
+
+    public Collection<WorkDay> getAllWorkDays() {
+        return workDayMap.values();
+    }
 }

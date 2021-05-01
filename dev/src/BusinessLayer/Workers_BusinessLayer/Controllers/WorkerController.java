@@ -4,6 +4,7 @@ import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Workers_BusinessLayer.Workers.*;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
+import DataLayer.Workers_DAL.WorkerDataController;
 
 
 public class WorkerController {
@@ -36,6 +37,8 @@ public class WorkerController {
 
     public void logout() throws InnerLogicException {
         if(loggedIn == null) throw new InnerLogicException("tried to log out but no worker was logged in");
+        WorkerDataController workerDataController = new WorkerDataController();
+        workerDataController.SaveData();
         loggedIn = null;
     }
 
@@ -75,7 +78,10 @@ public class WorkerController {
         if(loggedIn == null) throw new InnerLogicException("tried to remove constraint but no user was logged in");
         WorkersUtils.dateValidation(date);
         ShiftType st = WorkersUtils.parseShiftType(shiftType);
-        return loggedIn.removeConstraint(date, st);
+        Constraint constraint = loggedIn.removeConstraint(date, st);
+        WorkerDataController workerDataController = new WorkerDataController();
+        workerDataController.removeConstraint(loggedIn.getId(),date,st);
+        return constraint;
     }
 
     public Worker addOccupation(String id, String job) throws InnerLogicException {
@@ -93,6 +99,8 @@ public class WorkerController {
         Job role = WorkersUtils.parseJob(job);
         Worker worker = workersList.getWorker(id);
         worker.removeOccupation(role);
+        WorkerDataController workerDataController = new WorkerDataController();
+        workerDataController.removeOccupation(id,role);
         return worker;
     }
 

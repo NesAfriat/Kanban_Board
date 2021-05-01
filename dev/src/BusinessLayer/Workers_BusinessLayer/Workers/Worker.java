@@ -3,6 +3,8 @@ package BusinessLayer.Workers_BusinessLayer.Workers;
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Shifts.*;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
+import DataLayer.Workers_DAL.WorkerDataController;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -73,6 +75,7 @@ public class Worker {
         }
         if(output == null) throw new InnerLogicException("tried to remove non-existing constraint");
         constraints.remove(output);
+
         return output;
     }
 
@@ -96,8 +99,8 @@ public class Worker {
 
     public void removeOccupation(Job job) throws InnerLogicException {
         if (!occupations.contains(job)) throw new InnerLogicException("tried to remove occupation to worker but he was never qualified to work as " + job.name());
-        if (job.equals(Job.HR_Manager)) throw new InnerLogicException("Can not remove the HR Manager occupation");
         this.occupations.remove(job);
+
     }
 
     public void fireWorker(String endWorkingDate) throws InnerLogicException {

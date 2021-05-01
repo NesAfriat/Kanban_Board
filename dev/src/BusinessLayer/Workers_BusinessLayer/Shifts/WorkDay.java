@@ -45,7 +45,7 @@ public class WorkDay {
             output = morningShift;
             morningShift =null;
         }
-        if(shiftType == ShiftType.Evening){
+        else if(shiftType == ShiftType.Evening){
             if (eveningShift == null) throw new InnerLogicException("tried to remove shift that is not exist");
             output = eveningShift;
             eveningShift =null;

@@ -1,6 +1,9 @@
 package BusinessLayer.Workers_BusinessLayer.Workers;
 
+import BusinessLayer.Workers_BusinessLayer.Controllers.WorkerController;
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
+import DataLayer.Workers_DAL.WorkerDataController;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -29,15 +32,25 @@ public class WorkersList {
             if(worker.getId().equals(id)) return  worker;
         }
         //search in db
-        throw new InnerLogicException("there is no worker with that id in the system");
+        WorkerDataController workerDataController = new WorkerDataController();
+        Worker worker = workerDataController.getWorker(id);
+        if (worker == null)
+            throw new InnerLogicException("there is no worker with that id in the system");
+        else {
+            workers.add(worker);
+        }
+        return worker;
     }
 
     public Worker addWorker(String name, String id, String bankAccount, double salary, String educationFund,
                             int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
-        if (contains(id)) throw new InnerLogicException("the system already have worker with the id: " + id);
-        Worker newWorker =new Worker( name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
+        WorkerDataController workerDataController = new WorkerDataController();
+        if (contains(id) || getWorker(id) != null) throw new InnerLogicException("the system already have worker with the id: " + id);
+
+        Worker newWorker = new Worker( name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                 sickDaysPerMonth, startWorkingDate);
-        // add to map
+
+        workerDataController.addWorker(newWorker);
         workers.add(newWorker);
         return newWorker;
     }
