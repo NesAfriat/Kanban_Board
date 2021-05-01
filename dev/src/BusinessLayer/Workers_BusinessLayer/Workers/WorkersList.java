@@ -13,7 +13,7 @@ public class WorkersList {
     public WorkersList(){
         this.workers = new LinkedList<>();
         try { // default administrator worker
-            Worker worker = new Worker( "admin", "000000000", "a", 123, "a", 0, 0, "01/01/0001");
+            Worker worker = new Worker( "Administrator", "000000000", "0", 0, "0", 0, 0, "00/00/0000");
             workers.add(worker);
             worker.addOccupation(Job.HR_Manager); // administrator is admin
         } catch (InnerLogicException ignored) { }

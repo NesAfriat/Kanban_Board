@@ -1,4 +1,5 @@
 package PresentationLayer.Workers_PresentationLayer;
+import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.*;
 
