@@ -30,7 +30,7 @@ public class WorkerDataController {
         try {
             conn = DriverManager.getConnection(connectionPath);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return conn;
     }
@@ -66,7 +66,7 @@ public class WorkerDataController {
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql);){
             pstmt.setString(1,id);
-            ResultSet rs = pstmt.executeQuery(sql);
+            ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 String ID = rs.getString(1);
                 String Name = rs.getString(2);
@@ -93,12 +93,12 @@ public class WorkerDataController {
 
     private List<Constraint> selectConstraints(String id) {
         List<Constraint> constraints = new LinkedList<>();
-        String sql = "SELECT * FROM Constraint WHERE ID = ?";
+        String sql = "SELECT * FROM Constraints WHERE Worker_ID = ?;";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql);){
             pstmt.setString(1,id);
-            ResultSet rs = pstmt.executeQuery(sql);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String Date = rs.getString(2);
                 String ShiftType = rs.getString(3);
@@ -114,12 +114,12 @@ public class WorkerDataController {
 
     private List<Job> selectOccupations(String id) {
         List<Job> occupations = new LinkedList<>();
-        String sql = "SELECT * FROM Occupation WHERE ID = ?";
+        String sql = "SELECT * FROM Occupation WHERE Worker_ID = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql);){
             pstmt.setString(1,id);
-            ResultSet rs = pstmt.executeQuery(sql);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String job = rs.getString(2);
                 occupations.add(WorkersUtils.parseJob(job));
@@ -140,7 +140,7 @@ public class WorkerDataController {
 
     private boolean insertOrIgnoreWorker(Worker worker, Connection conn) {
         boolean inserted = false;
-        String statement = "INSERT OR IGNORE INTO Workers (ID, Name, BankAccount, Salary, EducationFund, vacationDaysPerMonth, " +
+        String statement = "INSERT OR IGNORE INTO Worker (ID, Name, BankAccount, Salary, EducationFund, vacationDaysPerMonth, " +
                 "sickDaysPerMonth, startWorkingDate, endWorkingDate) VALUES (?,?,?,?,?,?,?,?,?)";
         String ID = worker.getId();
         String Name = worker.getName();
@@ -198,7 +198,7 @@ public class WorkerDataController {
     }
 
     private void insertOrIgnoreConstraint(String Worker_ID, Constraint constraint, Connection conn){
-        String statement = "INSERT OR IGNORE INTO Constraint (Worker_ID, Date, ShiftType, ConstraintType) VALUES (?,?,?,?)";
+        String statement = "INSERT OR IGNORE INTO Constraints (Worker_ID, Date, ShiftType, ConstraintType) VALUES (?,?,?,?)";
         try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.setString(1, Worker_ID);
             pstmt.setString(2, constraint.getDate());
@@ -212,7 +212,7 @@ public class WorkerDataController {
 
 
     public void removeConstraint(String Worker_ID, String Date, ShiftType ShiftType){
-        String sql = "DELETE FROM Constraint WHERE Worker_ID = ? AND Date = ? AND ShiftType = ?";
+        String sql = "DELETE FROM Constraints WHERE Worker_ID = ? AND Date = ? AND ShiftType = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -229,14 +229,14 @@ public class WorkerDataController {
     }
 
     private void updateWorker(Worker worker, Connection conn){
-        String statement = "UPDATE Workers SET ID = ? , "
-                + "Name = ? "
-                + "BankAccount = ? "
-                + "Salary = ? "
-                + "EducationFund = ? "
-                + "vacationDaysPerMonth = ? "
-                + "sickDaysPerMonth = ? "
-                + "startWorkingDate = ? "
+        String statement = "UPDATE Worker SET ID = ? , "
+                + "Name = ?, "
+                + "BankAccount = ?, "
+                + "Salary = ?, "
+                + "EducationFund = ?, "
+                + "vacationDaysPerMonth = ?, "
+                + "sickDaysPerMonth = ?, "
+                + "startWorkingDate = ?, "
                 + "endWorkingDate = ? "
                 + "WHERE ID = ?";
 
@@ -347,20 +347,20 @@ public class WorkerDataController {
                 if (sqlRetVal != 0) inserted = true;
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return inserted;
     }
 
     private void updateShift(String date, Shift shift, String shiftType, Connection conn) {
-        String statement = "UPDATE Workers SET Date = ? , "
-                + "ShiftType = ? "
-                + "Cashier_Amount = ? "
-                + "Storekeeper_Amount = ? "
-                + "Usher_Amount = ? "
-                + "Guard_Amount = ? "
-                + "DriverA_Amount = ? "
-                + "DriverB_Amount = ? "
+        String statement = "UPDATE Shift SET Date = ? , "
+                + "ShiftType = ?, "
+                + "Cashier_Amount = ?, "
+                + "Storekeeper_Amount = ?, "
+                + "Usher_Amount = ?, "
+                + "Guard_Amount = ?, "
+                + "DriverA_Amount = ?, "
+                + "DriverB_Amount = ?, "
                 + "DriverC_Amount = ? "
                 + "WHERE Date = ? AND ShiftType = ?";
         try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
@@ -389,7 +389,7 @@ public class WorkerDataController {
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -419,7 +419,7 @@ public class WorkerDataController {
             pstmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -554,7 +554,7 @@ public class WorkerDataController {
                 outputWorkers.add(getWorker(rs.getString("Worker_ID")));
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         return outputWorkers;
     }

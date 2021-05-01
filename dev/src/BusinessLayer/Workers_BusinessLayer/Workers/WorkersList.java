@@ -45,7 +45,7 @@ public class WorkersList {
     public Worker addWorker(String name, String id, String bankAccount, double salary, String educationFund,
                             int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
         WorkerDataController workerDataController = new WorkerDataController();
-        if (contains(id) || getWorker(id) != null) throw new InnerLogicException("the system already have worker with the id: " + id);
+        if (contains(id) || workerDataController.getWorker(id) != null) throw new InnerLogicException("the system already have worker with the id: " + id);
 
         Worker newWorker = new Worker( name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                 sickDaysPerMonth, startWorkingDate);
