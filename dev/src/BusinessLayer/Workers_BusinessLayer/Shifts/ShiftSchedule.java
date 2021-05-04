@@ -96,7 +96,8 @@ public class ShiftSchedule {
     }
 
     public WorkDay addDefaultShift(String date, ShiftType shiftType) throws InnerLogicException {
-        WorkDay workDay = workDays.get(date);
+        //WorkDay workDay = workDays.get(date);
+        WorkDay workDay = getWorkDay(date);
         if (workDay != null && workDay.getShift(shiftType) != null){
             throw new InnerLogicException("Tried to add shift to a workday that already has the shift");
         }
@@ -123,7 +124,8 @@ public class ShiftSchedule {
     }
 
     public WorkDay addDefaultWorkDay(String date) throws InnerLogicException {
-        if (workDays.containsKey(date)){
+        WorkerDataController workerDataController = new WorkerDataController();
+        if (workDays.containsKey(date) || workerDataController.getWorkDay(date) != null){
             throw new InnerLogicException("Workday at date: " + date + " is already exist");
         }
         int dayOfTheWeek = WorkersUtils.getWeekDayFromDate(date);
@@ -146,7 +148,6 @@ public class ShiftSchedule {
             }
         }
         workDays.put(date,workDay);
-        WorkerDataController workerDataController = new WorkerDataController();
         workerDataController.addWorkDay(workDay);
         return workDay;
     }
