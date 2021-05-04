@@ -5,14 +5,11 @@ import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Workers_BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
-import BusinessLayer.Workers_BusinessLayer.Workers.ConstraintType;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -46,15 +43,7 @@ public class WorkerDataController {
             saveWorkDay(workDay);
         }
     }
-    public Worker getWorker(String ID){
-        Worker worker = identityMap.getWorker(ID);
-        if (worker == null){
-            worker = selectWorker(ID);
-            if (worker != null)
-                identityMap.addWorker(worker);
-        }
-        return worker;
-    }
+
 
     private Worker selectWorker(String id) {
         Worker worker = null;
@@ -424,6 +413,16 @@ public class WorkerDataController {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public Worker getWorker(String ID){
+        Worker worker = identityMap.getWorker(ID);
+        if (worker == null){
+            worker = selectWorker(ID);
+            if (worker != null)
+                identityMap.addWorker(worker);
+        }
+        return worker;
     }
 
     public WorkDay getWorkDay(String date){
