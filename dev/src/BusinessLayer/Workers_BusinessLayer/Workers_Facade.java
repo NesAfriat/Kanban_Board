@@ -279,10 +279,6 @@ public class Workers_Facade implements Workers_Integration {
     public ResponseT<WorkDayResponse> addDefaultWorkDay(String date) {
         try {
             WorkDay workDay = shiftController.addDefaultWorkDay(date);
-            //TODO delete this
-            WorkerDataController wdc = new WorkerDataController();
-            wdc.addWorkDay(workDay);
-            //TODO until here
             return new ResponseT<>(new WorkDayResponse(workDay));
         } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
