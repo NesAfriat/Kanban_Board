@@ -1,2 +1,4 @@
-package DataLayer.Mapper;public class mapper {
+package DataLayer.Mapper;
+
+public abstract class mapper {
 }

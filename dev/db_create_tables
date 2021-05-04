@@ -1,0 +1,185 @@
+CREATE TABLE IF NOT EXISTS Categories(
+	catID INTEGER PRIMARY KEY,
+	catName VARCHAR(30),
+	father_Category INTEGER,
+	
+	FOREIGN KEY (father_Category) REFERENCES Categories (catID)
+);
+
+CREATE TABLE IF NOT EXISTS Reports(
+	repID INTEGER PRIMARY KEY,	
+	subject VARCHAR(7),
+	creation_date DATETIME,
+	time_range VARCHAR(7),
+	data TEXT
+
+);
+
+CREATE TABLE IF NOT EXISTS ReportCategories(
+	repID INTEGER,
+	catID INTEGER,
+	
+	PRIMARY KEY (repID, catID),
+	FOREIGN KEY (repID) REFERENCES Reports(repID),
+	FOREIGN KEY (catID) REFERENCES Categories(catID)
+	
+);
+
+CREATE TABLE IF NOT EXISTS SaleCategory(
+	saleID INTEGER,
+	catID INTEGER,
+	discount_percent REAL,
+	description VARCHAR(300),
+	start_date DATETIME,
+	end_date DATETIME,
+	
+	PRIMARY KEY (saleID, catID),
+	FOREIGN KEY (catID) REFERENCES Categories(catID),
+	CHECK(end_date >= start_date)
+
+);
+
+CREATE TABLE IF NOT EXISTS GeneralProducts(
+	gpID INTEGER PRIMARY KEY,
+	gpName VARCHAR(30),
+	gpManuName VARCHAR(30),
+	amountStore INTEGER,
+	amountStorage INTEGER,
+	minAmount INTEGER,
+	sellingPrice REAL
+	
+);
+
+CREATE TABLE IF NOT EXISTS ProductCategories(
+	catID INTEGER,
+	gpID INTEGER,
+	
+	PRIMARY KEY (catID, gpID),
+	FOREIGN KEY (catID) REFERENCES Categories(catID),
+	FOREIGN KEY (gpID) REFERENCES GeneralProducts(gpID)
+	
+);
+CREATE TABLE IF NOT EXISTS SaleProduct(
+	saleID INTEGER,
+	gpID INTEGER,
+	discount_percent REAL,
+	description VARCHAR(300),
+	start_date DATETIME,
+	end_date DATETIME,
+	
+	PRIMARY KEY (saleID, gpID),
+	FOREIGN KEY (gpID) REFERENCES GeneralProducts(gpID),
+	CHECK(end_date >= start_date)
+	
+);
+
+CREATE TABLE IF NOT EXISTS Item(
+	gpID INTEGER,
+	iID INTEGER,
+	location TEXT,
+	supplied_date DATETIME,
+	creation_date DATETIME,
+	expiration_date DATETIME,
+	
+	PRIMARY KEY (gpID, iID),
+	FOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID),
+	CHECK(expiration_date >= creation_date)
+	CHECK(supplied_date >= creation_date)
+
+);
+========================================================================
+
+CREATE TABLE IF NOT EXISTS Suppliers(
+	supID INTEGER PRIMARY KEY,
+	supName VARCHAR(15),
+	bankAccount TEXT,
+	payementMethod TEXT
+	
+);
+
+CREATE TABLE IF NOT EXISTS SuppliersProducts(
+	supID INTEGER,
+	catalogID INTEGER,
+	gpID INTEGER,
+	price REAL,
+	
+	PRIMARY KEY (supID, catalogID),
+	FOREIGN KEY (supID) REFERENCES Suppliers (supID),
+	FOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)
+	
+);
+
+CREATE TABLE IF NOT EXISTS SuppliersContacts(
+	supID INTEGER,
+	cntcID INTEGER,
+	cntcName VARCHAR(30),
+	phoneNumber TEXT,
+	email TEXT,
+	
+	PRIMARY KEY (supID, cntcID),
+	FOREIGN KEY (supID) REFERENCES Suppliers (supID)
+	
+);
+
+CREATE TABLE IF NOT EXISTS Orders(
+	supID INTEGER,
+	oID INTEGER,
+	dateTime DATETIME,
+	totalPayment REAL,
+	constant INTEGER,
+	
+	PRIMARY KEY (supID, oID),
+	FOREIGN KEY (supID) REFERENCES Suppliers (supID)
+	
+);
+
+CREATE TABLE IF NOT EXISTS OrderProducts(
+	oID INTEGER,
+	catalogID INTEGER,
+	quantity INTEGER,
+	
+	PRIMARY KEY (oID, catalogID),
+	FOREIGN KEY (oID) REFERENCES Orders(oID),
+	FOREIGN KEY (catalogID) REFERENCES SuppliersProducts(catalogID)
+	
+);
+
+CREATE TABLE IF NOT EXISTS Agreement(
+	supID INTEGER PRIMARY KEY,
+	extraDisc REAL,
+	deliveryMods TEXT,
+	daysFromOrder INTEGER,
+	
+	FOREIGN KEY (supID) REFERENCES Suppliers(supID)
+	
+);
+
+CREATE TABLE IF NOT EXISTS AgreementProducts(
+	supID INTEGER,
+	catalogID INTEGER,
+	
+	PRIMARY KEY(supID, catalogID),
+	FOREIGN KEY(supID) REFERENCES Agreement(supID),
+	FOREIGN KEY(catalogID) REFERENCES SuppliersProducts(catalogID)
+	
+);
+
+CREATE TABLE IF NOT EXISTS AgreementProductDisc(
+	supID INTEGER,
+	catalogID INTEGER,
+	quantity INTEGER,
+	discount REAL,
+	
+	PRIMARY KEY (supID, catalogID, quantity),
+	FOREIGN KEY (supID) REFERENCES Agreement(supID),
+	FOREIGN KEY (catalogID) REFERENCES SuppliersProducts(catalogID)
+
+);
+
+CREATE TABLE IF NOT EXISTS AgreementDeliveryDays(
+	deliveryDay TEXT,
+	supID INTEGER,
+	
+	PRIMARY KEY(deliveryDay, supID),
+	FOREIGN KEY(supID) REFERENCES Agreement(supID)
+);

@@ -1,4 +1,4 @@
 package DataLayer.Mapper;
 
-public class SalesMapper {
+public class SuppliersMapper extends mapper{
 }

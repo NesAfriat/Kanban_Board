@@ -1,2 +1,4 @@
-package DataLayer.Mapper;public class IdentityMap {
+package DataLayer.Mapper;
+
+public class IdentityMap {
 }

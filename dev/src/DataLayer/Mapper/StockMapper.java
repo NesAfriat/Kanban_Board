@@ -1,2 +1,4 @@
-package DataLayer.Mapper;public class StockMapper {
+package DataLayer.Mapper;
+
+public class StockMapper extends mapper {
 }
