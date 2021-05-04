@@ -319,13 +319,13 @@ public class WorkerDataController {
     }
 
     private boolean insertOrIgnoreShift(String date, Shift shift, String shiftType, Connection conn) {
-        String statement = "INSERT OR IGNORE INTO Shift (Date, ShiftType, Cashier_Amount,  Storekeeper_Amount, Usher_Amount," +
-                " Guard_Amount, DriverA_Amount, DriverB_Amount, DriverC_Amount) VALUES (?,?,?,?,?,?,?,?,?)";
+        String statement = "INSERT OR IGNORE INTO Shift (Date, ShiftType, Approved ,Cashier_Amount,  Storekeeper_Amount, Usher_Amount," +
+                " Guard_Amount, DriverA_Amount, DriverB_Amount, DriverC_Amount) VALUES (?,?,?,?,?,?,?,?,?,?)";
         boolean inserted = false;
         try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
 
             if (shift != null) {
-
+                boolean Approved = shift.isApproved();
                 int Cashier_Amount = shift.getAmountRequired(Job.Cashier);
                 int Storekeeper_Amount = shift.getAmountRequired(Job.Storekeeper);
                 int Usher_Amount = shift.getAmountRequired(Job.Usher);
@@ -336,13 +336,14 @@ public class WorkerDataController {
 
                 pstmt.setString(1, date);
                 pstmt.setString(2, shiftType);
-                pstmt.setInt(3, Cashier_Amount);
-                pstmt.setInt(4, Storekeeper_Amount);
-                pstmt.setInt(5, Usher_Amount);
-                pstmt.setInt(6, Guard_Amount);
-                pstmt.setInt(7, DriverA_Amount);
-                pstmt.setInt(8, DriverB_Amount);
-                pstmt.setInt(9, DriverC_Amount);
+                pstmt.setBoolean(3, Approved);
+                pstmt.setInt(4, Cashier_Amount);
+                pstmt.setInt(5, Storekeeper_Amount);
+                pstmt.setInt(6, Usher_Amount);
+                pstmt.setInt(7, Guard_Amount);
+                pstmt.setInt(8, DriverA_Amount);
+                pstmt.setInt(9, DriverB_Amount);
+                pstmt.setInt(10, DriverC_Amount);
                 int sqlRetVal = pstmt.executeUpdate();
                 if (sqlRetVal != 0) inserted = true;
             }
@@ -355,6 +356,7 @@ public class WorkerDataController {
     private void updateShift(String date, Shift shift, String shiftType, Connection conn) {
         String statement = "UPDATE Shift SET Date = ? , "
                 + "ShiftType = ?, "
+                + "Approved = ?, "
                 + "Cashier_Amount = ?, "
                 + "Storekeeper_Amount = ?, "
                 + "Usher_Amount = ?, "
@@ -366,7 +368,7 @@ public class WorkerDataController {
         try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
 
             if (shift != null) {
-
+                boolean Approved = shift.isApproved();
                 int Cashier_Amount = shift.getAmountRequired(Job.Cashier);
                 int Storekeeper_Amount = shift.getAmountRequired(Job.Storekeeper);
                 int Usher_Amount = shift.getAmountRequired(Job.Usher);
@@ -377,15 +379,16 @@ public class WorkerDataController {
 
                 pstmt.setString(1, date);
                 pstmt.setString(2, shiftType);
-                pstmt.setInt(3, Cashier_Amount);
-                pstmt.setInt(4, Storekeeper_Amount);
-                pstmt.setInt(5, Usher_Amount);
-                pstmt.setInt(6, Guard_Amount);
-                pstmt.setInt(7, DriverA_Amount);
-                pstmt.setInt(8, DriverB_Amount);
-                pstmt.setInt(9, DriverC_Amount);
-                pstmt.setString(10, date);
-                pstmt.setString(11, shiftType);
+                pstmt.setBoolean(3, Approved);
+                pstmt.setInt(4, Cashier_Amount);
+                pstmt.setInt(5, Storekeeper_Amount);
+                pstmt.setInt(6, Usher_Amount);
+                pstmt.setInt(7, Guard_Amount);
+                pstmt.setInt(8, DriverA_Amount);
+                pstmt.setInt(9, DriverB_Amount);
+                pstmt.setInt(10, DriverC_Amount);
+                pstmt.setString(11, date);
+                pstmt.setString(12, shiftType);
                 pstmt.executeUpdate();
             }
         } catch (SQLException e) {
@@ -427,7 +430,9 @@ public class WorkerDataController {
         WorkDay workDay = identityMap.getWorkDay(date);
         if(workDay == null){
             workDay = buildWorkDay(date);
-            identityMap.addWorkDay(workDay);
+            if(workDay != null){
+                identityMap.addWorkDay(workDay);
+            }
         }
         return workDay;
     }
@@ -467,19 +472,21 @@ public class WorkerDataController {
 
         boolean hasMorning = DBmorning != null;
         boolean hasEvening = DBevening != null;
-
+        if(!(hasEvening || hasMorning)) return null;
         WorkDay workDay = new WorkDay(hasMorning, hasEvening, date);
         if(hasMorning) {
             Shift workDayMorning = workDay.getShift(ShiftType.Morning);
             for (Job job: WorkersUtils.getShiftWorkers()) {
                 try {
-                    workDayMorning.setAmountRequired(job, DBmorning.getAmountRequired(job));
-                    List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Morning", job.name());
-                    for (Worker worker: workersToInsert) {
-                        try {
-                            workDayMorning.addWorker(job, worker);
-                        } catch (InnerLogicException e) {
-                            e.printStackTrace();
+                    if(job != Job.Shift_Manager) {
+                        workDayMorning.setAmountRequired(job, DBmorning.getAmountRequired(job));
+                        List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Morning", job.name());
+                        for (Worker worker : workersToInsert) {
+                            try {
+                                workDayMorning.addWorker(job, worker);
+                            } catch (InnerLogicException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 } catch (InnerLogicException e) {
@@ -491,13 +498,15 @@ public class WorkerDataController {
             Shift workDayEvening = workDay.getShift(ShiftType.Evening);
             for (Job job: WorkersUtils.getShiftWorkers()) {
                 try {
-                    workDayEvening.setAmountRequired(job, DBevening.getAmountRequired(job));
-                    List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Evening", job.name());
-                    for (Worker worker: workersToInsert) {
-                        try {
-                            workDayEvening.addWorker(job, worker);
-                        } catch (InnerLogicException e) {
-                            e.printStackTrace();
+                    if(job != Job.Shift_Manager) {
+                        workDayEvening.setAmountRequired(job, DBevening.getAmountRequired(job));
+                        List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Evening", job.name());
+                        for (Worker worker : workersToInsert) {
+                            try {
+                                workDayEvening.addWorker(job, worker);
+                            } catch (InnerLogicException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                 } catch (InnerLogicException e) {
@@ -524,8 +533,10 @@ public class WorkerDataController {
                 outputShift = new Shift();
                 if(rs.getBoolean("Approved")) outputShift.approveShift();
                 for (Job job: WorkersUtils.getShiftWorkers()) {
+                    if(job != Job.Shift_Manager){
                     String jobAmountColumn = job.name() + "_Amount";
                     outputShift.setAmountRequired(job, rs.getInt(jobAmountColumn));
+                    }
                 }
             }
         }catch (SQLException | InnerLogicException e) {
@@ -536,7 +547,7 @@ public class WorkerDataController {
 
     private List<Worker> selectWorkersInShiftByJob(String date, String shiftType, String job){
         List<Worker> outputWorkers = new LinkedList<>();
-        String sql = "SELECT Worker_ID"
+        String sql = "SELECT Worker_ID "
                 + "FROM Workers_In_Shift WHERE Date = ? AND ShiftType = ? AND Job = ?";
         try (Connection conn = this.connect();
              PreparedStatement pstmt  = conn.prepareStatement(sql)){
