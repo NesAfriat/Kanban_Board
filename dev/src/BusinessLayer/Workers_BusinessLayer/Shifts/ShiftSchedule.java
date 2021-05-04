@@ -35,8 +35,7 @@ public class ShiftSchedule {
         if (workDay == null){
             WorkerDataController workerDataController = new WorkerDataController();
             workDay = workerDataController.getWorkDay(date);
-            if(workDay == null) throw new InnerLogicException("There's no WorkDay at date: " + date);
-            else workDays.put(date,workDay);
+            if(workDay != null) workDays.put(date,workDay);
         }
         return workDay;
     }

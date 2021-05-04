@@ -30,7 +30,11 @@ public class ShiftController {
     }
 
     public  List<Worker> getWorkersInShiftByJob(String date, String shiftType, String job) throws InnerLogicException {
-        Shift shift = calendar.getWorkDay(date).getShift(WorkersUtils.parseShiftType(shiftType));
+        WorkDay workDay = calendar.getWorkDay(date);
+        if (workDay == null){
+            throw new InnerLogicException("There's no WorkDay at date: " + date);
+        }
+        Shift shift = workDay.getShift(WorkersUtils.parseShiftType(shiftType));
         return shift.getCurrentWorkers(WorkersUtils.parseJob(job));
     }
 
@@ -39,12 +43,18 @@ public class ShiftController {
     }
 
     public void setCurrentDay(String date) throws InnerLogicException {
-        currentDay = calendar.getWorkDay(date);
+        WorkDay workDay = calendar.getWorkDay(date);
+        if (workDay == null) throw new InnerLogicException("There's no WorkDay at date: " + date);
+        currentDay = workDay;
     }
 
     public WorkDay getWorkDay(String date) throws InnerLogicException {
         WorkersUtils.dateValidation(date);
-        return calendar.getWorkDay(date);
+        WorkDay workDay = calendar.getWorkDay(date);
+        if (workDay == null){
+            throw new InnerLogicException("There's no WorkDay at date: " + date);
+        }
+        return workDay;
     }
 
     /*public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
@@ -177,6 +187,9 @@ public class ShiftController {
         WorkersUtils.notPastDateValidation(date);
         ShiftType shiftType = WorkersUtils.parseShiftType(shift);
         WorkDay workDay = calendar.getWorkDay(date);
+        if (workDay == null){
+            throw new InnerLogicException("There's no WorkDay at date: " + date);
+        }
         Shift output =workDay.removeShift(shiftType);
         WorkerDataController workerDataController = new WorkerDataController();
         workerDataController.removeShift(date, shift);
