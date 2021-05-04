@@ -479,13 +479,15 @@ public class WorkerDataController {
                 try {
                     if(job != Job.Shift_Manager) {
                         workDayMorning.setAmountRequired(job, DBmorning.getAmountRequired(job));
+                    }else{
+                        workDayMorning.addRequiredJob(job, 1);
+                    }
                         List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Morning", job.name());
-                        for (Worker worker : workersToInsert) {
-                            try {
-                                workDayMorning.addWorker(job, worker);
-                            } catch (InnerLogicException e) {
-                                e.printStackTrace();
-                            }
+                    for (Worker worker : workersToInsert) {
+                        try {
+                            workDayMorning.addWorker(job, worker);
+                        } catch (InnerLogicException e) {
+                            e.printStackTrace();
                         }
                     }
                 } catch (InnerLogicException e) {
@@ -499,13 +501,15 @@ public class WorkerDataController {
                 try {
                     if(job != Job.Shift_Manager) {
                         workDayEvening.setAmountRequired(job, DBevening.getAmountRequired(job));
-                        List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Evening", job.name());
-                        for (Worker worker : workersToInsert) {
-                            try {
-                                workDayEvening.addWorker(job, worker);
-                            } catch (InnerLogicException e) {
-                                e.printStackTrace();
-                            }
+                    }else{
+                        workDayEvening.addRequiredJob(job, 1);
+                    }
+                    List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Evening", job.name());
+                    for (Worker worker : workersToInsert) {
+                        try {
+                            workDayEvening.addWorker(job, worker);
+                        } catch (InnerLogicException e) {
+                            e.printStackTrace();
                         }
                     }
                 } catch (InnerLogicException e) {
@@ -530,13 +534,23 @@ public class WorkerDataController {
 
             if(rs.next()){
                 outputShift = new Shift();
-                if(rs.getBoolean("Approved")) outputShift.approveShift();
                 for (Job job: WorkersUtils.getShiftWorkers()) {
                     if(job != Job.Shift_Manager){
                     String jobAmountColumn = job.name() + "_Amount";
                     outputShift.setAmountRequired(job, rs.getInt(jobAmountColumn));
+                    }else{
+                        outputShift.addRequiredJob(job, 1);
+                    }
+                    List<Worker> workersToInsert = selectWorkersInShiftByJob(date, rs.getString("ShiftType"), job.name());
+                    for (Worker worker : workersToInsert) {
+                        try {
+                            outputShift.addWorker(job, worker);
+                        } catch (InnerLogicException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
+                if(rs.getBoolean("Approved")) outputShift.approveShift();
             }
         }catch (SQLException | InnerLogicException e) {
             e.printStackTrace();
