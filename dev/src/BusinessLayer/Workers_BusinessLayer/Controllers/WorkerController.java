@@ -16,6 +16,8 @@ public class WorkerController {
 
     public WorkerController() {
         this.workersList = new WorkersList();
+        WorkerDataController workerDataController = new WorkerDataController();
+        workerDataController.InitDatabase();
     }
 
     public WorkersList getWorkersList() {

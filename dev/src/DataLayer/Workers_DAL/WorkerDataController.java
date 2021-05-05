@@ -9,101 +9,110 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 
+import java.io.File;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 public class WorkerDataController {
+    private final static String db_name = "WorkersDB.db";
     private final IdentityMap identityMap;
-    private final String connectionPath = "jdbc:sqlite:WorkersDB.db";
+    private final static String connectionPath = "jdbc:sqlite:WorkersDB.db";
 
     public WorkerDataController() {
         this.identityMap = IdentityMap.getInstance();
     }
 
     public void InitDatabase(){
+        File f = new File(db_name);
+        if(!f.exists() && !f.isDirectory()) {
+            String workerTable = "CREATE TABLE IF NOT EXISTS Worker (" +
+                    "\tID\tTEXT NOT NULL," +
+                    "\tName\tTEXT NOT NULL," +
+                    "\tBankAccount\tTEXT NOT NULL," +
+                    "\tSalary\tREAL NOT NULL," +
+                    "\tEducationFund\tTEXT NOT NULL," +
+                    "\tvacationDaysPerMonth\tINTEGER NOT NULL," +
+                    "\tsickDaysPerMonth\tINTEGER NOT NULL,\n" +
+                    "\tstartWorkingDate\tTEXT NOT NULL,\n" +
+                    "\tendWorkingDate\tTEXT,\n" +
+                    "\tPRIMARY KEY(\"ID\")); ";
 
-        String workerTable = "CREATE TABLE IF NOT EXISTS Worker (" +
-                "\tID\tTEXT NOT NULL," +
-                "\tName\tTEXT NOT NULL," +
-                "\tBankAccount\tTEXT NOT NULL," +
-                "\tSalary\tREAL NOT NULL," +
-                "\tEducationFund\tTEXT NOT NULL," +
-                "\tvacationDaysPerMonth\tINTEGER NOT NULL," +
-                "\tsickDaysPerMonth\tINTEGER NOT NULL,\n" +
-                "\tstartWorkingDate\tTEXT NOT NULL,\n" +
-                "\tendWorkingDate\tTEXT,\n" +
-                "\tPRIMARY KEY(\"ID\"));";
+            String shiftTable = "CREATE TABLE IF NOT EXISTS Shift (" +
+                    "\tDate\tTEXT NOT NULL," +
+                    "\tShiftType\tTEXT NOT NULL," +
+                    "\tApproved\tINTEGER NOT NULL,\n" +
+                    "\tCashier_Amount\tINTEGER NOT NULL," +
+                    "\tStorekeeper_Amount\tINTEGER NOT NULL,\n" +
+                    "\tUsher_Amount\tINTEGER NOT NULL,\n" +
+                    "\tGuard_Amount\tINTEGER NOT NULL,\n" +
+                    "\tDriverA_Amount\tINTEGER NOT NULL,\n" +
+                    "\tDriverB_Amount\tINTEGER NOT NULL,\n" +
+                    "\tDriverC_Amount\tINTEGER NOT NULL,\n" +
+                    "\tPRIMARY KEY(Date,ShiftType)); ";
 
-        String shiftTable = "CREATE TABLE IF NOT EXISTS Shift (" +
-                "\tDate\tTEXT NOT NULL," +
-                "\tShiftType\tTEXT NOT NULL," +
-                "\tApproved\tINTEGER NOT NULL,\n" +
-                "\tCashier_Amount\tBLOB NOT NULL," +
-                "\tStorekeeper_Amount\tINTEGER NOT NULL,\n" +
-                "\tUsher_Amount\tINTEGER NOT NULL,\n" +
-                "\tGuard_Amount\tINTEGER NOT NULL,\n" +
-                "\tDriverA_Amount\tINTEGER NOT NULL,\n" +
-                "\tDriverB_Amount\tINTEGER NOT NULL,\n" +
-                "\tDriverC_Amount\tINTEGER NOT NULL,\n" +
-                "\tPRIMARY KEY(Date,ShiftType));";
+            String occupationTable = "CREATE TABLE IF NOT EXISTS Occupation (\n" +
+                    "\tWorker_ID\tTEXT NOT NULL,\n" +
+                    "\tJob\tTEXT NOT NULL,\n" +
+                    "\tPRIMARY KEY(Worker_ID,Job),\n" +
+                    "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON DELETE CASCADE ON UPDATE CASCADE); ";
 
-        String occupationTable = "CREATE TABLE IF NOT EXISTS Occupation (\n" +
-                "\tWorker_ID\tTEXT NOT NULL,\n" +
-                "\tJob\tTEXT NOT NULL,\n" +
-                "\tPRIMARY KEY(Worker_ID,Job),\n" +
-                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON DELETE CASCADE ON UPDATE CASCADE);";
+            String defaultWorkDayAssignTable = "CREATE TABLE IF NOT EXISTS DefaultWorkDayAssign (\n" +
+                    "\tDay\tINTEGER NOT NULL CHECK(0<Day<=7),\n" +
+                    "\tShiftType\tTEXT NOT NULL,\n" +
+                    "\tJob\tTEXT NOT NULL,\n" +
+                    "\tAmount\tINTEGER NOT NULL,\n" +
+                    "\tPRIMARY KEY(Day,Day,ShiftType,Job)); ";
 
-        String defaultWorkDayAssignTable = "CREATE TABLE IF NOT EXISTS DefaultWorkDayAssign (\n" +
-                "\tDay\tINTEGER NOT NULL CHECK(0<Day<=7),\n" +
-                "\tShiftType\tTEXT NOT NULL,\n" +
-                "\tJob\tTEXT NOT NULL,\n" +
-                "\tAmount\tINTEGER NOT NULL,\n" +
-                "\tPRIMARY KEY(Day,Day,ShiftType,Job));";
+            String defaultWorkDayShift = "CREATE TABLE IF NOT EXISTS DefaultWorkDayShift (\n" +
+                    "\tDay\tINTEGER NOT NULL,\n" +
+                    "\thasMorning\tINTEGER NOT NULL,\n" +
+                    "\thasEvening\tINTEGER NOT NULL,\n" +
+                    "\tPRIMARY KEY(Day)); ";
 
-        String defaultWorkDayShift = "CREATE TABLE IF NOT EXISTS DefaultWorkDayShift (\n" +
-                "\tDay\tINTEGER NOT NULL,\n" +
-                "\thasMorning\tINTEGER NOT NULL,\n" +
-                "\thasEvening\tINTEGER NOT NULL,\n" +
-                "\tPRIMARY KEY(Day));";
+            String constraintTable = "CREATE TABLE IF NOT EXISTS Constraints (\n" +
+                    "\tWorker_ID\tTEXT NOT NULL,\n" +
+                    "\tDate\tTEXT NOT NULL,\n" +
+                    "\tShiftType\tTEXT NOT NULL,\n" +
+                    "\tConstraintType\tTEXT NOT NULL,\n" +
+                    "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
+                    "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID)); ";
 
-        String constraintTable = "CREATE TABLE IF NOT EXISTS Constraints (\n" +
-                "\tWorker_ID\tTEXT NOT NULL,\n" +
-                "\tDate\tTEXT NOT NULL,\n" +
-                "\tShiftType\tTEXT NOT NULL,\n" +
-                "\tConstraintType\tTEXT NOT NULL,\n" +
-                "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
-                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID));";
+            String workersInShiftsTable = "CREATE TABLE IF NOT EXISTS Workers_In_Shift (\n" +
+                    "\tWorker_ID\tTEXT NOT NULL,\n" +
+                    "\tDate\tTEXT NOT NULL,\n" +
+                    "\tShiftType\tTEXT NOT NULL,\n" +
+                    "\tJob\tTEXT NOT NULL,\n" +
+                    "\tCONSTRAINT fk_shift FOREIGN KEY(Date,ShiftType) REFERENCES Shift(Date,ShiftType) ON UPDATE CASCADE ON DELETE CASCADE,\n" +
+                    "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
+                    "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON UPDATE CASCADE ON DELETE CASCADE\n" +
+                    "); ";
 
-        String workersInShiftsTable = "CREATE TABLE IF NOT EXISTS Workers_In_Shift (\n" +
-                "\tWorker_ID\tTEXT NOT NULL,\n" +
-                "\tDate\tTEXT NOT NULL,\n" +
-                "\tShiftType\tTEXT NOT NULL,\n" +
-                "\tJob\tTEXT NOT NULL,\n" +
-                "\tCONSTRAINT fk_shift FOREIGN KEY(Date,ShiftType) REFERENCES Shift(Date,ShiftType) ON UPDATE CASCADE ON DELETE CASCADE,\n" +
-                "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
-                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON UPDATE CASCADE ON DELETE CASCADE\n" +
-                ");";
-
-        String sql = "BEGIN TRANSACTION;" + workerTable + shiftTable + occupationTable +
-                constraintTable + defaultWorkDayAssignTable + defaultWorkDayShift + workersInShiftsTable + "COMMIT;";
-
-        try (Connection conn = connect();
-             Statement stmt = conn.createStatement()) {
-            // create a new tables
-            stmt.execute(sql);
-            if (!identityMap.initialized){
+            String sql = workerTable + shiftTable;
+            try (Connection conn = connect();
+                 Statement stmt = conn.createStatement()) {
+                // create a new tables
+                stmt.execute(workerTable);
+                stmt.execute(occupationTable);
+                stmt.execute(constraintTable);
+                stmt.execute(defaultWorkDayAssignTable);
+                stmt.execute(defaultWorkDayShift);
+                stmt.execute(shiftTable);
+                stmt.execute(workersInShiftsTable);
                 LoadPreData();
-                identityMap.initialized = true;
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
     }
 
     private void LoadPreData() {
         // add all insert queries here
+        initDefaultWorkDayShiftData();
+        initShiftsData();
     }
 
     private Connection connect() {
@@ -127,7 +136,6 @@ public class WorkerDataController {
             saveWorkDay(workDay);
         }
     }
-
 
     private Worker selectWorker(String id) {
         Worker worker = null;
@@ -253,7 +261,6 @@ public class WorkerDataController {
         }
     }
 
-
     public void removeOccupation(String Worker_ID, Job occupation){
         String sql = "DELETE FROM Occupation WHERE Worker_ID = ? AND Job = ?";
 
@@ -282,7 +289,6 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
-
 
     public void removeConstraint(String Worker_ID, String Date, ShiftType ShiftType){
         String sql = "DELETE FROM Constraints WHERE Worker_ID = ? AND Date = ? AND ShiftType = ?";
@@ -548,7 +554,6 @@ public class WorkerDataController {
         return dates;
     }
 
-
     private WorkDay buildWorkDay(String date){
         Shift DBmorning = selectShift(date, "Morning");
         Shift DBevening = selectShift(date, "Evening");
@@ -741,17 +746,37 @@ public class WorkerDataController {
         }
     }
 
-
     private void initDefaultWorkDayShiftData(){
-        String statement = "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (1,1,1); "+
-        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (2,1,1); "+
-        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (3,0,1); "+
-        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (4,1,0); "+
-        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (5,1,1); "+
-        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (6,1,0); "+
-        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (7,0,1);";
+        String statement = "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES " +
+                "(1,1,1), (2,1,1), (3,0,1), (4,1,0), (5,1,1), (6,1,0), (7,0,1);";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void initShiftsData(){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String statement = "INSERT INTO Shift (Date,ShiftType,Approved,Cashier_Amount,Storekeeper_Amount,Usher_Amount,Guard_Amount,DriverA_Amount,DriverB_Amount,DriverC_Amount) VALUES " +
+                "(? ,'Morning',0,2,1,3,1,1,1,1), " +
+                "(? ,'Evening',0,2,1,3,1,1,1,1), " +
+                "(? ,'Morning',0,0,0,0,0,0,0,0), " +
+                "(? ,'Evening',0,2,1,3,1,1,1,1), " +
+                "(? ,'Morning',0,1,1,0,1,1,1,1), " +
+                "(? ,'Evening',0,1,1,0,1,1,1,1), " +
+                "(? ,'Morning',0,2,1,3,1,1,1,1);";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.setString(1, LocalDate.now().format(formatter));
+            pstmt.setString(2, LocalDate.now().format(formatter));
+            pstmt.setString(3, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(4, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(5, LocalDate.now().plusDays(3).format(formatter));
+            pstmt.setString(6, LocalDate.now().plusDays(3).format(formatter));
+            pstmt.setString(7, LocalDate.now().plusDays(5).format(formatter));
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
