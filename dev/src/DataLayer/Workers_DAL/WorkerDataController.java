@@ -22,6 +22,90 @@ public class WorkerDataController {
         this.identityMap = IdentityMap.getInstance();
     }
 
+    public void InitDatabase(){
+
+        String workerTable = "CREATE TABLE IF NOT EXISTS Worker (" +
+                "\tID\tTEXT NOT NULL," +
+                "\tName\tTEXT NOT NULL," +
+                "\tBankAccount\tTEXT NOT NULL," +
+                "\tSalary\tREAL NOT NULL," +
+                "\tEducationFund\tTEXT NOT NULL," +
+                "\tvacationDaysPerMonth\tINTEGER NOT NULL," +
+                "\tsickDaysPerMonth\tINTEGER NOT NULL,\n" +
+                "\tstartWorkingDate\tTEXT NOT NULL,\n" +
+                "\tendWorkingDate\tTEXT,\n" +
+                "\tPRIMARY KEY(\"ID\"));";
+
+        String shiftTable = "CREATE TABLE IF NOT EXISTS Shift (" +
+                "\tDate\tTEXT NOT NULL," +
+                "\tShiftType\tTEXT NOT NULL," +
+                "\tApproved\tINTEGER NOT NULL,\n" +
+                "\tCashier_Amount\tBLOB NOT NULL," +
+                "\tStorekeeper_Amount\tINTEGER NOT NULL,\n" +
+                "\tUsher_Amount\tINTEGER NOT NULL,\n" +
+                "\tGuard_Amount\tINTEGER NOT NULL,\n" +
+                "\tDriverA_Amount\tINTEGER NOT NULL,\n" +
+                "\tDriverB_Amount\tINTEGER NOT NULL,\n" +
+                "\tDriverC_Amount\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(Date,ShiftType));";
+
+        String occupationTable = "CREATE TABLE IF NOT EXISTS Occupation (\n" +
+                "\tWorker_ID\tTEXT NOT NULL,\n" +
+                "\tJob\tTEXT NOT NULL,\n" +
+                "\tPRIMARY KEY(Worker_ID,Job),\n" +
+                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON DELETE CASCADE ON UPDATE CASCADE);";
+
+        String defaultWorkDayAssignTable = "CREATE TABLE IF NOT EXISTS DefaultWorkDayAssign (\n" +
+                "\tDay\tINTEGER NOT NULL CHECK(0<Day<=7),\n" +
+                "\tShiftType\tTEXT NOT NULL,\n" +
+                "\tJob\tTEXT NOT NULL,\n" +
+                "\tAmount\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(Day,Day,ShiftType,Job));";
+
+        String defaultWorkDayShift = "CREATE TABLE IF NOT EXISTS DefaultWorkDayShift (\n" +
+                "\tDay\tINTEGER NOT NULL,\n" +
+                "\thasMorning\tINTEGER NOT NULL,\n" +
+                "\thasEvening\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(Day));";
+
+        String constraintTable = "CREATE TABLE IF NOT EXISTS Constraints (\n" +
+                "\tWorker_ID\tTEXT NOT NULL,\n" +
+                "\tDate\tTEXT NOT NULL,\n" +
+                "\tShiftType\tTEXT NOT NULL,\n" +
+                "\tConstraintType\tTEXT NOT NULL,\n" +
+                "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
+                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID));";
+
+        String workersInShiftsTable = "CREATE TABLE IF NOT EXISTS Workers_In_Shift (\n" +
+                "\tWorker_ID\tTEXT NOT NULL,\n" +
+                "\tDate\tTEXT NOT NULL,\n" +
+                "\tShiftType\tTEXT NOT NULL,\n" +
+                "\tJob\tTEXT NOT NULL,\n" +
+                "\tCONSTRAINT fk_shift FOREIGN KEY(Date,ShiftType) REFERENCES Shift(Date,ShiftType) ON UPDATE CASCADE ON DELETE CASCADE,\n" +
+                "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
+                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON UPDATE CASCADE ON DELETE CASCADE\n" +
+                ");";
+
+        String sql = "BEGIN TRANSACTION;" + workerTable + shiftTable + occupationTable +
+                constraintTable + defaultWorkDayAssignTable + defaultWorkDayShift + workersInShiftsTable + "COMMIT;";
+
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement()) {
+            // create a new tables
+            stmt.execute(sql);
+            if (!identityMap.initialized){
+                LoadPreData();
+                identityMap.initialized = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void LoadPreData() {
+        // add all insert queries here
+    }
+
     private Connection connect() {
         Connection conn = null;
         try {

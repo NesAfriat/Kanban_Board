@@ -11,10 +11,14 @@ import java.util.Scanner;
 
 public class Workers_Main_Menu {
     private boolean firstRun;
+
+
+
     public Workers_Main_Menu(Workers_Facade facade){
         firstRun = true;
         this.facade = facade;
     }
+
 
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[31m";
