@@ -21,9 +21,10 @@ public class DriversFactory {
 
     private Workers_Integration workers_integration;
 
-
-    public List<Driver> getDrivers(Date date,License license){
+//todo license properly
+    public List<Driver> getDrivers(Date date,boolean shift,License license){
         //todo parse date properly
+        //todo parse shift properly
         ResponseT<List<WorkerResponse>> responseT= workers_integration.getWorkersInShiftByJob(date.toString(), "Morning", LicenseToString(license));
 
         List<Driver> driverList=responseT.value.stream().map(res->
@@ -32,10 +33,11 @@ public class DriversFactory {
         return driverList;
 
     }
+
     public List<Driver> getDrivers(Date date,List<License> license){
         List<Driver> output=new LinkedList<>();
         for (License l:license) {
-            output=Stream.concat(output.stream(), getDrivers(date,l).stream()).collect(Collectors.toList());
+            output=Stream.concat(output.stream(), getDrivers(date,true/*to fix*/,l).stream()).collect(Collectors.toList());
         }
         return output;
     }
