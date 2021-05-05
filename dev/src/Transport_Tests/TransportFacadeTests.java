@@ -291,12 +291,12 @@ class TransportFacadeTests {
     }
     private DriversController LoadDriverController(){
         DriversController drivers=new DriversController();
-        drivers.AddNewDriver("Guy",208750760, License.typeA);
+        /*drivers.AddNewDriver("Guy",208750760, License.typeA);
         drivers.AddNewDriver("Dan",209889510, License.typeA);
         drivers.AddNewDriver("Lebron James",986750760, License.typeB);
         drivers.AddNewDriver("Steph Curry",308450560, License.typeB);
         drivers.AddNewDriver("Omri Caspi",208759760, License.typeC);
-        drivers.AddNewDriver("Deni Avdija",208650760, License.typeC);
+        drivers.AddNewDriver("Deni Avdija",208650760, License.typeC);*/
 
         List<License> licenseList1=new LinkedList<License>();licenseList1.add(License.typeA);licenseList1.add(License.typeB);
         List<License> licenseList2=new LinkedList<License>();licenseList2.add(License.typeA);licenseList2.add(License.typeB);licenseList2.add(License.typeC);

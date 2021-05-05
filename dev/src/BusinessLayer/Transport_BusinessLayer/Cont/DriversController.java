@@ -28,9 +28,6 @@ public class DriversController {
     }
 
 
-        public void setDriversFac(Workers_Integration w){
-        DriversFac.setWorkers_integration(w);
-    }
     /*public DriversController(List<Driver> drivers, List<Truck> trucks, List<Tuple<Truck,Driver>> occupied) {
         Drivers = drivers;
         Trucks = trucks;
@@ -44,7 +41,6 @@ public class DriversController {
     public DriversController() {
        // Drivers = new LinkedList<>();
         Trucks = new LinkedList<>();
-        DriversFac= new DriversFactory();
        // this.Occupied = new LinkedList<>();
     }
 
@@ -209,5 +205,9 @@ public class DriversController {
 
         throw new Exception("could not find driver");
 
+    }
+
+    public void addWorkersInterface(Workers_Integration wk) {
+        DriversFac = new DriversFactory(wk);
     }
 }

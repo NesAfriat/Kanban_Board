@@ -7,6 +7,7 @@ import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
 import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
 import BusinessLayer.Transport_BusinessLayer.Shops.*;
 import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
+import BusinessLayer.Workers_Integration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,6 +25,10 @@ public class Transport_Facade {
         this.driversController = new DriversController();
         this.docCont = new DocCont();
         this.controllerShops = new ControllerShops();
+    }
+    public void addWorkersInterface(Workers_Integration wk ){
+        driversController.addWorkersInterface(wk);
+
     }
 
     public Transport_Facade(DriversController driversController, DocCont docCont, ControllerShops controllerShops) {
@@ -140,6 +145,7 @@ public class Transport_Facade {
         }
         return output;
     }
+
     public  String returnAvaliableSupplierString(int doc) {
         List<Tuple<List<Supplier>, Product>> listTuple = returnAvaliableSuppliersP(doc);
         String acc = "";
@@ -306,7 +312,19 @@ public class Transport_Facade {
     public String getAllSuppliers(){
         return controllerShops.getSupplierList().toString();
     }
-    public void loadData()  {
+    public void loadData() throws Exception {
+        ControllerShops cs = this.controllerShops;
+        controllerShops.load();
+        DriversController drivers = this.driversController;
+        drivers.load();
+        DocCont docContro = this.docCont;
+        docCont.load();
+
+
+    }
+
+
+    public void loadDataNoDatabase()  {
 
 try {
     ControllerShops cs = this.controllerShops;
@@ -362,12 +380,12 @@ try {
 
     DriversController drivers = this.driversController;
     Driver dr = new Driver("Dan", 209889510, License.typeA);
-    drivers.AddNewDriver("Guy", 208750760, License.typeA);
+    /*drivers.AddNewDriver("Guy", 208750760, License.typeA);
     drivers.AddNewDriver("Dan", 209889510, License.typeA);
     drivers.AddNewDriver("Lebron James", 986750760, License.typeB);
     drivers.AddNewDriver("Stephen Curry", 308450560, License.typeB);
     drivers.AddNewDriver("Omri Caspi", 208750760, License.typeC);
-    drivers.AddNewDriver("Deni Avdija", 208750760, License.typeC);
+    drivers.AddNewDriver("Deni Avdija", 208750760, License.typeC);*/
 
     List<License> licenseList1 = new LinkedList<License>();
     licenseList1.add(License.typeA);

@@ -1,6 +1,7 @@
 package PresentationLayer.Transport_PresentationLayer;
 import BusinessLayer.Transport_BusinessLayer.Cont.Transport_Facade;
 import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
+import BusinessLayer.Workers_Integration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,14 +14,23 @@ public class Transport_Menu {
     int input;
 
 
-
+    public void addWorkersIntegration (Workers_Integration wk){
+        bc.addWorkersInterface(wk);
+    }
     public Transport_Menu(Transport_Facade facade)
     {
         bc = facade;
         sc = new Scanner(System.in);
     }
 
-    public int displayMenu(){
+    public void mainMenu(){
+        boolean run = true;
+        while(run){
+            run = runProgram();
+        }
+    }
+
+        public int displayMenu(){
 
         print("Please choose an option:\n\n");
 
@@ -52,7 +62,7 @@ public class Transport_Menu {
         return input;
     }
 
-    public void runProgram() {
+    public boolean runProgram() {
         int a, b, c, d;
         String str;
         switch (displayMenu()) {
@@ -84,7 +94,8 @@ public class Transport_Menu {
                 break;
             case 7:
                 print("will only display drivers in shift, please enter date in format DD/MM/YYYY, 1 for morning shift - 2 for evening shift\n" +
-                        "and the truck license plate");
+                        "and the truck license plate\n");
+                str = sc.nextLine();
                 str = sc.nextLine();
                 a = sc.nextInt();
                 b=sc.nextInt();
@@ -196,7 +207,13 @@ public class Transport_Menu {
             case 17:
                 printDoc();
                 break;
+            case 18:
+                return false;
+
+
+
         }
+        return true;
     }
 
 private void makeChanges() {
@@ -332,8 +349,12 @@ private void printDoc() {
 
 
 public void loadData()  {
-
-        bc.loadData();
+try {
+    bc.loadData();
+    }catch (Exception e)
+{
+    System.out.println(e.getMessage());
+}
         }
 
 
