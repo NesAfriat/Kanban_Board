@@ -23,6 +23,7 @@ public abstract class Mapper {
         return conn;
     }
 
+    abstract void create_table();
 
 
 }

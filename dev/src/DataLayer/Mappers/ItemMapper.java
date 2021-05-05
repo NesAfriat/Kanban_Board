@@ -11,9 +11,39 @@ public class ItemMapper extends Mapper {
 
     public ItemMapper() {
         super();
+        create_table();
     }
 
-    public ItemPer getItem(int product_id, int item_id){
+    @Override
+    void create_table() {
+        String itemTable = "CREATE TABLE IF NOT EXISTS Item(\n" +
+                "\tgpID INTEGER,\n" +
+                "\tiID INTEGER,\n" +
+                "\tlocation TEXT,\n" +
+                "\tsupplied_date DATETIME,\n" +
+                "\tcreation_date DATETIME,\n" +
+                "\texpiration_date DATETIME,\n" +
+                "\tPRIMARY KEY (gpID, iID),\n" +
+                "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID),\n" +
+                "\tCHECK(expiration_date >= creation_date),\n" +
+                "\tCHECK(supplied_date >= creation_date)\n" +
+                ");";
+        String sql = "BEGIN TRANSACTION;" + itemTable + "COMMIT;";
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement()) {
+            // create a new tables
+            stmt.execute(sql);
+            //TODO: in DataController - need to activate loadData
+//            if (!identityMap.initialized){
+//                LoadPreData();
+//                identityMap.initialized = true;
+//            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ItemPer getItem(int product_id, int item_id) {
         ItemPer obj = null;
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM items WHERE gpID=? AND iID=? ";
@@ -22,15 +52,15 @@ public class ItemMapper extends Mapper {
                 pstmt.setInt(1, obj.getProduct_id());
                 pstmt.setInt(2, obj.getItem_id());
 
-                ResultSet rs  = pstmt.executeQuery();
-                if(rs.next()){
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
                     int gpID = rs.getInt(1);
                     int iID = rs.getInt(2);
                     String location = rs.getString(3);
                     Date sup_date = rs.getDate(4);
                     Date create_date = rs.getDate(5);
                     Date exp_date = rs.getDate(6);
-                    obj = new ItemPer(gpID, iID, location,sup_date,create_date,exp_date);
+                    obj = new ItemPer(gpID, iID, location, sup_date, create_date, exp_date);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
