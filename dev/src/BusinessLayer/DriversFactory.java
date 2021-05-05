@@ -37,8 +37,7 @@ public class DriversFactory {
 
     }
 
-    public List<Driver> getDriversPerLicense(String date,int shift,License lcs){
-        List<License> license = returnLicenseList(lcs);
+    public List<Driver> getDrivers(String date,int shift,List<License> license){
         List<Driver> output=new LinkedList<>();
         for (License l:license) {
             output=Stream.concat(output.stream(), getDriversPerJob(date,shift,l).stream()).collect(Collectors.toList());

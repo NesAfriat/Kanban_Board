@@ -43,6 +43,9 @@ public class Transport_Facade {
         Area area=docCont.getArea(docNum);
         return controllerShops.getStoreList().stream().filter(x->x.getArea()==area).collect(Collectors.toList()).toString();
     }
+
+
+
     public void addStore(int doc, int StoreNum, int place) throws Exception {
         Area area = docCont.getArea(doc);
         Optional<Store> s = controllerShops.getStoreList().stream().filter(r -> r.getId() == StoreNum).findFirst();
@@ -180,7 +183,8 @@ public class Transport_Facade {
             throw new Exception("document already contain Driver");
         }
         //todo need to get all drivers
-        Driver driver = driversController.getDrivers(driverId,);
+
+        Driver driver = driversController.getDriverWithID(driverId);
 
 
         if(docCont.getTruck(doc)!=null){
@@ -189,7 +193,7 @@ public class Transport_Facade {
 
         docCont.addDriver(doc,driver);
     }
-    public void addTruckAndDriver(int doc, int truckLicensePlate, int DriverId) throws Exception {//connect driver and truck ONLY in the driverController
+    /*public void addTruckAndDriver(int doc, int truckLicensePlate, int DriverId) throws Exception {//connect driver and truck ONLY in the driverController
         Optional<Truck> truck = driversController.getTrucks().stream().filter(x -> x.getLicensePlate() == truckLicensePlate).findFirst();
         if (!truck.isPresent()) {
             throw new Exception("truck not found");
@@ -200,17 +204,21 @@ public class Transport_Facade {
             throw new Exception("driver not found");
         }
         driversController.connectDriverAndTruck(driver.get(), truck.get());
-    }
-    private List<Driver> getAvaliableDriversP(int truckLicensePlate) throws Exception {
+    }*/
+    /*private List<Driver> getAvaliableDriversP(int truckLicensePlate) throws Exception {
         Optional<Truck> truckOp=driversController.getTrucks().stream().filter(x -> x.getLicensePlate() == truckLicensePlate).findFirst();
         if(!truckOp.isPresent()){
             throw new Exception("no truck with this plate");
         }
         return driversController.getCompatibleDrivers(truckOp.get());
-    }
+    }*/
 
-    public String getDriversString(int truckLicensePlate) throws Exception {
-        return buildListToString(getAvaliableDriversP(truckLicensePlate));
+    public String getDriversString(String date, int shift, int truckLicensePlate) throws Exception {
+        Optional<Truck> truckOp=driversController.getTrucks().stream().filter(x -> x.getLicensePlate() == truckLicensePlate).findFirst();
+        if(!truckOp.isPresent()){
+            throw new Exception("no truck with this plate");
+        }
+        return buildListToString( driversController.getDrivers(date,shift,truckOp.get().getTruckType().getLicensesForTruck()));
     }
     public void addWeightWhenLeaving(int doc, double truckDepartureWeight) throws Exception {
         int truckMaxWeight = docCont.getTruck(doc).getTruckType().getMaxWeight();
@@ -255,15 +263,12 @@ public class Transport_Facade {
     }
     public void editDocDriver(int doc, int drId) throws Exception {
 
-        Optional<Driver> newDriver = driversController.getNotOccupiedDrivers().stream().filter(c -> c.getId() == drId).findFirst();
-        if (!newDriver.isPresent()) {
-            throw new Exception("no truck with this id");
-        }
-        if (!docCont.getTruck(doc).getTruckType().getLicensesForTruck().contains(newDriver.get().getLicense())) {
+        Driver dr = driversController.getDriverWithID(drId);
+        if (!docCont.getTruck(doc).getTruckType().getLicensesForTruck().contains(dr.getLicense())) {
             throw new Exception("new driver not have a compatible license to Truck");
         }
        // driversController.changeDriver(newDriver.get(),docCont.getDriver(doc) );
-        docCont.editDriver(doc, newDriver.get());
+        docCont.editDriver(doc, dr);
     }
     public void editOrigin(int doc, int origenStoreId) throws Exception {
         Optional<Store> newStore = controllerShops.getStoreList().stream().filter(x -> x.getId() == origenStoreId).findFirst();
@@ -360,7 +365,7 @@ try {
     drivers.AddNewDriver("Guy", 208750760, License.typeA);
     drivers.AddNewDriver("Dan", 209889510, License.typeA);
     drivers.AddNewDriver("Lebron James", 986750760, License.typeB);
-    drivers.AddNewDriver("Steph Curry", 308450560, License.typeB);
+    drivers.AddNewDriver("Stephen Curry", 308450560, License.typeB);
     drivers.AddNewDriver("Omri Caspi", 208750760, License.typeC);
     drivers.AddNewDriver("Deni Avdija", 208750760, License.typeC);
 

@@ -16,12 +16,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DriversController {
-   // private List<Driver> Drivers;
+    private List<Driver> Drivers;
     private List<Truck> Trucks;
    // private List<Tuple<Truck,Driver>> Occupied;
     private DriversFactory DriversFac;
 
-    public void setDriversFac(Workers_Integration w){
+    public List<Driver> getDrivers(String date,int shift,List<License> license) {
+
+        Drivers=DriversFac.getDrivers(date,shift,license);
+        return Drivers;
+    }
+
+
+        public void setDriversFac(Workers_Integration w){
         DriversFac.setWorkers_integration(w);
     }
     /*public DriversController(List<Driver> drivers, List<Truck> trucks, List<Tuple<Truck,Driver>> occupied) {
@@ -50,9 +57,6 @@ public class DriversController {
         return finalCopy;
     }
 
-    public List<Driver> getDrivers(Date date,License license) {
-        return DriversFac.getDrivers(date,license);
-    }
 
 
     public List<Truck> getTrucks() {
@@ -88,24 +92,24 @@ public class DriversController {
 
     }
 
-    public List<Driver> getCompatibleDrivers(Truck truck,Date date ){
+   /*public List<Driver> getCompatibleDrivers(Truck truck,Date date ){
 
         List<Driver> d=DriversFac.getDrivers(date, truck.getTruckType().getLicensesForTruck());
         List<Driver> conDrivers= d.stream().filter(Dr->
         {
-           /* if(!Occupied.isEmpty()) {
+           if(!Occupied.isEmpty()) {
                 for (Tuple<Truck, Driver> y : Occupied) {
                     if (Dr.getLicense() == y.y.getLicense()) {
                         return false;
                     }
                 }
-            }*/
+            }
             return truck.getTruckType().getLicensesForTruck().contains(Dr.getLicense());
         }).collect(Collectors.toList());;
 
         return conDrivers;
 
-    }
+    }*/
 
 //todo create new func taht return all druvers in date
 
@@ -187,14 +191,7 @@ public class DriversController {
         }
         throw new Exception("truck not found");
     }
-    public Driver getDriver (int id,Truck truck,Date date) throws Exception {
-        List<Driver> Drivers=DriversFac.getDrivers(date, truck.getTruckType().getLicensesForTruck());
-        for (Driver dr: Drivers){
-            if (dr.getId()==id)
-                return dr;
-        }
-        throw new Exception("driver not found");
-    }
+
     public void load() throws Exception {
         DALController con=DALController.getInstance();
         try {
@@ -202,5 +199,15 @@ public class DriversController {
         } catch (SQLException throwables) {
             throw new Exception("Error Loading Documents");
         }
+    }
+
+    public Driver getDriverWithID(int driverId) throws Exception {
+        for (Driver d :Drivers){
+            if (d.getId()==driverId)
+                return d;
+        }
+
+        throw new Exception("could not find driver");
+
     }
 }

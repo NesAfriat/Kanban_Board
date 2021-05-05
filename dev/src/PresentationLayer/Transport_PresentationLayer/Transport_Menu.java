@@ -89,7 +89,7 @@ public class Transport_Menu {
                 a = sc.nextInt();
                 b=sc.nextInt();
                 try {
-                    print(bc.getDriversString(a));
+                    print(bc.getDriversString(str,a,b));
                 } catch (Exception e) {
                     print(e.toString());
                 }

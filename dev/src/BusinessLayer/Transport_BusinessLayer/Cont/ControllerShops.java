@@ -181,5 +181,6 @@ public class ControllerShops {
             List<Product> supProductes=products.stream().map(mapedProducts::get).collect(Collectors.toList());
             s.setProductsServed(supProductes);
         }
+
     }
 }
