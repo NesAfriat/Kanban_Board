@@ -656,6 +656,23 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+
+
+    private void initDefaultWorkDayShiftData(){
+        String statement = "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (1,1,1); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (2,1,1); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (3,0,1); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (4,1,0); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (5,1,1); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (6,1,0); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (7,0,1);";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 
