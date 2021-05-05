@@ -583,6 +583,41 @@ public class WorkerDataController {
         return outputWorkers;
     }
 
+    public boolean[] getDefaultWorkDayShifts(int day){
+        String sql = "SELECT * FROM DefaultWorkDayShift WHERE Day = ?";
+        boolean[] hasShift = new boolean[2];
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql);){
+            pstmt.setInt(1, day);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                hasShift[0] = rs.getBoolean("hasMorning");
+                hasShift[1] = rs.getBoolean("hasEvening");
+            }
+            return hasShift;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public int getDefaultAmountRequired(int day, String ShiftType, String job){
+        String sql = "SELECT * FROM DefaultWorkDayAssign WHERE Day = ? AND ShiftType = ? AND Job = ?";
+        int amount = 0;
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql);){
+            pstmt.setInt(1, day);
+            pstmt.setString(2, ShiftType);
+            pstmt.setString(3, job);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+               amount = rs.getInt("Amount");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return amount;
+    }
 
 }
 
