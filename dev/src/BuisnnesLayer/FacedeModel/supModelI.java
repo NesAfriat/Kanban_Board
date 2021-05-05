@@ -3,6 +3,7 @@ package BuisnnesLayer.FacedeModel;
 import BuisnnesLayer.DeliveryMode;
 import BuisnnesLayer.FacedeModel.Objects.Response;
 import BuisnnesLayer.FacedeModel.Objects.ResponseT;
+import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.paymentMethods;
 
 import java.util.HashMap;
@@ -52,6 +53,8 @@ public interface supModelI {
     public Response RemoveContact(int SupId,int ContactID);
 
     public Response SetDeliveryMode(int SupId, DeliveryMode deliveryMods, List<Integer> daysOfDelivery, int numOfDaysFromOrder);
+
+    public Response create_order_Due_to_lack(HashMap<GeneralProduct, Integer> lackMap);
 
 
     //---------------------------------------------------------------------------------------------------

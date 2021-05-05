@@ -51,6 +51,11 @@ public class OrderControler {
         }
 
     }
+    public void create_order_Due_to_lack( HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity){
+        for (Integer SupId : cheapest_supplier_products_by_quantity.keySet()) {
+            AddOrder(SupId,cheapest_supplier_products_by_quantity.get(SupId),false);
+        }
+    }
 
 
     // check if supplier exist in the agreements
@@ -83,8 +88,7 @@ public class OrderControler {
 
     public Order GetOrder(int OrderID)
     {
-        System.out.println("Orders.size()");
-        System.out.println(Orders.size());
+
         if(!Orders.containsKey(OrderID)){
             throw new IllegalArgumentException("the order is not in the system");
         }

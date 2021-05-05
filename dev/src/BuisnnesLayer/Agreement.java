@@ -23,6 +23,34 @@ public class Agreement implements IAgreement {
     }
 
 
+    public double Calculate_cost(ProductSupplier productSupplier,int quantity) {
+        double cost=-1;
+
+        if (products.containsKey(productSupplier.getCatalogID()))
+        {
+            double newprice=CheckAvailableDiscount(productSupplier.getCatalogID(),quantity);
+            if (newprice!=-1) { cost=newprice*quantity; }
+            else {cost=(productSupplier.getPrice())*quantity; }
+            cost=  cost-(cost*(ExtraDiscount)/100.0);
+        }
+
+        return cost;
+    }
+    private double CheckAvailableDiscount(Integer CatalogID,Integer quantity)
+    {
+        double newprice=-1;
+        HashMap<Integer, Double> Temp= DiscountByProductQuantity.get(CatalogID);
+        if (Temp!=null&&Temp.size()!=0) {
+            for (Integer key : Temp.keySet()) {
+                if (quantity >= Temp.get(key)) {
+                    if (newprice==-1){newprice=Temp.get(key);}
+                    else {newprice = Math.min(Temp.get(key), newprice); }
+                }
+            }
+        }
+        return newprice ;
+    }
+
     public void removeDiscountQuantity(int CatalogId,int Quantiti){
         if(!DiscountByProductQuantity.containsKey(CatalogId)){
             throw new IllegalArgumentException("the product donot have discount by quantity at all");

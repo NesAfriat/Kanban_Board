@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class productManager {
+    private HashMap<Integer, GeneralProduct> productsfuture;                       //all product in store by product id
+
     private HashMap<Integer, GeneralProduct> products;                       //all product in store by product id
     private HashMap<Category, LinkedList<GeneralProduct>> categories;        //all categories and their products
 
@@ -25,7 +27,7 @@ public class productManager {
      */
     public Category getCategory(String cat) throws Exception {
         if (!isCategory_in_Categories(cat))
-            throw new Exception("theres no such category");
+            throw new Exception("there no such category");
         for (Category c : categories.keySet())
             if (c.getCategory_name().equals(cat)) {
                 return c;
@@ -35,7 +37,7 @@ public class productManager {
 
     public Item set_item_defected(Integer product_id, Integer item_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
-            throw new Exception("product doesnt exist!");
+            throw new Exception("product doesn't exist!");
         }
         Item item = products.get(product_id).setItem_defected(item_id);
         return item;
@@ -64,8 +66,9 @@ public class productManager {
         if (isProduct_in_Products(product_id)) {
             throw new Exception("product already exist");
         }
+        else
         if (!isCategory_in_Categories(cat)) {
-            throw new Exception("category doesnt exist");
+            throw new Exception("category doesn't exist");
         } else {
             categories.get(getCategory(cat)).add(product);
         }
@@ -168,6 +171,20 @@ public class productManager {
 //        categories.put(father, mergeProductLists(categories.get(father), products));
     }
 
+    public void RemoveSupllierProductFromGeneralProduct(ProductSupplier productSupplier){
+        for (GeneralProduct gp: products.values()
+             ) {
+            HashMap<Integer,ProductSupplier> hps=gp.getHashOfSupplierProducts();
+            for (ProductSupplier ps:hps.values()
+                 ) {
+                if(ps==productSupplier){
+                    hps.remove(ps);
+                    break;
+                }
+            }
+        }
+    }
+
     public void set_father(String cat_name, String cat_father_name) throws Exception {
         if (!isCategory_in_Categories(cat_name) || !isCategory_in_Categories(cat_father_name)) {
             throw new Exception("category doesnt exist!");
@@ -221,8 +238,23 @@ public class productManager {
         }
     }
 
+    public HashMap<GeneralProduct, Integer> get_missing_General_products_with_amounts(){
+
+        LinkedList<GeneralProduct> missingProd = get_missing_products();
+        HashMap<GeneralProduct, Integer> output = new HashMap<>();
+        for (GeneralProduct p : missingProd) {
+            if (p.getMin_amount() > p.getTotal_amount()) {
+                Integer amountToAdd = p.getMin_amount() - p.getTotal_amount();
+                output.put(p,amountToAdd);
+            }
+        }
+        return output;
+    }
+
+
     //for suppliers, return Map<Product.id, product_missing_amount>
     public HashMap<Integer, Integer> get_missing_products_with_amounts(){
+
         LinkedList<GeneralProduct> missingProd = get_missing_products();
         HashMap<Integer, Integer> output = new HashMap<>();
         for (GeneralProduct p : missingProd) {

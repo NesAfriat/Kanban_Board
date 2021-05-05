@@ -18,7 +18,7 @@ public class SupModel implements supModelI{
     private static SupModel single_instance = null;
     private SuppliersControler suppliersControler;
     private OrderControler orderControler;
-    private SupModel(productManager productManager){
+    SupModel(productManager productManager){
         AgreementManager agreementManager=new AgreementManager(productManager);
         suppliersControler = new SuppliersControler(agreementManager);
         orderControler = new OrderControler(agreementManager);
@@ -31,10 +31,25 @@ public class SupModel implements supModelI{
         return single_instance;
     }
 
-
     //---------------------------------------------------------------------------------------------------
     //in this section we represent all the functionality of the system
     //---------------------------------------------------------------------------------------------------
+    @Override
+    public Response create_order_Due_to_lack(HashMap<GeneralProduct, Integer> lackMap)
+    {
+        try {
+
+            orderControler.create_order_Due_to_lack(suppliersControler.get_cheapest_supplier(lackMap));
+
+            return new Response();
+        }
+        catch (Exception e){
+            return new Response(e.getMessage());
+        }
+
+    }
+
+
     @Override
     public Response addNewSupplier(int id, String name, String bankAccount, paymentMethods paymentMethods, DeliveryMode deliveryMode, List<Integer> daysOfDelivery, int NumOfDaysFromDelivery,String contactName,String contactEmail,String phoneNumber)
     {

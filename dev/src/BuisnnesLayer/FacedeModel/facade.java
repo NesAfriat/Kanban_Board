@@ -1,6 +1,7 @@
 package BuisnnesLayer.FacedeModel;
 
 import BuisnnesLayer.*;
+import BuisnnesLayer.Controlls.Reports_Controller;
 import BuisnnesLayer.Controlls.Sales_Controller;
 import BuisnnesLayer.Controlls.Stock_Controller;
 import BuisnnesLayer.FacedeModel.Objects.*;
@@ -10,23 +11,61 @@ import BuisnnesLayer.Sales.Sale;
 import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.ISupplier;
 import BuisnnesLayer.FacedeModel.inventModel;
+import com.sun.source.tree.NewArrayTree;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.*;
 
 public class facade {
+    private static facade single_instance = null;
     private inventModel inventModel;
     private SupModel supModel;
+    private productManager ProductManager;
+//    private Stock_Controller stock_controller;
+//    private Sales_Controller sales_controller;
+//    private Reports_Controller reports_controller;
 //for invent
+private facade(){
+    ProductManager=new productManager();
+    inventModel=new inventModel(ProductManager);
+    supModel= new SupModel(ProductManager);
 
+}
+    public static facade getInstance()
+    {
+        if (single_instance == null)
+            single_instance = new facade();
+        return single_instance;
+    }
 
+    public Response create_order_Due_to_lack() {
 
+        return supModel.create_order_Due_to_lack((inventModel.getStockC()).get_missing_General_products_with_amounts());
 
+    }
+    ////////////////////////////////////////
+    public Stock_Controller getStockC() {
+        return inventModel.getStockC();
+    }
+    public static Date getDate(String date) throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.parse(date);
+    }
 
+    public static String getDate(Date date) {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(date);
+    }
+////////////////////////////////
+    public Sales_Controller getSalesC() {
+        return inventModel.getSalesC();
+    }
     public Response create_category(String cat_name) {
         return inventModel.create_category(cat_name);
-
     }
 
 
@@ -53,15 +92,19 @@ public class facade {
 
 
     public Response update_location(Integer item_id, Integer product_id, String new_location) {
-        return update_location(item_id,product_id,new_location);
+        return inventModel.update_location(item_id,product_id,new_location);
 
     }
 
     public Response add_product_items(Integer product_id, Integer quantity, String location, String supplied_date, String creation_date, String expiration_date) {
-        return add_product_items(product_id,quantity,location,supplied_date,creation_date,expiration_date);
+        return inventModel.add_product_items(product_id,quantity,location,supplied_date,creation_date,expiration_date);
 
     }
+    //needed to chang to Response
+    public void addProduct(String product_name, Integer product_id, String manufacturer_name, Integer min_amount,  String cat, Double selling_price,ProductSupplier productSupplier) throws Exception {
+        ProductManager.addProduct(product_name,product_id,  manufacturer_name,  min_amount,   cat,  selling_price, productSupplier);
 
+}
     public Response remove_product_items(Integer product_id, Integer item_id) {
         return inventModel.remove_product_items(product_id,item_id);
 
@@ -176,13 +219,12 @@ public class facade {
     return supModel.SetDeliveryMode(SupId,deliveryMods,daysOfDelivery,numOfDaysFromOrder);
     }
 
-    public Response addNewProductToAgreement(int SupplierId,double Price, int CatalogID, String manfucator, String name,String category,int pid, boolean isexsist) {
-    return supModel.addNewProductToAgreement(SupplierId,Price,CatalogID,manfucator,name,category,pid,isexsist);
+    public Response addNewProductToAgreement(int SupplierId,double Price, int CatalogID, String manfucator, String name,String category,int pid, boolean isexist) {
+    return supModel.addNewProductToAgreement(SupplierId,Price,CatalogID,manfucator,name,category,pid,isexist);
     }
 
     public Response removeProductFromSupplier(int SupId, int CatalogID) {
         return supModel.removeProductFromSupplier(SupId,CatalogID);
-
     }
 
     //            facade.removeProductFromOrder(id,catalogId);

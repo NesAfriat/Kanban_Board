@@ -32,6 +32,9 @@ public class GeneralProduct {
         HashOfSupplierProducts.put(productSupplier.getCatalogID(),productSupplier);
     }
 
+    public HashMap<Integer,ProductSupplier> getProductSuppliers(){
+        return  HashOfSupplierProducts;
+    }
 
     //add new product supplier,product supplier can have multiple product suppliers, it must have at least one product supplier
     public void AddSupplierProduct(ProductSupplier productSupplier){
@@ -46,9 +49,12 @@ public class GeneralProduct {
         return HashOfSupplierProducts.containsKey(catalog_id);
     }
 
-
     public String getProduct_name() {
         return product_name;
+    }
+
+    public HashMap<Integer,ProductSupplier> getHashOfSupplierProducts() {
+        return HashOfSupplierProducts;
     }
 
     public Integer getProduct_id() {

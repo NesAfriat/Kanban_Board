@@ -145,10 +145,13 @@ public class Stock_Controller {
         return stock.get_missing_products();
     }
 
-    public HashMap<Integer, Integer> get_missing_product_with_amount() throws Exception {
+    public HashMap<Integer, Integer> get_missing_product_with_amount() {
         return stock.get_missing_products_with_amounts();
     }
 
+    public HashMap<GeneralProduct, Integer> get_missing_General_products_with_amounts() {
+    return stock.get_missing_General_products_with_amounts();
+}
     //for inside use
     public LinkedList<GeneralProduct> get_category_products(String cat_name) throws Exception {
         return stock.get_category_products(cat_name);
@@ -206,7 +209,6 @@ public class Stock_Controller {
         if(!flag)
             throw new Exception("product does not exist");
     }
-
 
 }
 

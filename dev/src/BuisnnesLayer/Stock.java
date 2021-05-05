@@ -133,12 +133,15 @@ public class Stock {
     }
 
 
-
+//get_missing_products_with_amounts
     public LinkedList<GeneralProduct> get_missing_products() {
         return this.productManager.get_missing_products();
     }
     public HashMap<Integer, Integer> get_missing_products_with_amounts(){
         return this.productManager.get_missing_products_with_amounts();
+    }
+    public HashMap<GeneralProduct, Integer> get_missing_General_products_with_amounts(){
+        return this.productManager.get_missing_General_products_with_amounts();
     }
 
 

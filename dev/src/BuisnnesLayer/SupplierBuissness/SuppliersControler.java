@@ -23,6 +23,15 @@ public class SuppliersControler implements ISupplierControler {
      //   agreementManager.AddNewAgreement(agreement);
 
    // }
+
+    //HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity;// hashMap<SupllierID:int, hashMap<CatalogID :int , quantitiy:int>>
+   public HashMap<Integer, HashMap<Integer, Integer>> get_cheapest_supplier(HashMap<GeneralProduct, Integer> lackMap) {
+       return agreementManager.get_cheapest_supplier(lackMap);
+   }
+
+
+
+
     private void AddNewAgreement(int id, DeliveryMode deliveryMode, List<Integer> daysOfDelivery, int NumOfDaysFromDelivery) {
         agreementManager.AddNewAgreement(id,deliveryMode,daysOfDelivery,NumOfDaysFromDelivery);
 
@@ -30,7 +39,7 @@ public class SuppliersControler implements ISupplierControler {
 
 
     public void removeProductFromSupplier(int CatalogId,int SupID){
-        agreementManager.GetAgreement(SupID).RemovePrudact(CatalogId);
+        agreementManager.removeProduct(SupID,CatalogId);
     }
 
     public void setProductPrice(int SupId, int CatalogID, double price){
@@ -65,7 +74,7 @@ public class SuppliersControler implements ISupplierControler {
     }
 
     //@Override
-    public void addNewProductToAgreement(int SupplierId,double Price, int CatalogID, String manfucator, String name,String category,int pid, boolean isexsist) throws Exception {
+    public void addNewProductToAgreement(int SupplierId,double Price, int CatalogID, String manfucator, String name,String category,int pid, boolean isexist) throws Exception {
         if(!isSupplierExist(SupplierId)){
             throw new IllegalArgumentException("the Supplier doues not exsist");
         }
@@ -75,8 +84,9 @@ public class SuppliersControler implements ISupplierControler {
         if(name==null||name==""){
             throw new IllegalArgumentException("the name input is incorrect");
         }
-        agreementManager.AddProduct(SupplierId,Price,CatalogID,manfucator,name,category,pid,isexsist);
+        agreementManager.AddProduct(SupplierId,Price,CatalogID,manfucator,name,category,pid,isexist);
     }
+
 
     @Override
     public void addNewSupplier(int id, String name, String bankAccount, paymentMethods paymentMethods, DeliveryMode deliveryMode, List<Integer> daysOfDelivery, int NumOfDaysFromDelivery, String contactName, String contactEmail, String phoneNumber) {

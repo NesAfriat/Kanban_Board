@@ -1,7 +1,7 @@
 package BuisnnesLayer.FacedeModel.Objects;
 
 public class ResponseT<T> extends Response {
-    private T value;
+     T value;
 
     public ResponseT(String errorMsg) {
         super(errorMsg);
@@ -15,6 +15,9 @@ public class ResponseT<T> extends Response {
     public ResponseT(T value, String errorMsg) {
         super(errorMsg);
         this.value = value;
+    }
+    public T getValue(){
+        return value;
     }
 
     @Override
