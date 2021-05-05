@@ -112,7 +112,15 @@ public class WorkerDataController {
     private void LoadPreData() {
         // add all insert queries here
         initDefaultWorkDayShiftData();
+        initDefaultWorkDayAssignData();
+        initWorkerData();
         initShiftsData();
+        initConstraintData();
+        initOccupationData();
+        initWorkersInShifts();
+    }
+
+    private void initWorkersInShifts() {
     }
 
     private Connection connect() {
@@ -694,7 +702,7 @@ public class WorkerDataController {
         String sql = "SELECT * FROM DefaultWorkDayAssign WHERE Day = ? AND ShiftType = ? AND Job = ?";
         int amount = 0;
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql);){
+             PreparedStatement pstmt = conn.prepareStatement(sql)){
             pstmt.setInt(1, day);
             pstmt.setString(2, ShiftType);
             pstmt.setString(3, job);
