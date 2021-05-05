@@ -11,6 +11,7 @@ import BusinessLayer.Transport_BusinessLayer.Shops.Product;
 import BusinessLayer.Transport_BusinessLayer.Shops.Store;
 import BusinessLayer.Transport_BusinessLayer.Shops.Supplier;
 import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
+import BusinessLayer.Workers_Integration;
 import DataLayer.Transport_DAL.TransportDocDAL;
 import PresentationLayer.Transport_PresentationLayer.Transport_Menu;
 import PresentationLayer.Workers_PresentationLayer.Workers_Main_Menu;
@@ -30,6 +31,8 @@ public class Main_Menu {
     public void start() {
         Workers_Main_Menu workers_menu = new Workers_Main_Menu(workers_facade);
         Transport_Menu transport_menu = new Transport_Menu(transport_facade);
+        Workers_Integration wk = workers_facade;
+        transport_menu.addWorkersIntegration(wk);
         if (firstRun) {
             System.out.println("Welcome to Super-Lee system!");
             System.out.println("Do you want to load database?");
@@ -53,7 +56,7 @@ public class Main_Menu {
                     workers_menu.start();
                     break;
                 case 2:
-                    transport_menu.runProgram();
+                    transport_menu.mainMenu();
                     //System.out.println("Not implemented yet");
                     break;
                 case 3:

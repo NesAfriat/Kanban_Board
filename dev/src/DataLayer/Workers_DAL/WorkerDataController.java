@@ -782,7 +782,134 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+    private void initDefaultWorkDayAssignData(){
+        String statement = "INSERT INTO DefaultWorkDayAssign (Day,ShiftType,Job,Amount) VALUES (7,'Morning','Cashier',2), " +
+        " (7,'Evening','Cashier',2), " +
+        "(7,'Morning','Storekeeper',2)," +
+        "(7,'Evening','Storekeeper',2), " +
+        "(7,'Morning','Usher',3), " +
+        "(7,'Evening','Usher',3), " +
+        "(7,'Morning','Guard',1), " +
+        "(7,'Evening','Guard',1), "+
+        "(7,'Morning','DriverA',0), "+
+        "(7,'Evening','DriverA',0), "+
+        "(7,'Morning','DriverB',0), "+
+        "(7,'Evening','DriverB',0), "+
+        "(7,'Morning','DriverC',0), "+
+        "(7,'Evening','DriverC',0), "+
+        "(6,'Morning','Cashier',4), "+
+        "(6,'Evening','Cashier',3), "+
+        "(6,'Morning','Storekeeper',2), "+
+        "(6,'Evening','Storekeeper',2), "+
+        "(6,'Morning','Usher',3), "+
+        "(6,'Evening','Usher',3), "+
+        "(6,'Morning','Guard',1), "+
+        "(6,'Evening','Guard',1), "+
+        "(6,'Morning','DriverA',1), "+
+        "(6,'Evening','DriverA',0), "+
+        "(6,'Morning','DriverB',1), "+
+        "(6,'Evening','DriverB',0), "+
+        "(6,'Morning','DriverC',1), "+
+        "(6,'Evening','DriverC',0), "+
+        "(1,'Morning','Cashier',5), "+
+        "(1,'Evening','Cashier',6), "+
+        "(1,'Morning','Storekeeper',3), "+
+        "(1,'Evening','Storekeeper',3), "+
+        "(1,'Morning','Usher',4), "+
+        "(1,'Evening','Usher',4), "+
+        "(1,'Morning','Guard',2), "+
+        "(1,'Evening','Guard',2), "+
+        "(1,'Morning','DriverA',3), "+
+        "(1,'Evening','DriverA',2), "+
+        "(1,'Morning','DriverB',3), "+
+        "(1,'Evening','DriverB',2), "+
+        "(1,'Morning','DriverC',3), "+
+        "(1,'Evening','DriverC',1);";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initOccupationData(){
+        String statement = "INSERT INTO Occupation (Worker_ID,Job) VALUES "+
+        "('000000009','Cashier'), " +
+        "('000000009','Storekeeper'), " +
+        "('000000009','Usher'), " +
+        "('000000008','Cashier'), " +
+        "('000000008','Storekeeper'), " +
+        "('000000003','Shift_Manager'), " +
+        "('000000014','Guard'), " +
+        "('000000002','Shift_Manager'), " +
+        "('000000013','Guard'), " +
+        "('000000001','HR_Manager'), " +
+        "('000000012','Guard'), " +
+        "('000000012','Usher'), " +
+        "('000000011','Storekeeper'), " +
+        "('000000011','Usher'), " +
+        "('000000007','Cashier'), " +
+        "('000000006','Cashier')," +
+        " ('000000005','Shift_Manager'), " +
+        "('000000004','Shift_Manager'), " +
+        "('000000010','Cashier')," +
+        " ('000000010','Storekeeper'), " +
+        "('000000010','Usher'), " +
+        "('000000010','DriverA'), " +
+        "('000000011','DriverB'), " +
+        "('000000012','DriverC');";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initConstraintData(){
+        String statement = "INSERT INTO Constraints (Worker_ID,Date,ShiftType,ConstraintType) VALUES" +
+                " ('000000002','21/05/2021','Morning','Cant')," +
+                " ('000000002','21/09/2021','Evening','Cant')," +
+                " ('000000002','22/09/2021','Morning','Cant')," +
+                " ('000000002','22/09/2021','Evening','Cant')," +
+                " ('000000002','22/09/2021','Morning','Cant');";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    private void initWorkerData(){
+        String statement = "INSERT INTO Worker (ID,Name,BankAccount,Salary,EducationFund,vacationDaysPerMonth,sickDaysPerMonth,startWorkingDate,endWorkingDate)" +
+                " VALUES " +
+                "('000000009','ronen','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000008','ronen','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000003','kobi','1',1.0,'1',1,1,'01/01/2021',NULL), " +
+                "('000000014','meni','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000002','avi','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000013','micha','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000001','dan','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000012','eliad','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000011','dolev','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000007','shaol','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000006','moti','1',1.0,'1',1,1,'01/01/2016',NULL), " +
+                "('000000005','eli','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000004','moshe','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('000000010','moshe','1',1.0,'1',1,1,'01/01/2018',NULL);";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
+
+
 
 
 

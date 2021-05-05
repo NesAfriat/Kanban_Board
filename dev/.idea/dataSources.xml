@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="WorkersDB" uuid="f39a69a5-5ea1-40db-9558-b93b191db3ce">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/WorkersDB.db</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="Nituz" uuid="d1baaf61-81d9-4398-b662-8bd2d5472570">
+      <driver-ref>sqlite.xerial</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/Nituz.db</jdbc-url>
+    </data-source>
+  </component>
+</project>
