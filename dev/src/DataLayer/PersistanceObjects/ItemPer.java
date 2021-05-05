@@ -3,6 +3,7 @@ package DataLayer.PersistanceObjects;
 import java.util.Date;
 
 public class ItemPer implements PersistanceObj{
+    //TODO maybe save only the primary keys per Persistance item;
     public int item_id;
     public int product_id;
     public String location;
