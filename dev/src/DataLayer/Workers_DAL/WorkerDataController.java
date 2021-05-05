@@ -590,6 +590,13 @@ public class WorkerDataController {
                     e.printStackTrace();
                 }
             }
+            if(DBmorning.isApproved()) {
+                try {
+                    workDayMorning.approveShift();
+                } catch (InnerLogicException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         if(hasEvening) {
             Shift workDayEvening = workDay.getShift(ShiftType.Evening);
@@ -610,6 +617,13 @@ public class WorkerDataController {
                     }
                 } catch (InnerLogicException e) {
                     e.printStackTrace();
+                }
+                if(DBevening.isApproved()) {
+                    try {
+                        workDayEvening.approveShift();
+                    } catch (InnerLogicException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -637,7 +651,7 @@ public class WorkerDataController {
                     }else{
                         outputShift.addRequiredJob(job, 1);
                     }
-                    List<Worker> workersToInsert = selectWorkersInShiftByJob(date, rs.getString("ShiftType"), job.name());
+                    List<Worker> workersToInsert = selectWorkersInShiftByJob(date, shiftType, job.name());
                     for (Worker worker : workersToInsert) {
                         try {
                             outputShift.addWorker(job, worker);
@@ -671,7 +685,8 @@ public class WorkerDataController {
 
             // loop through the result set
             while (rs.next()) {
-                outputWorkers.add(getWorker(rs.getString("Worker_ID")));
+                Worker worker = getWorker(rs.getString("Worker_ID"));
+                outputWorkers.add(worker);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -763,6 +778,7 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+
     private void initWorkersInShifts() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String statement = "INSERT INTO Workers_In_Shift (Worker_ID,Date,ShiftType,Job) VALUES" +
@@ -771,17 +787,17 @@ public class WorkerDataController {
                 "('000000008',?,'Morning','Storekeeper'), " +
                 "('000000014',?,'Morning','Guard'), " +
                 "('000000004',?,'Morning','Shift_Manager'), " +
-                "('0000000010',?,'Morning','DriverB'), " +
-                "('0000000011',?,'Morning','DriverB'), " +
-                "('0000000012',?,'Morning','DriverC'), " +
+                "('000000010',?,'Morning','DriverA'), " +
+                "('000000011',?,'Morning','DriverB'), " +
+                "('000000012',?,'Morning','DriverC'), " +
                 " ('000000006',?,'Morning','Cashier'), " +
                 "('000000007',?,'Morning','Cashier'), " +
                 "('000000008',?,'Morning','Storekeeper'), " +
                 "('000000014',?,'Morning','Guard'), " +
                 "('000000004',?,'Morning','Shift_Manager'), " +
-                "('0000000010',?,'Morning','DriverB'), " +
-                "('0000000011',?,'Morning','DriverB'), " +
-                "('0000000012',?,'Morning','DriverC') ";
+                "('000000010',?,'Morning','DriverA'), " +
+                "('000000011',?,'Morning','DriverB'), " +
+                "('000000012',?,'Morning','DriverC');";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
@@ -808,6 +824,7 @@ public class WorkerDataController {
         }
 
     }
+
     private void initShiftsData(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String statement = "INSERT INTO Shift (Date,ShiftType,Approved,Cashier_Amount,Storekeeper_Amount,Usher_Amount,Guard_Amount,DriverA_Amount,DriverB_Amount,DriverC_Amount) VALUES " +
@@ -833,6 +850,7 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+
     private void initDefaultWorkDayAssignData(){
         String statement = "INSERT INTO DefaultWorkDayAssign (Day,ShiftType,Job,Amount) VALUES (7,'Morning','Cashier',2), " +
         " (7,'Evening','Cashier',2), " +
@@ -884,6 +902,7 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+
     private void initOccupationData(){
         String statement = "INSERT INTO Occupation (Worker_ID,Job) VALUES "+
         "('000000009','Cashier'), " +
@@ -918,6 +937,7 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+
     private void initConstraintData(){
         String statement = "INSERT INTO Constraints (Worker_ID,Date,ShiftType,ConstraintType) VALUES" +
                 " ('000000002','21/05/2021','Morning','Cant')," +
@@ -933,6 +953,7 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+
     private void initWorkerData(){
         String statement = "INSERT INTO Worker (ID,Name,BankAccount,Salary,EducationFund,vacationDaysPerMonth,sickDaysPerMonth,startWorkingDate,endWorkingDate)" +
                 " VALUES " +
