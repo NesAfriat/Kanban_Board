@@ -13,6 +13,6 @@ public class DataController {
         return instance;
     }
     private DataController(){
-        itemMapper= new itemMapper();
+        itemMapper= new ItemMapper();
     }
 }
