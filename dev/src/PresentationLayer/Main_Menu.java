@@ -38,13 +38,8 @@ public class Main_Menu {
             System.out.println("Do you want to load database?");
             boolean load = getInputYesNo();
             if (load) {
-<<<<<<< HEAD
                // workers_menu.testingDataUpload();
                // transport_menu.loadData();
-=======
-                workers_menu.testingDataUpload();
-                //transport_menu.loadData();
->>>>>>> ef53b8afb4f0bae25ffc032c4e5751e35d35855a
             }
             firstRun = false;
         }

@@ -793,7 +793,6 @@ public class WorkerDataController {
             pstmt.setString(6, LocalDate.now().format(formatter));
             pstmt.setString(7, LocalDate.now().format(formatter));
             pstmt.setString(8, LocalDate.now().format(formatter));
-            pstmt.setString(8, LocalDate.now().plusDays(1).format(formatter));
             pstmt.setString(9, LocalDate.now().plusDays(1).format(formatter));
             pstmt.setString(10, LocalDate.now().plusDays(1).format(formatter));
             pstmt.setString(11, LocalDate.now().plusDays(1).format(formatter));
