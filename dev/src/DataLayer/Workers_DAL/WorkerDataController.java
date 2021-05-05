@@ -618,6 +618,44 @@ public class WorkerDataController {
         }
         return amount;
     }
+
+    public void setDefaultAmountRequired(int day, String ShiftType, String job, int amount){
+        String statement = "UPDATE DefaultWorkDayAssign SET Amount = ? , "
+                + "WHERE Day = ? AND ShiftType = ? AND Job = ? ";
+        if (day >= 1 && day <= 5)
+            day = 1;
+        if (day == 6) day = 6;
+        if (day == 7) day = 7;
+        try (Connection conn = this.connect();
+                PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.setInt(1, amount);
+            pstmt.setInt(2, day);
+            pstmt.setString(3, ShiftType);
+            pstmt.setString(4, job);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setDefaultWorkDayShifts(int day, String ShiftType, boolean changeTo) {
+        String columnName = "miss_chang";
+        if (ShiftType.equals("Morning"))
+            columnName = "hasMorning";
+        else if (ShiftType.equals("hasEvening"))
+            columnName = "hasEvening";
+
+        String statement = "UPDATE DefaultWorkDayShift SET "+columnName+" = ? , "
+                + "WHERE Day = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.setBoolean(1, changeTo);
+            pstmt.setInt(2, day);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
 
 
