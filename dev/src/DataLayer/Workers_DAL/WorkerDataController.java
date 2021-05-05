@@ -812,9 +812,9 @@ public class WorkerDataController {
     private void initShiftsData(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String statement = "INSERT INTO Shift (Date,ShiftType,Approved,Cashier_Amount,Storekeeper_Amount,Usher_Amount,Guard_Amount,DriverA_Amount,DriverB_Amount,DriverC_Amount) VALUES " +
-                "(? ,'Morning',0,2,1,3,1,1,1,1), " +
+                "(? ,'Morning',1,2,1,3,1,1,1,1), " +
                 "(? ,'Evening',0,2,1,3,1,1,1,1), " +
-                "(? ,'Morning',0,0,0,0,0,0,0,0), " +
+                "(? ,'Morning',0,1,1,1,1,1,1,1), " +
                 "(? ,'Evening',0,2,1,3,1,1,1,1), " +
                 "(? ,'Morning',0,1,1,0,1,1,1,1), " +
                 "(? ,'Evening',0,1,1,0,1,1,1,1), " +
