@@ -2,10 +2,9 @@ package BusinessLayer.Workers_BusinessLayer.Shifts;
 
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
+import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 import DataLayer.Workers_DAL.WorkerDataController;
-
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -89,7 +88,6 @@ public class ShiftSchedule {
         return skeleton;
     }
 
-
     public void setDefaultShiftInDay(int dayOfTheWeek, ShiftType shiftType, boolean changeTo) throws InnerLogicException {
         defaultWorkDayHolder.setDefaultShiftInDay(dayOfTheWeek, shiftType, changeTo);
     }
@@ -165,28 +163,36 @@ public class ShiftSchedule {
 
         private final Map<Job, int[]> defaultShiftSetup;
         private final boolean[][] defaultWorkDaySetup;
-        
         private DefaultWorkDayHolder(){
+            WorkerDataController workerDataController = new WorkerDataController();
             defaultShiftSetup = new HashMap<>();
             List<Job> jobs = WorkersUtils.getShiftWorkers();
             for (Job job: jobs) {
                 int[] arr = new int[6];
-                arr[weekDayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[fridayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
-                arr[weekDayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT;
-                arr[fridayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
+                arr[weekDayMorning] = workerDataController.getDefaultAmountRequired(1, "Morning", job.name());
+                arr[weekDayEvening] = workerDataController.getDefaultAmountRequired(1, "Evening", job.name());
+                arr[fridayMorning] = workerDataController.getDefaultAmountRequired(6, "Morning", job.name());
+                arr[fridayEvening] = workerDataController.getDefaultAmountRequired(6, "Evening", job.name());
+                arr[saturdayMorning] = workerDataController.getDefaultAmountRequired(7, "Morning", job.name());
+                arr[saturdayEvening] = workerDataController.getDefaultAmountRequired(7, "Evening", job.name());
+//                arr[weekDayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[fridayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
+//                arr[weekDayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT;
+//                arr[fridayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
                 defaultShiftSetup.put(job, arr);
             }
             int numberOfDays = 7;
             int numberOfShifts = 2;
             defaultWorkDaySetup = new boolean[numberOfDays][numberOfShifts];
-            for (int i = 0; i < numberOfDays-2; i++){
-                defaultWorkDaySetup[i][0] = true;
-                defaultWorkDaySetup[i][1] = true;
+            for (int i = 0; i < numberOfDays; i++){//-2; i++){
+                boolean[] shifts = workerDataController.getDefaultWorkDayShifts(i + 1);
+                if(shifts == null){
+                    defaultWorkDaySetup[i][0] = false;
+                    defaultWorkDaySetup[i][1] = false;
+                }else{
+                    defaultWorkDaySetup[i][0] = shifts[0];
+                    defaultWorkDaySetup[i][1] = shifts[1];
+                }
             }
-            defaultWorkDaySetup[5][0] = true;
-            defaultWorkDaySetup[5][1] = false;
-            defaultWorkDaySetup[6][0] = false;
-            defaultWorkDaySetup[6][1] = false;
         }
 
 
@@ -202,6 +208,8 @@ public class ShiftSchedule {
                 throw new InnerLogicException("There's no a default number workers for job: " + job);
             }
             defaults[shiftKind] = amount;
+            WorkerDataController workerDataController = new WorkerDataController();
+            workerDataController.setDefaultAmountRequired(dayOfTheWeek, shiftType.name(), job.name(), amount);
         }
 
         private int getDefaultJobInShift(Job role, int dayOfTheWeek, ShiftType shiftType) throws InnerLogicException {
@@ -211,6 +219,7 @@ public class ShiftSchedule {
                 throw new InnerLogicException("There's no a default number workers for job: " + role);
             }
             return defaults[shiftKind];
+
         }
 
         private void setDefaultShiftInDay(int dayOfTheWeek, ShiftType shiftType, boolean changeTo) throws InnerLogicException {
@@ -219,6 +228,8 @@ public class ShiftSchedule {
             int numShiftType = 0;
             if(shiftType == ShiftType.Evening) numShiftType = 1;
             defaultWorkDaySetup[dayOfTheWeek-1][numShiftType] = changeTo;
+            WorkerDataController workerDataController = new WorkerDataController();
+            workerDataController.setDefaultWorkDayShifts(dayOfTheWeek, shiftType.name(), changeTo);
         }
 
         private boolean getDefaultShiftInDay(int dayOfTheWeek, ShiftType shiftType) throws InnerLogicException {
