@@ -63,7 +63,6 @@ class TransportFacadeTests {
     }
     private DriversController LoadDriverController(){
         DriversController drivers=new DriversController();
-        drivers.AddNewDriver("Deni Avdija",208650760, License.typeC);*/
 
         List<License> licenseList1=new LinkedList<License>();licenseList1.add(License.typeA);licenseList1.add(License.typeB);
         List<License> licenseList2=new LinkedList<License>();licenseList2.add(License.typeA);licenseList2.add(License.typeB);licenseList2.add(License.typeC);
