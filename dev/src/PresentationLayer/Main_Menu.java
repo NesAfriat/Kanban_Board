@@ -38,7 +38,7 @@ public class Main_Menu {
             System.out.println("Do you want to load database?");
             boolean load = getInputYesNo();
             if (load) {
-                workers_menu.testingDataUpload();
+               // workers_menu.testingDataUpload();
                // transport_menu.loadData();
             }
             firstRun = false;
