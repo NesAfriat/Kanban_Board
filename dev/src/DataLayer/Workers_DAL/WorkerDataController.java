@@ -717,7 +717,7 @@ CREATE TABLE IF NOT EXISTS "Constraints" (
     }
 
     public void setDefaultAmountRequired(int day, String ShiftType, String job, int amount){
-        String statement = "UPDATE DefaultWorkDayAssign SET Amount = ? , "
+        String statement = "UPDATE DefaultWorkDayAssign SET Amount = ? "
                 + "WHERE Day = ? AND ShiftType = ? AND Job = ? ";
         if (day >= 1 && day <= 5)
             day = 1;
@@ -739,15 +739,32 @@ CREATE TABLE IF NOT EXISTS "Constraints" (
         String columnName = "miss_chang";
         if (ShiftType.equals("Morning"))
             columnName = "hasMorning";
-        else if (ShiftType.equals("hasEvening"))
+        else if (ShiftType.equals("Evening"))
             columnName = "hasEvening";
 
-        String statement = "UPDATE DefaultWorkDayShift SET "+columnName+" = ? , "
+        String statement = "UPDATE DefaultWorkDayShift SET "+columnName+" = ? "
                 + "WHERE Day = ?";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
             pstmt.setBoolean(1, changeTo);
             pstmt.setInt(2, day);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void initDefaultWorkDayShiftData(){
+        String statement = "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (1,1,1); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (2,1,1); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (3,0,1); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (4,1,0); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (5,1,1); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (6,1,0); "+
+        "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES (7,0,1);";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
