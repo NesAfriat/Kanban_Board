@@ -21,9 +21,16 @@ class IdentityMap {
 
     private final Map<String, Worker> workerMap;
     private final Map<String, WorkDay> workDayMap;
+    boolean initialized;
+
     private IdentityMap(){
         this.workDayMap = new HashMap<>();
         this.workerMap = new HashMap<>();
+        initialized = false;
+    }
+
+    public void setInitialized(boolean initialized) {
+        this.initialized = initialized;
     }
 
     public void addWorkDay(WorkDay workDay) {

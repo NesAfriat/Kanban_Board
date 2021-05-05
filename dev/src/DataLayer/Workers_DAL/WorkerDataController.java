@@ -22,7 +22,8 @@ public class WorkerDataController {
         this.identityMap = IdentityMap.getInstance();
     }
 
-    public boolean InitDatabase(){
+    public void InitDatabase(){
+
         String workerTable = "CREATE TABLE IF NOT EXISTS Worker (" +
                 "\tID\tTEXT NOT NULL," +
                 "\tName\tTEXT NOT NULL," +
@@ -54,69 +55,55 @@ public class WorkerDataController {
                 "\tPRIMARY KEY(Worker_ID,Job),\n" +
                 "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON DELETE CASCADE ON UPDATE CASCADE);";
 
-        /*
-);
-        BEGIN TRANSACTION;
-CREATE TABLE IF NOT EXISTS "Workers_In_Shift" (
-	"Worker_ID"	TEXT NOT NULL,
-	"Date"	TEXT NOT NULL,
-	"ShiftType"	TEXT NOT NULL,
-	"Job"	TEXT NOT NULL,
-	CONSTRAINT "fk_shift" FOREIGN KEY("Date","ShiftType") REFERENCES "Shift"("Date","ShiftType") ON UPDATE CASCADE ON DELETE CASCADE,
-	PRIMARY KEY("Worker_ID","Date","ShiftType"),
-	FOREIGN KEY("Worker_ID") REFERENCES "Worker"("ID") ON UPDATE CASCADE ON DELETE CASCADE
-);
-CREATE TABLE IF NOT EXISTS "Shift" (
-	"Date"	TEXT NOT NULL,
-	"ShiftType"	TEXT NOT NULL,
-	"Approved"	INTEGER NOT NULL,
-	"Cashier_Amount"	BLOB NOT NULL,
-	"Storekeeper_Amount"	INTEGER NOT NULL,
-	"Usher_Amount"	INTEGER NOT NULL,
-	"Guard_Amount"	INTEGER NOT NULL,
-	"DriverA_Amount"	INTEGER NOT NULL,
-	"DriverB_Amount"	INTEGER NOT NULL,
-	"DriverC_Amount"	INTEGER NOT NULL,
-	PRIMARY KEY("Date","ShiftType")
-);
-CREATE TABLE IF NOT EXISTS "Occupation" (
-	"Worker_ID"	TEXT NOT NULL,
-	"Job"	TEXT NOT NULL,
-	PRIMARY KEY("Worker_ID","Job"),
-	FOREIGN KEY("Worker_ID") REFERENCES "Worker"("ID") ON DELETE CASCADE ON UPDATE CASCADE
-);
-CREATE TABLE IF NOT EXISTS "DefaultWorkDayShift" (
-	"Day"	INTEGER NOT NULL,
-	"hasMorning"	INTEGER NOT NULL,
-	"hasEvening"	INTEGER NOT NULL,
-	PRIMARY KEY("Day")
-);
-CREATE TABLE IF NOT EXISTS "DefaultWorkDayAssign" (
-	"Day"	INTEGER NOT NULL CHECK(0<Day<=7),
-	"ShiftType"	TEXT NOT NULL,
-	"Job"	TEXT NOT NULL,
-	"Amount"	INTEGER NOT NULL,
-	PRIMARY KEY("Day","Day","ShiftType","Job")
-);
-CREATE TABLE IF NOT EXISTS "Constraints" (
-	"Worker_ID"	TEXT NOT NULL,
-	"Date"	TEXT NOT NULL,
-	"ShiftType"	TEXT NOT NULL,
-	"ConstraintType"	TEXT NOT NULL,
-	PRIMARY KEY("Worker_ID","Date","ShiftType"),
-	FOREIGN KEY("Worker_ID") REFERENCES "Worker"("ID")
-);
+        String defaultWorkDayAssignTable = "CREATE TABLE IF NOT EXISTS DefaultWorkDayAssign (\n" +
+                "\tDay\tINTEGER NOT NULL CHECK(0<Day<=7),\n" +
+                "\tShiftType\tTEXT NOT NULL,\n" +
+                "\tJob\tTEXT NOT NULL,\n" +
+                "\tAmount\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(Day,Day,ShiftType,Job));";
 
-         */
+        String defaultWorkDayShift = "CREATE TABLE IF NOT EXISTS DefaultWorkDayShift (\n" +
+                "\tDay\tINTEGER NOT NULL,\n" +
+                "\thasMorning\tINTEGER NOT NULL,\n" +
+                "\thasEvening\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(Day));";
+
+        String constraintTable = "CREATE TABLE IF NOT EXISTS Constraints (\n" +
+                "\tWorker_ID\tTEXT NOT NULL,\n" +
+                "\tDate\tTEXT NOT NULL,\n" +
+                "\tShiftType\tTEXT NOT NULL,\n" +
+                "\tConstraintType\tTEXT NOT NULL,\n" +
+                "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
+                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID));";
+
+        String workersInShiftsTable = "CREATE TABLE IF NOT EXISTS Workers_In_Shift (\n" +
+                "\tWorker_ID\tTEXT NOT NULL,\n" +
+                "\tDate\tTEXT NOT NULL,\n" +
+                "\tShiftType\tTEXT NOT NULL,\n" +
+                "\tJob\tTEXT NOT NULL,\n" +
+                "\tCONSTRAINT fk_shift FOREIGN KEY(Date,ShiftType) REFERENCES Shift(Date,ShiftType) ON UPDATE CASCADE ON DELETE CASCADE,\n" +
+                "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
+                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON UPDATE CASCADE ON DELETE CASCADE\n" +
+                ");";
+
+        String sql = "BEGIN TRANSACTION;" + workerTable + shiftTable + occupationTable +
+                constraintTable + defaultWorkDayAssignTable + defaultWorkDayShift + workersInShiftsTable + "COMMIT;";
 
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
-            // create a new table
-            //stmt.execute(sql);
+            // create a new tables
+            stmt.execute(sql);
+            if (!identityMap.initialized){
+                LoadPreData();
+                identityMap.initialized = true;
+            }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
-        return false;
+    }
+
+    private void LoadPreData() {
+        // add all insert queries here
     }
 
     private Connection connect() {
