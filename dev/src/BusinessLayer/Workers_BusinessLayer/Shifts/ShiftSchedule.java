@@ -2,6 +2,7 @@ package BusinessLayer.Workers_BusinessLayer.Shifts;
 
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
+import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 import DataLayer.Workers_DAL.WorkerDataController;
 import java.time.format.DateTimeFormatter;
@@ -183,7 +184,7 @@ public class ShiftSchedule {
             int numberOfShifts = 2;
             defaultWorkDaySetup = new boolean[numberOfDays][numberOfShifts];
             for (int i = 0; i < numberOfDays; i++){//-2; i++){
-                boolean[] shifts = workerDataController.getDefaultWorkDayShifts(i);
+                boolean[] shifts = workerDataController.getDefaultWorkDayShifts(i + 1);
                 if(shifts == null){
                     defaultWorkDaySetup[i][0] = false;
                     defaultWorkDaySetup[i][1] = false;
@@ -207,6 +208,8 @@ public class ShiftSchedule {
                 throw new InnerLogicException("There's no a default number workers for job: " + job);
             }
             defaults[shiftKind] = amount;
+            WorkerDataController workerDataController = new WorkerDataController();
+            workerDataController.setDefaultAmountRequired(dayOfTheWeek, shiftType.name(), job.name(), amount);
         }
 
         private int getDefaultJobInShift(Job role, int dayOfTheWeek, ShiftType shiftType) throws InnerLogicException {
@@ -216,6 +219,7 @@ public class ShiftSchedule {
                 throw new InnerLogicException("There's no a default number workers for job: " + role);
             }
             return defaults[shiftKind];
+
         }
 
         private void setDefaultShiftInDay(int dayOfTheWeek, ShiftType shiftType, boolean changeTo) throws InnerLogicException {
@@ -224,6 +228,8 @@ public class ShiftSchedule {
             int numShiftType = 0;
             if(shiftType == ShiftType.Evening) numShiftType = 1;
             defaultWorkDaySetup[dayOfTheWeek-1][numShiftType] = changeTo;
+            WorkerDataController workerDataController = new WorkerDataController();
+            workerDataController.setDefaultWorkDayShifts(dayOfTheWeek, shiftType.name(), changeTo);
         }
 
         private boolean getDefaultShiftInDay(int dayOfTheWeek, ShiftType shiftType) throws InnerLogicException {
