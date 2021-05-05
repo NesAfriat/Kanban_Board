@@ -22,7 +22,6 @@ public class DocCont {
 
 
     HashMap<Integer,TransportDoc> theTransportBible;
-    Integer docIndex=0;
 
 
 
@@ -35,7 +34,17 @@ public class DocCont {
         return theTransportBible.get(x);
     }
 
+    public int getIndex(){
+        boolean cont=true;
+        int index =1;
+        while(cont){
+            if(!theTransportBible.containsKey(index))
+                return index;
+            index++;
+        }
+        return -1;
 
+    }
 
 
 
@@ -50,9 +59,10 @@ public class DocCont {
 
     public int newDelivery()//c- return doc index for the user to use
     {
-        TransportDoc td = new TransportDoc(docIndex);
-        theTransportBible.put(docIndex,td);
-        return docIndex++;
+        int index = getIndex();
+        TransportDoc td = new TransportDoc(index);
+        theTransportBible.put(index,td);
+        return index;
     }
 
 
@@ -207,6 +217,7 @@ public class DocCont {
     public void load() throws Exception {
         DALController con=DALController.getInstance();
         try {
+
             theTransportBible=con.tra.LoadProducts();
         } catch (SQLException throwables) {
             throw new Exception("Error Loading Documents");

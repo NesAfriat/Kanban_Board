@@ -1,6 +1,7 @@
 package BusinessLayer.Transport_BusinessLayer.Cont;
 
 import BusinessLayer.Transport_BusinessLayer.Shops.*;
+import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
 import DataLayer.Transport_DAL.DALController;
 
 import java.sql.SQLException;
@@ -173,6 +174,8 @@ public class ControllerShops {
     }
     private void putProductsInSupp(DALController con) throws SQLException {
         HashMap<Integer,Product> mapedProducts=new HashMap<>();
+        HashMap<ProductArea, List<Supplier>> productAreaHash= new HashMap<>();
+
         for (Product p:productList) {
             mapedProducts.put(p.getId(),p);
         }
@@ -180,7 +183,25 @@ public class ControllerShops {
             List<Integer> products= con.sup.LoadSupplierProductList(s.getId());
             List<Product> supProductes=products.stream().map(mapedProducts::get).collect(Collectors.toList());
             s.setProductsServed(supProductes);
+
+            for (Product p: supProductes) {
+                List<ProductArea> list = new ArrayList<ProductArea>(productAreaHash.keySet());
+                Optional<ProductArea> tuple =list.stream().filter(x-> x.getId()==p.getId() && s.getArea().toString().equals(x.getA())).findFirst();
+                if((!tuple.isEmpty()) && (!productAreaHash.get(tuple.get()).contains(s))){
+                    productAreaHash.get(tuple.get()).add(s);
+                }
+                else if((!tuple.isEmpty()) && (productAreaHash.get(tuple.get()).contains(s))){
+                    //do nothing
+                }
+                else if(tuple.isEmpty()){
+                    List<Supplier> temp= new ArrayList<>();
+                    temp.add(s);
+                    productAreaHash.put(new ProductArea(p, s.getArea()), temp);
+                }
+            }
         }
+        findSupp=productAreaHash;
+
 
     }
 }

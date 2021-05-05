@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DriversFactory {
-    public void setWorkers_integration(Workers_Integration workers_integration) {
+    public DriversFactory (Workers_Integration workers_integration) {
         this.workers_integration = workers_integration;
     }
 
