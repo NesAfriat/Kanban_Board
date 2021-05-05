@@ -13,11 +13,7 @@ public class ProductDAL {
         Connection conn = null;
         try{
 
-            String url = "jdbc:sqlite:/Users/danrotman/Desktop/Nituz.db";
-            conn = DriverManager.getConnection(url);
-
-            System.out.println("Connection to SQLite has been established.");
-
+            conn = Connect.getConnection();
             Statement st = conn.createStatement();
             ResultSet results = st.executeQuery("SELECT * FROM Product where Id = " + prodId);
             while(results.next()){
@@ -56,11 +52,7 @@ public class ProductDAL {
         try{
             stList = new LinkedList<>();
 
-            String url = "jdbc:sqlite:/Users/danrotman/Desktop/Nituz.db";
-            conn = DriverManager.getConnection(url);
-
-            System.out.println("Connection to SQLite has been established.");
-
+            conn = Connect.getConnection();
             Statement st = conn.createStatement();
             ResultSet results = st.executeQuery("SELECT * FROM Product");
             while(results.next()){
