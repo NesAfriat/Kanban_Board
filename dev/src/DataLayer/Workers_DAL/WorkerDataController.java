@@ -120,8 +120,7 @@ public class WorkerDataController {
         initWorkersInShifts();
     }
 
-    private void initWorkersInShifts() {
-    }
+
 
     private Connection connect() {
         Connection conn = null;
@@ -764,7 +763,52 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+    private void initWorkersInShifts() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String statement = "INSERT INTO Workers_In_Shift (Worker_ID,Date,ShiftType,Job) VALUES" +
+                " ('000000006',?,'Morning','Cashier'), " +
+                "('000000007',?,'Morning','Cashier'), " +
+                "('000000008',?,'Morning','Storekeeper'), " +
+                "('000000014',?,'Morning','Guard'), " +
+                "('000000004',?,'Morning','Shift_Manager'), " +
+                "('0000000010',?,'Morning','DriverB'), " +
+                "('0000000011',?,'Morning','DriverB'), " +
+                "('0000000012',?,'Morning','DriverC'), " +
+                " ('000000006',?,'Morning','Cashier'), " +
+                "('000000007',?,'Morning','Cashier'), " +
+                "('000000008',?,'Morning','Storekeeper'), " +
+                "('000000014',?,'Morning','Guard'), " +
+                "('000000004',?,'Morning','Shift_Manager'), " +
+                "('0000000010',?,'Morning','DriverB'), " +
+                "('0000000011',?,'Morning','DriverB'), " +
+                "('0000000012',?,'Morning','DriverC') ";
 
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+            pstmt.setString(1, LocalDate.now().format(formatter));
+            pstmt.setString(2, LocalDate.now().format(formatter));
+            pstmt.setString(3, LocalDate.now().format(formatter));
+            pstmt.setString(4, LocalDate.now().format(formatter));
+            pstmt.setString(5, LocalDate.now().format(formatter));
+            pstmt.setString(6, LocalDate.now().format(formatter));
+            pstmt.setString(7, LocalDate.now().format(formatter));
+            pstmt.setString(8, LocalDate.now().format(formatter));
+            pstmt.setString(8, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(9, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(10, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(11, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(12, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(13, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(14, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(15, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(16, LocalDate.now().plusDays(1).format(formatter));
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
     private void initShiftsData(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String statement = "INSERT INTO Shift (Date,ShiftType,Approved,Cashier_Amount,Storekeeper_Amount,Usher_Amount,Guard_Amount,DriverA_Amount,DriverB_Amount,DriverC_Amount) VALUES " +
