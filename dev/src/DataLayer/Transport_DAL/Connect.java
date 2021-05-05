@@ -26,7 +26,7 @@ public class Connect {
         Connection conn = null;
         try {
             // db parameters
-            String url = "jdbc:sqlite:/Users/danrotman/Desktop/Nituz.db";
+            String url = "jdbc:sqlite:C:\\Users\\guyne\\Documents\\BGU\\semester C\\HomeAssinments\\system architecture\\gitRipo\\ADSS_Group_K\\dev";
             // create a connection to the database
             conn = DriverManager.getConnection(url);
             System.out.println("Connection to SQLite has been established.");
