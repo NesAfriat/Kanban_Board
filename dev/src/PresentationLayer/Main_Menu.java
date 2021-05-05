@@ -39,7 +39,7 @@ public class Main_Menu {
             boolean load = getInputYesNo();
             if (load) {
                 workers_menu.testingDataUpload();
-                transport_menu.loadData();
+                //transport_menu.loadData();
             }
             firstRun = false;
         }
