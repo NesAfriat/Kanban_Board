@@ -620,7 +620,7 @@ public class WorkerDataController {
     }
 
     public void setDefaultAmountRequired(int day, String ShiftType, String job, int amount){
-        String statement = "UPDATE DefaultWorkDayAssign SET Amount = ? , "
+        String statement = "UPDATE DefaultWorkDayAssign SET Amount = ? "
                 + "WHERE Day = ? AND ShiftType = ? AND Job = ? ";
         if (day >= 1 && day <= 5)
             day = 1;
@@ -642,10 +642,10 @@ public class WorkerDataController {
         String columnName = "miss_chang";
         if (ShiftType.equals("Morning"))
             columnName = "hasMorning";
-        else if (ShiftType.equals("hasEvening"))
+        else if (ShiftType.equals("Evening"))
             columnName = "hasEvening";
 
-        String statement = "UPDATE DefaultWorkDayShift SET "+columnName+" = ? , "
+        String statement = "UPDATE DefaultWorkDayShift SET "+columnName+" = ? "
                 + "WHERE Day = ?";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
