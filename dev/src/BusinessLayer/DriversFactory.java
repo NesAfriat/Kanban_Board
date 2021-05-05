@@ -22,10 +22,13 @@ public class DriversFactory {
     private Workers_Integration workers_integration;
 
 //todo license properly
-    public List<Driver> getDrivers(Date date,boolean shift,License license){
-        //todo parse date properly
+    public List<Driver> getDriversPerJob(String date,int shift,License license){
         //todo parse shift properly
-        ResponseT<List<WorkerResponse>> responseT= workers_integration.getWorkersInShiftByJob(date.toString(), "Morning", LicenseToString(license));
+        ResponseT<List<WorkerResponse>> responseT;
+        if (shift ==1)
+            responseT= workers_integration.getWorkersInShiftByJob(date, "Morning", LicenseToString(license));
+        else
+            responseT= workers_integration.getWorkersInShiftByJob(date, "Evening", LicenseToString(license));
 
         List<Driver> driverList=responseT.value.stream().map(res->
                 new Driver(res.getName(), Integer.parseInt(res.getId()), getLicenseFromWorker(res.getOccupations()))
@@ -34,19 +37,40 @@ public class DriversFactory {
 
     }
 
-    public List<Driver> getDrivers(Date date,List<License> license){
+    public List<Driver> getDriversPerLicense(String date,int shift,License lcs){
+        List<License> license = returnLicenseList(lcs);
         List<Driver> output=new LinkedList<>();
         for (License l:license) {
-            output=Stream.concat(output.stream(), getDrivers(date,true/*to fix*/,l).stream()).collect(Collectors.toList());
+            output=Stream.concat(output.stream(), getDriversPerJob(date,shift,l).stream()).collect(Collectors.toList());
         }
         return output;
     }
-    public List<Driver> getAllDrivers(Date date){
-        List<License> allLicenses=new LinkedList<>();
-        allLicenses.add(License.typeA);allLicenses.add(License.typeB);allLicenses.add(License.typeB);
-        return getDrivers(date, allLicenses) ;
-    }
 
+    public List<License> returnLicenseList(License lcs){
+        List<License> Licenses=new LinkedList<>();
+        switch(lcs) {
+            case typeA:
+                Licenses.add(License.typeA);
+                return Licenses;
+            case typeB:
+                Licenses.add(License.typeA);
+                Licenses.add(License.typeB);
+                return Licenses;
+            case typeC:
+                Licenses.add(License.typeA);
+                Licenses.add(License.typeB);
+                Licenses.add(License.typeC);
+                return Licenses;
+            case typeD:
+                Licenses.add(License.typeA);
+                Licenses.add(License.typeB);
+                Licenses.add(License.typeC);
+                Licenses.add(License.typeD);
+                return Licenses;
+
+        }
+        return null;
+    }
 
     private String LicenseToString(License license) {
         String output = "error";

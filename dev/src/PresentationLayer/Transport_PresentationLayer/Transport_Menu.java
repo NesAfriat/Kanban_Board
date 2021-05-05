@@ -23,7 +23,7 @@ public class Transport_Menu {
     public int displayMenu(){
 
         print("Please choose an option:\n\n");
-        //print ("0) Load Data \n");
+
         print ("1) New document\n");
         print ("2) Display all Store List \n");
         print ("3) Display all Product List \n");
@@ -83,8 +83,11 @@ public class Transport_Menu {
                 print(bc.getTrucksString());
                 break;
             case 7:
-                print("please enter your truck License Plate\n");
+                print("will only display drivers in shift, please enter date in format DD/MM/YYYY, 1 for morning shift - 2 for evening shift\n" +
+                        "and the truck license plate");
+                str = sc.nextLine();
                 a = sc.nextInt();
+                b=sc.nextInt();
                 try {
                     print(bc.getDriversString(a));
                 } catch (Exception e) {
