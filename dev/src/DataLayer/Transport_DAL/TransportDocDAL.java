@@ -24,11 +24,8 @@ public class TransportDocDAL {
         try{
             stList = new LinkedList<>();
 
-            String url = "jdbc:sqlite:/Users/danrotman/Desktop/Nituz.db";
-            conn = DriverManager.getConnection(url);
 
-            System.out.println("Connection to SQLite has been established.");
-
+            conn = Connect.getConnection();
             Statement st = conn.createStatement();
             boolean atLeastOne=true;
             int index=0;

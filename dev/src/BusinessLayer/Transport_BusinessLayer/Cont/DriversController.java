@@ -1,35 +1,44 @@
 package BusinessLayer.Transport_BusinessLayer.Cont;
 
+import BusinessLayer.DriversFactory;
 import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
 import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
 import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
 import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
+import BusinessLayer.Workers_Integration;
+import DataLayer.Transport_DAL.DALController;
 
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class DriversController {
-    private List<Driver> Drivers;
+   // private List<Driver> Drivers;
     private List<Truck> Trucks;
-    private List<Tuple<Truck,Driver>> Occupied;
+   // private List<Tuple<Truck,Driver>> Occupied;
+    private DriversFactory DriversFac;
 
-
-    public DriversController(List<Driver> drivers, List<Truck> trucks, List<Tuple<Truck,Driver>> occupied) {
+    public void setDriversFac(Workers_Integration w){
+        DriversFac.setWorkers_integration(w);
+    }
+    /*public DriversController(List<Driver> drivers, List<Truck> trucks, List<Tuple<Truck,Driver>> occupied) {
         Drivers = drivers;
         Trucks = trucks;
         this.Occupied = occupied;
-    }
-    public DriversController(List<Driver> drivers, List<Truck> trucks) {
+    }*/
+    /*public DriversController(List<Driver> drivers, List<Truck> trucks) {
         Drivers = drivers;
         Trucks = trucks;
         this.Occupied = new LinkedList<>();
-    }
+    }*/
     public DriversController() {
-        Drivers = new LinkedList<>();
+       // Drivers = new LinkedList<>();
         Trucks = new LinkedList<>();
-        this.Occupied = new LinkedList<>();
+        DriversFac= new DriversFactory();
+       // this.Occupied = new LinkedList<>();
     }
 
     private <T>List<T> CopyList(List<T> original){//return copy list with final objects
@@ -41,50 +50,20 @@ public class DriversController {
         return finalCopy;
     }
 
-    public List<Driver> getDrivers() {
-        return Drivers;
+    public List<Driver> getDrivers(Date date,License license) {
+        return DriversFac.getDrivers(date,license);
     }
-    public List<Driver> getNotOccupiedDrivers() {
-       /* List<Driver> output=new LinkedList<>();
-        for (Driver tru:Drivers) {
-            boolean enterToList=true;
-           for(Tuple<Truck,Driver> tup:Occupied){
-               if(tru.getId()==tup.y.getId()){
-                   enterToList=false;
-               }
-           }
-           if(enterToList)
-           output.add(tru);
-        }
-        return output;
 
-        */
-        return Drivers;
-    }
 
     public List<Truck> getTrucks() {
         return Trucks;
     }
-    public List<Truck> getNotOccupiedTrucks() {
-       /* List<Truck> output=new LinkedList<>();
-        for (Truck tru:Trucks) {
-            boolean enterToList=true;
-            for(Tuple<Truck,Driver> tup:Occupied){
-                if(tru.getLicensePlate()==tup.x.getLicensePlate()){
-                    enterToList=false;
-                }
-            }
-            if(enterToList)
-                output.add(tru);
-        }
-        return output;*/
-        return Trucks;
-    }
 
-    public void AddNewDriver(String name,int id,License license) {
+
+  /*  public void AddNewDriver(String name,int id,License license) {
         Driver newDriver = new Driver(name, id, license);
         Drivers.add(newDriver);
-    }
+    }*/
     public void AddNewTruck(String name,int licensePlate,TruckType type) {
         Truck newTruck = new Truck(name, licensePlate, type);
         Trucks.add(newTruck);
@@ -109,9 +88,10 @@ public class DriversController {
 
     }
 
-    public List<Driver> getCompatibleDrivers(Truck truck){
+    public List<Driver> getCompatibleDrivers(Truck truck,Date date ){
 
-        List<Driver> conDrivers= Drivers.stream().filter(Dr->
+        List<Driver> d=DriversFac.getDrivers(date, truck.getTruckType().getLicensesForTruck());
+        List<Driver> conDrivers= d.stream().filter(Dr->
         {
            /* if(!Occupied.isEmpty()) {
                 for (Tuple<Truck, Driver> y : Occupied) {
@@ -127,7 +107,7 @@ public class DriversController {
 
     }
 
-
+//todo create new func taht return all druvers in date
 
     public void connectDriverAndTruck(Driver driver,Truck truck) throws Exception{//create reserve a truck and a driver
 
@@ -207,12 +187,20 @@ public class DriversController {
         }
         throw new Exception("truck not found");
     }
-    public Driver getDriver (int id) throws Exception {
+    public Driver getDriver (int id,Truck truck,Date date) throws Exception {
+        List<Driver> Drivers=DriversFac.getDrivers(date, truck.getTruckType().getLicensesForTruck());
         for (Driver dr: Drivers){
             if (dr.getId()==id)
                 return dr;
         }
         throw new Exception("driver not found");
     }
-
+    public void load() throws Exception {
+        DALController con=DALController.getInstance();
+        try {
+            Trucks=con.tru.LoadTrucks();
+        } catch (SQLException throwables) {
+            throw new Exception("Error Loading Documents");
+        }
+    }
 }

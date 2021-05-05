@@ -8,6 +8,11 @@ import java.util.List;
 
 public class WorkerResponse {
     private boolean isAdmin;
+
+    public List<Job> getOccupations() {
+        return occupations;
+    }
+
     private List<Job> occupations;
     private List<ConstraintResponse> constraints;
     private String name;

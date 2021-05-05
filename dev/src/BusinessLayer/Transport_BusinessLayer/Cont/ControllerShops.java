@@ -1,8 +1,11 @@
 package BusinessLayer.Transport_BusinessLayer.Cont;
 
 import BusinessLayer.Transport_BusinessLayer.Shops.*;
+import DataLayer.Transport_DAL.DALController;
 
+import java.sql.SQLException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ControllerShops {
     private List<Product> productList;
@@ -156,6 +159,27 @@ public class ControllerShops {
     }
 
 
+    public void load() throws Exception {
+        DALController con=DALController.getInstance();
+        try {
+            productList=con.pro.LoadProducts();
+            storeList=con.sto.LoadStores();
+            supplierList=con.sup.LoadEmptySuppliers();
+            putProductsInSupp(con);
 
-
+        } catch (SQLException throwables) {
+            throw new Exception("Error Loading Stores/Suppliers/products");
+        }
+    }
+    private void putProductsInSupp(DALController con) throws SQLException {
+        HashMap<Integer,Product> mapedProducts=new HashMap<>();
+        for (Product p:productList) {
+            mapedProducts.put(p.getId(),p);
+        }
+        for (Supplier s:supplierList) {
+            List<Integer> products= con.sup.LoadSupplierProductList(s.getId());
+            List<Product> supProductes=products.stream().map(mapedProducts::get).collect(Collectors.toList());
+            s.setProductsServed(supProductes);
+        }
+    }
 }

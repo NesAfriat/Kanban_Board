@@ -15,11 +15,7 @@ public class SupplierDAL {
         try {
 
 
-            String url = "jdbc:sqlite:/Users/danrotman/Desktop/Nituz.db";
-            conn = DriverManager.getConnection(url);
-
-            System.out.println("Connection to SQLite has been established.");
-
+            conn = Connect.getConnection();
             Statement st = conn.createStatement();
             ResultSet results = st.executeQuery("SELECT * FROM Supplier where id =  " + supplierID);
             while (results.next()) {
@@ -74,11 +70,7 @@ public class SupplierDAL {
         try {
             stList = new LinkedList<>();
 
-            String url = "jdbc:sqlite:/Users/danrotman/Desktop/Nituz.db";
-            conn = DriverManager.getConnection(url);
-
-            System.out.println("Connection to SQLite has been established.");
-
+            conn = Connect.getConnection();
             Statement st = conn.createStatement();
             ResultSet results = st.executeQuery("SELECT * FROM SupplierProducts where SupplierID =" + SupplierID);
             int id = 0;
@@ -109,11 +101,7 @@ public class SupplierDAL {
         try{
             stList = new LinkedList<>();
 
-            String url = "jdbc:sqlite:/Users/danrotman/Desktop/Nituz.db";
-            conn = DriverManager.getConnection(url);
-
-            System.out.println("Connection to SQLite has been established.");
-
+            conn = Connect.getConnection();
             Statement st = conn.createStatement();
             ResultSet results = st.executeQuery("SELECT * FROM Supplier");
             while(results.next()){
