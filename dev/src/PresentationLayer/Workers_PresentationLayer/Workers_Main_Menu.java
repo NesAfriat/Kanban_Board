@@ -69,7 +69,10 @@ public class Workers_Main_Menu {
         facade.addOccupationToWorker("000000009", "Usher");
         facade.addOccupationToWorker("000000010", "Usher");
         facade.addOccupationToWorker("000000011", "Usher");
-        facade.addOccupationToWorker("000000012", "Usher");
+        facade.addOccupationToWorker("000000012", "DriverA");
+        facade.addOccupationToWorker("000000011", "DriverB");
+        facade.addOccupationToWorker("000000010", "DriverC");
+
 
 
         facade.addDefaultWorkDay( LocalDate.now().format(formatter));
