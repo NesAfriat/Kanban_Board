@@ -362,12 +362,12 @@ try {
 
     DriversController drivers = this.driversController;
     Driver dr = new Driver("Dan", 209889510, License.typeA);
-    drivers.AddNewDriver("Guy", 208750760, License.typeA);
+    /*drivers.AddNewDriver("Guy", 208750760, License.typeA);
     drivers.AddNewDriver("Dan", 209889510, License.typeA);
     drivers.AddNewDriver("Lebron James", 986750760, License.typeB);
     drivers.AddNewDriver("Stephen Curry", 308450560, License.typeB);
     drivers.AddNewDriver("Omri Caspi", 208750760, License.typeC);
-    drivers.AddNewDriver("Deni Avdija", 208750760, License.typeC);
+    drivers.AddNewDriver("Deni Avdija", 208750760, License.typeC);*/
 
     List<License> licenseList1 = new LinkedList<License>();
     licenseList1.add(License.typeA);
