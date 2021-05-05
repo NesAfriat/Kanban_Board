@@ -1,14 +1,16 @@
 package DataLayer.PersistanceObjects;
 
+import java.util.Date;
+
 public class ItemPer implements PersistanceObj{
     public int item_id;
     public int product_id;
     public String location;
-    public String supplied_date;
-    public String creation_date;
-    public String expiration_date;
+    public Date supplied_date;
+    public Date creation_date;
+    public Date expiration_date;
 
-    public ItemPer(int item_id, int product_id, String location, String supplied_date, String creation_date, String expiration_date) {
+    public ItemPer(int item_id, int product_id, String location, Date supplied_date, Date creation_date, Date expiration_date) {
         this.item_id = item_id;
         this.product_id = product_id;
         this.location = location;
@@ -41,27 +43,27 @@ public class ItemPer implements PersistanceObj{
         this.location = location;
     }
 
-    public String getSupplied_date() {
+    public Date getSupplied_date() {
         return supplied_date;
     }
 
-    public void setSupplied_date(String supplied_date) {
+    public void setSupplied_date(Date supplied_date) {
         this.supplied_date = supplied_date;
     }
 
-    public String getCreation_date() {
+    public Date getCreation_date() {
         return creation_date;
     }
 
-    public void setCreation_date(String creation_date) {
+    public void setCreation_date(Date creation_date) {
         this.creation_date = creation_date;
     }
 
-    public String getExpiration_date() {
+    public Date getExpiration_date() {
         return expiration_date;
     }
 
-    public void setExpiration_date(String expiration_date) {
+    public void setExpiration_date(Date expiration_date) {
         this.expiration_date = expiration_date;
     }
 }
