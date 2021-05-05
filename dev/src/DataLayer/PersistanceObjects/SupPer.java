@@ -1,4 +1,4 @@
 package DataLayer.PersistanceObjects;
 
-public class SupPer {
+public class SupPer implements PersistanceObj {
 }

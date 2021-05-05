@@ -1,4 +1,4 @@
 package DataLayer.PersistanceObjects;
 
-public class CatPer {
+public class CatPer implements PersistanceObj{
 }
