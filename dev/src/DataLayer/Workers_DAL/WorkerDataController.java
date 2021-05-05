@@ -22,6 +22,103 @@ public class WorkerDataController {
         this.identityMap = IdentityMap.getInstance();
     }
 
+    public boolean InitDatabase(){
+        String workerTable = "CREATE TABLE IF NOT EXISTS Worker (" +
+                "\tID\tTEXT NOT NULL," +
+                "\tName\tTEXT NOT NULL," +
+                "\tBankAccount\tTEXT NOT NULL," +
+                "\tSalary\tREAL NOT NULL," +
+                "\tEducationFund\tTEXT NOT NULL," +
+                "\tvacationDaysPerMonth\tINTEGER NOT NULL," +
+                "\tsickDaysPerMonth\tINTEGER NOT NULL,\n" +
+                "\tstartWorkingDate\tTEXT NOT NULL,\n" +
+                "\tendWorkingDate\tTEXT,\n" +
+                "\tPRIMARY KEY(\"ID\"));";
+
+        String shiftTable = "CREATE TABLE IF NOT EXISTS Shift (" +
+                "\tDate\tTEXT NOT NULL," +
+                "\tShiftType\tTEXT NOT NULL," +
+                "\tApproved\tINTEGER NOT NULL,\n" +
+                "\tCashier_Amount\tBLOB NOT NULL," +
+                "\tStorekeeper_Amount\tINTEGER NOT NULL,\n" +
+                "\tUsher_Amount\tINTEGER NOT NULL,\n" +
+                "\tGuard_Amount\tINTEGER NOT NULL,\n" +
+                "\tDriverA_Amount\tINTEGER NOT NULL,\n" +
+                "\tDriverB_Amount\tINTEGER NOT NULL,\n" +
+                "\tDriverC_Amount\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(Date,ShiftType));";
+
+        String occupationTable = "CREATE TABLE IF NOT EXISTS Occupation (\n" +
+                "\tWorker_ID\tTEXT NOT NULL,\n" +
+                "\tJob\tTEXT NOT NULL,\n" +
+                "\tPRIMARY KEY(Worker_ID,Job),\n" +
+                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON DELETE CASCADE ON UPDATE CASCADE);";
+
+        /*
+);
+        BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "Workers_In_Shift" (
+	"Worker_ID"	TEXT NOT NULL,
+	"Date"	TEXT NOT NULL,
+	"ShiftType"	TEXT NOT NULL,
+	"Job"	TEXT NOT NULL,
+	CONSTRAINT "fk_shift" FOREIGN KEY("Date","ShiftType") REFERENCES "Shift"("Date","ShiftType") ON UPDATE CASCADE ON DELETE CASCADE,
+	PRIMARY KEY("Worker_ID","Date","ShiftType"),
+	FOREIGN KEY("Worker_ID") REFERENCES "Worker"("ID") ON UPDATE CASCADE ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "Shift" (
+	"Date"	TEXT NOT NULL,
+	"ShiftType"	TEXT NOT NULL,
+	"Approved"	INTEGER NOT NULL,
+	"Cashier_Amount"	BLOB NOT NULL,
+	"Storekeeper_Amount"	INTEGER NOT NULL,
+	"Usher_Amount"	INTEGER NOT NULL,
+	"Guard_Amount"	INTEGER NOT NULL,
+	"DriverA_Amount"	INTEGER NOT NULL,
+	"DriverB_Amount"	INTEGER NOT NULL,
+	"DriverC_Amount"	INTEGER NOT NULL,
+	PRIMARY KEY("Date","ShiftType")
+);
+CREATE TABLE IF NOT EXISTS "Occupation" (
+	"Worker_ID"	TEXT NOT NULL,
+	"Job"	TEXT NOT NULL,
+	PRIMARY KEY("Worker_ID","Job"),
+	FOREIGN KEY("Worker_ID") REFERENCES "Worker"("ID") ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "DefaultWorkDayShift" (
+	"Day"	INTEGER NOT NULL,
+	"hasMorning"	INTEGER NOT NULL,
+	"hasEvening"	INTEGER NOT NULL,
+	PRIMARY KEY("Day")
+);
+CREATE TABLE IF NOT EXISTS "DefaultWorkDayAssign" (
+	"Day"	INTEGER NOT NULL CHECK(0<Day<=7),
+	"ShiftType"	TEXT NOT NULL,
+	"Job"	TEXT NOT NULL,
+	"Amount"	INTEGER NOT NULL,
+	PRIMARY KEY("Day","Day","ShiftType","Job")
+);
+CREATE TABLE IF NOT EXISTS "Constraints" (
+	"Worker_ID"	TEXT NOT NULL,
+	"Date"	TEXT NOT NULL,
+	"ShiftType"	TEXT NOT NULL,
+	"ConstraintType"	TEXT NOT NULL,
+	PRIMARY KEY("Worker_ID","Date","ShiftType"),
+	FOREIGN KEY("Worker_ID") REFERENCES "Worker"("ID")
+);
+
+         */
+
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement()) {
+            // create a new table
+            //stmt.execute(sql);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+
     private Connection connect() {
         Connection conn = null;
         try {
