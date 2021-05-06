@@ -10,7 +10,7 @@ public interface Report {
 
     public String getSubject();
 
-    public Date getDate();
+    public Date getCreationDate();
 
     public int getReportID();
 

@@ -63,24 +63,11 @@ public class Reports_Controller {
         check_valid_string(new String[]{subject, timeRange});
         check_valid_string(categories);
         Subject sub = convertSubject(subject);
-        TimeRange time = convertTimeRange(timeRange);
-        Report r = reportFactory.getReport(sub, time, categories);
+        Report r = reportFactory.getReport(sub, timeRange, categories);
         reports.put(r.getReportID(), r);
         return r;
     }
 
-    private TimeRange convertTimeRange(String timeRange) throws Exception {
-        switch (timeRange.toLowerCase()) {
-            case "d":
-                return TimeRange.Daily;
-            case "w":
-                return TimeRange.Weekly;
-            case "m":
-                return TimeRange.Monthly;
-            default:
-                throw new Exception("No such Subject");
-        }
-    }
 
     private Subject convertSubject(String sub) throws Exception {
         switch (sub.toLowerCase()) {
@@ -108,7 +95,7 @@ public class Reports_Controller {
         String output = "Report ID's about " + subject + "from " + date + ":\n";
         for (Report r : reports.values()) {
             if (subject.equals(r.getSubject()) &&
-                    date.equals(r.getDate()))
+                    date.equals(r.getCreationDate()))
                 output = output + r.getReportID();
         }
         return output;

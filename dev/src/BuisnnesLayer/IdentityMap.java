@@ -1,8 +1,10 @@
-package BuisnnesLayer.SupplierBuissness;
+package BuisnnesLayer;
 
 import BuisnnesLayer.Category;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
+import BuisnnesLayer.Reports.Report;
+import BuisnnesLayer.SupplierBuissness.*;
 
 import java.util.LinkedList;
 
@@ -12,6 +14,7 @@ public class IdentityMap {
     private LinkedList<GeneralProduct> generalProductList;
     private LinkedList<Category> categoryList;
     private LinkedList<Supplier> suppliersList;
+    private LinkedList<Report> reportsList;
 
     public static IdentityMap getInstance() {
         if (instance == null){
@@ -25,6 +28,7 @@ public class IdentityMap {
         categoryList = new LinkedList<>();
         suppliersList = new LinkedList<>();
         generalProductList = new LinkedList<>();
+        reportsList = new LinkedList<>();
     }
 
     //add an item to the identityMap
@@ -76,13 +80,15 @@ public class IdentityMap {
         }
         return output;
     }
+
+    ////Categories//////
  //TODO: check if object exist in the list before adding
     public void addCategory(Category category) {
         if(!categoryList.contains(category))
         categoryList.add(category);
     }
     //if this function return null - go to the db
-    public Category getCatregoy(String cat) {
+    public Category getCategory(String cat) {
         Category output = null;
         for (Category c: categoryList) {
             if(c.getCategory_name().equals(cat))
@@ -97,4 +103,24 @@ public class IdentityMap {
         return output;
     }
 
+    /////Reports//////
+    public void addReport(Report report) {
+        if(!reportsList.contains(report))
+            reportsList.add(report);
+    }
+    //if this function return null - go to the db
+    public Report getReport(Report report) {
+        Report output = null;
+        for (Report r: reportsList) {
+            if(r.equals(report))
+                output = r;
+        }
+        return output;
+    }
+
+    public Report removeReport(Report report){
+        Report output=null;
+        output = reportsList.remove();
+        return output;
+    }
 }

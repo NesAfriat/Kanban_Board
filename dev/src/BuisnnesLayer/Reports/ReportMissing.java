@@ -10,13 +10,13 @@ import java.util.List;
 
 public class ReportMissing implements Report {
     private final Subject subject = Subject.Missing;
-    private final Date date = new Date();
+    private final Date creationDate = new Date();
     private Integer reportID;
     private LinkedList<String> categories;
-    private TimeRange timeRange;
+    private String timeRange;
     private String report_data;
 
-    public ReportMissing(Integer reportId, TimeRange time, LinkedList<String> categories) {
+    public ReportMissing(Integer reportId, String time, LinkedList<String> categories) {
         this.reportID = reportId;
         this.categories = categories;
         this.timeRange = time;
@@ -43,8 +43,8 @@ public class ReportMissing implements Report {
     }
 
     @Override
-    public Date getDate() {
-        return this.date;
+    public Date getCreationDate() {
+        return this.creationDate;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class ReportMissing implements Report {
 
     @Override
     public String getTimeRange() {
-        return timeRange.name();
+        return timeRange;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class ReportMissing implements Report {
     public String toString() {
         return "Report{" +
                 "\nreport_id= " + this.reportID +
-                "\nreport_date= " + this.date +
+                "\nreport_date= " + this.creationDate +
                 "\nsubject=" + subject +
                 "\ntimeRange=" + timeRange +
                 "\nreport_data= " + report_data +

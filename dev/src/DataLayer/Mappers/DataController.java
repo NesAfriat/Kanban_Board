@@ -3,7 +3,11 @@ package DataLayer.Mappers;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
 import BuisnnesLayer.Category;
+import BuisnnesLayer.Reports.Report;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 
 
@@ -11,7 +15,8 @@ public class DataController {
     private static DataController instance = null;
     private ItemMapper itemMapper;
     private GeneralProductMapper generalProductMapper;
-    private CategoriesMapper CategoriesMapper;
+    private CategoriesMapper categoriesMapper;
+    private ReportsMapper reportsMapper;
 
     public static DataController getInstance() {
         if (instance == null) {
@@ -23,7 +28,8 @@ public class DataController {
     private DataController() {
         itemMapper = new ItemMapper();
         generalProductMapper = new GeneralProductMapper();
-        CategoriesMapper = new CategoriesMapper();
+        categoriesMapper = new CategoriesMapper();
+        reportsMapper = new ReportsMapper();
     }
 
     //TODO: return null if item does not exist
@@ -68,29 +74,65 @@ public class DataController {
         return generalProductMapper.delete(obj);
     }
 
+
     public Category getCategory(String cat_name) {
-        Category cat = CategoriesMapper.getCategory(cat_name);
+        Category cat = categoriesMapper.getCategory(cat_name);
         return cat;
     }
 
     public boolean insertCategory(Category category) {
-        return CategoriesMapper.insertCategory(category);
+        return categoriesMapper.insertCategory(category);
     }
 
     public boolean update(Category obj) {
-        return CategoriesMapper.update(obj);
+        return categoriesMapper.update(obj);
     }
 
     public boolean delete(Category obj) {
-        return CategoriesMapper.delete(obj);
+        return categoriesMapper.delete(obj);
     }
 
     public boolean setFather(Category cat, Category father_cat) {
 
-        return CategoriesMapper.setFather(cat, father_cat);
+        return categoriesMapper.setFather(cat, father_cat);
     }
 
     public LinkedList<Category> loadAllCategoreis() {
-        return CategoriesMapper.loadAllCategories();
+        return categoriesMapper.loadAllCategories();
+    }
+
+    //=============================
+    //reports
+    public Report getReport(int rID) {
+        Report report = reportsMapper.getReport(rID);
+        return report;
+    }
+
+    public boolean insertReport(Report report) {
+        return reportsMapper.insert(report);
+    }
+
+    public boolean update(Report report) {
+        return reportsMapper.update(report);
+    }
+
+    public boolean delete(Report report) {
+        return reportsMapper.delete(report);
+    }
+
+    public LinkedList<Report> loadAllReports() {
+        return reportsMapper.loadAllReports();
+    }
+
+    public static Date getDate(String date) throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.parse(date);
+    }
+
+    public static String getDate(Date date) {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(date);
     }
 }

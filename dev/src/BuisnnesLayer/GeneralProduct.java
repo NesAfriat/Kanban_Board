@@ -1,6 +1,6 @@
 package BuisnnesLayer;
 
-import BuisnnesLayer.SupplierBuissness.IdentityMap;
+import BuisnnesLayer.SupplierBuissness.*;
 import DataLayer.Mappers.DataController;
 
 import java.util.HashMap;

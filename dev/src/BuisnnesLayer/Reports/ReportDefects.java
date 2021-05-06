@@ -12,13 +12,13 @@ import java.util.List;
 
 public class ReportDefects implements Report {
     private final Subject subject = Subject.Defects;
-    private final Date date = new Date();
+    private final Date creationDate = new Date();
     private int reportID;
     private LinkedList<String> categories;
-    private TimeRange timeRange;
+    private String timeRange;
     private String report_data;
 
-    public ReportDefects(Integer reportId, TimeRange time, LinkedList<String> categories) {
+    public ReportDefects(Integer reportId, String time, LinkedList<String> categories) {
         this.reportID = reportId;
         this.categories = categories;
         this.timeRange = time;
@@ -42,16 +42,16 @@ public class ReportDefects implements Report {
 
     private boolean relevantToTimeRange(Date expiration_date) {
         switch (timeRange) {
-            case Daily:
-                if (getDate(expiration_date).substring(8).equals(getDate(this.date).substring(8)))
+            case "d":
+                if (getDate(expiration_date).substring(8).equals(getDate(this.creationDate).substring(8)))
                     return true;
                 break;
-            case Weekly:
-                if (Math.abs((this.date.getTime() - expiration_date.getTime()) / (60 * 60 * 24 * 1000)) <= 7)
+            case "w":
+                if (Math.abs((this.creationDate.getTime() - expiration_date.getTime()) / (60 * 60 * 24 * 1000)) <= 7)
                     return true;
                 break;
-            case Monthly:
-                if (Math.abs((this.date.getTime() - expiration_date.getTime()) / (60 * 60 * 24 * 1000)) <= 30)
+            case "m":
+                if (Math.abs((this.creationDate.getTime() - expiration_date.getTime()) / (60 * 60 * 24 * 1000)) <= 30)
                     return true;
                 break;
         }
@@ -65,8 +65,8 @@ public class ReportDefects implements Report {
     }
 
     @Override
-    public Date getDate() {
-        return this.date;
+    public Date getCreationDate() {
+        return this.creationDate;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class ReportDefects implements Report {
 
     @Override
     public String getTimeRange() {
-        return timeRange.name();
+        return timeRange;
     }
 
     @Override
@@ -94,7 +94,7 @@ public class ReportDefects implements Report {
     public String toString() {
         return "Report{" +
                 "\nreport_id= " + this.reportID +
-                "\nreport_date= " + this.date +
+                "\nreport_date= " + this.creationDate +
                 "\nsubject=" + subject +
                 "\ntimeRange=" + timeRange +
                 "\nreport_data= " + report_data +
