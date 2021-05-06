@@ -69,20 +69,20 @@ public class GeneralProductMapper extends Mapper {
         return obj;
     }
 
-    public boolean update(GeneralProduct obj) {
+    public boolean update(GeneralProduct gp) {
         boolean updated = false;
         try (Connection conn = connect()) {
             String statement = "UPDATE GeneralProducts SET gpID=?, gpName=?, gpManuName=?, amountStore=?, amountStorage=?, minAmount=?, sellingPrice=? WHERE gpID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, obj.getProduct_id());
-                pstmt.setString(2, obj.getProduct_name());
-                pstmt.setString(3, obj.getManufacturer_name());
-                pstmt.setInt(4, obj.getAmount_store());
-                pstmt.setInt(5, obj.getAmount_storage());
-                pstmt.setInt(6, obj.getMin_amount());
-                pstmt.setDouble(7, obj.getSelling_price());
-                pstmt.setInt(8, obj.getProduct_id());
+                pstmt.setInt(1, gp.getProduct_id());
+                pstmt.setString(2, gp.getProduct_name());
+                pstmt.setString(3, gp.getManufacturer_name());
+                pstmt.setInt(4, gp.getAmount_store());
+                pstmt.setInt(5, gp.getAmount_storage());
+                pstmt.setInt(6, gp.getMin_amount());
+                pstmt.setDouble(7, gp.getSelling_price());
+                pstmt.setInt(8, gp.getProduct_id());
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -94,13 +94,13 @@ public class GeneralProductMapper extends Mapper {
     }
 
     //TODO: not sure if it will be used
-    public boolean delete(GeneralProduct obj) {
+    public boolean delete(GeneralProduct gp) {
         boolean deleted = false;
         try (Connection conn = connect()) {
             String statement = "DELETE FROM GeneralProducts WHERE gpID=?";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, obj.getProduct_id());
+                pstmt.setInt(1, gp.getProduct_id());
                 deleted = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -112,7 +112,7 @@ public class GeneralProductMapper extends Mapper {
     }
 
     //TODO: make sure the dates are added properly!
-    public boolean insertProduct(GeneralProduct product) {
+    public boolean insertProduct(GeneralProduct gp) {
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
@@ -120,13 +120,13 @@ public class GeneralProductMapper extends Mapper {
                     "VALUES (?,?,?,?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, product.getProduct_id());
-                pstmt.setString(2, product.getProduct_name());
-                pstmt.setString(3, product.getManufacturer_name());
-                pstmt.setInt(4, product.getAmount_store());
-                pstmt.setInt(5, product.getAmount_storage());
-                pstmt.setInt(6, product.getMin_amount());
-                pstmt.setDouble(7, product.getSelling_price());
+                pstmt.setInt(1, gp.getProduct_id());
+                pstmt.setString(2, gp.getProduct_name());
+                pstmt.setString(3, gp.getManufacturer_name());
+                pstmt.setInt(4, gp.getAmount_store());
+                pstmt.setInt(5, gp.getAmount_storage());
+                pstmt.setInt(6, gp.getMin_amount());
+                pstmt.setDouble(7, gp.getSelling_price());
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();

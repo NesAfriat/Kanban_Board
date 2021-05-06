@@ -47,7 +47,7 @@ public class GeneralProduct {
         this.selling_price = sellingPrice;
 
         //TODO: those fields will be updated later on!
-        this.item_id =-1;
+        this.item_id =0;
         this.items = null;
         this.HashOfSupplierProducts = null;
         add_to_data(this); //TODO: added here
@@ -157,9 +157,10 @@ public class GeneralProduct {
         } else {
             addAmount_store(quantity);
         }
-
+        update(this);
         return itemsAdded;
     }
+
 
     /**
      * get the defected items from the product to this date(today) from a specific stock
@@ -270,15 +271,16 @@ public class GeneralProduct {
         if(!dc.insertGP(prod)){
             System.out.println("failed to insert new General Product to the database with the keys: gpID= "+prod.getProduct_id() );
         }
-        for (Item item:items) {
-            add_to_data(item);
-        }
-//        for(ProductSupplier ps: HashOfSupplierProducts.values()){
-//            add_to_data(ps);
-//        }
         im.addGeneralProduct(prod);
     }
 
+    private void update(GeneralProduct prod) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.update(this)){
+            System.out.println("failed to update new General Product to the database with the keys: gpID= "+prod.getProduct_id() );
+        }
+    }
 
 
 

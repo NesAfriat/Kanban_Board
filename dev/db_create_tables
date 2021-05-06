@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS Categories(
 	catID INTEGER PRIMARY KEY,
-	catName VARCHAR(30),
+	catName TEXT,
 	father_Category INTEGER,
 	
 	FOREIGN KEY (father_Category) REFERENCES Categories (catID)
@@ -8,9 +8,9 @@ CREATE TABLE IF NOT EXISTS Categories(
 
 CREATE TABLE IF NOT EXISTS Reports(
 	repID INTEGER PRIMARY KEY,	
-	subject VARCHAR(7),
-	creation_date DATETIME,
-	time_range VARCHAR(7),
+	subject TEXT,
+	creation_date TEXT,
+	time_range TEXT,
 	data TEXT
 
 );
@@ -29,20 +29,19 @@ CREATE TABLE IF NOT EXISTS SaleCategory(
 	saleID INTEGER,
 	catID INTEGER,
 	discount_percent REAL,
-	description VARCHAR(300),
-	start_date DATETIME,
-	end_date DATETIME,
+	description TEXT,
+	start_date TEXT,
+	end_date TEXT,
 	
 	PRIMARY KEY (saleID, catID),
-	FOREIGN KEY (catID) REFERENCES Categories(catID),
-	CHECK(end_date >= start_date)
+	FOREIGN KEY (catID) REFERENCES Categories(catID)
 
 );
 
 CREATE TABLE IF NOT EXISTS GeneralProducts(
 	gpID INTEGER PRIMARY KEY,
-	gpName VARCHAR(30),
-	gpManuName VARCHAR(30),
+	gpName TEXT,
+	gpManuName TEXT,
 	amountStore INTEGER,
 	amountStorage INTEGER,
 	minAmount INTEGER,
@@ -63,38 +62,46 @@ CREATE TABLE IF NOT EXISTS SaleProduct(
 	saleID INTEGER,
 	gpID INTEGER,
 	discount_percent REAL,
-	description VARCHAR(300),
-	start_date DATETIME,
-	end_date DATETIME,
+	description TEXT,
+	start_date TEXT,
+	end_date TEXT,
 
 	PRIMARY KEY (saleID, gpID),
-	FOREIGN KEY (gpID) REFERENCES GeneralProducts(gpID),
-	CHECK(end_date >= start_date)
+	FOREIGN KEY (gpID) REFERENCES GeneralProducts(gpID)
 	
 );
 
-CREATE TABLE IF NOT EXISTS Item(
+CREATE TABLE IF NOT EXISTS DefectsItems(
+	gpID INTEGER,
+	iID INTEGER,
+	expiration_date TEXT,
+
+	PRIMARY KEY (gpID, iID),
+	FOREIGN KEY (gpID) REFERENCES Items (gpID),
+	FOREIGN KEY (iID) REFERENCES Items (iID)
+
+);
+
+
+CREATE TABLE IF NOT EXISTS Items(
 	gpID INTEGER,
 	iID INTEGER,
 	location TEXT,
-	supplied_date DATETIME,
-	creation_date DATETIME,
-	expiration_date DATETIME,
-	
+	supplied_date TEXT,
+	creation_date TEXT,
+	expiration_date TEXT,
+
 	PRIMARY KEY (gpID, iID),
-	FOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID),
-	CHECK(expiration_date >= creation_date)
-	CHECK(supplied_date >= creation_date)
+	FOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)
 
 );
-========================================================================
 
 CREATE TABLE IF NOT EXISTS Suppliers(
 	supID INTEGER PRIMARY KEY,
-	supName VARCHAR(15),
+	supName TEXT,
 	bankAccount TEXT,
 	payementMethod TEXT
-	
+
 );
 
 CREATE TABLE IF NOT EXISTS SuppliersProducts(
@@ -102,17 +109,17 @@ CREATE TABLE IF NOT EXISTS SuppliersProducts(
 	catalogID INTEGER,
 	gpID INTEGER,
 	price REAL,
-	
+
 	PRIMARY KEY (supID, catalogID),
 	FOREIGN KEY (supID) REFERENCES Suppliers (supID),
 	FOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)
-	
+
 );
 
 CREATE TABLE IF NOT EXISTS SuppliersContacts(
 	supID INTEGER,
 	cntcID INTEGER,
-	cntcName VARCHAR(30),
+	cntcName TEXT,
 	phoneNumber TEXT,
 	email TEXT,
 	
@@ -124,7 +131,7 @@ CREATE TABLE IF NOT EXISTS SuppliersContacts(
 CREATE TABLE IF NOT EXISTS Orders(
 	supID INTEGER,
 	oID INTEGER,
-	dateTime DATETIME,
+	TEXT TEXT,
 	totalPayment REAL,
 	constant INTEGER,
 	

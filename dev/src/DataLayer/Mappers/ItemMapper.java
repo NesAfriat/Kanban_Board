@@ -6,6 +6,8 @@ import DataLayer.PersistanceObjects.PersistanceObj;
 
 import java.io.File;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ItemMapper extends Mapper {
@@ -14,21 +16,29 @@ public class ItemMapper extends Mapper {
         super();
         create_table();
     }
+    public static Date getDate(String date) throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.parse(date);
+    }
+
+    public static String getDate(Date date) {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(date);
+    }
 
     @Override
     void create_table() {
-
         String itemTable = "CREATE TABLE IF NOT EXISTS Items(\n" +
                 "\tgpID INTEGER,\n" +
                 "\tiID INTEGER,\n" +
                 "\tlocation TEXT,\n" +
-                "\tsupplied_date DATETIME,\n" +
-                "\tcreation_date DATETIME,\n" +
-                "\texpiration_date DATETIME,\n" +
+                "\tsupplied_date TEXT,\n" +
+                "\tcreation_date TEXT,\n" +
+                "\texpiration_date TEXT,\n" +
                 "\tPRIMARY KEY (gpID, iID),\n" +
-                "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID),\n" +
-                "\tCHECK(expiration_date >= creation_date),\n" +
-                "\tCHECK(supplied_date >= creation_date)\n" +
+                "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)\n" +
                 ");";
         //        String sql = "BEGIN TRANSACTION;" + itemTable + "COMMIT;";
         try (Connection conn = connect();
@@ -60,12 +70,12 @@ public class ItemMapper extends Mapper {
                     int gpID = rs.getInt(1);
                     int iID = rs.getInt(2);
                     String location = rs.getString(3);
-                    Date sup_date = rs.getDate(4);
-                    Date create_date = rs.getDate(5);
-                    Date exp_date = rs.getDate(6);
-                    obj = new Item(gpID, iID, location, sup_date, create_date, exp_date);
+                    String sup_date = rs.getString(4);
+                    String create_date = rs.getString(5);
+                    String exp_date = rs.getString(6);
+                    obj = new Item(gpID, iID, location, getDate(sup_date), getDate(create_date), getDate(exp_date));
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ParseException e) {
                 e.printStackTrace();
             }
         } catch (SQLException throwables) {
@@ -74,20 +84,20 @@ public class ItemMapper extends Mapper {
         return obj;
     }
 
-    public boolean update(Item obj) {
+    public boolean update(Item item) {
         boolean updated = false;
         try (Connection conn = connect()) {
             String statement = "UPDATE Items SET gpID=?, iID=?, location=?, supplied_date=?, creation_date=?, expiration_date=? WHERE gpID=? AND iID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, obj.getProduct_id());
-                pstmt.setInt(2, obj.getItem_id());
-                pstmt.setString(3, obj.getLocation());
-                pstmt.setDate(4, (java.sql.Date) obj.getSupplied_date());
-                pstmt.setDate(5, (java.sql.Date) obj.getCreation_date());
-                pstmt.setDate(6, (java.sql.Date) obj.getExpiration_date());
-                pstmt.setInt(7, obj.getProduct_id());
-                pstmt.setInt(8, obj.getItem_id());
+                pstmt.setInt(1, item.getProduct_id());
+                pstmt.setInt(2, item.getItem_id());
+                pstmt.setString(3, item.getLocation());
+                pstmt.setString(4, getDate(item.getSupplied_date()));
+                pstmt.setString(5, getDate(item.getCreation_date()));
+                pstmt.setString(6, getDate(item.getExpiration_date()));
+                pstmt.setInt(7, item.getProduct_id());
+                pstmt.setInt(8, item.getItem_id());
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -98,14 +108,14 @@ public class ItemMapper extends Mapper {
         return updated;
     }
 
-    public boolean delete(Item obj) {
+    public boolean delete(Item item) {
         boolean deleted = false;
         try (Connection conn = connect()) {
             String statement = "DELETE FROM Items WHERE gpID=? AND iID=?";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, obj.getProduct_id());
-                pstmt.setInt(2, obj.getItem_id());
+                pstmt.setInt(1, item.getProduct_id());
+                pstmt.setInt(2, item.getItem_id());
                 deleted = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -128,9 +138,9 @@ public class ItemMapper extends Mapper {
                 pstmt.setInt(1, item.getProduct_id());
                 pstmt.setInt(2, item.getItem_id());
                 pstmt.setString(3, item.getLocation());
-                pstmt.setDate(4, (java.sql.Date) item.getSupplied_date());
-                pstmt.setDate(5, (java.sql.Date) item.getCreation_date());
-                pstmt.setDate(6, (java.sql.Date) item.getExpiration_date());
+                pstmt.setString(4, getDate(item.getSupplied_date()));
+                pstmt.setString(5, getDate(item.getCreation_date()));
+                pstmt.setString(6, getDate(item.getExpiration_date()));
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
