@@ -2,12 +2,16 @@ package DataLayer.Mappers;
 
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
+import BuisnnesLayer.Category;
+
+import java.util.LinkedList;
 
 
 public class DataController {
     private static DataController instance = null;
     private ItemMapper itemMapper;
     private GeneralProductMapper generalProductMapper;
+    private CategoriesMapper CategoriesMapper;
 
     public static DataController getInstance() {
         if (instance == null) {
@@ -19,6 +23,7 @@ public class DataController {
     private DataController() {
         itemMapper = new ItemMapper();
         generalProductMapper = new GeneralProductMapper();
+        CategoriesMapper = new CategoriesMapper();
     }
 
     //TODO: return null if item does not exist
@@ -28,6 +33,7 @@ public class DataController {
         Item ip = itemMapper.getItem(product_id, item_id);
         return ip;
     }
+
     //If we want to make entire new record of an item
     public boolean insertItem(Item obj) {
         return itemMapper.insertItem(obj);
@@ -48,6 +54,7 @@ public class DataController {
         //TODO: need to add here itemsList and supplierProductList
         return gp;
     }
+
     //If we want to make entire new record of an item
     public boolean insertGP(GeneralProduct obj) {
         return generalProductMapper.insertProduct(obj);
@@ -61,4 +68,29 @@ public class DataController {
         return generalProductMapper.delete(obj);
     }
 
+    public Category getCategory(String cat_name) {
+        Category cat = CategoriesMapper.getCategory(cat_name);
+        return cat;
+    }
+
+    public boolean insertCategory(Category category) {
+        return CategoriesMapper.insertCategory(category);
+    }
+
+    public boolean update(Category obj) {
+        return CategoriesMapper.update(obj);
+    }
+
+    public boolean delete(Category obj) {
+        return CategoriesMapper.delete(obj);
+    }
+
+    public boolean setFather(Category cat, Category father_cat) {
+
+        return CategoriesMapper.setFather(cat, father_cat);
+    }
+
+    public LinkedList<Category> loadAllCategoreis() {
+        return CategoriesMapper.loadAllCategories();
+    }
 }

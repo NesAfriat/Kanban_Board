@@ -1,10 +1,7 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.Item;
-import DataLayer.PersistanceObjects.ItemPer;
-import DataLayer.PersistanceObjects.PersistanceObj;
 
-import java.io.File;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

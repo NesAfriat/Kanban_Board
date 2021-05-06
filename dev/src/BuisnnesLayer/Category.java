@@ -28,6 +28,7 @@ public class Category {
 
     public void setFather_Category(Category father_Category) {
         this.father_Category = father_Category;
+        if(father_Category!=null)
         father_Category.sub_Category.add(this);
     }
 

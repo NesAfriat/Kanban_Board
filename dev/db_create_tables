@@ -1,9 +1,8 @@
 CREATE TABLE IF NOT EXISTS Categories(
-	catID INTEGER PRIMARY KEY,
-	catName TEXT,
-	father_Category INTEGER,
+	catName TEXT PRIMARY KEY,
+	father_Category TEXT,
 	
-	FOREIGN KEY (father_Category) REFERENCES Categories (catID)
+	FOREIGN KEY (father_Category) REFERENCES Categories (catName)
 );
 
 CREATE TABLE IF NOT EXISTS Reports(
@@ -17,24 +16,24 @@ CREATE TABLE IF NOT EXISTS Reports(
 
 CREATE TABLE IF NOT EXISTS ReportCategories(
 	repID INTEGER,
-	catID INTEGER,
+	catName TEXT,
 	
-	PRIMARY KEY (repID, catID),
+	PRIMARY KEY (repID, catName),
 	FOREIGN KEY (repID) REFERENCES Reports(repID),
-	FOREIGN KEY (catID) REFERENCES Categories(catID)
+	FOREIGN KEY (catName) REFERENCES Categories(catName)
 	
 );
 
 CREATE TABLE IF NOT EXISTS SaleCategory(
 	saleID INTEGER,
-	catID INTEGER,
+	catName TEXT,
 	discount_percent REAL,
 	description TEXT,
 	start_date TEXT,
 	end_date TEXT,
 	
-	PRIMARY KEY (saleID, catID),
-	FOREIGN KEY (catID) REFERENCES Categories(catID)
+	PRIMARY KEY (saleID, catName),
+	FOREIGN KEY (catName) REFERENCES Categories(catName)
 
 );
 
@@ -45,19 +44,12 @@ CREATE TABLE IF NOT EXISTS GeneralProducts(
 	amountStore INTEGER,
 	amountStorage INTEGER,
 	minAmount INTEGER,
-	sellingPrice REAL
+	sellingPrice REAL,
+	catName TEXT
 	
+	FOREIGN KEY (catName) REFERENCES Categories(catName)
 );
 
-CREATE TABLE IF NOT EXISTS ProductCategories(
-	catID INTEGER,
-	gpID INTEGER,
-	
-	PRIMARY KEY (catID, gpID),
-	FOREIGN KEY (catID) REFERENCES Categories(catID),
-	FOREIGN KEY (gpID) REFERENCES GeneralProducts(gpID)
-	
-);
 CREATE TABLE IF NOT EXISTS SaleProduct(
 	saleID INTEGER,
 	gpID INTEGER,

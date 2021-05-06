@@ -3,6 +3,8 @@ package BuisnnesLayer;
 import BuisnnesLayer.Category;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
+import BuisnnesLayer.SupplierBuissness.IdentityMap;
+import DataLayer.Mappers.DataController;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -10,13 +12,14 @@ import java.util.LinkedList;
 
 public class productManager {
     private HashMap<Integer, GeneralProduct> productsfuture;                       //all product in store by product id
-
+    private boolean loadCategories;
     private HashMap<Integer, GeneralProduct> products;                       //all product in store by product id
     private HashMap<Category, LinkedList<GeneralProduct>> categories;        //all categories and their products
 
     public productManager(){
         this.products = new HashMap<>();
         this.categories = new HashMap<>();
+        this.loadCategories= false;
     }
 
     /**
@@ -52,6 +55,10 @@ public class productManager {
     }
 
     public HashMap<Category, LinkedList<GeneralProduct>> getCategories() {
+        if(!loadCategories) {
+            loadAllCategories();
+            loadCategories=true;
+        }
         return categories;
     }
 
@@ -92,6 +99,8 @@ public class productManager {
         if (isCategory_in_Categories(category)) {
             throw new Exception("category already exist");
         }
+        Category newCat= new Category(category);
+        addCategoryPersistence(newCat);
         categories.put(new Category(category), new LinkedList<>());
     }
 
@@ -116,6 +125,10 @@ public class productManager {
      * @return
      */
     private boolean isCategory_in_Categories(String category) {
+        if(!loadCategories) {
+            loadAllCategories();
+            loadCategories=true;
+        }
         for (Category c : categories.keySet())
             if (c.getCategory_name().equals(category)) {
                 return true;
@@ -166,7 +179,8 @@ public class productManager {
             throw new Exception("category doesnt exist");
         }
         Category father = getCategory(cat_name).removed();
-        LinkedList<GeneralProduct> products = categories.remove(getCategory(cat_name));
+        Category removed= removeCategoryPersistence(getCategory(cat_name));
+        LinkedList<GeneralProduct> products = categories.remove(removed);
         categories.get(father).addAll(products);
 //        categories.put(father, mergeProductLists(categories.get(father), products));
     }
@@ -190,6 +204,7 @@ public class productManager {
             throw new Exception("category doesnt exist!");
         }
         getCategory(cat_name).setFather_Category(getCategory(cat_father_name));
+        setFatherPersistence(getCategory(cat_name),getCategory(cat_father_name));
     }
 
     public LinkedList<GeneralProduct> get_category_products(String cat_name) throws Exception {
@@ -279,6 +294,10 @@ public class productManager {
     public LinkedList<String> get_product_categories(GeneralProduct product) {
         LinkedList<String> output = new LinkedList<>();
         Category tmp;
+        if(!loadCategories) {
+            loadAllCategories();
+            loadCategories=true;
+        }
         for (Category cat : categories.keySet()) {
             if (categories.get(cat).contains(product)) {
                 tmp = cat;
@@ -300,6 +319,10 @@ public class productManager {
     }
 
     public LinkedList<String> get_all_categories() {
+        if(!loadCategories) {
+            loadAllCategories();
+            loadCategories=true;
+        }
         int counter=1;
         LinkedList<String> output = new LinkedList<>();
         for (Category category : categories.keySet()) {
@@ -325,6 +348,10 @@ public class productManager {
 
     //for inside use
     public boolean check_category_exist(String cat_name) {
+        if(!loadCategories) {
+            loadAllCategories();
+            loadCategories=true;
+        }
         for (Category cat : categories.keySet()) {
             if(cat.getCategory_name().equals(cat_name))
                 return true;
@@ -340,5 +367,38 @@ public class productManager {
         return false;
     }
 
+    //=================================
+    //Data Fucntions
+    private void loadAllCategories() {
+        DataController dc = DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        LinkedList<Category> categoriesList = dc.loadAllCategoreis();
+        for (Category c : categoriesList) {
+            im.addCategory(c);
+            if(!categories.containsKey(c))
+                categories.put(c,new LinkedList<>());
+        }
+    }
+    private void addCategoryPersistence(Category newCat)
+    {
+        DataController dc = DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        im.addCategory(newCat);
+        dc.insertCategory(newCat);
+    }
+    private Category removeCategoryPersistence(Category toRemove)
+    {
+        Category removed;
+        DataController dc = DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        removed=im.removeCategory(toRemove);
+        dc.delete(toRemove);
+        return removed;
+    }
+    private void setFatherPersistence(Category category,Category father)
+    {
+        DataController dc = DataController.getInstance();
+        dc.setFather(category,father);
+    }
 
 }

@@ -1,6 +1,8 @@
 package BuisnnesLayer;
 
 import BuisnnesLayer.Item;
+import BuisnnesLayer.SupplierBuissness.IdentityMap;
+import DataLayer.Mappers.DataController;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -188,6 +190,17 @@ public class Stock {
 
     public boolean check_product_exist(String prod_name) {
         return this.productManager.check_product_exist(prod_name);
+    }
+
+    //======================================================================
+//DATA Functions:
+    private void add_to_data(Category category){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.insertCategory(category)){
+            System.out.println("failed to insert new Category to the database with the name + " +category.getCategory_name());
+        }
+        im.addCategory(category);
     }
 
 

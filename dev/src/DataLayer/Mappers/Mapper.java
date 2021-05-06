@@ -1,6 +1,5 @@
 package DataLayer.Mappers;
 
-import DataLayer.PersistanceObjects.PersistanceObj;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
