@@ -43,8 +43,8 @@ public class ItemMapper extends Mapper {
         }
     }
 
-    public ItemPer getItem(int product_id, int item_id) {
-        ItemPer obj = null;
+    public Item getItem(int product_id, int item_id) {
+        Item obj = null;
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM items WHERE gpID=? AND iID=? ";
 
@@ -60,7 +60,7 @@ public class ItemMapper extends Mapper {
                     Date sup_date = rs.getDate(4);
                     Date create_date = rs.getDate(5);
                     Date exp_date = rs.getDate(6);
-                    obj = new ItemPer(gpID, iID, location, sup_date, create_date, exp_date);
+                    obj = new Item(gpID, iID, location, sup_date, create_date, exp_date);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -71,7 +71,7 @@ public class ItemMapper extends Mapper {
         return obj;
     }
 
-    public boolean update(ItemPer obj) {
+    public boolean update(Item obj) {
         boolean updated = false;
         try (Connection conn = connect()) {
             String statement = "UPDATE Items SET gpID=?, iID=?, location=?, supplied_date=?, creation_date=?, expiration_date=? WHERE gpID=? AND iID=? ";
@@ -95,7 +95,7 @@ public class ItemMapper extends Mapper {
         return updated;
     }
 
-    public boolean delete(ItemPer obj) {
+    public boolean delete(Item obj) {
         boolean deleted = false;
         try (Connection conn = connect()) {
             String statement = "DELETE FROM Items WHERE gpID=? AND iID=?";
@@ -114,23 +114,21 @@ public class ItemMapper extends Mapper {
     }
 
     //TODO: make sure the dates are added properly!
-    public PersistanceObj insertItem(Item item) throws Exception {
-        ItemPer output = new ItemPer(item.getItem_id(), item.getProduct_id(), item.getLocation(), item.getSupplied_date(), item.getCreation_date(), item.getExpiration_date());
+    public boolean insertItem(Item item) {
+        boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
             String statement = "INSERT OR IGNORE INTO Items (gpID, iID, location, supplied_date, creation_date, expiration_date) " +
                     "VALUES (?,?,?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, output.getProduct_id());
-                pstmt.setInt(2, output.getItem_id());
-                pstmt.setString(3, output.getLocation());
-                pstmt.setDate(4, (java.sql.Date) output.getSupplied_date());
-                pstmt.setDate(5, (java.sql.Date) output.getCreation_date());
-                pstmt.setDate(6, (java.sql.Date) output.getExpiration_date());
-                if (pstmt.executeUpdate() != 0) {
-                    throw new Exception("could not add an item to the database");
-                }
+                pstmt.setInt(1, item.getProduct_id());
+                pstmt.setInt(2, item.getItem_id());
+                pstmt.setString(3, item.getLocation());
+                pstmt.setDate(4, (java.sql.Date) item.getSupplied_date());
+                pstmt.setDate(5, (java.sql.Date) item.getCreation_date());
+                pstmt.setDate(6, (java.sql.Date) item.getExpiration_date());
+                output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
             }

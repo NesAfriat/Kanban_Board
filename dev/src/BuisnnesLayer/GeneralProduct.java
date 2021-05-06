@@ -1,5 +1,8 @@
 package BuisnnesLayer;
 
+import DataLayer.IdentityMap;
+import DataLayer.Mappers.DataController;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Date;
@@ -125,6 +128,7 @@ public class GeneralProduct {
         LinkedList<Integer> itemsAdded = new LinkedList<>();
         for (int i = 0; i < quantity; i++) {
             Item item = new Item(item_id, product_id, location, supplied_date, creation_date, expiration_date);
+            add_to_data(item);
             items.add(item);
             itemsAdded.add(item.getItem_id());
             item_id++;
@@ -134,6 +138,7 @@ public class GeneralProduct {
         } else {
             addAmount_store(quantity);
         }
+
         return itemsAdded;
     }
 
@@ -228,5 +233,19 @@ public class GeneralProduct {
     public LinkedList<Item> get_items() {
         return items;
     }
+
+//======================================================================
+//DATA Functions:
+    private void add_to_data(Item item){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.insertItem(item)){
+            System.out.println("failed to insert new item to the database with the keys: gpID= "+item.getProduct_id() + " iID= " + item.getItem_id() );
+        }
+        im.addItem(item);
+    }
+
+
+
 
 }

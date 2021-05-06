@@ -1,4 +1,5 @@
 package DataLayer.Mappers;
+
 import BuisnnesLayer.Item;
 import DataLayer.PersistanceObjects.ItemPer;
 
@@ -10,23 +11,34 @@ public class DataController {
     private ItemMapper itemMapper;
 
     public static DataController getInstance() {
-        if (instance == null){
+        if (instance == null) {
             instance = new DataController();
         }
         return instance;
     }
-    private DataController(){
-        itemMapper= new ItemMapper();
+
+    private DataController() {
+        itemMapper = new ItemMapper();
     }
 
+    //TODO: return null if item does not exist
     //Item Actions:
-    public Item getItem(int product_id, int item_id){
-        ItemPer ip = itemMapper.getItem(product_id, item_id);
-        return new Item(ip.item_id, ip.product_id, ip.location, ip.supplied_date, ip.creation_date, ip.expiration_date);
+    //If we want to retrive an item which was not in the business
+    public Item getItem(int product_id, int item_id) {
+        Item ip = itemMapper.getItem(product_id, item_id);
+        return ip;
     }
-    //TODO look on this
-    public void update(ItemPer obj){
-        itemMapper.update(obj);
+    //If we want to make entire new record of an item
+    public boolean insertItem(Item obj) {
+        return itemMapper.insertItem(obj);
+    }
+
+    public boolean update(Item obj) {
+        return itemMapper.update(obj);
+    }
+
+    public boolean delete(Item obj) {
+        return itemMapper.delete(obj);
     }
 
 }

@@ -11,10 +11,9 @@ import java.util.LinkedList;
 
 public class IdentityMap {
     private static IdentityMap instance = null;
-    HashMap<PersistanceObj, Item> itemMap;
-    HashMap<PersistanceObj, Category> catMap;
-    HashMap<PersistanceObj, Supplier> supMap;
-
+    private LinkedList<Item> itemList;
+    private LinkedList<Category> categoryList;
+    private LinkedList<Supplier> suppliersList;
 
     public static IdentityMap getInstance() {
         if (instance == null){
@@ -24,22 +23,33 @@ public class IdentityMap {
     }
 
     private IdentityMap(){
-        this.itemMap = new HashMap<>();
-        this.catMap = new HashMap<>();
-        this.supMap = new HashMap<>();
+        itemList = new LinkedList<>();
+        categoryList = new LinkedList<>();
+        suppliersList = new LinkedList<>();
     }
 
     //add an item to the identityMap
-    public void addItem(Item item, PersistanceObj itemPer) {
-        itemMap.put(itemPer,item);
+    public void addItem(Item item) {
+        itemList.add(item);
     }
 
+    //TODO: need to add empty constructor for each created object
     //if this function return null - go to the db
     public Item getItem(int item_id, int gp_id) {
         Item output = null;
-        for (Item item: itemMap.values()) {
+        for (Item item: itemList) {
             if(item.getItem_id()==item_id && item.getProduct_id() ==gp_id)
                 output = item;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
+    public Item removeItem(int item_id, int gp_id){
+        Item output=null;
+        for (Item item: itemList) {
+            if(item.getItem_id()==item_id && item.getProduct_id() ==gp_id)
+                output = itemList.remove();
         }
         return output;
     }
