@@ -1,12 +1,8 @@
-package DataLayer;
+package BuisnnesLayer.SupplierBuissness;
 
 import BuisnnesLayer.Category;
 import BuisnnesLayer.Item;
-import BuisnnesLayer.SupplierBuissness.Supplier;
-import DataLayer.PersistanceObjects.ItemPer;
-import DataLayer.PersistanceObjects.PersistanceObj;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public class IdentityMap {
@@ -50,6 +46,28 @@ public class IdentityMap {
         for (Item item: itemList) {
             if(item.getItem_id()==item_id && item.getProduct_id() ==gp_id)
                 output = itemList.remove();
+        }
+        return output;
+    }
+
+    public void addCategory(Category category) {
+        categoryList.add(category);
+    }
+    //if this function return null - go to the db
+    public Category getCatregoy(String cat) {
+        Category output = null;
+        for (Category c: categoryList) {
+            if(c.getCategory_name().equals(cat))
+                output = c;
+        }
+        return output;
+    }
+
+    public Category removeCategory(String cat_name){
+        Category output=null;
+        for (Category c: categoryList) {
+            if(c.getCategory_name().equals(cat_name))
+                output = categoryList.remove();
         }
         return output;
     }

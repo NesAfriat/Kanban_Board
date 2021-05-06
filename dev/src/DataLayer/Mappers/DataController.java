@@ -1,5 +1,6 @@
 package DataLayer.Mappers;
 
+import BuisnnesLayer.Category;
 import BuisnnesLayer.Item;
 import DataLayer.PersistanceObjects.ItemPer;
 
@@ -9,6 +10,7 @@ import java.sql.*;
 public class DataController {
     private static DataController instance = null;
     private ItemMapper itemMapper;
+    private CategoriesMapper CategoriesMapper;
 
     public static DataController getInstance() {
         if (instance == null) {
@@ -19,6 +21,7 @@ public class DataController {
 
     private DataController() {
         itemMapper = new ItemMapper();
+        CategoriesMapper= new CategoriesMapper();
     }
 
     //TODO: return null if item does not exist
@@ -41,4 +44,18 @@ public class DataController {
         return itemMapper.delete(obj);
     }
 
+    public Category getCategory(String cat_name) {
+        Category cat = CategoriesMapper.getCategory(cat_name);
+        return cat;
+    }
+    public boolean insertCategory(Category category) {
+        return CategoriesMapper.insertCategory(category);
+    }
+    public boolean update(Category obj) {
+        return CategoriesMapper.update(obj);
+    }
+
+    public boolean delete(Category obj) {
+        return CategoriesMapper.delete(obj);
+    }
 }
