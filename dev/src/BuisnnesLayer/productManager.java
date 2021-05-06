@@ -158,8 +158,13 @@ public class productManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist");
         }
+        if(!products.get(product_id).isSupplierProducHashEmpty()){
+            throw new IllegalArgumentException("the supliier product hash is no empty you canot deleate it");
+        }
         products.remove(product_id);
     }
+
+
 
     public void remove_category(String cat_name) throws Exception {
         if (!isCategory_in_Categories(cat_name)) {
@@ -171,18 +176,10 @@ public class productManager {
 //        categories.put(father, mergeProductLists(categories.get(father), products));
     }
 
-    public void RemoveSupllierProductFromGeneralProduct(ProductSupplier productSupplier){
-        for (GeneralProduct gp: products.values()
-             ) {
-            HashMap<Integer,ProductSupplier> hps=gp.getHashOfSupplierProducts();
-            for (ProductSupplier ps:hps.values()
-                 ) {
-                if(ps==productSupplier){
-                    hps.remove(ps);
-                    break;
-                }
-            }
-        }
+    public void RemoveSupllierProductFromGeneralProduct(int pid,int catalogIF){
+        products.get(pid).RemoveSupplierProduct(catalogIF);
+
+
     }
 
     public void set_father(String cat_name, String cat_father_name) throws Exception {
@@ -339,6 +336,20 @@ public class productManager {
         }
         return false;
     }
+    public boolean check_product_id_exist(int id) {
+        for (GeneralProduct p : products.values()) {
+            if(p.getProduct_id()==id)
+                return true;
+        }
+        return false;
+    }
 
+    public void AddProcuctSupplierToProductGeneral(ProductSupplier productSupplier,int generalId){
+        if(!products.containsKey(generalId)){
+            throw new IllegalArgumentException("the stock product is not exsist");
+        }
+        products.get(generalId).addSupplierProduct(productSupplier);
+
+    }
 
 }

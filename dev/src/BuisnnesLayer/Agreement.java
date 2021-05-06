@@ -85,9 +85,7 @@ public class Agreement implements IAgreement {
         if(!isProductExist(CatalogID)){
             throw new IllegalArgumentException("the product is not exist");
         }
-        if(products.keySet().size()==1){
-            throw new IllegalArgumentException("you cannot remove the product because its the last one in the agrement");
-        }
+
         products.remove(CatalogID);
         DiscountByProductQuantity.remove(CatalogID);//check if need to ceck if exist
     }

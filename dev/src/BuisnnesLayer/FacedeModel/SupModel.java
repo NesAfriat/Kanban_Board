@@ -35,11 +35,11 @@ public class SupModel implements supModelI{
     //in this section we represent all the functionality of the system
     //---------------------------------------------------------------------------------------------------
     @Override
-    public Response create_order_Due_to_lack(HashMap<GeneralProduct, Integer> lackMap)
+    public Response create_order_Due_to_lack(HashMap<GeneralProduct, Integer> lackMap,Integer constantorderdayfromdelivery)
     {
         try {
 
-            orderControler.create_order_Due_to_lack(suppliersControler.get_cheapest_supplier(lackMap));
+            orderControler.create_order_Due_to_lack(suppliersControler.get_cheapest_supplier(lackMap),constantorderdayfromdelivery);
 
             return new Response();
         }
@@ -185,7 +185,7 @@ public class SupModel implements supModelI{
             return new ResponseT(sr);
         }
         catch (Exception e){
-            return new ResponseT(e.getMessage(),null);
+            return new ResponseT(e.getMessage());
         }
     }
 
@@ -286,9 +286,9 @@ public class SupModel implements supModelI{
     }
 
     @Override
-    public Response addNewOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant) {
+    public Response addNewOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant,Integer constantorderdayfromdelivery) {
         try {
-            orderControler.AddOrder(SupId,productQuantity,isConstant);
+            orderControler.AddOrder(SupId,productQuantity,isConstant,constantorderdayfromdelivery);
             return new Response();
         }
         catch (Exception e){

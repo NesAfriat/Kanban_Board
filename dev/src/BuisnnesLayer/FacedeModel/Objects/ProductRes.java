@@ -29,7 +29,7 @@ public class ProductRes {
     public String toString() {
         return "{" +
                 "product id=" + product_id +
-                ", product name=" + product_name +"_"+manufacturer_name+
+                ", product name=" + product_name +
                 ", manufacturer name=" + manufacturer_name +
                 ", amount store=" + amount_store +
                 ", amount storage=" + amount_storage +

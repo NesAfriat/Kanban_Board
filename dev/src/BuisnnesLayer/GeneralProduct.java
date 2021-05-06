@@ -49,6 +49,19 @@ public class GeneralProduct {
         return HashOfSupplierProducts.containsKey(catalog_id);
     }
 
+    public void RemoveSupplierProduct(Integer Catalofid){
+        if(!isSupplierProductExist(Catalofid)){
+            throw new IllegalArgumentException("the supplie product doues not exsist");
+        }
+        HashOfSupplierProducts.remove(Catalofid);
+
+    }
+
+    public  boolean isSupplierProductExist(int Catalogid){
+        return HashOfSupplierProducts.containsKey(Catalogid);
+    }
+
+
     public String getProduct_name() {
         return product_name;
     }
@@ -102,6 +115,10 @@ public class GeneralProduct {
         this.selling_price = selling_price;
     }
 
+    public  void addSupplierProduct(ProductSupplier productSupplier){
+        HashOfSupplierProducts.put(productSupplier.getCatalogID(),productSupplier);
+    }
+
 
 
 
@@ -135,6 +152,10 @@ public class GeneralProduct {
             addAmount_store(quantity);
         }
         return itemsAdded;
+    }
+
+    public boolean isSupplierProducHashEmpty(){
+        return HashOfSupplierProducts.keySet().size()==0;
     }
 
     /**

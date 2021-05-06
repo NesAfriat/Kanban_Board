@@ -209,7 +209,6 @@ public class Stock_Controller {
         if(!flag)
             throw new Exception("product does not exist");
     }
-
 }
 
 

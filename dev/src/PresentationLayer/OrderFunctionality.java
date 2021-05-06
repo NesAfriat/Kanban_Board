@@ -219,32 +219,45 @@ public class OrderFunctionality {
                 }
                 else break;
             }
+
             //}
         }
         System.out.println("is the order constant?");
         System.out.println("1) yes");
         System.out.println("2) no");
-        // while (true) {
-        int isConstat = NumberType();
-        if(isConstat!=1&&isConstat!=2){
-            System.out.println("try again!");
-        }
-        else{
+        int isConstat=1;
+         while (true) {
+             isConstat = NumberType();
+             if (isConstat != 1 && isConstat != 2) {
+                 System.out.println("try again!");
+             }
+             break;
+         }
+
             if(isConstat==1){
-                Response r=facade.addNewOrder(id,productQuantity,true);
+                System.out.println("please type the constant day for the order");
+                int day=0;
+                while (true) {
+                    day = NumberType();
+                    if (isConstat>= 1 && isConstat <=7 ) {
+                        System.out.println("try again!");
+                    }
+                    break;
+                }
+                Response r=facade.addNewOrder(id,productQuantity,true,day);
                 if(r.getErrorOccurred()) System.out.println(r.getErrorMsg());
                 else{System.out.println("order add changed successfully\n");
                     return;
                 }
             }
             else {//==2
-                Response r=facade.addNewOrder(id,productQuantity,false);
+                Response r=facade.addNewOrder(id,productQuantity,false,-1);
                 if(r.getErrorOccurred()) System.out.println(r.getErrorMsg());
                 else{System.out.println("order add changed successfully\n");
                     return;
                 }
             }
-        }
+
 
 
     }
