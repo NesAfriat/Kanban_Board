@@ -49,8 +49,9 @@ public class IdentityMap {
         }
         return output;
     }
-
+ //TODO: check if object exist in the list before adding
     public void addCategory(Category category) {
+        if(!categoryList.contains(category))
         categoryList.add(category);
     }
     //if this function return null - go to the db
@@ -63,12 +64,9 @@ public class IdentityMap {
         return output;
     }
 
-    public Category removeCategory(String cat_name){
+    public Category removeCategory(Category category){
         Category output=null;
-        for (Category c: categoryList) {
-            if(c.getCategory_name().equals(cat_name))
-                output = categoryList.remove();
-        }
+        output = categoryList.remove();
         return output;
     }
 

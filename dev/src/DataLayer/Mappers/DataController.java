@@ -5,6 +5,7 @@ import BuisnnesLayer.Item;
 import DataLayer.PersistanceObjects.ItemPer;
 
 import java.sql.*;
+import java.util.LinkedList;
 
 
 public class DataController {
@@ -57,5 +58,12 @@ public class DataController {
 
     public boolean delete(Category obj) {
         return CategoriesMapper.delete(obj);
+    }
+    public boolean setFather(Category cat,Category father_cat) {
+
+        return CategoriesMapper.setFather(cat,father_cat);
+    }
+    public LinkedList<Category> loadAllCategoreis() {
+     return  CategoriesMapper.loadAllCategories();
     }
 }

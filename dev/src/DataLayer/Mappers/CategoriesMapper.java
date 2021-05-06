@@ -4,6 +4,7 @@ import BuisnnesLayer.Category;
 import BuisnnesLayer.Item;
 
 import java.sql.*;
+import java.util.LinkedList;
 
 public class CategoriesMapper extends Mapper {
 
@@ -119,4 +120,67 @@ public class CategoriesMapper extends Mapper {
         }
         return output;
     }
-}
+
+    public boolean setFather(Category cat,Category father_cat) {
+        boolean updated = false;
+        try (Connection conn = connect()) {
+            String statement = "UPDATE Categories SET father_Category=? WHERE catName=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, father_cat.getCategory_name());
+                pstmt.setString(2, cat.getCategory_name());
+                updated = pstmt.executeUpdate() != 0;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return updated;
+    }
+
+    public LinkedList<Category> loadAllCategories() {
+        LinkedList<Category> categories=new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Categories  ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    String catName = rs.getString(1);
+                    Category newCat= new Category(catName);
+                    categories.add(newCat);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        setFathers(categories);
+        return categories;
+    }
+    private void setFathers(LinkedList<Category> categories) {
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Categories WHERE catName=? ";
+            for (Category category : categories) {
+                try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                    ResultSet rs = pstmt.executeQuery();
+                    if (rs.next()) {
+                        String fathersCatString = rs.getString(2);
+                        for(Category fc: categories)
+                        if(fc.getCategory_name().equals(fathersCatString))
+                        category.setFather_Category(fc);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+             catch(SQLException throwables){
+                throwables.printStackTrace();
+            }
+        }
+
+        }
+
