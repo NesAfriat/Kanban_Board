@@ -1,13 +1,9 @@
-package DataLayer;
+package BuisnnesLayer.SupplierBuissness;
 
 import BuisnnesLayer.Category;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
-import BuisnnesLayer.SupplierBuissness.Supplier;
-import DataLayer.PersistanceObjects.ItemPer;
-import DataLayer.PersistanceObjects.PersistanceObj;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public class IdentityMap {
@@ -78,6 +74,26 @@ public class IdentityMap {
             if(prod.getProduct_id() ==gp_id)
                 output = generalProductList.remove(prod);
         }
+        return output;
+    }
+ //TODO: check if object exist in the list before adding
+    public void addCategory(Category category) {
+        if(!categoryList.contains(category))
+        categoryList.add(category);
+    }
+    //if this function return null - go to the db
+    public Category getCatregoy(String cat) {
+        Category output = null;
+        for (Category c: categoryList) {
+            if(c.getCategory_name().equals(cat))
+                output = c;
+        }
+        return output;
+    }
+
+    public Category removeCategory(Category category){
+        Category output=null;
+        output = categoryList.remove();
         return output;
     }
 

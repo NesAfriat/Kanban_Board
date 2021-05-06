@@ -1,12 +1,11 @@
 package BuisnnesLayer;
 
-import DataLayer.IdentityMap;
+import BuisnnesLayer.SupplierBuissness.IdentityMap;
 import DataLayer.Mappers.DataController;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Date;
-import java.util.List;
 
 
 public class GeneralProduct {

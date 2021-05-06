@@ -1,9 +1,8 @@
 CREATE TABLE IF NOT EXISTS Categories(
-	catID INTEGER PRIMARY KEY,
-	catName VARCHAR(30),
-	father_Category INTEGER,
+	catName VARCHAR(30) PRIMARY KEY,
+	father_Category VARCHAR(30),
 	
-	FOREIGN KEY (father_Category) REFERENCES Categories (catID)
+	FOREIGN KEY (father_Category) REFERENCES Categories (catName)
 );
 
 CREATE TABLE IF NOT EXISTS Reports(
