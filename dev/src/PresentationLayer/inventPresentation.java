@@ -75,17 +75,17 @@ public class inventPresentation {
             System.out.println("2. show all products");
             System.out.println("3. show all categories");
             System.out.println("4. clear stock defected items");
-            System.out.println("6. add new category");
-            System.out.println("7. remove category");
-            System.out.println("8. print product info");
-            System.out.println("9. update category's father");
-            System.out.println("10. update min amount of a product");
-            System.out.println("11. update selling price");
-            System.out.println("12. add new items");
-            System.out.println("13. remove item");
-            System.out.println("14. show product items info");
-            System.out.println("15. update item location");
-            System.out.println("16. set item defected");
+            System.out.println("5. add new category");
+            System.out.println("6. remove category");
+            System.out.println("7. print product info");
+            System.out.println("8. update category's father");
+            System.out.println("9. update min amount of a product");
+            System.out.println("10. update selling price");
+            System.out.println("11. add new items");
+            System.out.println("12. remove item");
+            System.out.println("13. show product items info");
+            System.out.println("14. update item location");
+            System.out.println("15. set item defected");
             boolean flag = true;
             while (flag) {
                 System.out.println("What action would u like to do?");

@@ -33,7 +33,26 @@ public class GeneralProduct {
         this.items = new LinkedList<>();
         this.item_id = 0;
         HashOfSupplierProducts.put(productSupplier.getCatalogID(),productSupplier);
+        add_to_data(this); //TODO: added here
     }
+
+    //constructor for DAL
+    public GeneralProduct(int gpID, String gpName, String gpManuName, int amountStore, int amountStorage, int minAmount, double sellingPrice) {
+        this.product_id = gpID;
+        this.product_name = gpName;
+        this.manufacturer_name = gpManuName;
+        this.amount_store = amountStore;
+        this.amount_storage=amountStorage;
+        this.min_amount = minAmount;
+        this.selling_price = sellingPrice;
+
+        //TODO: those fields will be updated later on!
+        this.item_id =-1;
+        this.items = null;
+        this.HashOfSupplierProducts = null;
+        add_to_data(this); //TODO: added here
+    }
+
 
     public HashMap<Integer,ProductSupplier> getProductSuppliers(){
         return  HashOfSupplierProducts;
@@ -243,6 +262,21 @@ public class GeneralProduct {
             System.out.println("failed to insert new item to the database with the keys: gpID= "+item.getProduct_id() + " iID= " + item.getItem_id() );
         }
         im.addItem(item);
+    }
+
+    private void add_to_data(GeneralProduct prod){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.insertGP(prod)){
+            System.out.println("failed to insert new General Product to the database with the keys: gpID= "+prod.getProduct_id() );
+        }
+        for (Item item:items) {
+            add_to_data(item);
+        }
+//        for(ProductSupplier ps: HashOfSupplierProducts.values()){
+//            add_to_data(ps);
+//        }
+        im.addGeneralProduct(prod);
     }
 
 

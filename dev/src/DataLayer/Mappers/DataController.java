@@ -1,14 +1,13 @@
 package DataLayer.Mappers;
 
+import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
-import DataLayer.PersistanceObjects.ItemPer;
-
-import java.sql.*;
 
 
 public class DataController {
     private static DataController instance = null;
     private ItemMapper itemMapper;
+    private GeneralProductMapper generalProductMapper;
 
     public static DataController getInstance() {
         if (instance == null) {
@@ -19,6 +18,7 @@ public class DataController {
 
     private DataController() {
         itemMapper = new ItemMapper();
+        generalProductMapper = new GeneralProductMapper();
     }
 
     //TODO: return null if item does not exist
@@ -39,6 +39,26 @@ public class DataController {
 
     public boolean delete(Item obj) {
         return itemMapper.delete(obj);
+    }
+
+    //GeneralProduct Actions:
+    //If we want to retrive an product which was not in the business
+    public GeneralProduct getGP(int product_id) {
+        GeneralProduct gp = generalProductMapper.getGeneralProduct(product_id);
+        //TODO: need to add here itemsList and supplierProductList
+        return gp;
+    }
+    //If we want to make entire new record of an item
+    public boolean insertGP(GeneralProduct obj) {
+        return generalProductMapper.insertProduct(obj);
+    }
+
+    public boolean update(GeneralProduct obj) {
+        return generalProductMapper.update(obj);
+    }
+
+    public boolean delete(GeneralProduct obj) {
+        return generalProductMapper.delete(obj);
     }
 
 }

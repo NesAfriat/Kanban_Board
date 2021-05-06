@@ -4,6 +4,7 @@ import BuisnnesLayer.Item;
 import DataLayer.PersistanceObjects.ItemPer;
 import DataLayer.PersistanceObjects.PersistanceObj;
 
+import java.io.File;
 import java.sql.*;
 import java.util.Date;
 
@@ -16,6 +17,7 @@ public class ItemMapper extends Mapper {
 
     @Override
     void create_table() {
+
         String itemTable = "CREATE TABLE IF NOT EXISTS Items(\n" +
                 "\tgpID INTEGER,\n" +
                 "\tiID INTEGER,\n" +
@@ -28,20 +30,21 @@ public class ItemMapper extends Mapper {
                 "\tCHECK(expiration_date >= creation_date),\n" +
                 "\tCHECK(supplied_date >= creation_date)\n" +
                 ");";
-        String sql = "BEGIN TRANSACTION;" + itemTable + "COMMIT;";
+        //        String sql = "BEGIN TRANSACTION;" + itemTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
             // create a new tables
-            stmt.execute(sql);
+            stmt.execute(itemTable);
             //TODO: in DataController - need to activate loadData
-//            if (!identityMap.initialized){
-//                LoadPreData();
-//                identityMap.initialized = true;
-//            }
+//                      if (!identityMap.initialized){
+//                                LoadPreData();
+//                                identityMap.initialized = true;
+//                            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     public Item getItem(int product_id, int item_id) {
         Item obj = null;
