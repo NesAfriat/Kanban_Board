@@ -49,8 +49,8 @@ public class ItemMapper extends Mapper {
             String statement = "SELECT * FROM Items WHERE gpID=? AND iID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, obj.getProduct_id());
-                pstmt.setInt(2, obj.getItem_id());
+                pstmt.setInt(1, product_id);
+                pstmt.setInt(2, item_id);
 
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
