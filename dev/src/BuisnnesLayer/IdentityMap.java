@@ -1,8 +1,9 @@
-package BuisnnesLayer.SupplierBuissness;
+package BuisnnesLayer;
 
 import BuisnnesLayer.Category;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
+import BuisnnesLayer.SupplierBuissness.Supplier;
 
 import java.util.LinkedList;
 
@@ -44,11 +45,12 @@ public class IdentityMap {
     }
 
     //TODO: make sure remove doesnt stop the for
-    public boolean removeItem(int item_id, int gp_id){
-        boolean output = false;
+    public Item removeItem(int item_id, int gp_id){
+        Item output = null;
         for (Item item: itemList) {
             if(item.getItem_id()==item_id && item.getProduct_id() ==gp_id)
-                output = itemList.remove(item);
+                output=item;
+                itemList.remove(item);
         }
         return output;
     }

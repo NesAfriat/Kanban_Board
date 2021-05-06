@@ -1,5 +1,7 @@
 package BuisnnesLayer;
 
+import DataLayer.Mappers.DataController;
+
 import java.util.Date;
 
 public class Item {
@@ -51,15 +53,9 @@ public class Item {
 
     public void setExpiration_date(Date expiration_date) {
         this.expiration_date = expiration_date;
+        update(this);
     }
 
-//    public Double getSelling_price() {
-//        return selling_price;
-//    }
-//
-//    public void setSelling_price(Double selling_price) {
-//        this.selling_price = selling_price;
-//    }
 
     @Override
     public String toString() {
@@ -71,6 +67,17 @@ public class Item {
                 ", creation_date=" + creation_date +
                 ", expiration_date=" + expiration_date +
                 '}';
+    }
+
+
+    //==================================================
+    //DATA Actions:
+    private void update(Item item) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.update(this)){
+            System.out.println("failed to update new Item to the database with the keys: gpID= "+item.getProduct_id()+" iID= "+item.getItem_id());
+        }
     }
 }
 

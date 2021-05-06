@@ -1,6 +1,6 @@
 package BuisnnesLayer;
 
-import BuisnnesLayer.SupplierBuissness.IdentityMap;
+import BuisnnesLayer.IdentityMap;
 import DataLayer.Mappers.DataController;
 
 import java.util.HashMap;
@@ -32,7 +32,6 @@ public class GeneralProduct {
         this.items = new LinkedList<>();
         this.item_id = 0;
         HashOfSupplierProducts.put(productSupplier.getCatalogID(),productSupplier);
-        add_to_data(this); //TODO: added here
     }
 
     //constructor for DAL
@@ -49,7 +48,6 @@ public class GeneralProduct {
         this.item_id =0;
         this.items = null;
         this.HashOfSupplierProducts = null;
-        add_to_data(this); //TODO: added here
     }
 
 
@@ -111,8 +109,10 @@ public class GeneralProduct {
         return min_amount;
     }
 
+    //TODO: need to add a function ItemsMapper which change the minAmount
     public void setMin_amount(Integer min_amount) {
         this.min_amount = min_amount;
+        update(this);
     }
 
     public Double getSelling_price() {
@@ -193,6 +193,7 @@ public class GeneralProduct {
     /**
      * @param item_id
      */
+    //TODO: need to add a function ItemsMapper which change the expiration_date
     public Item setItem_defected(Integer item_id) throws Exception {
         Item item = getItem(item_id);
         item.setExpiration_date(new Date());
@@ -203,6 +204,7 @@ public class GeneralProduct {
     /**
      * @param item_id
      */
+    //TODO: need to add a function ItemsMapper which change the location
     public void setItem_location(Integer item_id, String new_location) throws Exception {
         Item item = getItem(item_id);
         if (item.getLocation().startsWith("storage")) {
@@ -217,8 +219,10 @@ public class GeneralProduct {
             }
         }
         item.setLocation(new_location);
+
     }
 
+    //TODO need to think of a way to load all product items before this action
     private Item getItem(Integer item_id) throws Exception {
         Item item = null;
         for (Item i : items) {
@@ -244,8 +248,10 @@ public class GeneralProduct {
                 '}';
     }
 
+
     public void removeItem(Integer item_id) throws Exception {
         Item item = getItem(item_id);
+        //TODO removeItemPersistence -> ItemMapper
         items.remove(item);
     }
 
@@ -264,21 +270,21 @@ public class GeneralProduct {
         im.addItem(item);
     }
 
-    private void add_to_data(GeneralProduct prod){
-        IdentityMap im = IdentityMap.getInstance();
-        DataController dc = DataController.getInstance();
-        if(!dc.insertGP(prod)){
-            System.out.println("failed to insert new General Product to the database with the keys: gpID= "+prod.getProduct_id() );
-        }
-        im.addGeneralProduct(prod);
-    }
-
     private void update(GeneralProduct prod) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if(!dc.update(this)){
             System.out.println("failed to update new General Product to the database with the keys: gpID= "+prod.getProduct_id() );
         }
+    }
+
+    private Item removeItemPersistence(Item toRemove) {
+        Item removed;
+        DataController dc = DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        removed = im.removeItem(toRemove.getItem_id(),toRemove.getProduct_id());
+        dc.delete(toRemove);
+        return removed;
     }
 
 

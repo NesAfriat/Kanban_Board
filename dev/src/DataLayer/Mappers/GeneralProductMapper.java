@@ -18,12 +18,13 @@ public class GeneralProductMapper extends Mapper {
 //        File f = new File(db_name);
         String GeneralProductTable = "CREATE TABLE IF NOT EXISTS GeneralProducts(\n" +
                 "\tgpID INTEGER PRIMARY KEY,\n" +
-                "\tgpName VARCHAR(30),\n" +
-                "\tgpManuName VARCHAR(30),\n" +
+                "\tgpName TEXT,\n" +
+                "\tgpManuName TEXT,\n" +
                 "\tamountStore INTEGER,\n" +
                 "\tamountStorage INTEGER,\n" +
                 "\tminAmount INTEGER,\n" +
-                "\tsellingPrice REAL\n" +
+                "\tsellingPrice REAL,\n" +
+                "\tcatName TEXT\n" +
                 ");";
 //        String sql = "BEGIN TRANSACTION;" + GeneralProductTable + "COMMIT;";
         try (Connection conn = connect();
@@ -112,12 +113,12 @@ public class GeneralProductMapper extends Mapper {
     }
 
     //TODO: make sure the dates are added properly!
-    public boolean insertProduct(GeneralProduct gp) {
+    public boolean insertProduct(GeneralProduct gp,String catName) {
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
-            String statement = "INSERT OR IGNORE INTO GeneralProducts(gpID, gpName, gpManuName, amountStore, amountStorage, minAmount, sellingPrice) " +
-                    "VALUES (?,?,?,?,?,?,?)";
+            String statement = "INSERT OR IGNORE INTO GeneralProducts(gpID, gpName, gpManuName, amountStore, amountStorage, minAmount, sellingPrice, catName) " +
+                    "VALUES (?,?,?,?,?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, gp.getProduct_id());
@@ -127,6 +128,7 @@ public class GeneralProductMapper extends Mapper {
                 pstmt.setInt(5, gp.getAmount_storage());
                 pstmt.setInt(6, gp.getMin_amount());
                 pstmt.setDouble(7, gp.getSelling_price());
+                pstmt.setString(8, catName);
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -20,7 +20,6 @@ public class CategoriesMapper extends Mapper {
                 "\tfather_Category TEXT,\n" +
                 "\tFOREIGN KEY (father_Category) REFERENCES Categories (catName)\n" +
                 ");";
-//        String sql = "BEGIN TRANSACTION;" + CategoriesTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
             // create a new tables

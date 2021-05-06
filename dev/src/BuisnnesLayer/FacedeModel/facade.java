@@ -102,7 +102,7 @@ private facade(){
     }
     //needed to chang to Response
     public void addProduct(String product_name, Integer product_id, String manufacturer_name, Integer min_amount,  String cat, Double selling_price,ProductSupplier productSupplier) throws Exception {
-        ProductManager.addProduct(product_name,product_id,  manufacturer_name,  min_amount,   cat,  selling_price, productSupplier);
+        ProductManager.addProduct(product_name,product_id,  manufacturer_name,  min_amount,   cat,  selling_price, productSupplier,cat);
 
 }
     public Response remove_product_items(Integer product_id, Integer item_id) {

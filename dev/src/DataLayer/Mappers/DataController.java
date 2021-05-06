@@ -56,8 +56,8 @@ public class DataController {
     }
 
     //If we want to make entire new record of an item
-    public boolean insertGP(GeneralProduct obj) {
-        return generalProductMapper.insertProduct(obj);
+    public boolean insertGP(GeneralProduct obj,String catName) {
+        return generalProductMapper.insertProduct(obj,catName);
     }
 
     public boolean update(GeneralProduct obj) {
