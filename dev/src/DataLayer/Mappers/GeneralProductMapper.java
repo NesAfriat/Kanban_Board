@@ -39,7 +39,7 @@ public class GeneralProductMapper extends Mapper {
     public Item getGeneralProduct(int product_id) {
         Item obj = null;
         try (Connection conn = connect()) {
-            String statement = "SELECT * FROM items WHERE gpID=? AND iID=? ";
+            String statement = "SELECT * FROM G WHERE gpID=? AND iID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, obj.getProduct_id());

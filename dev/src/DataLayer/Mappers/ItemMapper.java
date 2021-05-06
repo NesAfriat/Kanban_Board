@@ -16,7 +16,7 @@ public class ItemMapper extends Mapper {
 
     @Override
     void create_table() {
-        String itemTable = "CREATE TABLE IF NOT EXISTS Item(\n" +
+        String itemTable = "CREATE TABLE IF NOT EXISTS Items(\n" +
                 "\tgpID INTEGER,\n" +
                 "\tiID INTEGER,\n" +
                 "\tlocation TEXT,\n" +
@@ -46,7 +46,7 @@ public class ItemMapper extends Mapper {
     public Item getItem(int product_id, int item_id) {
         Item obj = null;
         try (Connection conn = connect()) {
-            String statement = "SELECT * FROM items WHERE gpID=? AND iID=? ";
+            String statement = "SELECT * FROM Items WHERE gpID=? AND iID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, obj.getProduct_id());
