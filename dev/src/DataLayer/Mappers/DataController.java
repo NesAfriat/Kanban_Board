@@ -3,6 +3,7 @@ package DataLayer.Mappers;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
 import BuisnnesLayer.Category;
+import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.Supplier;
 
 import java.util.LinkedList;
@@ -14,6 +15,7 @@ public class DataController {
     private GeneralProductMapper generalProductMapper;
     private CategoriesMapper CategoriesMapper;
     private SuppliersMapper suppliersMapper;
+    private SuppliersContactsMapper suppliersContactsMapper;
 
     public static DataController getInstance() {
         if (instance == null) {
@@ -27,8 +29,9 @@ public class DataController {
         generalProductMapper = new GeneralProductMapper();
         CategoriesMapper = new CategoriesMapper();
         suppliersMapper = new SuppliersMapper();
+        suppliersContactsMapper = new SuppliersContactsMapper();
     }
-
+    //================================================================================
     //TODO: return null if item does not exist
     //Item Actions:
     //If we want to retrive an item which was not in the business
@@ -50,6 +53,7 @@ public class DataController {
         return itemMapper.delete(obj);
     }
 
+    //================================================================================
     //GeneralProduct Actions:
     //If we want to retrive an product which was not in the business
     public GeneralProduct getGP(int product_id) {
@@ -71,6 +75,7 @@ public class DataController {
         return generalProductMapper.delete(obj);
     }
 
+    //================================================================================
     public Category getCategory(String cat_name) {
         Category cat = CategoriesMapper.getCategory(cat_name);
         return cat;
@@ -97,9 +102,7 @@ public class DataController {
         return CategoriesMapper.loadAllCategories();
     }
 
-
-
-
+    //================================================================================
     //Suppliers Actions:
     //If we want to retrive an suplpier which was not in the business
     public Supplier getSupplier(int supplier_id) {
@@ -120,4 +123,25 @@ public class DataController {
     public boolean delete(Supplier obj) {
         return suppliersMapper.delete(obj);
     }
+    //================================================================================
+    //Contacs Actions:
+    //If we want to retrive an contact which was not in the business
+    public Contact getContact(int sup_id, int con_id) {
+        Contact cntc = suppliersContactsMapper.getContact(sup_id, con_id);
+        return cntc;
+    }
+
+    //If we want to make entire new record of an item
+    public boolean insertContact(Contact obj, int sup_id) {
+        return suppliersContactsMapper.insertContact(obj,sup_id);
+    }
+
+    public boolean update(Contact con, int sup_id) {
+        return suppliersContactsMapper.update(con, sup_id);
+    }
+
+    public boolean delete(Contact con, int sup_id) {
+        return suppliersContactsMapper.delete(con,sup_id);
+    }
+
 }
