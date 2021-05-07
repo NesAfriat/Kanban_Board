@@ -38,7 +38,7 @@ public class SuppliersControler implements ISupplierControler {
     }
 
 
-    public void removeProductFromSupplier(int CatalogId,int SupID){
+    public void removeProductFromSupplier(int CatalogId,int SupID) throws Exception {
         agreementManager.removeProduct(SupID,CatalogId);
     }
 
@@ -84,7 +84,7 @@ public class SuppliersControler implements ISupplierControler {
         if(name==null||name==""){
             throw new IllegalArgumentException("the name input is incorrect");
         }
-        agreementManager.AddProduct(SupplierId,Price,CatalogID,manfucator,name,category,pid,isexist);
+        agreementManager.AddProduct(SupplierId,Price,CatalogID,name,manfucator,category,pid,isexist);
     }
 
 

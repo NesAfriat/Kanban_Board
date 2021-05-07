@@ -67,10 +67,10 @@ public class productManager {
      *
      * @throws Exception
      */
-    public GeneralProduct addProduct(String product_name, Integer product_id, String manufacturer_name, Integer min_amount, String cat, Double selling_price, ProductSupplier productSupplier, String catName) throws Exception {
+    public GeneralProduct addProduct(String product_name, Integer product_id, String manufacturer_name, Integer min_amount, String cat, Double selling_price, ProductSupplier productSupplier) throws Exception {
         checkNameDuplication(product_name, manufacturer_name);
         GeneralProduct product = new GeneralProduct(product_name, product_id, manufacturer_name, min_amount, selling_price, productSupplier);
-        addGPPersistence(product, catName);
+        addGPPersistence(product, cat);
         if (isProduct_in_Products(product_id)) {
             throw new Exception("product already exist");
         } else if (!isCategory_in_Categories(cat)) {
@@ -178,9 +178,14 @@ public class productManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist");
         }
+        if(!products.get(product_id).isSupplierProducHashEmpty()){
+            throw new IllegalArgumentException("the supliier product hash is no empty you canot deleate it");
+        }
         products.remove(product_id);
 //        removeProductPersistence(product_id);
     }
+
+
 
     public void remove_category(String cat_name) throws Exception {
         if (!isCategory_in_Categories(cat_name)) {
@@ -193,16 +198,8 @@ public class productManager {
     }
 
     //TODO need to add a removeSP for SPMapper
-    public void RemoveSupllierProductFromGeneralProduct(ProductSupplier productSupplier) {
-        for (GeneralProduct gp : products.values()) {
-            HashMap<Integer, ProductSupplier> hps = gp.getHashOfSupplierProducts();
-            for (ProductSupplier ps : hps.values()) {
-                if (ps == productSupplier) {
-                    hps.remove(ps);
-                    break;
-                }
-            }
-        }
+    public void RemoveSupllierProductFromGeneralProduct(int pid,int catalogIF){
+        products.get(pid).RemoveSupplierProduct(catalogIF);
     }
 
     public void set_father(String cat_name, String cat_father_name) throws Exception {
@@ -375,7 +372,20 @@ public class productManager {
         }
         return false;
     }
+    public boolean check_product_id_exist(int id) {
+        for (GeneralProduct p : products.values()) {
+            if(p.getProduct_id()==id)
+                return true;
+        }
+        return false;
+    }
 
+    public void AddProductSupplierToProductGeneral(ProductSupplier productSupplier, int generalId) {
+        if (!products.containsKey(generalId)) {
+            throw new IllegalArgumentException("the stock product is not exsist");
+        }
+        products.get(generalId).addSupplierProduct(productSupplier);
+    }
     //=================================
     //Data Fucntions
     private void loadAllCategories() {

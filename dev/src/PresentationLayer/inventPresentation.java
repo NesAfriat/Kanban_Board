@@ -71,24 +71,25 @@ public class inventPresentation {
         }
 
         public void stocks_window() throws IOException {
-            System.out.println("1. go back");
-            System.out.println("2. show all products");
-            System.out.println("3. show all categories");
-            System.out.println("4. clear stock defected items");
-            System.out.println("5. add new category");
-            System.out.println("6. remove category");
-            System.out.println("7. print product info");
-            System.out.println("8. update category's father");
-            System.out.println("9. update min amount of a product");
-            System.out.println("10. update selling price");
-            System.out.println("11. add new items");
-            System.out.println("12. remove item");
-            System.out.println("13. show product items info");
-            System.out.println("14. update item location");
-            System.out.println("15. set item defected");
             boolean flag = true;
             while (flag) {
                 System.out.println("What action would u like to do?");
+                System.out.println("1. go back");
+                System.out.println("2. show all products");
+                System.out.println("3. show all categories");
+                System.out.println("4. clear stock defected items");
+                System.out.println("5. add new category");
+                System.out.println("6. remove category");
+                System.out.println("7. print product info");
+                System.out.println("8. update category's father");
+                System.out.println("9. update min amount of a product");
+                System.out.println("10. update selling price");
+                System.out.println("11. add new items");
+                System.out.println("12. remove item");
+                System.out.println("13. show product items info");
+                System.out.println("14. update item location");
+                System.out.println("15. set item defected");
+
                 inputs = reader.readLine().trim();
                 if(inputs.equals("")) {
                     inputi = -1;
@@ -134,7 +135,7 @@ public class inventPresentation {
                         check_action(res);
                         break;
                     }
-                    case 7: {
+                    case 8: {
                         //update category father
                         System.out.println("please type the category name u want to set a father: ");
                         String cat_name = reader.readLine().trim().toLowerCase();
@@ -146,7 +147,7 @@ public class inventPresentation {
                     }
 
 
-                    case 8: {
+                    case 7: {
                         //product info
                         System.out.println("please enter the product id: ");
                         int product_id = Integer.parseInt(reader.readLine());
@@ -247,19 +248,20 @@ public class inventPresentation {
         }
 
         public void sales_window() throws IOException {
-            System.out.println("0. go back");
-            System.out.println("1. add a new category sale");
-            System.out.println("2. add new products sale");
-            System.out.println("3. update all sales");
-            System.out.println("4. remove sale");
-            System.out.println("5. inspect all sales");
-            System.out.println("6. get info of a category sale");
-            System.out.println("7. get info of a product sale");
-            System.out.println("8. update sale description");
-            System.out.println("9. update sale discount");
+
             boolean flag = true;
             while (flag) {
                 System.out.println("What action would u like to do?");
+                System.out.println("0. go back");
+                System.out.println("1. add a new category sale");
+                System.out.println("2. add new products sale");
+                System.out.println("3. update all sales");
+                System.out.println("4. remove sale");
+                System.out.println("5. inspect all sales");
+                System.out.println("6. get info of a category sale");
+                System.out.println("7. get info of a product sale");
+                System.out.println("8. update sale description");
+                System.out.println("9. update sale discount");
                 inputs = reader.readLine().trim();
                 if(inputs.equals("")) {
                     inputi = -1;
@@ -379,14 +381,15 @@ public class inventPresentation {
         }
 
         public void report_window() throws IOException {
-            System.out.println("0. go back");
-            System.out.println("1. create a new report");
-            System.out.println("2. get report by id");
-            System.out.println("3. get report by subject and date");
-            System.out.println("4. show all reports");
+
             boolean flag = true;
             while (flag) {
                 System.out.println("What action would u like to do?");
+                System.out.println("0. go back");
+                System.out.println("1. create a new report");
+                System.out.println("2. get report by id");
+                System.out.println("3. get report by subject and date");
+                System.out.println("4. show all reports");
                 inputs = reader.readLine().trim();
                 if(inputs.equals("")) {
                     inputi = -1;

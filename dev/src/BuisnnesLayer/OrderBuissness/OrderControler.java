@@ -28,7 +28,7 @@ public class OrderControler {
         idOrderCounter=0;
     }
 
-    public void AddOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant){
+    public void AddOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant,Integer constantorderdayfromdelivery){
         if(!CheckIfSupplierExist(SupId)){
             throw new IllegalArgumentException("the supplier is not exist in system");
         }
@@ -39,21 +39,21 @@ public class OrderControler {
         if(isConstant){
 
 
-            Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),true);
+            Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),true,constantorderdayfromdelivery);
             Orders.put(idOrderCounter, order);
 
             idOrderCounter++;
         }
         else {
-            Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),false);
+            Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),false,constantorderdayfromdelivery);
             Orders.put(idOrderCounter, order);
             idOrderCounter++;
         }
 
     }
-    public void create_order_Due_to_lack( HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity){
+    public void create_order_Due_to_lack( HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity,Integer constantorderdayfromdelivery){
         for (Integer SupId : cheapest_supplier_products_by_quantity.keySet()) {
-            AddOrder(SupId,cheapest_supplier_products_by_quantity.get(SupId),false);
+            AddOrder(SupId,cheapest_supplier_products_by_quantity.get(SupId),false,constantorderdayfromdelivery);
         }
     }
 

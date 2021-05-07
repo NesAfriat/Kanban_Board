@@ -99,22 +99,31 @@ public class AgreementManager {
         }
         // the product id is already exis
         if(existProductId){
-           if (!productManager.check_product_exist(product_name)){
+           if (!productManager.check_product_id_exist(product_id)){
                 throw new IllegalArgumentException("the genaral product not exsist");
             }
-            ProductSupplier productSupplier=(SupplierAgreement.get(SupplierId)).AddPrudact(Price,CatalogID,product_id,product_name);
-            productManager.addProduct(product_name,product_id,manufacture_name,-1,cat,-1.0,productSupplier,cat);
+           //TODO w8 for daniel's respond
+//<<<<<<< MINE
+//            ProductSupplier productSupplier=(SupplierAgreement.get(SupplierId)).AddPrudact(Price,CatalogID,product_id,product_name);
+//            productManager.addProduct(product_name,product_id,manufacture_name,-1,cat,-1.0,productSupplier);
+//>>>>>>> Daniel's
+            ProductSupplier productSupplier=(SupplierAgreement.get(SupplierId)).AddPrudact(Price,CatalogID,product_id,productManager.get_product(product_id).getProduct_name());
+            productManager.AddProductSupplierToProductGeneral(productSupplier,product_id);
         }
         else{
             ProductSupplier productSupplier=(SupplierAgreement.get(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
-            productManager.addProduct(product_name,idProductCounter,manufacture_name,-1,cat,-1.0,productSupplier,cat);
+            productManager.addProduct(product_name,idProductCounter,manufacture_name,-1,cat,-1.0,productSupplier);
         idProductCounter++;
         }
 //        gp.add_t
    }
 
-    public void  removeProduct(int SupplierId,int CatalogID){
-        productManager.RemoveSupllierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID));
+    public void  removeProduct(int SupplierId,int CatalogID) throws Exception {
+        productManager.RemoveSupllierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID).getId(),CatalogID);
+        GeneralProduct generalProduct=productManager.get_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
+        if(generalProduct.isSupplierProducHashEmpty()){
+            productManager.remove_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
+        }
         GetAgreement(SupplierId).RemovePrudact(CatalogID);
     }
 

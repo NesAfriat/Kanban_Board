@@ -54,7 +54,7 @@ public interface supModelI {
 
     public Response SetDeliveryMode(int SupId, DeliveryMode deliveryMods, List<Integer> daysOfDelivery, int numOfDaysFromOrder);
 
-    public Response create_order_Due_to_lack(HashMap<GeneralProduct, Integer> lackMap);
+    public Response create_order_Due_to_lack(HashMap<GeneralProduct, Integer> lackMap,Integer constantorderdayfromdelivery);
 
 
     //---------------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ public interface supModelI {
 
 
     //this function add a new order to the system this function return a response if exception thrown
-    public Response addNewOrder(int SupId, HashMap<Integer,Integer> productQuantity, boolean isConstant);
+    public Response addNewOrder(int SupId, HashMap<Integer,Integer> productQuantity, boolean isConstant,Integer constantorderdayfromdelivery);
 
     //this function remove an order from the system
     public Response removeOrder(int SupId);

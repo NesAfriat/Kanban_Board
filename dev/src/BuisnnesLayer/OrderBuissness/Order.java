@@ -6,8 +6,10 @@ import BuisnnesLayer.IAgreement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 //    private HashMap<Integer, HashMap<Integer, Integer>> DiscountByProductQuantity;//- DiscountByProductQuantity hashMap<CatalogID:int, hashMap<quantitiy :int , newPrice:int>>
 public class Order {
@@ -17,13 +19,14 @@ public class Order {
     private LocalDate dateTime;
     private double TotalPayment=0;
     private boolean Constant;
+    private Integer constsntordersDays;
 
 
     public boolean isConstant() {
         return Constant;
     }
 
-    public Order(int id, int SupplierID, HashMap<Integer, Integer> products, IAgreement agreement, boolean constant)
+    public Order(int id, int SupplierID, HashMap<Integer, Integer> products, IAgreement agreement, boolean constant,Integer constsntordersDays)
     {
         this.id=id;
         this.SupplierID=SupplierID;
@@ -31,6 +34,7 @@ public class Order {
         this.dateTime= LocalDate.now();
         this.TotalPayment=CalculateTotalPayment(products,agreement);
         this.Constant=constant;
+        this.constsntordersDays=constsntordersDays;
     }
 
     public int getSupplierID() {
@@ -58,6 +62,10 @@ public class Order {
 
     public void RemovePrudactFromOrder(int CatalogID,IAgreement agreement)
     {
+        if(isConstant()&&isOneDayFromOrder()){
+            throw new IllegalArgumentException("the order is constant and it less then one day to the order");
+
+        }
         if(!checkIfProductIsAlreadyExist(CatalogID)){
             throw new IllegalArgumentException("the product is not in the order you cannot deleate it");
         }
@@ -69,9 +77,14 @@ public class Order {
 
 
     public void EditProductQuantity(int CatalogID,int quantity,IAgreement agreement)
+
     {if(!checkIfProductIsAlreadyExist(CatalogID)){
         throw new IllegalArgumentException("this Product dose not exist in this order");
     }
+        if(isConstant()&&isOneDayFromOrder()){
+            throw new IllegalArgumentException("the order is constant and it less then one day to the order");
+
+        }
         productQuantity.replace(CatalogID,quantity);
         CalculateTotalPayment(this.productQuantity,agreement);
     }
@@ -142,8 +155,26 @@ public class Order {
         return newprice ;
     }
 
+    public boolean isOneDayFromOrder(){
+        Date date=convertToDateViaSqlDate(LocalDate.now());
+        int daytoday=getDayNumberOld(date);
 
+            if(constsntordersDays-daytoday==1||constsntordersDays-daytoday==0){
+                return true;
+            }
 
+        return false;
+    }
+
+    public Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
+
+    public static int getDayNumberOld(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_WEEK);
+    }
 
 
 }
