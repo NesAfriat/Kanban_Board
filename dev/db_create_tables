@@ -92,7 +92,7 @@ CREATE TABLE IF NOT EXISTS Suppliers(
 	supID INTEGER PRIMARY KEY,
 	supName TEXT,
 	bankAccount TEXT,
-	payementMethod TEXT
+	paymentMethod TEXT
 
 );
 

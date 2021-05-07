@@ -70,11 +70,12 @@ public class IdentityMap {
     }
 
     //TODO: make sure remove doesnt stop the for
-    public boolean removeGeneralProd(int gp_id){
-        boolean output=false;
+    public GeneralProduct removeGeneralProd(int gp_id){
+        GeneralProduct output=null;
         for (GeneralProduct prod: generalProductList) {
             if(prod.getProduct_id() ==gp_id)
-                output = generalProductList.remove(prod);
+                output = prod;
+                generalProductList.remove(prod);
         }
         return output;
     }
@@ -99,4 +100,31 @@ public class IdentityMap {
         return output;
     }
 
+
+    //add an item to the identityMap
+    public void addSupplier(Supplier sup) {
+        suppliersList.add(sup);
+    }
+
+    //TODO: need to add empty constructor for each created object
+    //if this function return null - go to the db
+    public Supplier getSupplier(int supplier_id) {
+        Supplier output = null;
+        for (Supplier sup: suppliersList) {
+            if(sup.getId()==supplier_id)
+                output = sup;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
+    public Supplier removeSupplier(int supplier_id){
+        Supplier output = null;
+        for (Supplier sup: suppliersList) {
+            if(sup.getId()==supplier_id)
+                output = sup;
+                suppliersList.remove(sup);
+        }
+        return output;
+    }
 }

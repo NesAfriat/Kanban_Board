@@ -3,6 +3,7 @@ package DataLayer.Mappers;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
 import BuisnnesLayer.Category;
+import BuisnnesLayer.SupplierBuissness.Supplier;
 
 import java.util.LinkedList;
 
@@ -12,6 +13,7 @@ public class DataController {
     private ItemMapper itemMapper;
     private GeneralProductMapper generalProductMapper;
     private CategoriesMapper CategoriesMapper;
+    private SuppliersMapper suppliersMapper;
 
     public static DataController getInstance() {
         if (instance == null) {
@@ -24,6 +26,7 @@ public class DataController {
         itemMapper = new ItemMapper();
         generalProductMapper = new GeneralProductMapper();
         CategoriesMapper = new CategoriesMapper();
+        suppliersMapper = new SuppliersMapper();
     }
 
     //TODO: return null if item does not exist
@@ -92,5 +95,29 @@ public class DataController {
 
     public LinkedList<Category> loadAllCategoreis() {
         return CategoriesMapper.loadAllCategories();
+    }
+
+
+
+
+    //Suppliers Actions:
+    //If we want to retrive an suplpier which was not in the business
+    public Supplier getSupplier(int supplier_id) {
+        Supplier sup = suppliersMapper.getSupplier(supplier_id);
+        //TODO: need to add here ContactList
+        return sup;
+    }
+
+    //If we want to make entire new record of an item
+    public boolean insertSupplier(Supplier sup) {
+        return suppliersMapper.insertSupplier(sup);
+    }
+
+    public boolean update(Supplier obj) {
+        return suppliersMapper.update(obj);
+    }
+
+    public boolean delete(Supplier obj) {
+        return suppliersMapper.delete(obj);
     }
 }
