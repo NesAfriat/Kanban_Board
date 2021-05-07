@@ -113,4 +113,13 @@ public class DriversFactory {
                 (x==Job.DriverA)||(x==Job.DriverB)||(x==Job.DriverC)
         ).findFirst().get());
     }
+
+    public boolean isStoreKeeper(String date) {
+        ResponseT<List<WorkerResponse>> responseT;
+        responseT= workers_integration.getWorkersInShiftByJob(date, "Morning", "Storekeeper");
+        if(responseT.value.isEmpty())
+            return false;
+        return true;
+
+    }
 }

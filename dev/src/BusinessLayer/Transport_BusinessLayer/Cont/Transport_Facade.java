@@ -247,7 +247,10 @@ public class Transport_Facade {
         docCont.setOrigin(doc,s.get());
 
     }
-    public void setTransportDate(int doc, String str){
+
+    public void setTransportDate(int doc, String str) throws Exception {
+        if(!driversController.isStoreKeeper(str))
+            throw new Exception("no storekeeper in this date");
         docCont.setTranportDate(doc,str);
 
     }

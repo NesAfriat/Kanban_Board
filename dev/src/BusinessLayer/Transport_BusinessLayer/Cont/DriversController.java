@@ -26,6 +26,11 @@ public class DriversController {
         Drivers=DriversFac.getDrivers(date,shift,license);
         return Drivers;
     }
+    public boolean isStoreKeeper(String date) {
+
+        return DriversFac.isStoreKeeper(date);
+
+    }
 
 
     /*public DriversController(List<Driver> drivers, List<Truck> trucks, List<Tuple<Truck,Driver>> occupied) {
