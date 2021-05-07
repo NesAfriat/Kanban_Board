@@ -3,6 +3,7 @@ package BuisnnesLayer;
 import BuisnnesLayer.Category;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
+import BuisnnesLayer.OrderBuissness.Order;
 import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.Supplier;
 
@@ -15,6 +16,8 @@ public class IdentityMap {
     private LinkedList<Category> categoryList;
     private LinkedList<Supplier> suppliersList;
     private LinkedList<Contact> contactsList;
+    private LinkedList<ProductSupplier> productSuppliersList;
+    private LinkedList<Order> ordersList;
 
     public static IdentityMap getInstance() {
         if (instance == null) {
@@ -29,6 +32,8 @@ public class IdentityMap {
         suppliersList = new LinkedList<>();
         generalProductList = new LinkedList<>();
         contactsList = new LinkedList<>();
+        productSuppliersList = new LinkedList<>();
+        ordersList = new LinkedList<>();
     }
 
     //================================================================================
@@ -144,7 +149,7 @@ public class IdentityMap {
         contactsList.add(con);
     }
 
-    //TODO: need to add empty constructor for each created object
+
     //if this function return null - go to the db
     public Contact getContact(int con_id) {
         Contact output = null;
@@ -162,6 +167,62 @@ public class IdentityMap {
             if (con.getId() == con_id) {
                 output = con;
                 contactsList.remove(con);
+            }
+        }
+        return output;
+    }
+    //================================================================================
+    //add an item to the identityMap
+    public void addPS(ProductSupplier ps) {
+        productSuppliersList.add(ps);
+    }
+
+    //TODO: need to add a supID or idk how to get a specific ps
+    //if this function return null - go to the db
+//    public ProductSupplier getPS(int sup_id, int cat_id) {
+//        ProductSupplier output = null;
+//        for (ProductSupplier ps: productSuppliersList) {
+//            if (ps.getId() == con_id)
+//                output = con;
+//        }
+//        return output;
+//    }
+//
+//    //TODO: make sure remove doesnt stop the for
+//    public Contact removeContact(int con_id) {
+//        Contact output = null;
+//        for (Contact con: contactsList) {
+//            if (con.getId() == con_id) {
+//                output = con;
+//                contactsList.remove(con);
+//            }
+//        }
+//        return output;
+//    }
+    //================================================================================
+    //add an item to the identityMap
+    public void addOrder(Order o) {
+        ordersList.add(o);
+    }
+
+
+    //if this function return null - go to the db
+    public Order getOrder(int oID) {
+        Order output = null;
+        for (Order o: ordersList) {
+            if (o.GetId() == oID)
+                output = o;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
+    public Order removeOrder(int oID) {
+        Order output = null;
+        for (Order o: ordersList) {
+            if (o.GetId() == oID) {
+                output = o;
+                ordersList.remove(o);
             }
         }
         return output;

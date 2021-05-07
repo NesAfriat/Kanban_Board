@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS SuppliersProducts(
 	supID INTEGER,
 	catalogID INTEGER,
 	gpID INTEGER,
+	name TEXT,
 	price REAL,
 
 	PRIMARY KEY (supID, catalogID),
@@ -123,7 +124,7 @@ CREATE TABLE IF NOT EXISTS SuppliersContacts(
 CREATE TABLE IF NOT EXISTS Orders(
 	supID INTEGER,
 	oID INTEGER,
-	TEXT TEXT,
+	datetime TEXT,
 	totalPayment REAL,
 	constant INTEGER,
 	
