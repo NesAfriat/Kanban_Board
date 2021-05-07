@@ -31,7 +31,9 @@ public class Transport_Facade {
         driversController.addWorkersInterface(wk);
 
     }
-
+    public void saveDoc(int docId){
+        docCont.save(docId);
+    }
     public Transport_Facade(DriversController driversController, DocCont docCont, ControllerShops controllerShops) {
         this.driversController = driversController;
         this.docCont = docCont;
@@ -234,10 +236,10 @@ public class Transport_Facade {
         }
         docCont.addWeightWhenLeaving(doc,  truckDepartureWeight);
     }
-    public void editTransDate(int doc, Date transDate) {
+    public void editTransDate(int doc, String transDate) {
         docCont.editTransDate(doc, transDate);
     }
-    public void editLeftOrigin(int doc, Date LeftOrigin) {
+    public void editLeftOrigin(int doc, String LeftOrigin) {
         docCont.editLeftOrigin(doc, LeftOrigin);
     }
     public void setOrigin (int doc, int store) throws Exception {
@@ -245,11 +247,11 @@ public class Transport_Facade {
         docCont.setOrigin(doc,s.get());
 
     }
-    public void setTransportDate(int doc, Date date){
-        docCont.setTranportDate(doc,date);
+    public void setTransportDate(int doc, String str){
+        docCont.setTranportDate(doc,str);
 
     }
-    public void setDepartureTime(int doc, Date date){
+    public void setDepartureTime(int doc, String date){
         docCont.setDepartureTime(doc,date);
     }
     public void editDocTruck(int doc, int tkId) throws Exception {
@@ -406,11 +408,11 @@ try {
 
     DocCont docContro = this.docCont;
 
-    Date date = new SimpleDateFormat("dd/MM/yyyy").parse("11/03/1998");
+    String date = "11/03/1998";
 
 
     SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    Date date2 = formatter.parse("03-11-1998 16:32:08");
+    String date2 = "03-11-1998 16:32:08";
     docCont.newDelivery();
     docCont.setDepartureTime(0, date2);
     docCont.setTranportDate(0, date);

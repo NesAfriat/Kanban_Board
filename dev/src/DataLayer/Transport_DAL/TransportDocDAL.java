@@ -37,14 +37,13 @@ public class TransportDocDAL {
                   String driverName, area,driverLicense;
                   int id, version, driverID, truckID, originStoreID;
                   double truckWeightDep;
-                  Date TransDate, LeftOrigin;
+                  String TransDate, LeftOrigin;
 
                   //transport doc primitive values
                   id = results.getInt(1);
                   version = results.getInt(2);
-                  LeftOrigin = results.getDate(4);
-                  TransDate = results.getDate(3);
-
+                  TransDate = results.getString(3);
+                  LeftOrigin = results.getString(4);
                   driverName = results.getString(5);
                   driverID = results.getInt(6);
                   driverLicense = results.getString(7);
@@ -158,7 +157,7 @@ public class TransportDocDAL {
                 st.executeUpdate(delete4);
 
                 //now save to all tables for id
-                String insert1 = "INSERT INTO TransportDocument " + "VALUES (" + doc.getId() + "," + doc.getVersion() + ",'" + doc.getTransDate() +
+                String insert1 = "INSERT INTO TransportDocument " + "VALUES ("+ doc.getId() + "," + doc.getVersion() + ",'" + doc.getTransDate() +
                         "','" + doc.getLeftOrigin() + "','" + doc.getDriver().getName() + "'," + doc.getDriver().getId() + ",'" + LicenseToString(doc.getDriver().getLicense()) +
                         "'," + doc.getTruck().getLicensePlate() + "," + doc.getOrigin().getId() + ",'" + doc.getArea().toString() + "'," + doc.getTruckWeightDep() + ");";
                 st.executeUpdate(insert1);
@@ -185,8 +184,6 @@ public class TransportDocDAL {
                             "," + t.getSecond() +  "," + doc.getVersion() +" );";
                     st.executeUpdate(insert2);
                 }
-
-
                 saveDoc(doc.upDates);
             }
 
@@ -232,7 +229,10 @@ public class TransportDocDAL {
 
     }
 
-
+    private  java.sql.Date convertUtilToSql(java.util.Date uDate) {
+        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+        return sDate;
+    }
 
 
 }

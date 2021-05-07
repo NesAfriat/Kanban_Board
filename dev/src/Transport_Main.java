@@ -33,8 +33,8 @@ public class Transport_Main {
         Product pr1 = new Product("Cheese", 2);
         Store st1 = new Store("shufersal 1", 2, "0501231213", "mr man", Area.B);
 
-        TransportDoc tr=new TransportDoc(1,date,date,tk,dr,st1,new HashMap<>(),new HashMap<>(),Area.B,1000,new ArrayList<>(),new ArrayList<>(),0);
-        sDAL.saveDoc(tr);
+        //TransportDoc tr=new TransportDoc(1,date,date,tk,dr,st1,new HashMap<>(),new HashMap<>(),Area.B,1000,new ArrayList<>(),new ArrayList<>(),0);
+        //sDAL.saveDoc(tr);
 
         //HashMap<Integer, TransportDoc> LoadProducts = sDAL.LoadProducts();
 
