@@ -830,7 +830,7 @@ public class WorkerDataController {
         String statement = "INSERT INTO Shift (Date,ShiftType,Approved,Cashier_Amount,Storekeeper_Amount,Usher_Amount,Guard_Amount,DriverA_Amount,DriverB_Amount,DriverC_Amount) VALUES " +
                 "(? ,'Morning',1,2,1,3,1,1,1,1), " +
                 "(? ,'Evening',0,2,1,3,1,1,1,1), " +
-                "(? ,'Morning',0,1,1,1,1,1,1,1), " +
+                "(? ,'Morning',0,2,1,1,1,1,1,1), " +
                 "(? ,'Evening',0,2,1,3,1,1,1,1), " +
                 "(? ,'Morning',0,1,1,0,1,1,1,1), " +
                 "(? ,'Evening',0,1,1,0,1,1,1,1), " +

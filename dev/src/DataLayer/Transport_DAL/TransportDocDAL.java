@@ -42,8 +42,9 @@ public class TransportDocDAL {
                   //transport doc primitive values
                   id = results.getInt(1);
                   version = results.getInt(2);
-                  TransDate = results.getDate(3);
                   LeftOrigin = results.getDate(4);
+                  TransDate = results.getDate(3);
+
                   driverName = results.getString(5);
                   driverID = results.getInt(6);
                   driverLicense = results.getString(7);
@@ -126,7 +127,7 @@ public class TransportDocDAL {
         } catch (
                 SQLException e) {
 
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 if (conn != null) {

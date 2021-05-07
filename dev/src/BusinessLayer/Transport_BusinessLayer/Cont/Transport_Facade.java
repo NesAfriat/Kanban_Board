@@ -25,6 +25,7 @@ public class Transport_Facade {
         this.driversController = new DriversController();
         this.docCont = new DocCont();
         this.controllerShops = new ControllerShops();
+        // init data base
     }
     public void addWorkersInterface(Workers_Integration wk ){
         driversController.addWorkersInterface(wk);
