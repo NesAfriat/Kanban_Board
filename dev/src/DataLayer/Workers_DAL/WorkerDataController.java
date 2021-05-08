@@ -512,6 +512,23 @@ public class WorkerDataController {
         }
     }
 
+    public void removeWorkerFromShift(String id, String date, String shiftType) {
+        String sql = "DELETE FROM Workers_In_Shift WHERE Worker_ID = ? AND Date = ? AND ShiftType = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            // set the corresponding param
+            pstmt.setString(1, id);
+            pstmt.setString(2, date);
+            pstmt.setString(3, shiftType);
+            // execute the delete statement
+            pstmt.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public Worker getWorker(String ID){
         Worker worker = identityMap.getWorker(ID);
         if (worker == null){
@@ -520,6 +537,10 @@ public class WorkerDataController {
                 identityMap.addWorker(worker);
         }
         return worker;
+    }
+
+    public List<Worker> getAllWorkers(){
+        return selectAllWorkers();
     }
 
     public WorkDay getWorkDay(String date){
@@ -693,6 +714,24 @@ public class WorkerDataController {
         }
         return outputWorkers;
     }
+    private List<Worker> selectAllWorkers(){
+        List<Worker> outputWorkers= new LinkedList<>();
+        String sql = "SELECT ID FROM Worker";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            ResultSet rs  = pstmt.executeQuery();
+
+            // loop through the result set
+            while (rs.next()) {
+                Worker worker = getWorker(rs.getString("ID"));
+                outputWorkers.add(worker);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return outputWorkers;
+    }
 
     public boolean[] getDefaultWorkDayShifts(int day){
         String sql = "SELECT * FROM DefaultWorkDayShift WHERE Day = ?";
@@ -830,7 +869,7 @@ public class WorkerDataController {
         String statement = "INSERT INTO Shift (Date,ShiftType,Approved,Cashier_Amount,Storekeeper_Amount,Usher_Amount,Guard_Amount,DriverA_Amount,DriverB_Amount,DriverC_Amount) VALUES " +
                 "(? ,'Morning',1,2,1,3,1,1,1,1), " +
                 "(? ,'Evening',0,2,1,3,1,1,1,1), " +
-                "(? ,'Morning',0,1,1,1,1,1,1,1), " +
+                "(? ,'Morning',0,2,1,1,1,1,1,1), " +
                 "(? ,'Evening',0,2,1,3,1,1,1,1), " +
                 "(? ,'Morning',0,1,1,0,1,1,1,1), " +
                 "(? ,'Evening',0,1,1,0,1,1,1,1), " +

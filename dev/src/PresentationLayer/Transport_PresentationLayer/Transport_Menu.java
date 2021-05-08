@@ -12,6 +12,7 @@ public class Transport_Menu {
     private Scanner sc;
 
     int input;
+    boolean firstRun;
 
 
     public void addWorkersIntegration (Workers_Integration wk){
@@ -21,9 +22,12 @@ public class Transport_Menu {
     {
         bc = facade;
         sc = new Scanner(System.in);
+        firstRun=false;
     }
 
     public void mainMenu(){
+        if(!firstRun)
+            loadData();
         boolean run = true;
         while(run){
             run = runProgram();
@@ -51,6 +55,8 @@ public class Transport_Menu {
         print ("15) Add Departure time to Transport \n");
         print ("16) Make changes \n");
         print ("17) Print document \n");
+        print ("18) SaveDoc \n");
+        print ("19) Exit \n");
 
 
 
@@ -58,7 +64,10 @@ public class Transport_Menu {
 
 
 
-        input = sc.nextInt();
+
+
+
+            input = sc.nextInt();
         return input;
     }
 
@@ -180,23 +189,18 @@ public class Transport_Menu {
                 str = sc.nextLine();
                 str = sc.nextLine();
                 try {
-                    Date date = new SimpleDateFormat("dd/MM/yyyy").parse(str);
-                    bc.setTransportDate(a, date);
+                    bc.setTransportDate(a, str);
                 } catch (Exception e) {
                     print(e.toString());
                 }
                 break;
             case 15:
-                print("please enter your doc ID and the Departure time in this format (dd-MM-yyyy HH:mm:ss) \n");
+                print("please enter your doc ID and the Departure time in this format (hh:mm:ss) \n");
                 a = sc.nextInt();
                 str = sc.nextLine();
                 str = sc.nextLine();
                 try {
-                    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-                    Date date = formatter.parse(str);
-                    bc.setDepartureTime(a, date);
-
-
+                    bc.setDepartureTime(a, str);
                 } catch (Exception e) {
                     print(e.toString());
                 }
@@ -208,6 +212,11 @@ public class Transport_Menu {
                 printDoc();
                 break;
             case 18:
+                print("please enter the doc ID you would like to save, it will only save if all fields are full\n");
+                a = sc.nextInt();
+                bc.saveDoc(a);
+                break;
+            case 19:
                 return false;
 
 

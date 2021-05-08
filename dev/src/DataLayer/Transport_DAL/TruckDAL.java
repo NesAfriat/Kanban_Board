@@ -106,10 +106,9 @@ public class TruckDAL {
             HashMap <String, TruckType> hmTruckType = new HashMap<String, TruckType>();
             stList = new LinkedList<>();
 
-            String url = "jdbc:sqlite:/Users/danrotman/Desktop/Nituz.db";
-            conn = DriverManager.getConnection(url);
+            conn = Connect.getConnection();
 
-            System.out.println("Connection to SQLite has been established.");
+            //System.out.println("Connection to SQLite has been established.");
 
             Statement st = conn.createStatement();
             ResultSet results = st.executeQuery("SELECT * FROM TruckType");

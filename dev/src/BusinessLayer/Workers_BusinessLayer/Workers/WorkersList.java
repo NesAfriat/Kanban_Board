@@ -21,7 +21,8 @@ public class WorkersList {
 
     public List<Worker> getWorkersByJob(Job job){
         LinkedList<Worker> output = new LinkedList<>();
-        for (Worker worker: workers) {
+        WorkerDataController workerDataController = new WorkerDataController();
+        for (Worker worker: workerDataController.getAllWorkers()) {
             if(worker.canWorkInJob(job)) output.add(worker);
         }
         return output;

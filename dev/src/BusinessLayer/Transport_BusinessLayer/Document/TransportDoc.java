@@ -10,8 +10,8 @@ import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
 
 public class TransportDoc {
     int id;
-    Date TransDate=null;
-    Date LeftOrigin=null;
+    String TransDate=null;
+    String LeftOrigin=null;
     Truck truck=null;
     Driver driver=null;
 
@@ -42,7 +42,7 @@ public class TransportDoc {
         return id;
     }
 
-    public TransportDoc(int id, Date transDate, Date leftOrigin, Truck truck, Driver driver, Store origin, HashMap<Integer, Store> destinationStore, HashMap<Integer, Supplier> destinationSupplier, Area area, double truckWeightDep, List<Triple<Product, Integer, Store>> productList,ArrayList<Integer >allStops,int version) {
+    public TransportDoc(int id, String transDate, String leftOrigin, Truck truck, Driver driver, Store origin, HashMap<Integer, Store> destinationStore, HashMap<Integer, Supplier> destinationSupplier, Area area, double truckWeightDep, List<Triple<Product, Integer, Store>> productList,ArrayList<Integer >allStops,int version) {
         this.id = id;
         TransDate = transDate;
         LeftOrigin = leftOrigin;
@@ -124,19 +124,19 @@ public class TransportDoc {
 
     }
 
-    public Date getTransDate() {
+    public String getTransDate() {
         return TransDate;
     }
 
-    public void setTransDate(Date transDate) {
+    public void setTransDate(String transDate) {
         TransDate = transDate;
     }
 
-    public Date getLeftOrigin() {
+    public String getLeftOrigin() {
         return LeftOrigin;
     }
 
-    public void setLeftOrigin(Date leftOrigin) {
+    public void setLeftOrigin(String leftOrigin) {
         LeftOrigin = leftOrigin;
     }
 

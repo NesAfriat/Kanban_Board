@@ -8,7 +8,7 @@ public class Connect {
         Connection conn = null;
         try {
             // db parameters
-            String url = "jdbc:sqlite:Nituz.db";;
+            String url = "jdbc:sqlite:Transport.db";;
             // create a connection to the database
             conn = DriverManager.getConnection(url);
 

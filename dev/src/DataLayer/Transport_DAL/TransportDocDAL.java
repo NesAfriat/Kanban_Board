@@ -18,7 +18,7 @@ public class TransportDocDAL {
 
     public HashMap<Integer, TransportDoc> LoadProducts () throws SQLException {
         HashMap<Integer, TransportDoc> theTransportBible = new HashMap<>();
-        ArrayList<Integer > allStops = new ArrayList<>();
+
         List<Product> stList = null;
         Connection conn = null;
         try{
@@ -27,23 +27,28 @@ public class TransportDocDAL {
 
             conn = Connect.getConnection();
             Statement st = conn.createStatement();
+            Statement st1 = conn.createStatement();
+            Statement st2 = conn.createStatement();
             boolean atLeastOne=true;
             int index=0;
           while(atLeastOne) {
               atLeastOne = false;
+              int loops = 0;
               ResultSet results = st.executeQuery("SELECT * FROM TransportDocument where version = " + index);
+
               while (results.next()) {
+                  ArrayList<Integer > allStops = new ArrayList<>();
                   atLeastOne=true;
                   String driverName, area,driverLicense;
                   int id, version, driverID, truckID, originStoreID;
                   double truckWeightDep;
-                  Date TransDate, LeftOrigin;
+                  String TransDate, LeftOrigin;
 
                   //transport doc primitive values
                   id = results.getInt(1);
                   version = results.getInt(2);
-                  TransDate = results.getDate(3);
-                  LeftOrigin = results.getDate(4);
+                  TransDate = results.getString(3);
+                  LeftOrigin = results.getString(4);
                   driverName = results.getString(5);
                   driverID = results.getInt(6);
                   driverLicense = results.getString(7);
@@ -74,7 +79,7 @@ public class TransportDocDAL {
 
                     //store and supplier hashmap
                   HashMap<Integer, Store> destinationStore = new HashMap<>();
-                  ResultSet resultsHash = st.executeQuery("SELECT * FROM TransportStopStores where version = " + index+ " and id = "+ id);
+                  ResultSet resultsHash = st1.executeQuery("SELECT * FROM TransportStopStores where version = " + index+ " and id = "+ id);
                   while (resultsHash.next()) {
                       int stopNumber, storeIDHash;
 
@@ -85,7 +90,7 @@ public class TransportDocDAL {
                       destinationStore.put(stopNumber,stor);
                   }
                   HashMap<Integer, Supplier> destinationSupplier = new HashMap<>();
-                  ResultSet resultsHash2 = st.executeQuery("SELECT * FROM TransportStopSupplier where version = " + index+ " and ID = "+ id);
+                  ResultSet resultsHash2 = st1.executeQuery("SELECT * FROM TransportStopSupplier where version = " + index+ " and ID = "+ id);
                   while (resultsHash2.next()) {
                       int stopNumber, supplierIDHash;
                       stopNumber = resultsHash2.getInt(2) ;
@@ -95,8 +100,9 @@ public class TransportDocDAL {
                       destinationSupplier.put(stopNumber,spr);
                   }
 
-                    // create triple list of store product and amount
-                   resultsHash = st.executeQuery("SELECT * FROM TransportDocStoreProduct where Version = " + index+ " and DocumentID = "+ id);
+
+                  // create triple list of store product and amount
+                   resultsHash = st1.executeQuery("SELECT * FROM TransportDocStoreProduct where Version = " + index+ " and DocumentID = "+ id);
                   List<Triple<Product, Integer, Store>> productList = new LinkedList<>();
                   while(resultsHash.next()) {
                         int prodID, StoreID, Amount;
@@ -118,15 +124,18 @@ public class TransportDocDAL {
                               theTransportBible.put(td.getId(),td);
 
                           else
-                              DocCont.getUpToDateDoc(theTransportBible.get(td.getId())).upDates=td;
-                              index++;
+                              DocCont.getUpToDateDoc(theTransportBible.get(td.getId())).upDates = td;
+
+
+
               }
+              index++;
           }
 
         } catch (
                 SQLException e) {
 
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         } finally {
             try {
                 if (conn != null) {
@@ -157,7 +166,7 @@ public class TransportDocDAL {
                 st.executeUpdate(delete4);
 
                 //now save to all tables for id
-                String insert1 = "INSERT INTO TransportDocument " + "VALUES (" + doc.getId() + "," + doc.getVersion() + ",'" + doc.getTransDate() +
+                String insert1 = "INSERT INTO TransportDocument " + "VALUES ("+ doc.getId() + "," + doc.getVersion() + ",'" + doc.getTransDate() +
                         "','" + doc.getLeftOrigin() + "','" + doc.getDriver().getName() + "'," + doc.getDriver().getId() + ",'" + LicenseToString(doc.getDriver().getLicense()) +
                         "'," + doc.getTruck().getLicensePlate() + "," + doc.getOrigin().getId() + ",'" + doc.getArea().toString() + "'," + doc.getTruckWeightDep() + ");";
                 st.executeUpdate(insert1);
@@ -165,7 +174,7 @@ public class TransportDocDAL {
                 Iterator itStore=doc.getDestinationStore().entrySet().iterator();
                 while(itStore.hasNext()) {
                     Map.Entry pair =(Map.Entry)itStore.next();
-                    String insert2 = "INSERT INTO TransportStopStore " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + ((Store)pair.getValue()).getId()  +
+                    String insert2 = "INSERT INTO TransportStopStores " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + ((Store)pair.getValue()).getId()  +
                             "," + doc.getVersion() + ");";
                     st.executeUpdate(insert2);
                 }
@@ -184,8 +193,6 @@ public class TransportDocDAL {
                             "," + t.getSecond() +  "," + doc.getVersion() +" );";
                     st.executeUpdate(insert2);
                 }
-
-
                 saveDoc(doc.upDates);
             }
 
@@ -231,7 +238,10 @@ public class TransportDocDAL {
 
     }
 
-
+    private  java.sql.Date convertUtilToSql(java.util.Date uDate) {
+        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+        return sDate;
+    }
 
 
 }

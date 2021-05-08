@@ -37,6 +37,7 @@ public class DriversFactory {
 
     }
 
+
     public List<Driver> getDrivers(String date,int shift,List<License> license){
         List<Driver> output=new LinkedList<>();
         for (License l:license) {
@@ -111,5 +112,15 @@ public class DriversFactory {
         return JobToLicense(l.stream().filter(x->
                 (x==Job.DriverA)||(x==Job.DriverB)||(x==Job.DriverC)
         ).findFirst().get());
+    }
+
+    public boolean isStoreKeeper(String date) {
+        ResponseT<List<WorkerResponse>> responseT,responseT1;
+        responseT= workers_integration.getWorkersInShiftByJob(date, "Morning", "Storekeeper");
+        responseT1 = workers_integration.getWorkersInShiftByJob(date, "Evening", "Storekeeper");
+        if(responseT.value.isEmpty() && responseT1.value.isEmpty())
+            return false;
+        return true;
+
     }
 }

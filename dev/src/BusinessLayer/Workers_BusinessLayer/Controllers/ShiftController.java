@@ -109,6 +109,8 @@ public class ShiftController {
         Worker workerToRemove = workersList.getWorker(id);
         Job role = WorkersUtils.parseJob(job);
         currentShift.removeWorker(role, workerToRemove);
+        WorkerDataController workerDataController = new WorkerDataController();
+        workerDataController.removeWorkerFromShift(id, currentDay.getDate(), currentShiftType.name());
         return currentShift;
     }
 

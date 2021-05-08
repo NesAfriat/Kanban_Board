@@ -33,16 +33,26 @@ public class Main_Menu {
         Transport_Menu transport_menu = new Transport_Menu(transport_facade);
         Workers_Integration wk = workers_facade;
         transport_menu.addWorkersIntegration(wk);
-        if (firstRun) {
-            System.out.println("Welcome to Super-Lee system!");
+        System.out.println('\n' + "----------------------------------------------------------");
+        System.out.println('\n' +
+                "0000  0  0  0000  0000  0000              0    0000  0000" + '\n' +
+                "0     0  0  0  0  0     0  0              0    0     0   "+ '\n' +
+                "0000  0  0  0000  0000  000     000000    0    0000  0000"+ '\n' +
+                "   0  0  0  0     0     0 0               0    0     0   "+ '\n' +
+                "0000  0000  0     0000  0  0              0000 0000  0000" + '\n');
+        System.out.println("----------------------------------------------------------" + '\n');
+        System.out.println("Welcome to Super-Lee system!");
+
+        /*if (firstRun) {
+
             System.out.println("Do you want to load database?");
             boolean load = getInputYesNo();
             if (load) {
                // workers_menu.testingDataUpload();
-               // transport_menu.loadData();
+                transport_menu.loadData();
             }
             firstRun = false;
-        }
+        }*/
 
         boolean run = true;
         while (run) {
