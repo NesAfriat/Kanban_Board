@@ -4,7 +4,7 @@ import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.IAgreement;
 import BuisnnesLayer.IdentityMap;
 import BuisnnesLayer.Item;
-import DataLayer.Mappers.DataController;
+import DataLayer.DataController;
 
 
 import java.text.ParseException;
@@ -117,7 +117,6 @@ public class Order {
         updateProduct(this.id, CatalogID,quantity);
     }
 
-
     public double GetTotalPayment() {
         return TotalPayment;
     }
@@ -215,7 +214,7 @@ public class Order {
         if (!dc.update(this)) {
             System.out.println("failed to update  Order  to the database with the keys");
         }
-        im.addOrder(??);
+        im.addOrder(order);
     }
     private void updateProduct(int orderId,int catalogID,int quantity) {
         IdentityMap im = IdentityMap.getInstance();

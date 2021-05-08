@@ -26,14 +26,11 @@ public class DataController {
     private SuppliersProductsMapper suppliersProductsMapper;
     private OrdersMapper ordersMapper;
     private AgreementsMapper agreementsMapper;
-<<<<<<< HEAD:dev/src/DataLayer/Mappers/DataController.java
     private OrderProductsMapper orderProductsMapper;
     private AgreementDeliveryDaysMapper addMapper;
     private AgreementProductDiscMapper apdMapper;
-=======
     private SalesMapper salesMapper;
 
->>>>>>> salesDal:dev/src/DataLayer/DataController.java
 
     public static Date getDate(String date) throws ParseException {
         String pattern = "yyyy-MM-dd";
