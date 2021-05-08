@@ -223,7 +223,7 @@ public class Agreement implements IAgreement {
         if (!dc.delete(productSupplier,SupplierID)) {
             System.out.println("failed to Remove Prudact to the database");
         }
-        im.delete(productSupplier);// todo : way isnt delete methods in IdentityMap?
+        im.delete(productSupplier);// todo : way isnt delete methods in IdentityMap? idan - we didnt add it yet
     }
 
     //DiscountByProductQuantity
