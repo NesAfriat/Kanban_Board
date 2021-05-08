@@ -129,10 +129,10 @@ public class IdentityMap {
             reportsList.add(report);
     }
     //if this function return null - go to the db
-    public Report getReport(Report report) {
+    public Report getReport(int reportID) {
         Report output = null;
         for (Report r : reportsList) {
-            if (r.equals(report))
+            if (r.getReportID()==reportID)
                 output = r;
         }
         return output;

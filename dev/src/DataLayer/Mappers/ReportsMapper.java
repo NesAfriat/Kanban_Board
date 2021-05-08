@@ -79,7 +79,7 @@ public class ReportsMapper extends Mapper {
                 pstmt.setString(4, report.getTimeRange());
                 pstmt.setString(5, report.getReportData());
                 output = pstmt.executeUpdate() != 0;
-              //  rcm.insertCatgories(report.getCategories());
+                rcm.insertCategories(report);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

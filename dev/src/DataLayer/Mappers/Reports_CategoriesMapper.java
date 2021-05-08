@@ -50,5 +50,23 @@ public class Reports_CategoriesMapper extends Mapper{
         return categories;
     }
 
+    public void insertCategories(Report report) {
+        LinkedList<String> categories = report.getCategories();
+        try (Connection conn = connect()) {
+            for (String cat : categories) {
+                String statement = "INSERT OR IGNORE INTO Reports(repID, catName) " +
+                        "VALUES (?,?)";
+
+                try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                    pstmt.setInt(1, report.getReportID());
+                    pstmt.setString(2, cat);
+                    if (pstmt.executeUpdate() == 0)
+                        throw new Exception("failed inserting report category");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } }}catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+        }
     }
 
