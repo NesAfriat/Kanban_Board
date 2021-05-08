@@ -1,9 +1,12 @@
 package BuisnnesLayer.Controlls;
 
+import BuisnnesLayer.Category;
+import BuisnnesLayer.IdentityMap;
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.Reports.ReportFactory;
 import BuisnnesLayer.Reports.Subject;
 import BuisnnesLayer.Reports.TimeRange;
+import DataLayer.Mappers.DataController;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -14,7 +17,8 @@ import static BuisnnesLayer.FacedeModel.inventModel.getDate;
 public class Reports_Controller {
     private static Reports_Controller report_C = null;
     private HashMap<Integer, Report> reports;           //holds all reports ever created
-    private ReportFactory reportFactory;                //hold the class which create a report
+    private ReportFactory reportFactory;//hold the class which create a report
+    private boolean loadedReports=false;
 
     private void check_valid_string(String[] arr) throws Exception {
         for (String str : arr) {
@@ -64,10 +68,10 @@ public class Reports_Controller {
         check_valid_string(categories);
         Subject sub = convertSubject(subject);
         Report r = reportFactory.getReport(sub, timeRange, categories);
+        addReportData(r);
         reports.put(r.getReportID(), r);
         return r;
     }
-
 
     private Subject convertSubject(String sub) throws Exception {
         switch (sub.toLowerCase()) {
@@ -83,7 +87,10 @@ public class Reports_Controller {
     }
 
     public Report getReportById(int id) throws Exception {
+        Report output=null;
         if (!reports.containsKey(id))
+        output= getReportData(id);
+        if (output==null)
             throw new Exception("report id doesnt exist");
         return reports.get(id);
     }
@@ -93,6 +100,10 @@ public class Reports_Controller {
         check_valid_Dates(date);
         check_valid_string(new String[]{subject});
         String output = "Report ID's about " + subject + "from " + date + ":\n";
+        if(!loadedReports) {
+            loadAllReports();
+            loadedReports=true;
+        }
         for (Report r : reports.values()) {
             if (subject.equals(r.getSubject()) &&
                     date.equals(r.getCreationDate()))
@@ -101,12 +112,45 @@ public class Reports_Controller {
         return output;
     }
 
+
     public LinkedList<String> get_all_reports() {
         LinkedList<String> output = new LinkedList<>();
+        if(!loadedReports) {
+            loadAllReports();
+            loadedReports=true;
+        }
         for (Report report : reports.values()) {
-            output.addFirst(report.getReportData() + " " + report.getSubject() + " " + getDate(report.getDate()) + "\n");
+            output.addFirst(report.getReportData() + " " + report.getSubject() + " " + getDate(report.getCreationDate()) + "\n");
         }
         return output;
+    }
+
+    //==============================
+    //reports Data function
+    private void addReportData(Report r) {
+        IdentityMap im= IdentityMap.getInstance();
+        DataController dc= DataController.getInstance();
+        im.addReport(r);
+        dc.insertReport(r);
+    }
+    private Report getReportData(int repID)
+    {
+        IdentityMap im= IdentityMap.getInstance();
+        DataController dc= DataController.getInstance();
+        Report report= im.getReport(repID);
+        if(report==null)
+            report=dc.getReport(repID);
+        return report;
+    }
+    private void loadAllReports() {
+        DataController dc = DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        LinkedList<Report> reportsList = dc.loadAllReports();
+        for (Report r : reportsList) {
+            im.addReport(r);
+            if (!reports.containsKey(r))
+                reports.put(r.getReportID(),r);
+        }
     }
 }
 
