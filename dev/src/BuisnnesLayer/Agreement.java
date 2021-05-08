@@ -21,6 +21,17 @@ public class Agreement implements IAgreement {
         this.daysOfDelivery=daysOfDelivery;
         DiscountByProductQuantity=new HashMap<>(new HashMap<>());
     }
+    //constructor for DAL
+    public Agreement(int supID, double xDisc, String mod, int days) {
+        this.SupplierID=SupplierID;
+//        this.products=new HashMap<>();
+        deliveryMods=mod; //TODO need to change the enum or add switch case
+        this.numOfDaysFromOrder=days;
+        this.daysOfDelivery=daysOfDelivery; //TODO what is this????
+//        DiscountByProductQuantity=new HashMap<>(new HashMap<>());
+        this.ExtraDiscount = xDisc; //TODO why disc is in int???
+        //TODO need to add Products and DiscByProd
+    }
 
 
     public double Calculate_cost(ProductSupplier productSupplier,int quantity) {
@@ -85,9 +96,7 @@ public class Agreement implements IAgreement {
         if(!isProductExist(CatalogID)){
             throw new IllegalArgumentException("the product is not exist");
         }
-        if(products.keySet().size()==1){
-            throw new IllegalArgumentException("you cannot remove the product because its the last one in the agrement");
-        }
+
         products.remove(CatalogID);
         DiscountByProductQuantity.remove(CatalogID);//check if need to ceck if exist
     }

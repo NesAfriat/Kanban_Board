@@ -41,8 +41,8 @@ private facade(){
     }
 
     public Response create_order_Due_to_lack() {
-
-        return supModel.create_order_Due_to_lack((inventModel.getStockC()).get_missing_General_products_with_amounts());
+        Integer li=0;
+        return supModel.create_order_Due_to_lack((inventModel.getStockC()).get_missing_General_products_with_amounts(),li);
 
     }
     ////////////////////////////////////////
@@ -268,8 +268,8 @@ private facade(){
         return supModel.RemoveContact(SupId,ContactID);
     }
 
-    public Response addNewOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant) {
-    return supModel.addNewOrder(SupId,productQuantity,isConstant);
+    public Response addNewOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant,Integer constantorderdayfromdelivery) {
+    return supModel.addNewOrder(SupId,productQuantity,isConstant,constantorderdayfromdelivery);
     }
 
     public Response addProductToOrder(int SupId,int OrderId, int CatalogID, int quantity) {

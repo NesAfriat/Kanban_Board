@@ -3,34 +3,57 @@ package BuisnnesLayer;
 import BuisnnesLayer.Category;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
+<<<<<<< HEAD
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.SupplierBuissness.*;
+=======
+import BuisnnesLayer.OrderBuissness.Order;
+import BuisnnesLayer.SupplierBuissness.Contact;
+import BuisnnesLayer.SupplierBuissness.Supplier;
+>>>>>>> sup_stock_dal
 
 import java.util.LinkedList;
 
 public class IdentityMap {
     private static IdentityMap instance = null;
     private LinkedList<Item> itemList;
+    private LinkedList<Item> defctedItemsList;
     private LinkedList<GeneralProduct> generalProductList;
     private LinkedList<Category> categoryList;
     private LinkedList<Supplier> suppliersList;
+<<<<<<< HEAD
     private LinkedList<Report> reportsList;
+=======
+    private LinkedList<Contact> contactsList;
+    private LinkedList<ProductSupplier> productSuppliersList;
+    private LinkedList<Order> ordersList;
+    private LinkedList<Agreement> agreementsList;
+>>>>>>> sup_stock_dal
 
     public static IdentityMap getInstance() {
-        if (instance == null){
+        if (instance == null) {
             instance = new IdentityMap();
         }
         return instance;
     }
 
-    private IdentityMap(){
+    private IdentityMap() {
         itemList = new LinkedList<>();
         categoryList = new LinkedList<>();
         suppliersList = new LinkedList<>();
         generalProductList = new LinkedList<>();
+<<<<<<< HEAD
         reportsList = new LinkedList<>();
+=======
+        contactsList = new LinkedList<>();
+        productSuppliersList = new LinkedList<>();
+        ordersList = new LinkedList<>();
+        agreementsList = new LinkedList<>();
+        defctedItemsList = new LinkedList<>();
+>>>>>>> sup_stock_dal
     }
 
+    //================================================================================
     //add an item to the identityMap
     public void addItem(Item item) {
         itemList.add(item);
@@ -40,69 +63,80 @@ public class IdentityMap {
     //if this function return null - go to the db
     public Item getItem(int item_id, int gp_id) {
         Item output = null;
-        for (Item item: itemList) {
-            if(item.getItem_id()==item_id && item.getProduct_id() ==gp_id)
+        for (Item item : itemList) {
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
                 output = item;
         }
         return output;
     }
 
     //TODO: make sure remove doesnt stop the for
-    public boolean removeItem(int item_id, int gp_id){
-        boolean output = false;
-        for (Item item: itemList) {
-            if(item.getItem_id()==item_id && item.getProduct_id() ==gp_id)
-                output = itemList.remove(item);
+    public Item removeItem(int item_id, int gp_id) {
+        Item output = null;
+        for (Item item : itemList) {
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
+                output = item;
+            itemList.remove(item);
         }
         return output;
     }
 
-    public void addGeneralProduct(GeneralProduct product){
+    //================================================================================
+    public void addGeneralProduct(GeneralProduct product) {
         generalProductList.add(product);
     }
+
     //TODO: need to add empty constructor for each created object
     //if this function return null - go to the db
     public GeneralProduct getGeneralProduct(int gp_id) {
         GeneralProduct output = null;
-        for (GeneralProduct prod: generalProductList) {
-            if(prod.getProduct_id() ==gp_id)
+        for (GeneralProduct prod : generalProductList) {
+            if (prod.getProduct_id() == gp_id)
                 output = prod;
         }
         return output;
     }
 
     //TODO: make sure remove doesnt stop the for
-    public boolean removeGeneralProd(int gp_id){
-        boolean output=false;
-        for (GeneralProduct prod: generalProductList) {
-            if(prod.getProduct_id() ==gp_id)
-                output = generalProductList.remove(prod);
+    public GeneralProduct removeGeneralProd(int gp_id) {
+        GeneralProduct output = null;
+        for (GeneralProduct prod : generalProductList) {
+            if (prod.getProduct_id() == gp_id)
+                output = prod;
+            generalProductList.remove(prod);
         }
         return output;
     }
 
+<<<<<<< HEAD
     ////Categories//////
  //TODO: check if object exist in the list before adding
+=======
+    //================================================================================
+    //TODO: check if object exist in the list before adding
+>>>>>>> sup_stock_dal
     public void addCategory(Category category) {
-        if(!categoryList.contains(category))
-        categoryList.add(category);
+        if (!categoryList.contains(category))
+            categoryList.add(category);
     }
+
     //if this function return null - go to the db
     public Category getCategory(String cat) {
         Category output = null;
-        for (Category c: categoryList) {
-            if(c.getCategory_name().equals(cat))
+        for (Category c : categoryList) {
+            if (c.getCategory_name().equals(cat))
                 output = c;
         }
         return output;
     }
 
-    public Category removeCategory(Category category){
-        Category output=null;
+    public Category removeCategory(Category category) {
+        Category output = null;
         output = categoryList.remove();
         return output;
     }
 
+<<<<<<< HEAD
     /////Reports//////
     public void addReport(Report report) {
         if(!reportsList.contains(report))
@@ -114,13 +148,181 @@ public class IdentityMap {
         for (Report r: reportsList) {
             if(r.equals(report))
                 output = r;
+=======
+    //================================================================================
+    //add an item to the identityMap
+    public void addSupplier(Supplier sup) {
+        suppliersList.add(sup);
+    }
+
+    //TODO: need to add empty constructor for each created object
+    //if this function return null - go to the db
+    public Supplier getSupplier(int supplier_id) {
+        Supplier output = null;
+        for (Supplier sup : suppliersList) {
+            if (sup.getId() == supplier_id)
+                output = sup;
         }
         return output;
     }
 
+    //TODO: make sure remove doesnt stop the for
+    public Supplier removeSupplier(int supplier_id) {
+        Supplier output = null;
+        for (Supplier sup : suppliersList) {
+            if (sup.getId() == supplier_id) {
+                output = sup;
+                suppliersList.remove(sup);
+            }
+        }
+        return output;
+    }
+
+    //================================================================================
+    //add an item to the identityMap
+    public void addContact(Contact con) {
+        contactsList.add(con);
+    }
+
+
+    //if this function return null - go to the db
+    public Contact getContact(int con_id) {
+        Contact output = null;
+        for (Contact con: contactsList) {
+            if (con.getId() == con_id)
+                output = con;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
+    public Contact removeContact(int con_id) {
+        Contact output = null;
+        for (Contact con: contactsList) {
+            if (con.getId() == con_id) {
+                output = con;
+                contactsList.remove(con);
+            }
+        }
+        return output;
+    }
+    //================================================================================
+    //add an item to the identityMap
+    public void addPS(ProductSupplier ps) {
+        productSuppliersList.add(ps);
+    }
+
+    //TODO: need to add a supID or idk how to get a specific ps
+    //if this function return null - go to the db
+//    public ProductSupplier getPS(int sup_id, int cat_id) {
+//        ProductSupplier output = null;
+//        for (ProductSupplier ps: productSuppliersList) {
+//            if (ps.getId() == con_id)
+//                output = con;
+//        }
+//        return output;
+//    }
+//
+//    //TODO: make sure remove doesnt stop the for
+//    public Contact removeContact(int con_id) {
+//        Contact output = null;
+//        for (Contact con: contactsList) {
+//            if (con.getId() == con_id) {
+//                output = con;
+//                contactsList.remove(con);
+//            }
+//        }
+//        return output;
+//    }
+    //================================================================================
+    //add an Order to the identityMap
+    public void addOrder(Order o) {
+        ordersList.add(o);
+    }
+
+
+    //if this function return null - go to the db
+    public Order getOrder(int oID) {
+        Order output = null;
+        for (Order o: ordersList) {
+            if (o.GetId() == oID)
+                output = o;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
+    public Order removeOrder(int oID) {
+        Order output = null;
+        for (Order o: ordersList) {
+            if (o.GetId() == oID) {
+                output = o;
+                ordersList.remove(o);
+            }
+        }
+        return output;
+    }
+    //================================================================================
+    //add an Agreement to the identityMap
+    public void addAgreement(Agreement a) {
+        agreementsList.add(a);
+    }
+
+
+    //if this function return null - go to the db
+    public Agreement getAgreement(int supID) {
+        Agreement output = null;
+        for (Agreement a: agreementsList) {
+            if (a.getSupplierID() == supID)
+                output = a;
+>>>>>>> sup_stock_dal
+        }
+        return output;
+    }
+
+<<<<<<< HEAD
     public Report removeReport(Report report){
         Report output=null;
         output = reportsList.remove();
+=======
+    //TODO: make sure remove doesnt stop the for
+    public Agreement removeAgreement(int supID) {
+        Agreement output = null;
+        for (Agreement a: agreementsList) {
+            if (a.getSupplierID() == supID) {
+                output = a;
+                agreementsList.remove(a);
+            }
+        }
+        return output;
+    }
+
+    //================================================================================
+    //add an item to the identityMap
+    public void addDefectedItem(Item item) {
+        defctedItemsList.add(item);
+    }
+
+    //TODO: need to add empty constructor for each created object
+    //if this function return null - go to the db
+    public Item getDefectedItem(int item_id, int gp_id) {
+        Item output = null;
+        for (Item item : defctedItemsList) {
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
+                output = item;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
+    public Item removeDefectedItem(int item_id, int gp_id) {
+        Item output = null;
+        for (Item item : defctedItemsList) {
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
+                output = item;
+            defctedItemsList.remove(item);
+        }
+>>>>>>> sup_stock_dal
         return output;
     }
 }

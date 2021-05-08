@@ -4,14 +4,11 @@ import BuisnnesLayer.Item;
 
 import java.sql.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import static DataLayer.Mappers.DataController.getDate;
 
-public class ItemMapper extends Mapper {
-
-    public ItemMapper() {
+public class DefectsItemsMapper extends Mapper{
+    public DefectsItemsMapper() {
         super();
         create_table();
     }
@@ -19,21 +16,22 @@ public class ItemMapper extends Mapper {
 
     @Override
     void create_table() {
-        String itemTable = "CREATE TABLE IF NOT EXISTS Items(\n" +
-                "\tgpID INTEGER,\n" +
-                "\tiID INTEGER,\n" +
-                "\tlocation TEXT,\n" +
-                "\tsupplied_date TEXT,\n" +
-                "\tcreation_date TEXT,\n" +
-                "\texpiration_date TEXT,\n" +
-                "\tPRIMARY KEY (gpID, iID),\n" +
-                "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)\n" +
-                ");";
+        String DefItemTable = "CREATE TABLE IF NOT EXISTS DefectsItems(\n" +
+                                "\tgpID INTEGER,\n" +
+                                "\tiID INTEGER,\n" +
+                                "\tlocation TEXT,\n" +
+                                "\tsupplied_date TEXT,\n" +
+                                "\tcreation_date TEXT,\n" +
+                                "\texpiration_date TEXT,\n" +
+                                "\tPRIMARY KEY (gpID, iID),\n" +
+                                "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID),\n" +
+                                "\n" +
+                                ");";
         //        String sql = "BEGIN TRANSACTION;" + itemTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
             // create a new tables
-            stmt.execute(itemTable);
+            stmt.execute(DefItemTable);
             //TODO: in DataController - need to activate loadData
 //                      if (!identityMap.initialized){
 //                                LoadPreData();
@@ -45,10 +43,10 @@ public class ItemMapper extends Mapper {
     }
 
 
-    public Item getItem(int product_id, int item_id) {
+    public Item getDefectedItem(int product_id, int item_id) {
         Item obj = null;
         try (Connection conn = connect()) {
-            String statement = "SELECT * FROM Items WHERE gpID=? AND iID=? ";
+            String statement = "SELECT * FROM DefectsItems WHERE gpID=? AND iID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, product_id);
@@ -73,10 +71,11 @@ public class ItemMapper extends Mapper {
         return obj;
     }
 
+    //Probably wont be used at all
     public boolean update(Item item) {
         boolean updated = false;
         try (Connection conn = connect()) {
-            String statement = "UPDATE Items SET gpID=?, iID=?, location=?, supplied_date=?, creation_date=?, expiration_date=? WHERE gpID=? AND iID=? ";
+            String statement = "UPDATE DefectsItems SET gpID=?, iID=?, location=?, supplied_date=?, creation_date=?, expiration_date=? WHERE gpID=? AND iID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, item.getProduct_id());
@@ -100,7 +99,7 @@ public class ItemMapper extends Mapper {
     public boolean delete(Item item) {
         boolean deleted = false;
         try (Connection conn = connect()) {
-            String statement = "DELETE FROM Items WHERE gpID=? AND iID=?";
+            String statement = "DELETE FROM DefectsItems WHERE gpID=? AND iID=?";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, item.getProduct_id());
@@ -116,11 +115,11 @@ public class ItemMapper extends Mapper {
     }
 
     //TODO: make sure the dates are added properly!
-    public boolean insertItem(Item item) {
+    public boolean insertDefectedItem(Item item) {
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
-            String statement = "INSERT OR IGNORE INTO Items (gpID, iID, location, supplied_date, creation_date, expiration_date) " +
+            String statement = "INSERT OR IGNORE INTO DefectsItems (gpID, iID, location, supplied_date, creation_date, expiration_date) " +
                     "VALUES (?,?,?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {

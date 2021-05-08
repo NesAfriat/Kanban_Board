@@ -87,6 +87,7 @@ public class AgreementManager {
     //task 2 shinuyim hear!!!!
     //String product_name, Integer product_id, String manufacturer_name, Integer min_amount, Double cost_price, String cat, Double selling_price
     public void AddProduct(int SupplierId,double Price, int CatalogID,String product_name,String manufacture_name,String cat,int product_id,boolean existProductId) throws Exception {
+        GeneralProduct gp;
         if(!isSupplierExist(SupplierId)){
             throw new IllegalArgumentException("the Supplier IS not exist");
         }
@@ -98,20 +99,27 @@ public class AgreementManager {
         }
         // the product id is already exis
         if(existProductId){
-           if (!productManager.check_product_exist(product_name)){
+           if (!productManager.check_product_id_exist(product_id)){
                 throw new IllegalArgumentException("the genaral product not exsist");
             }
-            ProductSupplier productSupplier=(SupplierAgreement.get(SupplierId)).AddPrudact(Price,CatalogID,product_id,product_name);
-            productManager.addProduct(product_name,product_id,manufacture_name,-1,cat,-1.0,productSupplier);
+            //TODO with daniels code there is a problem when adding an item which exist in the stock to a supplier - another catagory is created
+            ProductSupplier productSupplier=(SupplierAgreement.get(SupplierId)).AddPrudact(Price,CatalogID,product_id,productManager.get_product(product_id).getProduct_name());
+            productManager.AddProductSupplierToProductGeneral(productSupplier,product_id);
         }
         else{
             ProductSupplier productSupplier=(SupplierAgreement.get(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
             productManager.addProduct(product_name,idProductCounter,manufacture_name,-1,cat,-1.0,productSupplier);
-        idProductCounter++;}
+        idProductCounter++;
+        }
+//        gp.add_t
    }
 
-    public void  removeProduct(int SupplierId,int CatalogID){
-        productManager.RemoveSupllierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID));
+    public void  removeProduct(int SupplierId,int CatalogID) throws Exception {
+        productManager.RemoveSupllierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID).getId(),CatalogID);
+        GeneralProduct generalProduct=productManager.get_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
+        if(generalProduct.isSupplierProducHashEmpty()){
+            productManager.remove_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
+        }
         GetAgreement(SupplierId).RemovePrudact(CatalogID);
     }
 

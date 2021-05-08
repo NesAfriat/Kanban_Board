@@ -252,16 +252,22 @@ public class SupplierFunctionality {
         double price=doubleType();
         System.out.println("please type item CatalogId : ");
         int catalogId=NumberType();
-        System.out.println("please type item manfucator : ");
-        String manfucator=myObj.nextLine();
-        System.out.println("please type item name : ");
-        String name=myObj.nextLine();
-        System.out.println("please type the product category : ");
-        String category=myObj.nextLine();
         System.out.println("is product already exsist in the stock ? : ");
         boolean isExsist=trueOrFlae();
+        String manfucator="Def";
+        String name="DEF";
+        String category="Def";
+        if(!isExsist) {
+
+            System.out.println("please type item manfucator : ");
+            manfucator = myObj.nextLine();
+            System.out.println("please type item name : ");
+            name = myObj.nextLine();
+            System.out.println("please type the product category : ");
+            category = myObj.nextLine();
+        }
         if(isExsist){
-            System.out.println("please type the id of the product");
+            System.out.println("please type the id of the product in stock");
             int general_product_id=NumberType();
             Response response= facade.addNewProductToAgreement(id,price,catalogId,manfucator,name,category,general_product_id,isExsist);
             if(response.getErrorOccurred()){
@@ -493,9 +499,9 @@ public class SupplierFunctionality {
             }
             System.out.println("The products in the agreement: ");
             List<productSupplierResponse> productResponseList =agreementResponse.products;
-            System.out.printf("%-22s%-22s%-22s%-22s\n","Catalog ID","produc name","manfucator","produc price");
+            System.out.printf("%-22s%-22s%-22s\n","Catalog ID","produc name","produc price");
             for(int i=0;i<productResponseList.size();i++){
-                System.out.printf("%-22d%-22s%-22s%-22s\n",productResponseList.get(i).CatalogID,productResponseList.get(i).name,productResponseList.get(i).price);
+                System.out.printf("%-22d%-22s%-22s\n",productResponseList.get(i).CatalogID,productResponseList.get(i).name,productResponseList.get(i).price);
             }
             System.out.println("The Discounts in the agreement: ");
             if(agreementResponse.ExtaraDiscount!=-1){

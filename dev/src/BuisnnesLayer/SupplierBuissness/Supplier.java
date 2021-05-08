@@ -33,6 +33,20 @@ public class Supplier implements ISupplier {
        this.SupplierIdCounter=SupplierIdCounter;
     }
 
+    //Constructor for DAL
+    public Supplier(int supID, String supName, String payment, String bank) {
+        this.ContactIdCounter=0;
+        this.ListOfContacts  = new ArrayList<>();
+        //TODO contacts will be added later
+//        ListOfContacts.add(new Contact(ContactIdCounter,contactName,contactEmail,phoneNumber));
+//        ContactIdCounter++;
+        this.id=supID;
+        this.SupplierName=supName;
+//        this.payment=payment; //TODO need to change
+        this.BankAccount=bank;
+//        this.SupplierIdCounter=SupplierIdCounter; //TODO what is this????
+    }
+
     @Override
     public void addNewContact( String contactName, String phoneNumber, String Email) {
         Contact newContact=new Contact(ContactIdCounter,contactName,phoneNumber,Email);

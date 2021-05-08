@@ -6,8 +6,10 @@ import BuisnnesLayer.IAgreement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 //    private HashMap<Integer, HashMap<Integer, Integer>> DiscountByProductQuantity;//- DiscountByProductQuantity hashMap<CatalogID:int, hashMap<quantitiy :int , newPrice:int>>
 public class Order {
@@ -15,135 +17,167 @@ public class Order {
     private int SupplierID;
     private HashMap<Integer, Integer> productQuantity; //product quantity
     private LocalDate dateTime;
-    private double TotalPayment=0;
+    private double TotalPayment = 0;
     private boolean Constant;
+    private Integer constsntordersDays;
+
+    //constructor for DAL
+    public Order(int orderID, int sup, String date, double pay, int con) {
+       //TODO: need to edit this constructor
+        this.id = orderID;
+        this.SupplierID = sup;
+//        this.productQuantity=products;
+        this.dateTime = getDate(date); //TODO need to take from inventModel the static function
+//        this.TotalPayment=CalculateTotalPayment(products,agreement);
+        this.TotalPayment = pay;
+        this.Constant = con == 0;
+//        this.constsntordersDays=constsntordersDays;
+    }
 
 
     public boolean isConstant() {
         return Constant;
     }
 
-    public Order(int id, int SupplierID, HashMap<Integer, Integer> products, IAgreement agreement, boolean constant)
-    {
-        this.id=id;
-        this.SupplierID=SupplierID;
-        this.productQuantity=products;
-        this.dateTime= LocalDate.now();
-        this.TotalPayment=CalculateTotalPayment(products,agreement);
-        this.Constant=constant;
+    public Order(int id, int SupplierID, HashMap<Integer, Integer> products, IAgreement agreement, boolean constant, Integer constsntordersDays) {
+        this.id = id;
+        this.SupplierID = SupplierID;
+        this.productQuantity = products;
+        this.dateTime = LocalDate.now();
+        this.TotalPayment = CalculateTotalPayment(products, agreement);
+        this.Constant = constant;
+        this.constsntordersDays = constsntordersDays;
     }
 
     public int getSupplierID() {
         return SupplierID;
     }
 
-    public HashMap<Integer,Integer> getProductQuantity(){
+    public HashMap<Integer, Integer> getProductQuantity() {
         return productQuantity;
     }
-    public void AddPrudactToOrder(Integer productCatalogID,int quantity,IAgreement agreement)
-    {
-        if(checkIfProductIsAlreadyExist(productCatalogID)){
+
+    public void AddPrudactToOrder(Integer productCatalogID, int quantity, IAgreement agreement) {
+        if (checkIfProductIsAlreadyExist(productCatalogID)) {
             throw new IllegalArgumentException("the product is already exist in the Order");
         }
-        productQuantity.put(productCatalogID,quantity);
-        this.TotalPayment= CalculateTotalPayment(this.productQuantity,agreement);
+        productQuantity.put(productCatalogID, quantity);
+        this.TotalPayment = CalculateTotalPayment(this.productQuantity, agreement);
     }
 
 
-    public boolean checkIfProductIsAlreadyExist(Integer ProductCtalogID){
+    public boolean checkIfProductIsAlreadyExist(Integer ProductCtalogID) {
         return productQuantity.containsKey(ProductCtalogID);
     }
 
 
+    public void RemovePrudactFromOrder(int CatalogID, IAgreement agreement) {
+        if (isConstant() && isOneDayFromOrder()) {
+            throw new IllegalArgumentException("the order is constant and it less then one day to the order");
 
-    public void RemovePrudactFromOrder(int CatalogID,IAgreement agreement)
-    {
-        if(!checkIfProductIsAlreadyExist(CatalogID)){
+        }
+        if (!checkIfProductIsAlreadyExist(CatalogID)) {
             throw new IllegalArgumentException("the product is not in the order you cannot deleate it");
         }
         System.out.println("CatalogID::::" + CatalogID);
         productQuantity.remove(CatalogID);
-        this.TotalPayment=CalculateTotalPayment(this.productQuantity,agreement);
+        this.TotalPayment = CalculateTotalPayment(this.productQuantity, agreement);
     }
 
 
+    public void EditProductQuantity(int CatalogID, int quantity, IAgreement agreement) {
+        if (!checkIfProductIsAlreadyExist(CatalogID)) {
+            throw new IllegalArgumentException("this Product dose not exist in this order");
+        }
+        if (isConstant() && isOneDayFromOrder()) {
+            throw new IllegalArgumentException("the order is constant and it less then one day to the order");
 
-    public void EditProductQuantity(int CatalogID,int quantity,IAgreement agreement)
-    {if(!checkIfProductIsAlreadyExist(CatalogID)){
-        throw new IllegalArgumentException("this Product dose not exist in this order");
+        }
+        productQuantity.replace(CatalogID, quantity);
+        CalculateTotalPayment(this.productQuantity, agreement);
     }
-        productQuantity.replace(CatalogID,quantity);
-        CalculateTotalPayment(this.productQuantity,agreement);
-    }
 
 
-
-    public double GetTotalPayment()
-    {
+    public double GetTotalPayment() {
         return TotalPayment;
     }
-    public LocalDate GetDateTime()
-    {
+
+    public LocalDate GetDateTime() {
         return dateTime;
     }
-    public int GetId()
-    {
+
+    public int GetId() {
         return id;
     }
 
-    public int GetProductQuantity(int CatalogID)
-    {
+    public int GetProductQuantity(int CatalogID) {
         return productQuantity.get(CatalogID);
     }
 
 
-
-    public void ReCalculateTotalPayment (IAgreement agreement)
-    {
-        this.TotalPayment=CalculateTotalPayment(productQuantity,agreement);
+    public void ReCalculateTotalPayment(IAgreement agreement) {
+        this.TotalPayment = CalculateTotalPayment(productQuantity, agreement);
     }
 
-    public double CalculateTotalPayment (HashMap<Integer,Integer> productQuantity,IAgreement agreement){
+    public double CalculateTotalPayment(HashMap<Integer, Integer> productQuantity, IAgreement agreement) {
         double TotalPayment = 0;
         for (Integer key : productQuantity.keySet()) {
             Integer value = productQuantity.get(key);
-            double newprice=CheckAvailableDiscount(key,value,agreement);
-            if (newprice!=-1)
-            {
-                TotalPayment=TotalPayment+newprice*productQuantity.get(key);
+            double newprice = CheckAvailableDiscount(key, value, agreement);
+            if (newprice != -1) {
+                TotalPayment = TotalPayment + newprice * productQuantity.get(key);
 
-            }
-            else {
-                TotalPayment=TotalPayment+((agreement.getProducts().get(key)).getPrice())*value;
+            } else {
+                TotalPayment = TotalPayment + ((agreement.getProducts().get(key)).getPrice()) * value;
             }
         }
         //calculate the total payment with the extra discount
-        if (agreement.getExtraDiscount()==0){
-        return TotalPayment;}
-        else {
-            return  TotalPayment-(TotalPayment*((agreement.getExtraDiscount())/100.0));
+        if (agreement.getExtraDiscount() == 0) {
+            return TotalPayment;
+        } else {
+            return TotalPayment - (TotalPayment * ((agreement.getExtraDiscount()) / 100.0));
         }
     }
 
 
     //chek if discount is avalible
-    private double CheckAvailableDiscount(Integer CatalogID,Integer quantity,IAgreement agreement)
-    {
-        double newprice=-1;
-        HashMap<Integer, Double> Temp= (agreement.getDiscountByProductQuantity()).get(CatalogID);
-        if (Temp!=null&&Temp.size()!=0) {
+    private double CheckAvailableDiscount(Integer CatalogID, Integer quantity, IAgreement agreement) {
+        double newprice = -1;
+        HashMap<Integer, Double> Temp = (agreement.getDiscountByProductQuantity()).get(CatalogID);
+        if (Temp != null && Temp.size() != 0) {
             for (Integer key : Temp.keySet()) {
                 if (quantity >= Temp.get(key)) {
-                    if (newprice==-1){newprice=Temp.get(key);}
-                    else {newprice = Math.min(Temp.get(key), newprice); }
+                    if (newprice == -1) {
+                        newprice = Temp.get(key);
+                    } else {
+                        newprice = Math.min(Temp.get(key), newprice);
+                    }
                 }
             }
         }
-        return newprice ;
+        return newprice;
     }
 
+    public boolean isOneDayFromOrder() {
+        Date date = convertToDateViaSqlDate(LocalDate.now());
+        int daytoday = getDayNumberOld(date);
 
+        if (constsntordersDays - daytoday == 1 || constsntordersDays - daytoday == 0) {
+            return true;
+        }
 
+        return false;
+    }
+
+    public Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return java.sql.Date.valueOf(dateToConvert);
+    }
+
+    public static int getDayNumberOld(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        return cal.get(Calendar.DAY_OF_WEEK);
+    }
 
 
 }
