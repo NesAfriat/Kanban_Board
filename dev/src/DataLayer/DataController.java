@@ -1,10 +1,12 @@
-package DataLayer.Mappers;
+package DataLayer;
 
 import BuisnnesLayer.*;
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.OrderBuissness.Order;
+import BuisnnesLayer.Sales.Sale;
 import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.Supplier;
+import DataLayer.Mappers.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,9 +26,14 @@ public class DataController {
     private SuppliersProductsMapper suppliersProductsMapper;
     private OrdersMapper ordersMapper;
     private AgreementsMapper agreementsMapper;
+<<<<<<< HEAD:dev/src/DataLayer/Mappers/DataController.java
     private OrderProductsMapper orderProductsMapper;
     private AgreementDeliveryDaysMapper addMapper;
     private AgreementProductDiscMapper apdMapper;
+=======
+    private SalesMapper salesMapper;
+
+>>>>>>> salesDal:dev/src/DataLayer/DataController.java
 
     public static Date getDate(String date) throws ParseException {
         String pattern = "yyyy-MM-dd";
@@ -51,10 +58,9 @@ public class DataController {
         suppliersMapper = new SuppliersMapper();
         itemMapper = new ItemMapper();
         defectsItemsMapper = new DefectsItemsMapper();
-
         categoriesMapper = new CategoriesMapper();
         reportsMapper = new ReportsMapper();
-
+        salesMapper= new SalesMapper();
         suppliersContactsMapper = new SuppliersContactsMapper();
         suppliersProductsMapper = new SuppliersProductsMapper();
         ordersMapper = new OrdersMapper();
@@ -308,6 +314,36 @@ public boolean insetProduct(int orderId,int catalogID,int quantity) {
 
     public boolean deleteDefected(Item obj) {
         return defectsItemsMapper.delete(obj);
+    }
+
+    //================================================================================
+    //Sales Actions:
+    public LinkedList<Sale> getSaleByProduct(String product) {
+        return salesMapper.getSaleByProduct(product);
+    }
+    public LinkedList<Sale> getSaleByCategory(String category) {
+        return salesMapper.getSaleByCategory(category);
+    }
+    public Sale getSaleByID(int sale_id) {
+        return salesMapper.getSaleByID(sale_id);
+    }
+    //If we want to make entire new record of an item
+    public boolean insertSaleByProduct(Sale s) {
+        return salesMapper.insertSaleByProduct(s);
+    }
+    public boolean insertSaleByCategory(Sale s) {
+        return salesMapper.insertSaleByCategory(s);
+    }
+
+    public boolean update(Sale s) {
+        return salesMapper.update(s);
+    }
+
+    public boolean delete(Sale s) {
+        return salesMapper.delete(s);
+    }
+    public LinkedList<Sale> loadAllSales() {
+        return salesMapper.loadAllSales();
     }
 
 

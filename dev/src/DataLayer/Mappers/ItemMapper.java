@@ -2,12 +2,13 @@ package DataLayer.Mappers;
 
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
+import DataLayer.DataController;
 
 import java.sql.*;
 import java.text.ParseException;
 import java.util.LinkedList;
 
-import static DataLayer.Mappers.DataController.getDate;
+import static DataLayer.DataController.getDate;
 
 public class ItemMapper extends Mapper {
 
@@ -62,7 +63,7 @@ public class ItemMapper extends Mapper {
                     String sup_date = rs.getString(4);
                     String create_date = rs.getString(5);
                     String exp_date = rs.getString(6);
-                    obj = new Item(gpID, iID, location, getDate(sup_date), getDate(create_date), getDate(exp_date));
+                    obj = new Item(gpID, iID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
                 }
             } catch (SQLException | ParseException e) {
                 e.printStackTrace();
@@ -82,9 +83,9 @@ public class ItemMapper extends Mapper {
                 pstmt.setInt(1, item.getProduct_id());
                 pstmt.setInt(2, item.getItem_id());
                 pstmt.setString(3, item.getLocation());
-                pstmt.setString(4, getDate(item.getSupplied_date()));
-                pstmt.setString(5, getDate(item.getCreation_date()));
-                pstmt.setString(6, getDate(item.getExpiration_date()));
+                pstmt.setString(4, DataController.getDate(item.getSupplied_date()));
+                pstmt.setString(5, DataController.getDate(item.getCreation_date()));
+                pstmt.setString(6, DataController.getDate(item.getExpiration_date()));
                 pstmt.setInt(7, item.getProduct_id());
                 pstmt.setInt(8, item.getItem_id());
                 updated = pstmt.executeUpdate() != 0;
@@ -127,9 +128,9 @@ public class ItemMapper extends Mapper {
                 pstmt.setInt(1, item.getProduct_id());
                 pstmt.setInt(2, item.getItem_id());
                 pstmt.setString(3, item.getLocation());
-                pstmt.setString(4, getDate(item.getSupplied_date()));
-                pstmt.setString(5, getDate(item.getCreation_date()));
-                pstmt.setString(6, getDate(item.getExpiration_date()));
+                pstmt.setString(4, DataController.getDate(item.getSupplied_date()));
+                pstmt.setString(5, DataController.getDate(item.getCreation_date()));
+                pstmt.setString(6, DataController.getDate(item.getExpiration_date()));
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -156,7 +157,7 @@ public class ItemMapper extends Mapper {
                     String sup_date = rs.getString(4);
                     String create_date = rs.getString(5);
                     String exp_date = rs.getString(6);
-                    Item toAdd = new Item(gpID, iID, location, getDate(sup_date), getDate(create_date), getDate(exp_date));
+                    Item toAdd = new Item(gpID, iID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
                     gp.addItem(toAdd);
                     output.add(toAdd);
                 }

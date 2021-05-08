@@ -4,13 +4,13 @@ import java.util.Date;
 import java.util.LinkedList;
 
 public abstract class Sale {
-    protected Integer sale_id;                  //sale id
+    protected int sale_id;                  //sale id
     protected Double discount_percent;          //sale discount
     protected String sale_description;          //sale description
     protected Date start_date;                  //sale starting date
     protected Date end_date;                    //sale end date
 
-    public Sale(Integer sale_id, Double discount_percent, String sale_description, Date start_date, Date end_date) {
+    public Sale(int sale_id, Double discount_percent, String sale_description, Date start_date, Date end_date) {
         this.discount_percent = discount_percent;
         this.sale_description = sale_description;
         this.start_date = start_date;

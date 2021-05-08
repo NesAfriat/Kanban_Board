@@ -24,17 +24,23 @@ CREATE TABLE IF NOT EXISTS ReportCategories(
 	
 );
 
-CREATE TABLE IF NOT EXISTS SaleCategory(
+CREATE TABLE IF NOT EXISTS Sales(
 	saleID INTEGER,
-	catName TEXT,
 	discount_percent REAL,
 	description TEXT,
 	start_date TEXT,
 	end_date TEXT,
 	
-	PRIMARY KEY (saleID, catName),
-	FOREIGN KEY (catName) REFERENCES Categories(catName)
+	PRIMARY KEY (saleID),
+);
+CREATE TABLE IF NOT EXISTS Sales(
+	saleID INTEGER,
+	discount_percent REAL,
+	description TEXT,
+	start_date TEXT,
+	end_date TEXT,
 
+	PRIMARY KEY (saleID),
 );
 
 CREATE TABLE IF NOT EXISTS GeneralProducts(
@@ -46,21 +52,37 @@ CREATE TABLE IF NOT EXISTS GeneralProducts(
 	minAmount INTEGER,
 	sellingPrice REAL,
 	catName TEXT
-	
+
 	FOREIGN KEY (catName) REFERENCES Categories(catName)
 );
 
-CREATE TABLE IF NOT EXISTS SaleProducts(
-	saleID INTEGER PRIMARY KEY,
-	gpID INTEGER,
+
+CREATE TABLE IF NOT EXISTS Sales(
+	saleID INTEGER,
 	discount_percent REAL,
 	description TEXT,
 	start_date TEXT,
 	end_date TEXT,
-
-	FOREIGN KEY (gpID) REFERENCES GeneralProducts(gpID)
-	
+    byCategory INTEGER,
+	PRIMARY KEY (saleID),
 );
+
+CREATE TABLE IF NOT EXISTS AffectedCategories(
+	saleID INTEGER,
+	catName TEXT,
+	PRIMARY KEY (saleID,catName),
+	FOREIGN KEY (saleID) REFERENCES Sales(saleID),
+    FOREIGN KEY (catName) REFERENCES Categories(catName)
+);
+
+CREATE TABLE IF NOT EXISTS AffectedProducts(
+	saleID INTEGER,
+	gpName TEXT,
+	PRIMARY KEY (saleID,gpID),
+	FOREIGN KEY (saleID) REFERENCES Sales(saleID),
+    FOREIGN KEY (gpName) REFERENCES GeneralProducts(gpName)
+);
+
 
 CREATE TABLE IF NOT EXISTS DefectsItems(
 	gpID INTEGER,
@@ -71,7 +93,7 @@ CREATE TABLE IF NOT EXISTS DefectsItems(
     expiration_date TEXT,
 
 	PRIMARY KEY (gpID, iID),
-	FOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID),
+	FOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)
 
 );
 

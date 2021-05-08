@@ -5,7 +5,7 @@ import BuisnnesLayer.Item;
 import java.sql.*;
 import java.text.ParseException;
 
-import static DataLayer.Mappers.DataController.getDate;
+import static DataLayer.DataController.getDate;
 
 public class DefectsItemsMapper extends Mapper{
     public DefectsItemsMapper() {

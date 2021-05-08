@@ -1,9 +1,7 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.GeneralProduct;
-import BuisnnesLayer.Item;
 
-import java.io.File;
 import java.sql.*;
 
 public class GeneralProductMapper extends Mapper {

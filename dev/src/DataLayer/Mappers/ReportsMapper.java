@@ -1,8 +1,8 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.Category;
-import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Reports.*;
+import DataLayer.DataController;
+
 import java.sql.*;
 import java.util.LinkedList;
 

@@ -1,12 +1,10 @@
 package BuisnnesLayer.Controlls;
 
-import BuisnnesLayer.Category;
 import BuisnnesLayer.IdentityMap;
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.Reports.ReportFactory;
 import BuisnnesLayer.Reports.Subject;
-import BuisnnesLayer.Reports.TimeRange;
-import DataLayer.Mappers.DataController;
+import DataLayer.DataController;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -140,6 +138,11 @@ public class Reports_Controller {
         Report report= im.getReport(repID);
         if(report==null)
             report=dc.getReport(repID);
+        if(report!=null)
+        {
+            im.addReport(report);
+            reports.put(repID,report);
+        }
         return report;
     }
     private void loadAllReports() {
@@ -148,8 +151,9 @@ public class Reports_Controller {
         LinkedList<Report> reportsList = dc.loadAllReports();
         for (Report r : reportsList) {
             im.addReport(r);
-            if (!reports.containsKey(r))
-                reports.put(r.getReportID(),r);
+            if (!reports.containsKey(r.getReportID())) {
+                reports.put(r.getReportID(), r);
+            }
         }
     }
 }

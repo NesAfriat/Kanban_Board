@@ -1,9 +1,12 @@
 package DataLayer.Mappers;
 
+<<<<<<< HEAD
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.OrderBuissness.Order;
 import DataLayer.Mappers.Mapper;
 
+=======
+>>>>>>> salesDal
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
