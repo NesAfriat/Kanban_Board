@@ -12,6 +12,7 @@ import java.util.LinkedList;
 public class IdentityMap {
     private static IdentityMap instance = null;
     private LinkedList<Item> itemList;
+    private LinkedList<Item> defctedItemsList;
     private LinkedList<GeneralProduct> generalProductList;
     private LinkedList<Category> categoryList;
     private LinkedList<Supplier> suppliersList;
@@ -36,6 +37,7 @@ public class IdentityMap {
         productSuppliersList = new LinkedList<>();
         ordersList = new LinkedList<>();
         agreementsList = new LinkedList<>();
+        defctedItemsList = new LinkedList<>();
     }
 
     //================================================================================
@@ -254,6 +256,34 @@ public class IdentityMap {
                 output = a;
                 agreementsList.remove(a);
             }
+        }
+        return output;
+    }
+
+    //================================================================================
+    //add an item to the identityMap
+    public void addDefectedItem(Item item) {
+        defctedItemsList.add(item);
+    }
+
+    //TODO: need to add empty constructor for each created object
+    //if this function return null - go to the db
+    public Item getDefectedItem(int item_id, int gp_id) {
+        Item output = null;
+        for (Item item : defctedItemsList) {
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
+                output = item;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
+    public Item removeDefectedItem(int item_id, int gp_id) {
+        Item output = null;
+        for (Item item : defctedItemsList) {
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
+                output = item;
+            defctedItemsList.remove(item);
         }
         return output;
     }
