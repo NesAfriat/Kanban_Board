@@ -292,7 +292,9 @@ public class DataController {
     public LinkedList<Sale> getSaleByCategory(String category) {
         return salesMapper.getSaleByCategory(category);
     }
-
+    public Sale getSaleByID(int sale_id) {
+        return salesMapper.getSaleByID(sale_id);
+    }
     //If we want to make entire new record of an item
     public boolean insertSaleByProduct(Sale s) {
         return salesMapper.insertSaleByProduct(s);
@@ -308,8 +310,9 @@ public class DataController {
     public boolean delete(Sale s) {
         return salesMapper.delete(s);
     }
-    public LinkedList<Sale> loadAllSaless() {
+    public LinkedList<Sale> loadAllSales() {
         return salesMapper.loadAllSales();
     }
+
 
 }

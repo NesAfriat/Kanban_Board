@@ -114,7 +114,11 @@ public class IdentityMap {
  //TODO: check if object exist in the list before adding
 
     public void addCategory(Category category) {
-        if (!categoryList.contains(category))
+        boolean isIN=false;
+        for(Category c:categoryList)
+            if(category.getCategory_name()==c.getCategory_name())
+                isIN=true;
+        if(!isIN)
             categoryList.add(category);
     }
 
@@ -137,7 +141,11 @@ public class IdentityMap {
 //==============================================
     /////Reports//////
     public void addReport(Report report) {
-        if(!reportsList.contains(report))
+        boolean isIN=false;
+        for(Report r:reportsList)
+        if(r.getReportID()==report.getReportID())
+            isIN=true;
+        if(!isIN)
             reportsList.add(report);
     }
     //if this function return null - go to the db
@@ -334,10 +342,15 @@ public class IdentityMap {
     //================================================================================
     //Sales
     //==============================================
-    /////Reports//////
-    public void addSale(Sale sale) {
-        if(!salesList.contains(sale))
-            salesList.add(sale);
+    /////sales//////
+    public boolean addSale(Sale sale) {
+       boolean added=false;
+       for(Sale s: salesList) {
+           if (s.getSale_id() == sale.getSale_id())
+               return false;
+       }
+        salesList.add(sale);
+        return true;
     }
     //if this function return null - go to the db
     public Sale getSale(int saleID) {

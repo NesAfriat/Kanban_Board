@@ -1,19 +1,15 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.Category;
-import BuisnnesLayer.Reports.Report;
-import BuisnnesLayer.Reports.ReportDefects;
-import BuisnnesLayer.Reports.ReportMissing;
-import BuisnnesLayer.Reports.ReportStock;
+
 import BuisnnesLayer.Sales.Sale;
 import BuisnnesLayer.Sales.SaleByProduct;
+import BuisnnesLayer.Sales.Sale_Category;
 import DataLayer.DataController;
 
 import java.sql.*;
-import java.util.Date;
+import java.text.ParseException;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.function.DoubleUnaryOperator;
+
 
 public class SalesMapper extends Mapper{
     private AffectedCategoriesMapper acm;
@@ -34,26 +30,56 @@ public class SalesMapper extends Mapper{
                             "\tdescription TEXT,\n"+
                             "\tstart_date TEXT,\n"+
                             "\tend_date TEXT,\n"+
-                            "\tPRIMARY KEY (saleID),\n"+
+                            "\tbyCategory INTEGER,\n"+
+                            "\tPRIMARY KEY (saleID)\n"+
                             ");";
-//        String sql = "BEGIN TRANSACTION;" + GeneralProductTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
-            // create a new tables
             stmt.execute(SaleTable);
-            //TODO: in DataController - need to activate loadData
-//            if (!identityMap.initialized){
-//                LoadPreData();
-//                identityMap.initialized = true;
-//            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+    public Sale getSaleByID(int sID) {
+        Sale s;
+            try (Connection conn = connect()) {
+                String statement = "SELECT * FROM Sales WHERE saleID=? ";
 
+                try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                    pstmt.setInt(1, sID);
+
+                    ResultSet rs = pstmt.executeQuery();
+                    if (rs.next()) {
+                        int saleID = rs.getInt(1);
+                        Double discount = rs.getDouble(2);
+                        String description = rs.getString(3);
+                        String startDate = rs.getString(4);
+                        String endDate = rs.getString(5);
+                        LinkedList<String> affected;
+                        int byCategory = rs.getInt(6);
+                        if(byCategory==1) {
+                            affected = acm.getAffectedCategories(saleID);
+                            s= new Sale_Category(saleID,discount,description,DataController.getDate(startDate),DataController.getDate(endDate),affected);
+                        }
+                        else {
+                            affected = apm.getAffectedProucts(saleID);
+                            s= new SaleByProduct(saleID,discount,description,DataController.getDate(startDate),DataController.getDate(endDate),affected);
+                        }
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        return s;
+    }
     public LinkedList<Sale> getSaleByProduct(String product) {
         LinkedList<Sale> sales= new LinkedList<>();
-        LinkedList<Integer> salesID= apm.getSales(product);
+        LinkedList<Integer> salesID= apm.getSalesID(product);
         for(Integer sID: salesID)
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Sales WHERE saleID=? ";
@@ -69,7 +95,7 @@ public class SalesMapper extends Mapper{
                     String start_date = rs.getString(4);
                     String end_date = rs.getString(5);
                     LinkedList<String> affected= apm.getAffectedProucts(saleID);
-                    Sale newSale = new SaleByProduct(saleID, discount_percent,description, start_date, end_date,  affected);
+                    Sale newSale = new SaleByProduct(saleID, discount_percent,description, DataController.getDate(start_date), DataController.getDate(end_date),  affected);
                     sales.add(newSale);
                 }
             } catch (SQLException e) {
@@ -85,7 +111,7 @@ public class SalesMapper extends Mapper{
 
     public LinkedList<Sale> getSaleByCategory(String category) {
         LinkedList<Sale> sales= new LinkedList<>();
-        LinkedList<Integer> salesID= acm.getSales(category);
+        LinkedList<Integer> salesID= acm.getSalesID(category);
         for(Integer sID: salesID)
             try (Connection conn = connect()) {
                 String statement = "SELECT * FROM Sales WHERE saleID=? ";
@@ -101,7 +127,7 @@ public class SalesMapper extends Mapper{
                         String start_date = rs.getString(4);
                         String end_date = rs.getString(5);
                         LinkedList<String> affected= acm.getAffectedCategories(saleID);
-                        Sale newSale = new SaleByProduct(saleID, discount_percent,description, start_date, end_date,  affected);
+                        Sale newSale = new SaleByProduct(saleID, discount_percent,description,  DataController.getDate(start_date), DataController.getDate(end_date),  affected);
                         sales.add(newSale);
                     }
                 } catch (SQLException e) {
@@ -115,21 +141,46 @@ public class SalesMapper extends Mapper{
         return sales;
     }
 
-    public boolean insert(Report report) {
+    public boolean insertSaleByProduct(Sale sale) { //by Product
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
-            String statement = "INSERT OR IGNORE INTO Reports(repID, subject, creation_date, time_range, data) " +
-                    "VALUES (?,?,?,?,?)";
+            String statement = "INSERT OR IGNORE INTO Sales(saleID, discount_percent, description, start_date, end_date,byCategory) " +
+                    "VALUES (?,?,?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, report.getReportID());
-                pstmt.setString(2, report.getSubject());
-                pstmt.setString(3, DataController.getDate(report.getCreationDate()));
-                pstmt.setString(4, report.getTimeRange());
-                pstmt.setString(5, report.getReportData());
+                pstmt.setInt(1, sale.getSale_id());
+                pstmt.setDouble(2, sale.getDiscount_percent());
+                pstmt.setString(3, sale.getSale_description());
+                pstmt.setString(4, DataController.getDate(sale.getStart_date()));
+                pstmt.setString(5, DataController.getDate(sale.getEnd_date()));
+                pstmt.setInt(6,0);
                 output = pstmt.executeUpdate() != 0;
-                rcm.insertCategories(report);
+                apm.insertAffected(sale);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
+    public boolean insertSaleByCategory(Sale sale) { //byCategory
+        boolean output = false;
+        try (Connection conn = connect()) {
+            boolean inserted = false;
+            String statement = "INSERT OR IGNORE INTO Sales(saleID, discount_percent, description, start_date, end_date,byCategory) " +
+                    "VALUES (?,?,?,?,?,?)";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, sale.getSale_id());
+                pstmt.setDouble(2, sale.getDiscount_percent());
+                pstmt.setString(3, sale.getSale_description());
+                pstmt.setString(4, DataController.getDate(sale.getStart_date()));
+                pstmt.setString(5, DataController.getDate(sale.getEnd_date()));
+                pstmt.setInt(6, 1);
+                output = pstmt.executeUpdate() != 0;
+                acm.insertAffected(sale);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -139,18 +190,18 @@ public class SalesMapper extends Mapper{
         return output;
     }
 
-    public boolean update(Report report) {
+    public boolean update(Sale sale) {
         boolean updated = false;
         try (Connection conn = connect()) {
-            String statement = "UPDATE Reports SET repID=?, subject=?, creation_date=?, time_range=?, data=? WHERE repID=? ";
+            String statement = "UPDATE Sales SET saleID=?, discount_percent=?, description=?, start_date=?, end_date=? WHERE saleID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, report.getReportID());
-                pstmt.setString(2, report.getSubject());
-                pstmt.setString(3, DataController.getDate(report.getCreationDate()));
-                pstmt.setString(4, report.getTimeRange());
-                pstmt.setString(5, report.getReportData());
-                pstmt.setInt(6, report.getReportID());
+                pstmt.setInt(1, sale.getSale_id());
+                pstmt.setDouble(2, sale.getDiscount_percent());
+                pstmt.setString(3, sale.getSale_description());
+                pstmt.setString(4, DataController.getDate(sale.getStart_date()));
+                pstmt.setString(5, DataController.getDate(sale.getEnd_date()));
+                pstmt.setInt(6, sale.getSale_id());
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -161,13 +212,17 @@ public class SalesMapper extends Mapper{
         return updated;
     }
 
-    public boolean delete(Report report) {
+    public boolean delete(Sale sale) {
         boolean deleted = false;
         try (Connection conn = connect()) {
-            String statement = "DELETE FROM Reports WHERE repID=?";
+            String statement = "DELETE FROM Sales WHERE saleID=?";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, report.getReportID());
+                pstmt.setInt(1, sale.getSale_id());
+                if(isByCategory(sale))
+                acm.deleteAffected(sale);
+                else
+                apm.deleteAffected(sale);
                 deleted = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -178,37 +233,64 @@ public class SalesMapper extends Mapper{
         return deleted;
     }
 
-    public LinkedList<Report> loadAllReports() {
-        LinkedList<Report> reports = new LinkedList<>();
+    private boolean isByCategory(Sale s) {
+                boolean byCategory=false;
+                try (Connection conn = connect()) {
+                    String statement = "SELECT * FROM Sales WHERE saleID=? ";
+                    try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                        pstmt.setInt(1, s.getSale_id());
+                        ResultSet rs = pstmt.executeQuery();
+                        if (rs.next()) {
+                            int byCat = rs.getInt(6);
+                        if(byCat==1)
+                            byCategory=true;
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
+                }
+            return byCategory;
+        }
+
+    public LinkedList<Sale> loadAllSales() {
+        LinkedList<Sale> sales = new LinkedList<>();
         try (Connection conn = connect()) {
-            String statement = "SELECT * FROM Reports  ";
+            String statement = "SELECT * FROM Sales ";
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
-                    int repID = rs.getInt(1);
-                    String subject = rs.getString(2);
-                    String creation_date = rs.getString(3);
-                    String time_range = rs.getString(4);
-                    String data = rs.getString(5);
-                    LinkedList<String> categoriesList = rcm.getCategories(repID);
-                    switch (subject.toLowerCase()) {
-                        case "stock":
-                            reports.add(new ReportStock(repID,time_range , categoriesList));
-                        case "missing":
-                            reports.add(new ReportMissing(repID, time_range, categoriesList));
-                        case "defects":
-                            reports.add(new ReportDefects(repID, time_range, categoriesList));
+                    int saleID = rs.getInt(1);
+                    Double discount = rs.getDouble(2);
+                    String description = rs.getString(3);
+                    String startDate = rs.getString(4);
+                    String endDate = rs.getString(5);
+                    LinkedList<String> affected;
+                    int byCategory = rs.getInt(6);
+                    if(byCategory==1) {
+                        affected = acm.getAffectedCategories(saleID);
+                        Sale s= new Sale_Category(saleID,discount,description,DataController.getDate(startDate),DataController.getDate(endDate),affected);
+                        sales.add(s);
                     }
+                    else {
+                        affected = apm.getAffectedProucts(saleID);
+                        Sale s= new SaleByProduct(saleID,discount,description,DataController.getDate(startDate),DataController.getDate(endDate),affected);
+                        sales.add(s);
+                    }
+
                 }
+            } catch (ParseException e) {
+                e.printStackTrace();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return reports;
+        return sales;
     }
-
-
 
 }

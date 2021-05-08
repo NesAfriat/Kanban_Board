@@ -6,7 +6,7 @@ import java.util.LinkedList;
 public class SaleByProduct extends Sale {
     private LinkedList<String> affectedProducts;
 
-    public SaleByProduct(Integer sale_id, Double discount_percent, String sale_description, Date start_date, Date end_date, LinkedList<String> affected) {
+    public SaleByProduct(int sale_id, Double discount_percent, String sale_description, Date start_date, Date end_date, LinkedList<String> affected) {
         super(sale_id, discount_percent, sale_description, start_date, end_date);
         this.affectedProducts = affected;
     }
