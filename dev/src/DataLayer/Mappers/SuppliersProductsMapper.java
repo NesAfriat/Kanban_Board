@@ -4,6 +4,7 @@ import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.ProductSupplier;
 
 import java.sql.*;
+import java.util.LinkedList;
 
 public class SuppliersProductsMapper extends Mapper{
     public SuppliersProductsMapper() {
@@ -127,6 +128,34 @@ public class SuppliersProductsMapper extends Mapper{
                 pstmt.setDouble(5, ps.getPrice());
 
                 output = pstmt.executeUpdate() != 0;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
+
+    public LinkedList<ProductSupplier> addPStoProduct(GeneralProduct gp){
+        LinkedList<ProductSupplier> output = new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM SuppliersProducts WHERE gpID=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, gp.getProduct_id());
+
+                ResultSet rs = pstmt.executeQuery();
+                while(rs.next()) {
+                    int catalogID = rs.getInt(2);
+                    int gpID = rs.getInt(3);
+                    String name = rs.getString(4);
+                    double price = rs.getDouble(5);
+
+                    ProductSupplier ps = new ProductSupplier(price,catalogID,gpID,name);
+                    gp.addSupplierProduct(ps);
+                    output.add(ps);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }

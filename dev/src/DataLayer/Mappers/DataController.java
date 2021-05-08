@@ -45,12 +45,14 @@ public class DataController {
     }
 
     private DataController() {
+        generalProductMapper = new GeneralProductMapper();
+        suppliersMapper = new SuppliersMapper();
         itemMapper = new ItemMapper();
         defectsItemsMapper = new DefectsItemsMapper();
-        generalProductMapper = new GeneralProductMapper();
+
         categoriesMapper = new CategoriesMapper();
         reportsMapper = new ReportsMapper();
-        suppliersMapper = new SuppliersMapper();
+
         suppliersContactsMapper = new SuppliersContactsMapper();
         suppliersProductsMapper = new SuppliersProductsMapper();
         ordersMapper = new OrdersMapper();
@@ -84,7 +86,8 @@ public class DataController {
     //If we want to retrive an product which was not in the business
     public GeneralProduct getGP(int product_id) {
         GeneralProduct gp = generalProductMapper.getGeneralProduct(product_id);
-        //TODO: need to add here itemsList and supplierProductList
+        itemMapper.addItemToProduct(gp);
+        suppliersProductsMapper.addPStoProduct(gp);
         return gp;
     }
 

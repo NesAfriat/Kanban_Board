@@ -2,6 +2,7 @@ package BuisnnesLayer;
 
 
 import DataLayer.Mappers.DataController;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Date;
@@ -17,20 +18,20 @@ public class GeneralProduct {
     private Double selling_price;
     private LinkedList<Item> items;                             //product's items in stock
     private Integer item_id;
-    private HashMap<Integer,ProductSupplier> HashOfSupplierProducts;
+    private HashMap<Integer, ProductSupplier> HashOfSupplierProducts;
 
-    public GeneralProduct(String product_name, Integer product_id, String manufacturer_name, Integer min_amount,  Double selling_price,ProductSupplier productSupplier) {
+    public GeneralProduct(String product_name, Integer product_id, String manufacturer_name, Integer min_amount, Double selling_price, ProductSupplier productSupplier) {
         this.product_id = product_id;
         this.product_name = product_name;
         this.manufacturer_name = manufacturer_name;
         this.amount_store = 0;
         this.amount_storage = 0;
         this.min_amount = min_amount;
-        HashOfSupplierProducts=new HashMap<>();
+        HashOfSupplierProducts = new HashMap<>();
         this.selling_price = selling_price;
         this.items = new LinkedList<>();
         this.item_id = 0;
-        HashOfSupplierProducts.put(productSupplier.getCatalogID(),productSupplier);
+        HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
     }
 
     //constructor for DAL
@@ -39,43 +40,43 @@ public class GeneralProduct {
         this.product_name = gpName;
         this.manufacturer_name = gpManuName;
         this.amount_store = amountStore;
-        this.amount_storage=amountStorage;
+        this.amount_storage = amountStorage;
         this.min_amount = minAmount;
         this.selling_price = sellingPrice;
 
         //TODO: those fields will be updated later on!
-        this.item_id =0;
-        this.items = null;
-        this.HashOfSupplierProducts = null;
+        this.item_id = 0;
+        this.items = new LinkedList<>();
+        this.HashOfSupplierProducts = new HashMap<>();
     }
 
 
-    public HashMap<Integer,ProductSupplier> getProductSuppliers(){
-        return  HashOfSupplierProducts;
+    public HashMap<Integer, ProductSupplier> getProductSuppliers() {
+        return HashOfSupplierProducts;
     }
 
     //add new product supplier,product supplier can have multiple product suppliers, it must have at least one product supplier
-    public void AddSupplierProduct(ProductSupplier productSupplier){
-        if(CheckIfSupplierProductExist(productSupplier.getCatalogID())){
+    public void AddSupplierProduct(ProductSupplier productSupplier) {
+        if (CheckIfSupplierProductExist(productSupplier.getCatalogID())) {
             throw new IllegalArgumentException("the product is already exsist in the system ");
         }
         // if ok we want to add the product to the system
-        HashOfSupplierProducts.put(productSupplier.getCatalogID(),productSupplier);
+        HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
     }
 
-    public boolean CheckIfSupplierProductExist(int catalog_id){
+    public boolean CheckIfSupplierProductExist(int catalog_id) {
         return HashOfSupplierProducts.containsKey(catalog_id);
     }
 
-    public void RemoveSupplierProduct(Integer Catalofid){
-        if(!isSupplierProductExist(Catalofid)){
+    public void RemoveSupplierProduct(Integer Catalofid) {
+        if (!isSupplierProductExist(Catalofid)) {
             throw new IllegalArgumentException("the supplie product doues not exsist");
         }
         HashOfSupplierProducts.remove(Catalofid);
 
     }
 
-    public  boolean isSupplierProductExist(int Catalogid){
+    public boolean isSupplierProductExist(int Catalogid) {
         return HashOfSupplierProducts.containsKey(Catalogid);
     }
 
@@ -84,7 +85,7 @@ public class GeneralProduct {
         return product_name;
     }
 
-    public HashMap<Integer,ProductSupplier> getHashOfSupplierProducts() {
+    public HashMap<Integer, ProductSupplier> getHashOfSupplierProducts() {
         return HashOfSupplierProducts;
     }
 
@@ -135,11 +136,9 @@ public class GeneralProduct {
         this.selling_price = selling_price;
     }
 
-    public  void addSupplierProduct(ProductSupplier productSupplier){
-        HashOfSupplierProducts.put(productSupplier.getCatalogID(),productSupplier);
+    public void addSupplierProduct(ProductSupplier productSupplier) {
+        HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
     }
-
-
 
 
     public LinkedList<Integer> getItems() {
@@ -158,7 +157,7 @@ public class GeneralProduct {
      * @param expiration_date
      * @return
      */
-    public LinkedList<Integer> addItems(Integer quantity,  String location, Date supplied_date, Date creation_date, Date expiration_date) {
+    public LinkedList<Integer> addItems(Integer quantity, String location, Date supplied_date, Date creation_date, Date expiration_date) {
         LinkedList<Integer> itemsAdded = new LinkedList<>();
         for (int i = 0; i < quantity; i++) {
             Item item = new Item(item_id, product_id, location, supplied_date, creation_date, expiration_date);
@@ -176,13 +175,12 @@ public class GeneralProduct {
         return itemsAdded;
     }
 
-    public boolean isSupplierProducHashEmpty(){
-        return HashOfSupplierProducts.keySet().size()==0;
+    public boolean isSupplierProducHashEmpty() {
+        return HashOfSupplierProducts.keySet().size() == 0;
     }
 
     /**
      * get the defected items from the product to this date(today) from a specific stock
-     *
      *
      * @return
      */
@@ -257,7 +255,7 @@ public class GeneralProduct {
     @Override
     public String toString() {
         return "{" +
-                "product_name=" + product_name  +
+                "product_name=" + product_name +
                 ", product_id=" + product_id +
                 ", producer_name=" + manufacturer_name +
                 ", amount_store=" + amount_store +
@@ -278,13 +276,13 @@ public class GeneralProduct {
         return items;
     }
 
-//======================================================================
+    //======================================================================
 //DATA Functions:
-    private void add_to_data(Item item){
+    private void add_to_data(Item item) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if(!dc.insertItem(item)){
-            System.out.println("failed to insert new item to the database with the keys: gpID= "+item.getProduct_id() + " iID= " + item.getItem_id() );
+        if (!dc.insertItem(item)) {
+            System.out.println("failed to insert new item to the database with the keys: gpID= " + item.getProduct_id() + " iID= " + item.getItem_id());
         }
         im.addItem(item);
     }
@@ -292,8 +290,8 @@ public class GeneralProduct {
     private void update(GeneralProduct prod) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if(!dc.update(this)){
-            System.out.println("failed to update new General Product to the database with the keys: gpID= "+prod.getProduct_id() );
+        if (!dc.update(this)) {
+            System.out.println("failed to update new General Product to the database with the keys: gpID= " + prod.getProduct_id());
         }
     }
 
@@ -301,11 +299,16 @@ public class GeneralProduct {
         Item removed;
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
-        removed = im.removeItem(toRemove.getItem_id(),toRemove.getProduct_id());
+        removed = im.removeItem(toRemove.getItem_id(), toRemove.getProduct_id());
         dc.delete(toRemove);
         return removed;
     }
 
-
-
+    //add items from dal
+    public void addItem(Item toAdd) {
+        items.add(toAdd);
+        if(item_id<toAdd.getItem_id()){
+            item_id = toAdd.getItem_id();
+        }
+    }
 }

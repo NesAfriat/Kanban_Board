@@ -1,6 +1,8 @@
 package DataLayer.Mappers;
 
 
+import BuisnnesLayer.GeneralProduct;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -23,6 +25,7 @@ public abstract class Mapper {
     }
 
     abstract void create_table();
+
 
 
 }

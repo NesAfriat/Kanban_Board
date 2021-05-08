@@ -1,11 +1,11 @@
 package DataLayer.Mappers;
 
+import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
 
 import java.sql.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.LinkedList;
 
 import static DataLayer.Mappers.DataController.getDate;
 
@@ -132,6 +132,35 @@ public class ItemMapper extends Mapper {
                 pstmt.setString(6, getDate(item.getExpiration_date()));
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
+
+    public LinkedList<Item> addItemToProduct(GeneralProduct gp){
+        LinkedList<Item> output = new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Items WHERE gpID=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, gp.getProduct_id());
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int gpID = rs.getInt(1);
+                    int iID = rs.getInt(2);
+                    String location = rs.getString(3);
+                    String sup_date = rs.getString(4);
+                    String create_date = rs.getString(5);
+                    String exp_date = rs.getString(6);
+                    Item toAdd = new Item(gpID, iID, location, getDate(sup_date), getDate(create_date), getDate(exp_date));
+                    gp.addItem(toAdd);
+                    output.add(toAdd);
+                }
+            } catch (SQLException | ParseException e) {
                 e.printStackTrace();
             }
         } catch (SQLException throwables) {

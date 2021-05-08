@@ -73,7 +73,16 @@ public class IdentityMap {
 
     //================================================================================
     public void addGeneralProduct(GeneralProduct product) {
-        generalProductList.add(product);
+        if(!generalProductList.contains(product))
+            generalProductList.add(product);
+        for(Item i:product.get_items()){
+            if(!itemList.contains(i))
+                itemList.add(i);
+        }
+        for(ProductSupplier ps:product.getHashOfSupplierProducts().values()){
+            if(!productSuppliersList.contains(ps))
+                productSuppliersList.add(ps);
+        }
     }
 
     //TODO: need to add empty constructor for each created object
