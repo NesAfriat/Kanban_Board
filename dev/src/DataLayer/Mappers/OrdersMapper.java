@@ -4,6 +4,7 @@ import BuisnnesLayer.OrderBuissness.Order;
 import BuisnnesLayer.ProductSupplier;
 
 import java.sql.*;
+import java.time.format.DateTimeFormatter;
 
 public class OrdersMapper extends Mapper{
     public OrdersMapper() {
@@ -70,15 +71,17 @@ public class OrdersMapper extends Mapper{
 
     public boolean update(Order o) {
         boolean updated = false;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         try (Connection conn = connect()) {
             String statement = "UPDATE Orders SET supID=?, oID=? datetime=?, totalPayment=?, constant=? WHERE supID=? AND oID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, o.getSupplierID());
                 pstmt.setInt(2, o.GetId());
-                pstmt.setInt(3, o.getDateTime()); //TODO need to add function for this
-                pstmt.setInt(4, o.getTotalPayment()); //TODO need to add function for this
-                pstmt.setInt(5, o.isConstant()); //TODO need to set true == 0, else false
+                pstmt.setString(3, (o.getDateTime().format(formatter))); //TODO need to add function for this //new todo -chang from int to stirng in the data base
+                pstmt.setDouble(4, o.getTotalPayment()); //TODO need to add function for this //new todo check if its double in the data base
+                pstmt.setInt(5, o.isConstant_int()); //TODO need to set true == 0, else false // true===1
                 pstmt.setInt(6, o.getSupplierID());
                 pstmt.setInt(7, o.GetId());
                 updated = pstmt.executeUpdate() != 0;
@@ -112,6 +115,8 @@ public class OrdersMapper extends Mapper{
 
     //TODO: make sure the dates are added properly!
     public boolean insertOrder(Order o) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
@@ -121,9 +126,9 @@ public class OrdersMapper extends Mapper{
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, o.getSupplierID());
                 pstmt.setInt(2, o.GetId());
-                pstmt.setInt(3, o.getDateTime()); //TODO need to add function for this
-                pstmt.setInt(4, o.getTotalPayment()); //TODO need to add function for this
-                pstmt.setInt(5, o.isConstant()); //TODO need to set true == 0, else false
+                pstmt.setString(3, (o.getDateTime().format(formatter))); //TODO need to add function for this //new todo -chang from int to stirng in the data base
+                pstmt.setDouble(4, o.getTotalPayment()); //TODO need to add function for this //new todo check if its double in the data base
+                pstmt.setInt(5, o.isConstant_int()); //TODO need to set true == 0, else false// true===1
 
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {

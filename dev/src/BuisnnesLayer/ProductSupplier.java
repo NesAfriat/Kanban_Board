@@ -1,6 +1,8 @@
 package BuisnnesLayer;
 
 
+import DataLayer.Mappers.DataController;
+
 public class ProductSupplier {
     private double Price;
     private int CatalogID;
@@ -42,7 +44,24 @@ public class ProductSupplier {
 
 
 
-
+//    //======================================================================
+////DATA Functions:
+//    private void add_to_data(ProductSupplier productSupplier) {
+//        IdentityMap im = IdentityMap.getInstance();
+//        DataController dc = DataController.getInstance();
+//        if (!dc.insetPS(productSupplier,)) {
+//            System.out.println("failed to insert new ProductSupplier to the database");
+//        }
+//        im.addItem(productSupplier);
+//    }
+//
+//    private void update(ProductSupplier productSupplier) {
+//        IdentityMap im = IdentityMap.getInstance();
+//        DataController dc = DataController.getInstance();
+//        if (!dc.update(productSupplier)) {
+//            System.out.println("failed to update ProductSupplier to the database");
+//        }
+//    }
 
 
 

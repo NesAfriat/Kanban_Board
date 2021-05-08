@@ -239,7 +239,11 @@ public class IdentityMap {
     //add an item to the identityMap
     public void addPS(ProductSupplier ps) {
         productSuppliersList.add(ps);
-    }
+    }//todo : doesn't need supplier id?
+
+//    public void updatePS(ProductSupplier ps) {
+//        productSuppliersList.r(ps).
+//    }//todo : ?
 
     //TODO: need to add a supID or idk how to get a specific ps
     //if this function return null - go to the db

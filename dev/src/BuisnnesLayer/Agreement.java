@@ -1,36 +1,47 @@
 package BuisnnesLayer;
 
+import DataLayer.Mappers.DataController;
+
 import java.util.HashMap;
 import java.util.List;
 
 public class Agreement implements IAgreement {
     private HashMap<Integer, HashMap<Integer, Double>> DiscountByProductQuantity;//- DiscountByProductQuantity hashMap<CatalogID:int, hashMap<quantitiy :int , newPrice:int>>
     private HashMap<Integer, ProductSupplier> products; //- products: hashMap<CatalogID: int, product: Product>
-    private int ExtraDiscount=0;//%
+    private double ExtraDiscount=0;//%
     private int SupplierID ;
     private DeliveryMode deliveryMods ;
     private List<Integer> daysOfDelivery;
     private int numOfDaysFromOrder;
 
-    public Agreement(int SupplierID , DeliveryMode delivery,List<Integer> daysOfDelivery,int numOfDaysFromOrder)
-    {
-        this.SupplierID=SupplierID;
-        this.products=new HashMap<>();
-        deliveryMods=delivery;
-        this.numOfDaysFromOrder=numOfDaysFromOrder;
-        this.daysOfDelivery=daysOfDelivery;
-        DiscountByProductQuantity=new HashMap<>(new HashMap<>());
+    public Agreement(int SupplierID , DeliveryMode delivery,List<Integer> daysOfDelivery,int numOfDaysFromOrder) {
+        this.SupplierID = SupplierID;
+        this.products = new HashMap<>();
+        deliveryMods = delivery;
+        this.numOfDaysFromOrder = numOfDaysFromOrder;
+        this.daysOfDelivery = daysOfDelivery;
+        DiscountByProductQuantity = new HashMap<>(new HashMap<>());
+        add_to_data(this);
     }
+
+
     //constructor for DAL
-    public Agreement(int supID, double xDisc, String mod, int days) {
-        this.SupplierID=SupplierID;
+    public Agreement(int supID, double xDisc, String mod, int days,List<Integer> daysOfDelivery) {//,HashMap<Integer, HashMap<Integer, Double>> discountByProductQuantity,HashMap<Integer, ProductSupplier> products
+        this.SupplierID=supID;
 //        this.products=new HashMap<>();
-        deliveryMods=mod; //TODO need to change the enum or add switch case
+        //TODO need to change the enum or add switch case
+        if (mod.equals("Pickup")){deliveryMods=DeliveryMode.Pickup;}
+        else if (mod.equals("DeliveryByDay")){deliveryMods=DeliveryMode.DeliveryByDay;}
+        else {deliveryMods=DeliveryMode.DeliveryAfterOrder;}
+
         this.numOfDaysFromOrder=days;
         this.daysOfDelivery=daysOfDelivery; //TODO what is this????
 //        DiscountByProductQuantity=new HashMap<>(new HashMap<>());
+       // this.DiscountByProductQuantity=discountByProductQuantity;
+       // this.products=products;
         this.ExtraDiscount = xDisc; //TODO why disc is in int???
         //TODO need to add Products and DiscByProd
+
     }
 
 
@@ -42,7 +53,7 @@ public class Agreement implements IAgreement {
             double newprice=CheckAvailableDiscount(productSupplier.getCatalogID(),quantity);
             if (newprice!=-1) { cost=newprice*quantity; }
             else {cost=(productSupplier.getPrice())*quantity; }
-            cost=  cost-(cost*(ExtraDiscount)/100.0);
+            cost= cost-(cost*(ExtraDiscount)/100.0);
         }
 
         return cost;
@@ -70,12 +81,15 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product do not have discount with this quantity");
         }
         DiscountByProductQuantity.get(CatalogId).remove(Quantiti);
+        update(this);
 
     }
     public void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery,int numOfDaysFromOrder) {
         this.deliveryMods=deliveryMods;
         this.daysOfDelivery=daysOfDelivery;
         this.numOfDaysFromOrder=numOfDaysFromOrder;
+        update(this);
+
     }
 
     public ProductSupplier AddPrudact(double Price,int CatalogID,int idProductCounter,String name)
@@ -88,6 +102,7 @@ public class Agreement implements IAgreement {
         }
         ProductSupplier productSupplier=new ProductSupplier(Price,CatalogID,idProductCounter,name);
         products.put(CatalogID,productSupplier);
+        InsertPrudact(productSupplier);
         return productSupplier;
     }
 
@@ -97,8 +112,11 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product is not exist");
         }
 
-        products.remove(CatalogID);
-        DiscountByProductQuantity.remove(CatalogID);//check if need to ceck if exist
+        RemovePrudact(products.remove(CatalogID));
+        if (DiscountByProductQuantity.containsKey(CatalogID)){
+        DiscountByProductQuantity.remove(CatalogID);
+    }
+
     }
     public void AddDiscountByProduct(int CatalogID,int quantity, double newPrice)
     {
@@ -113,11 +131,15 @@ public class Agreement implements IAgreement {
         }
 
          (DiscountByProductQuantity.get(CatalogID)).put(quantity,newPrice );
+        update(this);
+
     }
     public void SetExtraDiscount(int ExtraDiscount)
     {
         if (ExtraDiscount<0|ExtraDiscount>100)throw new IllegalArgumentException("Illegal Discount, the Discount need to be between 0-100 %");
         this.ExtraDiscount=ExtraDiscount;
+        update(this);
+
     }
 
     public ProductSupplier GetPrudact(int CatalogID)
@@ -132,6 +154,7 @@ public class Agreement implements IAgreement {
         if (price<0)throw new IllegalArgumentException("Illegal price, the price need to be positive!");
 
         (products.get(CatalogID)).setPrice(price);
+        UpdatePrudact(products.get(CatalogID));
     }
 
     public HashMap<Integer, HashMap<Integer, Double>> getDiscountByProductQuantity() {
@@ -145,7 +168,7 @@ public class Agreement implements IAgreement {
         return products;
     }
 
-    public int getExtraDiscount() {
+    public double getExtraDiscount() {
         return ExtraDiscount;
     }
 
@@ -164,7 +187,57 @@ public class Agreement implements IAgreement {
     public int getNumOfDaysFromOrder() {
         return numOfDaysFromOrder;
     }
+////////////////////////////////DATA Functions////////////////////////////////
+    private void update(Agreement agreement) {
+        //IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.update(agreement)) {
+            System.out.println("failed to update new Agreement to the database");
+        }
+    }
+    private void add_to_data(Agreement agreement) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.insertAgreement(agreement)) {
+            System.out.println("failed to update new Agreement to the database");
+        }
+        im.addAgreement(agreement);
+    }
 
+    private void InsertPrudact(ProductSupplier productSupplier) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.insetPS(productSupplier,SupplierID)) {
+            System.out.println("failed to add productSupplier to the database");
+        }
+        im.addPS(productSupplier);
+    }
+    private void UpdatePrudact(ProductSupplier productSupplier) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.update(productSupplier,SupplierID)) {
+            System.out.println("failed to add productSupplier to the database");
+        }
+        im.update(productSupplier);// todo : way isnt update methods in IdentityMap?
+    }
+    private void RemovePrudact(ProductSupplier productSupplier) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.delete(productSupplier,SupplierID)) {
+            System.out.println("failed to Remove Prudact to the database");
+        }
+        im.delete(productSupplier);// todo : way isnt update methods in IdentityMap?
+    }
+
+    //DiscountByProductQuantity
+    private void addDiscountByProductQuantity(Agreement agreement) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.insertAgreement(agreement)) {
+            System.out.println("failed to update new Agreement to the database");
+        }
+        im.addAgreement(agreement);
+    }
 /*
     public void AddDaysOfDelivery(int day)
     {

@@ -16,7 +16,7 @@ public interface IAgreement {
     public List<Integer> getDaysOfDelivery();
     public DeliveryMode getDeliveryMode();
     public int getSupplierID();
-    public int getExtraDiscount();
+    public double getExtraDiscount();
     public HashMap<Integer, HashMap<Integer, Double>> getDiscountByProductQuantity();
     public boolean isProductExist(int CatalogId);
     public void removeDiscountQuantity(int CatalogId, int Quantiti);

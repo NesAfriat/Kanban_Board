@@ -48,9 +48,10 @@ public class AgreementsMapper extends Mapper{
                     int supID = rs.getInt(1);
                     double xDisc = rs.getDouble(2);
                     String mod = rs.getString(3);
-                    int days = rs.getInt(4);
+                    int days = rs.getInt(4);//todo - need to be list of int - like days '(1 ,3) //sunday, tuesday
                     obj = new Agreement(supID,xDisc,mod,days);
                 }
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -24,6 +24,7 @@ public class DataController {
     private SuppliersProductsMapper suppliersProductsMapper;
     private OrdersMapper ordersMapper;
     private AgreementsMapper agreementsMapper;
+    private OrderProductsMapper orderProductsMapper;
 
 
     public static Date getDate(String date) throws ParseException {
@@ -57,6 +58,7 @@ public class DataController {
         suppliersProductsMapper = new SuppliersProductsMapper();
         ordersMapper = new OrdersMapper();
         agreementsMapper = new AgreementsMapper();
+        orderProductsMapper=new OrderProductsMapper();
     }
 
     //================================================================================
@@ -261,7 +263,24 @@ public class DataController {
     }
 
     //================================================================================
-    //TODO: return null if item does not exist
+//productQuantity
+
+    public boolean updateProduct(int orderId,int catalogID,int quantity) {
+        return orderProductsMapper.update(orderId,catalogID,quantity);
+    }
+//removeProduct
+public boolean removeProduct(int orderId,int catalogID) {
+    return orderProductsMapper.delete(orderId,catalogID);
+}
+//
+public boolean insetProduct(int orderId,int catalogID,int quantity) {
+    return orderProductsMapper.insetProduct(orderId,catalogID,quantity);
+}
+
+        //================================================================================
+
+
+        //TODO: return null if item does not exist
     //Item Actions:
     //If we want to retrive an item which was not in the business
     public Item getDefectedItem(int product_id, int item_id) {
