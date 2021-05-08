@@ -6,12 +6,16 @@ import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.Supplier;
 import com.sun.org.apache.xpath.internal.operations.Or;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedList;
 
 
 public class DataController {
     private static DataController instance = null;
     private ItemMapper itemMapper;
+    private DefectsItemsMapper defectsItemsMapper;
     private GeneralProductMapper generalProductMapper;
     private CategoriesMapper CategoriesMapper;
     private SuppliersMapper suppliersMapper;
@@ -19,6 +23,19 @@ public class DataController {
     private SuppliersProductsMapper suppliersProductsMapper;
     private OrdersMapper ordersMapper;
     private AgreementsMapper agreementsMapper;
+
+
+    public static Date getDate(String date) throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.parse(date);
+    }
+
+    public static String getDate(Date date) {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(date);
+    }
 
     public static DataController getInstance() {
         if (instance == null) {
@@ -29,6 +46,7 @@ public class DataController {
 
     private DataController() {
         itemMapper = new ItemMapper();
+        defectsItemsMapper = new DefectsItemsMapper();
         generalProductMapper = new GeneralProductMapper();
         CategoriesMapper = new CategoriesMapper();
         suppliersMapper = new SuppliersMapper();
@@ -213,6 +231,28 @@ public class DataController {
 
     public boolean delete(Agreement a) {
         return agreementsMapper.delete(a);
+    }
+
+    //================================================================================
+    //TODO: return null if item does not exist
+    //Item Actions:
+    //If we want to retrive an item which was not in the business
+    public Item getDefectedItem(int product_id, int item_id) {
+        Item ip = defectsItemsMapper.getDefectedItem(product_id, item_id);
+        return ip;
+    }
+
+    //If we want to make entire new record of an item
+    public boolean insertDefected(Item obj) {
+        return defectsItemsMapper.insertDefectedItem(obj);
+    }
+
+    public boolean updateDefected(Item obj) {
+        return defectsItemsMapper.update(obj);
+    }
+
+    public boolean deleteDefected(Item obj) {
+        return defectsItemsMapper.delete(obj);
     }
 
 
