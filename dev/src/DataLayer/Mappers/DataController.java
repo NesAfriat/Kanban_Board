@@ -1,17 +1,10 @@
 package DataLayer.Mappers;
 
-<<<<<<< HEAD
-import BuisnnesLayer.GeneralProduct;
-import BuisnnesLayer.Item;
-import BuisnnesLayer.Category;
-import BuisnnesLayer.Reports.Report;
-=======
 import BuisnnesLayer.*;
+import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.OrderBuissness.Order;
 import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.Supplier;
-import com.sun.org.apache.xpath.internal.operations.Or;
->>>>>>> sup_stock_dal
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,11 +17,8 @@ public class DataController {
     private ItemMapper itemMapper;
     private DefectsItemsMapper defectsItemsMapper;
     private GeneralProductMapper generalProductMapper;
-<<<<<<< HEAD
     private CategoriesMapper categoriesMapper;
     private ReportsMapper reportsMapper;
-=======
-    private CategoriesMapper CategoriesMapper;
     private SuppliersMapper suppliersMapper;
     private SuppliersContactsMapper suppliersContactsMapper;
     private SuppliersProductsMapper suppliersProductsMapper;
@@ -47,8 +37,6 @@ public class DataController {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);
     }
->>>>>>> sup_stock_dal
-
     public static DataController getInstance() {
         if (instance == null) {
             instance = new DataController();
@@ -60,17 +48,13 @@ public class DataController {
         itemMapper = new ItemMapper();
         defectsItemsMapper = new DefectsItemsMapper();
         generalProductMapper = new GeneralProductMapper();
-<<<<<<< HEAD
         categoriesMapper = new CategoriesMapper();
         reportsMapper = new ReportsMapper();
-=======
-        CategoriesMapper = new CategoriesMapper();
         suppliersMapper = new SuppliersMapper();
         suppliersContactsMapper = new SuppliersContactsMapper();
         suppliersProductsMapper = new SuppliersProductsMapper();
         ordersMapper = new OrdersMapper();
         agreementsMapper = new AgreementsMapper();
->>>>>>> sup_stock_dal
     }
 
     //================================================================================
@@ -117,11 +101,7 @@ public class DataController {
         return generalProductMapper.delete(obj);
     }
 
-<<<<<<< HEAD
 
-=======
-    //================================================================================
->>>>>>> sup_stock_dal
     public Category getCategory(String cat_name) {
         Category cat = categoriesMapper.getCategory(cat_name);
         return cat;
@@ -169,18 +149,6 @@ public class DataController {
 
     public LinkedList<Report> loadAllReports() {
         return reportsMapper.loadAllReports();
-    }
-
-    public static Date getDate(String date) throws ParseException {
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.parse(date);
-    }
-
-    public static String getDate(Date date) {
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.format(date);
     }
 
     //================================================================================

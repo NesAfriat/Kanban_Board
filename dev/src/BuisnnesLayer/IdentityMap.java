@@ -1,16 +1,11 @@
 package BuisnnesLayer;
 
-import BuisnnesLayer.Category;
-import BuisnnesLayer.GeneralProduct;
-import BuisnnesLayer.Item;
-<<<<<<< HEAD
+
 import BuisnnesLayer.Reports.Report;
-import BuisnnesLayer.SupplierBuissness.*;
-=======
 import BuisnnesLayer.OrderBuissness.Order;
 import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.Supplier;
->>>>>>> sup_stock_dal
+
 
 import java.util.LinkedList;
 
@@ -21,14 +16,12 @@ public class IdentityMap {
     private LinkedList<GeneralProduct> generalProductList;
     private LinkedList<Category> categoryList;
     private LinkedList<Supplier> suppliersList;
-<<<<<<< HEAD
     private LinkedList<Report> reportsList;
-=======
     private LinkedList<Contact> contactsList;
     private LinkedList<ProductSupplier> productSuppliersList;
     private LinkedList<Order> ordersList;
     private LinkedList<Agreement> agreementsList;
->>>>>>> sup_stock_dal
+
 
     public static IdentityMap getInstance() {
         if (instance == null) {
@@ -42,15 +35,12 @@ public class IdentityMap {
         categoryList = new LinkedList<>();
         suppliersList = new LinkedList<>();
         generalProductList = new LinkedList<>();
-<<<<<<< HEAD
         reportsList = new LinkedList<>();
-=======
         contactsList = new LinkedList<>();
         productSuppliersList = new LinkedList<>();
         ordersList = new LinkedList<>();
         agreementsList = new LinkedList<>();
         defctedItemsList = new LinkedList<>();
->>>>>>> sup_stock_dal
     }
 
     //================================================================================
@@ -108,13 +98,9 @@ public class IdentityMap {
         return output;
     }
 
-<<<<<<< HEAD
     ////Categories//////
  //TODO: check if object exist in the list before adding
-=======
-    //================================================================================
-    //TODO: check if object exist in the list before adding
->>>>>>> sup_stock_dal
+
     public void addCategory(Category category) {
         if (!categoryList.contains(category))
             categoryList.add(category);
@@ -136,7 +122,7 @@ public class IdentityMap {
         return output;
     }
 
-<<<<<<< HEAD
+
     /////Reports//////
     public void addReport(Report report) {
         if(!reportsList.contains(report))
@@ -145,10 +131,18 @@ public class IdentityMap {
     //if this function return null - go to the db
     public Report getReport(Report report) {
         Report output = null;
-        for (Report r: reportsList) {
-            if(r.equals(report))
+        for (Report r : reportsList) {
+            if (r.equals(report))
                 output = r;
-=======
+        }
+        return output;
+    }
+    public Report removeReport(Report report) {
+        Report output = null;
+        output = reportsList.remove();
+        return output;
+    }
+
     //================================================================================
     //add an item to the identityMap
     public void addSupplier(Supplier sup) {
@@ -275,16 +269,11 @@ public class IdentityMap {
         for (Agreement a: agreementsList) {
             if (a.getSupplierID() == supID)
                 output = a;
->>>>>>> sup_stock_dal
         }
         return output;
     }
 
-<<<<<<< HEAD
-    public Report removeReport(Report report){
-        Report output=null;
-        output = reportsList.remove();
-=======
+
     //TODO: make sure remove doesnt stop the for
     public Agreement removeAgreement(int supID) {
         Agreement output = null;
@@ -322,7 +311,6 @@ public class IdentityMap {
                 output = item;
             defctedItemsList.remove(item);
         }
->>>>>>> sup_stock_dal
         return output;
     }
 }

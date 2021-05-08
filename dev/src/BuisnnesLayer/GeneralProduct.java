@@ -1,12 +1,7 @@
 package BuisnnesLayer;
 
-<<<<<<< HEAD
-import BuisnnesLayer.SupplierBuissness.*;
-=======
-import BuisnnesLayer.IdentityMap;
->>>>>>> sup_stock_dal
-import DataLayer.Mappers.DataController;
 
+import DataLayer.Mappers.DataController;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Date;
