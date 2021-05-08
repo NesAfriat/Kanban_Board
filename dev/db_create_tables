@@ -63,14 +63,13 @@ CREATE TABLE IF NOT EXISTS Sales(
 	description TEXT,
 	start_date TEXT,
 	end_date TEXT,
-
+    byCategory INTEGER,
 	PRIMARY KEY (saleID),
 );
 
 CREATE TABLE IF NOT EXISTS AffectedCategories(
 	saleID INTEGER,
-	catName REAL,
-
+	catName TEXT,
 	PRIMARY KEY (saleID,catName),
 	FOREIGN KEY (saleID) REFERENCES Sales(saleID),
     FOREIGN KEY (catName) REFERENCES Categories(catName)
@@ -79,7 +78,6 @@ CREATE TABLE IF NOT EXISTS AffectedCategories(
 CREATE TABLE IF NOT EXISTS AffectedProducts(
 	saleID INTEGER,
 	gpName TEXT,
-
 	PRIMARY KEY (saleID,gpID),
 	FOREIGN KEY (saleID) REFERENCES Sales(saleID),
     FOREIGN KEY (gpName) REFERENCES GeneralProducts(gpName)

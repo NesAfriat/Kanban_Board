@@ -42,7 +42,7 @@ public class SalesMapper extends Mapper{
         }
     }
     public Sale getSaleByID(int sID) {
-        Sale s;
+        Sale s=null;
             try (Connection conn = connect()) {
                 String statement = "SELECT * FROM Sales WHERE saleID=? ";
 
