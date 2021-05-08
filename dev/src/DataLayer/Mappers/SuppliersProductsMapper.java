@@ -1,5 +1,6 @@
 package DataLayer.Mappers;
 
+import BuisnnesLayer.Agreement;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.ProductSupplier;
 
@@ -154,6 +155,33 @@ public class SuppliersProductsMapper extends Mapper{
 
                     ProductSupplier ps = new ProductSupplier(price,catalogID,gpID,name);
                     gp.addSupplierProduct(ps);
+                    output.add(ps);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
+    public LinkedList<ProductSupplier> addPStoAgreement(Agreement agr){
+        LinkedList<ProductSupplier> output = new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM SuppliersProducts WHERE supID=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, agr.getSupplierID());
+
+                ResultSet rs = pstmt.executeQuery();
+                while(rs.next()) {
+                    int catalogID = rs.getInt(2);
+                    int gpID = rs.getInt(3);
+                    String name = rs.getString(4);
+                    double price = rs.getDouble(5);
+
+                    ProductSupplier ps = new ProductSupplier(price,catalogID,gpID,name);
+                    agr.addSupplierProduct(ps);
                     output.add(ps);
                 }
             } catch (SQLException e) {

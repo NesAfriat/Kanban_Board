@@ -75,8 +75,16 @@ public class IdentityMap {
     //function which retrieve the info from the database
     public void addGeneralProduct(GeneralProduct product) {
         boolean flag;
-        if(!generalProductList.contains(product))
+        flag=false;
+        for(GeneralProduct gp: generalProductList){
+            if (product.getProduct_id().equals(gp.getProduct_id())) {
+                flag = true;
+                break;
+            }
+        }
+        if(!flag){
             generalProductList.add(product);
+        }
         for(Item i:product.get_items()){
             flag = false;
             for(Item item: itemList){

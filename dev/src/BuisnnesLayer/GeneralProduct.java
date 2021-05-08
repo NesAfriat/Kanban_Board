@@ -136,9 +136,7 @@ public class GeneralProduct {
         this.selling_price = selling_price;
     }
 
-    public void addSupplierProduct(ProductSupplier productSupplier) {
-        HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
-    }
+
 
 
     public LinkedList<Integer> getItems() {
@@ -304,11 +302,15 @@ public class GeneralProduct {
         return removed;
     }
 
-    //add items from dal
+    //for Dal - load from DB
     public void addItem(Item toAdd) {
         items.add(toAdd);
         if(item_id<toAdd.getItem_id()){
             item_id = toAdd.getItem_id();
         }
+    }
+    //for Dal - load from DB
+    public void addSupplierProduct(ProductSupplier productSupplier) {
+        HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
     }
 }

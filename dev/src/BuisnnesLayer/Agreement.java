@@ -3,6 +3,7 @@ package BuisnnesLayer;
 import DataLayer.Mappers.DataController;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Agreement implements IAgreement {
@@ -26,21 +27,17 @@ public class Agreement implements IAgreement {
 
 
     //constructor for DAL
-    public Agreement(int supID, double xDisc, String mod, int days,List<Integer> daysOfDelivery) {//,HashMap<Integer, HashMap<Integer, Double>> discountByProductQuantity,HashMap<Integer, ProductSupplier> products
+    //TODO idan - i've added to getAgreement from Dc more func, please look at them tnx
+    public Agreement(int supID, double xDisc, String mod, int daysFromOrder) {//,HashMap<Integer, HashMap<Integer, Double>> discountByProductQuantity,HashMap<Integer, ProductSupplier> products
         this.SupplierID=supID;
-//        this.products=new HashMap<>();
-        //TODO need to change the enum or add switch case
+        this.products=new HashMap<>();
         if (mod.equals("Pickup")){deliveryMods=DeliveryMode.Pickup;}
         else if (mod.equals("DeliveryByDay")){deliveryMods=DeliveryMode.DeliveryByDay;}
         else {deliveryMods=DeliveryMode.DeliveryAfterOrder;}
-
-        this.numOfDaysFromOrder=days;
-        this.daysOfDelivery=daysOfDelivery; //TODO what is this????
-//        DiscountByProductQuantity=new HashMap<>(new HashMap<>());
-       // this.DiscountByProductQuantity=discountByProductQuantity;
-       // this.products=products;
-        this.ExtraDiscount = xDisc; //TODO why disc is in int???
-        //TODO need to add Products and DiscByProd
+        this.numOfDaysFromOrder=daysFromOrder;
+        this.daysOfDelivery=new LinkedList<>();
+        DiscountByProductQuantity=new HashMap<>(new HashMap<>());
+        this.ExtraDiscount = xDisc;
 
     }
 
@@ -102,7 +99,7 @@ public class Agreement implements IAgreement {
         }
         ProductSupplier productSupplier=new ProductSupplier(Price,CatalogID,idProductCounter,name);
         products.put(CatalogID,productSupplier);
-        InsertPrudact(productSupplier);
+        InsertProduct(productSupplier);
         return productSupplier;
     }
 
@@ -112,7 +109,7 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product is not exist");
         }
 
-        RemovePrudact(products.remove(CatalogID));
+        RemoveProduct(products.remove(CatalogID));
         if (DiscountByProductQuantity.containsKey(CatalogID)){
         DiscountByProductQuantity.remove(CatalogID);
     }
@@ -154,7 +151,7 @@ public class Agreement implements IAgreement {
         if (price<0)throw new IllegalArgumentException("Illegal price, the price need to be positive!");
 
         (products.get(CatalogID)).setPrice(price);
-        UpdatePrudact(products.get(CatalogID));
+        UpdateProduct(products.get(CatalogID));
     }
 
     public HashMap<Integer, HashMap<Integer, Double>> getDiscountByProductQuantity() {
@@ -204,7 +201,7 @@ public class Agreement implements IAgreement {
         im.addAgreement(agreement);
     }
 
-    private void InsertPrudact(ProductSupplier productSupplier) {
+    private void InsertProduct(ProductSupplier productSupplier) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if (!dc.insetPS(productSupplier,SupplierID)) {
@@ -212,21 +209,21 @@ public class Agreement implements IAgreement {
         }
         im.addPS(productSupplier);
     }
-    private void UpdatePrudact(ProductSupplier productSupplier) {
+    private void UpdateProduct(ProductSupplier productSupplier) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if (!dc.update(productSupplier,SupplierID)) {
             System.out.println("failed to add productSupplier to the database");
         }
-        im.update(productSupplier);// todo : way isnt update methods in IdentityMap?
+//        im.update(productSupplier);// todo : way isnt update methods in IdentityMap? Idan - cuz it suppose to be the same Object
     }
-    private void RemovePrudact(ProductSupplier productSupplier) {
+    private void RemoveProduct(ProductSupplier productSupplier) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if (!dc.delete(productSupplier,SupplierID)) {
             System.out.println("failed to Remove Prudact to the database");
         }
-        im.delete(productSupplier);// todo : way isnt update methods in IdentityMap?
+        im.delete(productSupplier);// todo : way isnt delete methods in IdentityMap?
     }
 
     //DiscountByProductQuantity
@@ -237,6 +234,25 @@ public class Agreement implements IAgreement {
             System.out.println("failed to update new Agreement to the database");
         }
         im.addAgreement(agreement);
+    }
+    //for Dal - load from DB
+    public void addSupplierProduct(ProductSupplier ps) {
+        products.put(ps.getCatalogID(),ps);
+    }
+    //for Dal - load from DB
+    public void addDiscountByProductQuantity(int catalogID, int quantity, double newPrice){
+        if (!DiscountByProductQuantity.containsKey(catalogID)) {
+            DiscountByProductQuantity.put(catalogID, new HashMap<Integer, Double>());
+        }
+
+        (DiscountByProductQuantity.get(catalogID)).put(quantity,newPrice );
+    }
+
+    //for Dal - load from DB
+    public void addDeliveryDay(int day) {
+        if(!daysOfDelivery.contains(day)){
+            daysOfDelivery.add(day);
+        }
     }
 /*
     public void AddDaysOfDelivery(int day)

@@ -25,7 +25,8 @@ public class DataController {
     private OrdersMapper ordersMapper;
     private AgreementsMapper agreementsMapper;
     private OrderProductsMapper orderProductsMapper;
-
+    private AgreementDeliveryDaysMapper addMapper;
+    private AgreementProductDiscMapper apdMapper;
 
     public static Date getDate(String date) throws ParseException {
         String pattern = "yyyy-MM-dd";
@@ -59,6 +60,9 @@ public class DataController {
         ordersMapper = new OrdersMapper();
         agreementsMapper = new AgreementsMapper();
         orderProductsMapper=new OrderProductsMapper();
+        //TODO: thinks if thos better be in the AgreementMapper
+        addMapper = new AgreementDeliveryDaysMapper();
+        apdMapper = new AgreementProductDiscMapper();
     }
 
     //================================================================================
@@ -86,10 +90,11 @@ public class DataController {
     //================================================================================
     //GeneralProduct Actions:
     //If we want to retrive an product which was not in the business
+    //load all the gp's objects
     public GeneralProduct getGP(int product_id) {
         GeneralProduct gp = generalProductMapper.getGeneralProduct(product_id);
-        itemMapper.addItemToProduct(gp);
-        suppliersProductsMapper.addPStoProduct(gp);
+        itemMapper.addItemToProduct(gp); //add gp items
+        suppliersProductsMapper.addPStoProduct(gp); //add gp ps
         return gp;
     }
 
@@ -242,11 +247,15 @@ public class DataController {
     }
 
     //================================================================================
-    //Orders Actions:
+    //Agreement Actions:
     //If we want to retrive an Order which was not in the business
     public Agreement getAgreement(int sup_id) {
-        Agreement a = agreementsMapper.getAgreement(sup_id);
-        return a;
+        Agreement agr = agreementsMapper.getAgreement(sup_id);
+        suppliersProductsMapper.addPStoAgreement(agr); //SupplierProducts
+        apdMapper.addQuantityDiscAgreement(agr); //DiscByQuantity
+        addMapper.addDaysDelivery(agr); //DeliveryDays
+
+        return agr;
     }
 
     //If we want to make entire new record of an item

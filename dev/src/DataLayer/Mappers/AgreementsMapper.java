@@ -4,12 +4,13 @@ import BuisnnesLayer.Agreement;
 
 import java.sql.*;
 
-public class AgreementsMapper extends Mapper{
+public class AgreementsMapper extends Mapper {
 
     public AgreementsMapper() {
         super();
         create_table();
     }
+
     @Override
     void create_table() {
         String AgreementsTable = "CREATE TABLE IF NOT EXISTS Agreements(\n" +
@@ -17,7 +18,6 @@ public class AgreementsMapper extends Mapper{
                                 "\textraDisc REAL,\n" +
                                 "\tdeliveryMods TEXT,\n" +
                                 "\tdaysFromOrder INTEGER,\n" +
-
                                 "\tFOREIGN KEY (supID) REFERENCES Suppliers(supID)\n" +
                                 ");";
 //        String sql = "BEGIN TRANSACTION;" + GeneralProductTable + "COMMIT;";
@@ -48,8 +48,8 @@ public class AgreementsMapper extends Mapper{
                     int supID = rs.getInt(1);
                     double xDisc = rs.getDouble(2);
                     String mod = rs.getString(3);
-                    int days = rs.getInt(4);//todo - need to be list of int - like days '(1 ,3) //sunday, tuesday
-                    obj = new Agreement(supID,xDisc,mod,days);
+                    int daysFromOrder = rs.getInt(4);//todo - need to be list of int - like days '(1 ,3) //sunday, tuesday
+                    obj = new Agreement(supID, xDisc, mod, daysFromOrder);
                 }
 
             } catch (SQLException e) {

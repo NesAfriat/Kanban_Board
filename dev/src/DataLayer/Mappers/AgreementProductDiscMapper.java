@@ -1,8 +1,11 @@
 package DataLayer.Mappers;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
+import BuisnnesLayer.Agreement;
+import BuisnnesLayer.ProductSupplier;
+
+import java.sql.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class AgreementProductDiscMapper extends Mapper{
     public AgreementProductDiscMapper() {
@@ -17,7 +20,7 @@ public class AgreementProductDiscMapper extends Mapper{
                                             "\tsupID INTEGER,\n" +
                                             "\tcatalogID INTEGER,\n" +
                                             "\tquantity INTEGER,\n" +
-                                            "\tdiscount REAL,\n" +
+                                            "\tprice REAL,\n" +
                                             "\tPRIMARY KEY (supID, catalogID, quantity),\n" +
                                             "\tFOREIGN KEY (supID) REFERENCES Agreement(supID),\n" +
                                             "\tFOREIGN KEY (catalogID) REFERENCES SuppliersProducts(catalogID)\n" +
@@ -34,6 +37,29 @@ public class AgreementProductDiscMapper extends Mapper{
 //                            }
         } catch (SQLException e) {
             e.printStackTrace();
+        }
+    }
+    public void addQuantityDiscAgreement(Agreement agr){
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM AgreementProductDisc WHERE supID=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, agr.getSupplierID());
+
+                ResultSet rs = pstmt.executeQuery();
+                while(rs.next()) {
+                    int catalogID = rs.getInt(2);
+                    int amount = rs.getInt(3);
+                    double price = rs.getDouble(4);
+
+                    agr.addDiscountByProductQuantity(catalogID,amount,price);
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
 }
