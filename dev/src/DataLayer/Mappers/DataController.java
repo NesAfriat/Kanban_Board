@@ -1,10 +1,7 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.GeneralProduct;
-import BuisnnesLayer.Item;
-import BuisnnesLayer.Category;
+import BuisnnesLayer.*;
 import BuisnnesLayer.OrderBuissness.Order;
-import BuisnnesLayer.ProductSupplier;
 import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.Supplier;
 import com.sun.org.apache.xpath.internal.operations.Or;
@@ -21,6 +18,7 @@ public class DataController {
     private SuppliersContactsMapper suppliersContactsMapper;
     private SuppliersProductsMapper suppliersProductsMapper;
     private OrdersMapper ordersMapper;
+    private AgreementsMapper agreementsMapper;
 
     public static DataController getInstance() {
         if (instance == null) {
@@ -37,6 +35,7 @@ public class DataController {
         suppliersContactsMapper = new SuppliersContactsMapper();
         suppliersProductsMapper = new SuppliersProductsMapper();
         ordersMapper = new OrdersMapper();
+        agreementsMapper = new AgreementsMapper();
     }
 
     //================================================================================
@@ -194,4 +193,27 @@ public class DataController {
     public boolean delete(Order o) {
         return ordersMapper.delete(o);
     }
+
+    //================================================================================
+    //Orders Actions:
+    //If we want to retrive an Order which was not in the business
+    public Agreement getAgreement(int sup_id) {
+        Agreement a = agreementsMapper.getAgreement(sup_id);
+        return a;
+    }
+
+    //If we want to make entire new record of an item
+    public boolean insertAgreement(Agreement a) {
+        return agreementsMapper.insertAgreement(a);
+    }
+
+    public boolean update(Agreement a) {
+        return agreementsMapper.update(a);
+    }
+
+    public boolean delete(Agreement a) {
+        return agreementsMapper.delete(a);
+    }
+
+
 }

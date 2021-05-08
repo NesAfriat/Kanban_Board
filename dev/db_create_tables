@@ -50,15 +50,14 @@ CREATE TABLE IF NOT EXISTS GeneralProducts(
 	FOREIGN KEY (catName) REFERENCES Categories(catName)
 );
 
-CREATE TABLE IF NOT EXISTS SaleProduct(
-	saleID INTEGER,
+CREATE TABLE IF NOT EXISTS SaleProducts(
+	saleID INTEGER PRIMARY KEY,
 	gpID INTEGER,
 	discount_percent REAL,
 	description TEXT,
 	start_date TEXT,
 	end_date TEXT,
 
-	PRIMARY KEY (saleID, gpID),
 	FOREIGN KEY (gpID) REFERENCES GeneralProducts(gpID)
 	
 );

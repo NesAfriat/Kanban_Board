@@ -18,6 +18,7 @@ public class IdentityMap {
     private LinkedList<Contact> contactsList;
     private LinkedList<ProductSupplier> productSuppliersList;
     private LinkedList<Order> ordersList;
+    private LinkedList<Agreement> agreementsList;
 
     public static IdentityMap getInstance() {
         if (instance == null) {
@@ -34,6 +35,7 @@ public class IdentityMap {
         contactsList = new LinkedList<>();
         productSuppliersList = new LinkedList<>();
         ordersList = new LinkedList<>();
+        agreementsList = new LinkedList<>();
     }
 
     //================================================================================
@@ -200,7 +202,7 @@ public class IdentityMap {
 //        return output;
 //    }
     //================================================================================
-    //add an item to the identityMap
+    //add an Order to the identityMap
     public void addOrder(Order o) {
         ordersList.add(o);
     }
@@ -223,6 +225,34 @@ public class IdentityMap {
             if (o.GetId() == oID) {
                 output = o;
                 ordersList.remove(o);
+            }
+        }
+        return output;
+    }
+    //================================================================================
+    //add an Agreement to the identityMap
+    public void addAgreement(Agreement a) {
+        agreementsList.add(a);
+    }
+
+
+    //if this function return null - go to the db
+    public Agreement getAgreement(int supID) {
+        Agreement output = null;
+        for (Agreement a: agreementsList) {
+            if (a.getSupplierID() == supID)
+                output = a;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
+    public Agreement removeAgreement(int supID) {
+        Agreement output = null;
+        for (Agreement a: agreementsList) {
+            if (a.getSupplierID() == supID) {
+                output = a;
+                agreementsList.remove(a);
             }
         }
         return output;
