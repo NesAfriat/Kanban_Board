@@ -1,58 +1,76 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.Reports.*;
+import BuisnnesLayer.Category;
+import BuisnnesLayer.Reports.Report;
+import BuisnnesLayer.Reports.ReportDefects;
+import BuisnnesLayer.Reports.ReportMissing;
+import BuisnnesLayer.Reports.ReportStock;
+import BuisnnesLayer.Sales.Sale;
+import BuisnnesLayer.Sales.SaleByProduct;
 import DataLayer.DataController;
 
 import java.sql.*;
+import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.function.DoubleUnaryOperator;
 
-public class ReportsMapper extends Mapper {
-    private Reports_CategoriesMapper rcm = new Reports_CategoriesMapper();
+public class SalesMapper extends Mapper{
+    private AffectedCategoriesMapper acm;
+    private AffectedProductsMapper apm;
+    public SalesMapper() {
+        super();
+        create_table();
+        acm=new AffectedCategoriesMapper();
+        apm= new AffectedProductsMapper();
+    }
 
     @Override
     void create_table() {
-        String ReportsTable = "CREATE TABLE IF NOT EXISTS Reports(\n" +
-                "\trepID INTEGER PRIMARY KEY,\n" +
-                "\tsubject TEXT,\n" +
-                "\tcreation_date TEXT,\n" +
-                "\ttime_range TEXT,\n" +
-                "\tdata TEXT\n" +
-                ");";
-
+//        File f = new File(db_name);
+        String SaleTable = "CREATE TABLE IF NOT EXISTS Sales(\n" +
+                            "\tsaleID INTEGER,\n"+
+                            "\tdiscount_percent DOUBLE ,\n"+
+                            "\tdescription TEXT,\n"+
+                            "\tstart_date TEXT,\n"+
+                            "\tend_date TEXT,\n"+
+                            "\tPRIMARY KEY (saleID),\n"+
+                            ");";
+//        String sql = "BEGIN TRANSACTION;" + GeneralProductTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
             // create a new tables
-            stmt.execute(ReportsTable);
+            stmt.execute(SaleTable);
+            //TODO: in DataController - need to activate loadData
+//            if (!identityMap.initialized){
+//                LoadPreData();
+//                identityMap.initialized = true;
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-
-    public Report getReport(int rID) {
-        Report report = null;
+    public LinkedList<Sale> getSaleByProduct(String product) {
+        LinkedList<Sale> sales= new LinkedList<>();
+        LinkedList<Integer> salesID= apm.getSales(product);
+        for(Integer sID: salesID)
         try (Connection conn = connect()) {
-            String statement = "SELECT * FROM Reports WHERE repID=? ";
+            String statement = "SELECT * FROM Sales WHERE saleID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, rID);
+                pstmt.setInt(1, sID);
 
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
-                    int repID = rs.getInt(1);
-                    String subject = rs.getString(2);
-                    String creation_date = rs.getString(3);
-                    String time_range = rs.getString(4);
-                    String data = rs.getString(5);
-                    LinkedList<String> categoriesList = rcm.getCategories(repID);
-                    switch (subject.toLowerCase()) {
-                        case "stock":
-                            report = new ReportStock(repID, time_range, categoriesList);
-                        case "missing":
-                            report = new ReportMissing(repID, time_range, categoriesList);
-                        case "defects":
-                            report = new ReportDefects(repID, time_range, categoriesList);
-                    }
+                    int saleID = rs.getInt(1);
+                    Double discount_percent = rs.getDouble(2);
+                    String description = rs.getString(3);
+                    String start_date = rs.getString(4);
+                    String end_date = rs.getString(5);
+                    LinkedList<String> affected= apm.getAffectedProucts(saleID);
+                    Sale newSale = new SaleByProduct(saleID, discount_percent,description, start_date, end_date,  affected);
+                    sales.add(newSale);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -62,7 +80,39 @@ public class ReportsMapper extends Mapper {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        return report;
+        return sales;
+    }
+
+    public LinkedList<Sale> getSaleByCategory(String category) {
+        LinkedList<Sale> sales= new LinkedList<>();
+        LinkedList<Integer> salesID= acm.getSales(category);
+        for(Integer sID: salesID)
+            try (Connection conn = connect()) {
+                String statement = "SELECT * FROM Sales WHERE saleID=? ";
+
+                try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                    pstmt.setInt(1, sID);
+
+                    ResultSet rs = pstmt.executeQuery();
+                    if (rs.next()) {
+                        int saleID = rs.getInt(1);
+                        Double discount_percent = rs.getDouble(2);
+                        String description = rs.getString(3);
+                        String start_date = rs.getString(4);
+                        String end_date = rs.getString(5);
+                        LinkedList<String> affected= acm.getAffectedCategories(saleID);
+                        Sale newSale = new SaleByProduct(saleID, discount_percent,description, start_date, end_date,  affected);
+                        sales.add(newSale);
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        return sales;
     }
 
     public boolean insert(Report report) {
@@ -158,5 +208,7 @@ public class ReportsMapper extends Mapper {
         }
         return reports;
     }
+
+
 
 }

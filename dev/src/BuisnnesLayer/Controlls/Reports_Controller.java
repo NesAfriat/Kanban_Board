@@ -1,12 +1,10 @@
 package BuisnnesLayer.Controlls;
 
-import BuisnnesLayer.Category;
 import BuisnnesLayer.IdentityMap;
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.Reports.ReportFactory;
 import BuisnnesLayer.Reports.Subject;
-import BuisnnesLayer.Reports.TimeRange;
-import DataLayer.Mappers.DataController;
+import DataLayer.DataController;
 
 import java.util.Date;
 import java.util.HashMap;

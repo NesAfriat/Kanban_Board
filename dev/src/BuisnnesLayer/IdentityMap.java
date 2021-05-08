@@ -3,6 +3,7 @@ package BuisnnesLayer;
 
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.OrderBuissness.Order;
+import BuisnnesLayer.Sales.Sale;
 import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.Supplier;
 
@@ -21,6 +22,7 @@ public class IdentityMap {
     private LinkedList<ProductSupplier> productSuppliersList;
     private LinkedList<Order> ordersList;
     private LinkedList<Agreement> agreementsList;
+    private LinkedList<Sale> salesList;
 
 
     public static IdentityMap getInstance() {
@@ -41,6 +43,7 @@ public class IdentityMap {
         ordersList = new LinkedList<>();
         agreementsList = new LinkedList<>();
         defctedItemsList = new LinkedList<>();
+        salesList= new LinkedList<>();
     }
 
     //================================================================================
@@ -131,7 +134,7 @@ public class IdentityMap {
         return output;
     }
 
-
+//==============================================
     /////Reports//////
     public void addReport(Report report) {
         if(!reportsList.contains(report))
@@ -146,9 +149,14 @@ public class IdentityMap {
         }
         return output;
     }
-    public Report removeReport(Report report) {
+    public Report removeReport(int reportID) {
         Report output = null;
-        output = reportsList.remove();
+        for (Report r: reportsList) {
+            if (r.getReportID() == reportID) {
+                output = r;
+                reportsList.remove(r);
+            }
+        }
         return output;
     }
 
@@ -320,6 +328,29 @@ public class IdentityMap {
                 output = item;
             defctedItemsList.remove(item);
         }
+        return output;
+    }
+
+    //================================================================================
+    //Sales
+    //==============================================
+    /////Reports//////
+    public void addSale(Sale sale) {
+        if(!salesList.contains(sale))
+            salesList.add(sale);
+    }
+    //if this function return null - go to the db
+    public Sale getSale(int saleID) {
+        Sale output = null;
+        for (Sale s : salesList) {
+            if (s.getSale_id()==saleID)
+                output = s;
+        }
+        return output;
+    }
+    public boolean removeSale(Sale sale) {
+        boolean output = false;
+        output = salesList.remove(sale);
         return output;
     }
 }

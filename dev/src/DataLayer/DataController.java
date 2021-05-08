@@ -1,10 +1,12 @@
-package DataLayer.Mappers;
+package DataLayer;
 
 import BuisnnesLayer.*;
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.OrderBuissness.Order;
+import BuisnnesLayer.Sales.Sale;
 import BuisnnesLayer.SupplierBuissness.Contact;
 import BuisnnesLayer.SupplierBuissness.Supplier;
+import DataLayer.Mappers.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -24,6 +26,7 @@ public class DataController {
     private SuppliersProductsMapper suppliersProductsMapper;
     private OrdersMapper ordersMapper;
     private AgreementsMapper agreementsMapper;
+    private SalesMapper salesMapper;
 
 
     public static Date getDate(String date) throws ParseException {
@@ -49,10 +52,9 @@ public class DataController {
         suppliersMapper = new SuppliersMapper();
         itemMapper = new ItemMapper();
         defectsItemsMapper = new DefectsItemsMapper();
-
         categoriesMapper = new CategoriesMapper();
         reportsMapper = new ReportsMapper();
-
+        salesMapper= new SalesMapper();
         suppliersContactsMapper = new SuppliersContactsMapper();
         suppliersProductsMapper = new SuppliersProductsMapper();
         ordersMapper = new OrdersMapper();
@@ -282,5 +284,32 @@ public class DataController {
         return defectsItemsMapper.delete(obj);
     }
 
+    //================================================================================
+    //Sales Actions:
+    public LinkedList<Sale> getSaleByProduct(String product) {
+        return salesMapper.getSaleByProduct(product);
+    }
+    public LinkedList<Sale> getSaleByCategory(String category) {
+        return salesMapper.getSaleByCategory(category);
+    }
+
+    //If we want to make entire new record of an item
+    public boolean insertSaleByProduct(Sale s) {
+        return salesMapper.insertSaleByProduct(s);
+    }
+    public boolean insertSaleByCategory(Sale s) {
+        return salesMapper.insertSaleByCategory(s);
+    }
+
+    public boolean update(Sale s) {
+        return salesMapper.update(s);
+    }
+
+    public boolean delete(Sale s) {
+        return salesMapper.delete(s);
+    }
+    public LinkedList<Sale> loadAllSaless() {
+        return salesMapper.loadAllSales();
+    }
 
 }

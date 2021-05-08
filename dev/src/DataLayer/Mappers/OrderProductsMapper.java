@@ -1,7 +1,5 @@
 package DataLayer.Mappers;
 
-import DataLayer.Mappers.Mapper;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
