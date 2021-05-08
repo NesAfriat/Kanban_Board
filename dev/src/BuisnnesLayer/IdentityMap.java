@@ -72,16 +72,34 @@ public class IdentityMap {
     }
 
     //================================================================================
+    //function which retrieve the info from the database
     public void addGeneralProduct(GeneralProduct product) {
+        boolean flag;
         if(!generalProductList.contains(product))
             generalProductList.add(product);
         for(Item i:product.get_items()){
-            if(!itemList.contains(i))
+            flag = false;
+            for(Item item: itemList){
+                if (i.getItem_id().equals(item.getItem_id()) && i.getProduct_id().equals(item.getProduct_id())) {
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
                 itemList.add(i);
+            }
         }
         for(ProductSupplier ps:product.getHashOfSupplierProducts().values()){
-            if(!productSuppliersList.contains(ps))
+            flag = false;
+            for(ProductSupplier prod: productSuppliersList){
+                if (ps.getId() == prod.getId() && ps.getCatalogID() == prod.getCatalogID()) {
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
                 productSuppliersList.add(ps);
+            }
         }
     }
 
@@ -97,13 +115,16 @@ public class IdentityMap {
     }
 
     //TODO: make sure remove doesnt stop the for
+    //TODO: after the remove is done - need to remove the output's productSupplier and items from the identityMap
     public GeneralProduct removeGeneralProd(int gp_id) {
         GeneralProduct output = null;
         for (GeneralProduct prod : generalProductList) {
-            if (prod.getProduct_id() == gp_id)
+            if (prod.getProduct_id() == gp_id) {
                 output = prod;
-            generalProductList.remove(prod);
+                generalProductList.remove(prod);
+            }
         }
+
         return output;
     }
 
