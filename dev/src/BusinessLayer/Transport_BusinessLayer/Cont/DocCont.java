@@ -192,7 +192,13 @@ public class DocCont {
         origin = getUpToDateDoc(origin);
         return origin.destinationsString();
     }
+
     public void setTranportDate(int doc, String str){
+
+        theTransportBible.get(doc).setTransDate(str);
+    }
+
+    public void setTranportDateChanges(int doc, String str){
         TransportDoc origin = theTransportBible.get(doc);
         origin = getUpToDateDoc(origin);
         TransportDoc td= origin.copyDeep();
@@ -200,7 +206,11 @@ public class DocCont {
         td.setTransDate(str);
 
     }
-    public void setDepartureTime(int doc, String date){
+    public void setDepartureTime(int doc, String str){
+
+        theTransportBible.get(doc).setLeftOrigin(str);
+    }
+    public void setDepartureTimeChanges(int doc, String date){
         TransportDoc origin = theTransportBible.get(doc);
         origin = getUpToDateDoc(origin);
         TransportDoc td= origin.copyDeep();

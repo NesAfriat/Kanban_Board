@@ -12,6 +12,7 @@ public class Transport_Menu {
     private Scanner sc;
 
     int input;
+    boolean firstRun;
 
 
     public void addWorkersIntegration (Workers_Integration wk){
@@ -21,9 +22,12 @@ public class Transport_Menu {
     {
         bc = facade;
         sc = new Scanner(System.in);
+        firstRun=false;
     }
 
     public void mainMenu(){
+        if(!firstRun)
+            loadData();
         boolean run = true;
         while(run){
             run = runProgram();
@@ -185,7 +189,6 @@ public class Transport_Menu {
                 str = sc.nextLine();
                 str = sc.nextLine();
                 try {
-
                     bc.setTransportDate(a, str);
                 } catch (Exception e) {
                     print(e.toString());
