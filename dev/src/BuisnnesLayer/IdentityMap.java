@@ -49,7 +49,6 @@ public class IdentityMap {
         itemList.add(item);
     }
 
-    //TODO: need to add empty constructor for each created object
     //if this function return null - go to the db
     public Item getItem(int item_id, int gp_id) {
         Item output = null;
@@ -64,9 +63,10 @@ public class IdentityMap {
     public Item removeItem(int item_id, int gp_id) {
         Item output = null;
         for (Item item : itemList) {
-            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id) {
                 output = item;
-            itemList.remove(item);
+                itemList.remove(item);
+            }
         }
         return output;
     }
@@ -148,7 +148,12 @@ public class IdentityMap {
 
     public Category removeCategory(Category category) {
         Category output = null;
-        output = categoryList.remove();
+        for (Category cat : categoryList) {
+            if (cat.getCategory_name().equals(category)) {
+                output = cat;
+                categoryList.remove(cat);
+            }
+        }
         return output;
     }
 
