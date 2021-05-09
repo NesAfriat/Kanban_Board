@@ -115,17 +115,15 @@ public class AgreementManager {
            if (!productManager.check_product_id_exist(product_id)){
                 throw new IllegalArgumentException("the genaral product not exsist");
             }
-            //TODO with daniels code there is a problem when adding an item which exist in the stock to a supplier - another catagory is created
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,product_id,productManager.get_product(product_id).getProduct_name());
             productManager.AddProductSupplierToProductGeneral(productSupplier,product_id);
 
         }
         else{
-            idProductCounter++;
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
             productManager.addProduct(product_name,idProductCounter,manufacture_name,-1,cat,-1.0,productSupplier);
+            idProductCounter++;
         }
-//        gp.add_t
    }
 
     public void  removeProduct(int SupplierId,int CatalogID) throws Exception {

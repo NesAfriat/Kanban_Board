@@ -35,7 +35,7 @@ public class ProductManager {
         return null;    //not suppose to happen
     }
 
-    //TODO: Fix update in the db
+    //TODO: Fix update in the db -QUICK!!!!
     public Item set_item_defected(Integer product_id, Integer item_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesn't exist!");
@@ -255,7 +255,7 @@ public class ProductManager {
         return gp;
     }
 
-
+    //TODO - doesnt work!!!!
     public void removeItem(Integer product_id, Integer item_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist!");
@@ -426,7 +426,7 @@ public class ProductManager {
         for (GeneralProduct gp : productsList) {
             im.addGeneralProduct(gp);
             if (!products.containsKey(gp.getProduct_id()))
-                productsList.add(gp);
+                products.put(gp.getProduct_id(), gp);
             loadProductCategoryDal(gp);
         }
     }
