@@ -43,17 +43,6 @@ public class Main_Menu {
         System.out.println("----------------------------------------------------------" + '\n');
         System.out.println("Welcome to Super-Lee system!");
 
-        /*if (firstRun) {
-
-            System.out.println("Do you want to load database?");
-            boolean load = getInputYesNo();
-            if (load) {
-               // workers_menu.testingDataUpload();
-                transport_menu.loadData();
-            }
-            firstRun = false;
-        }*/
-
         boolean run = true;
         while (run) {
             System.out.println("1) Enter workers manage system");
@@ -67,7 +56,6 @@ public class Main_Menu {
                     break;
                 case 2:
                     transport_menu.mainMenu();
-                    //System.out.println("Not implemented yet");
                     break;
                 case 3:
                     run = false;
@@ -80,21 +68,6 @@ public class Main_Menu {
 
     }
 
-
-    private boolean getInputYesNo() {
-        System.out.println("1) Yes");
-        System.out.println("2) No");
-        System.out.print("Option: ");
-        int option = getInputInt();
-        if (option == 1)
-            return true;
-        else if (option == 2)
-            return false;
-        else{
-            System.out.println("There's no such option");
-            return getInputYesNo();
-        }
-    }
 
     private int getInputInt() {
         while (!scanner.hasNextInt()){
