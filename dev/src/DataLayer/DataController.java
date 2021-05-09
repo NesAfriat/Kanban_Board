@@ -74,6 +74,9 @@ public class DataController {
         apdMapper = new AgreementProductDiscMapper(); //needs supplier+supProd
         orderProductsMapper = new OrderProductsMapper(); //needs order+supProd
 
+        reportsMapper.setRCM(rcMapper);
+        salesMapper.setAcm(acMapper);
+        salesMapper.setApm(apMapper);
     }
 
     //================================================================================

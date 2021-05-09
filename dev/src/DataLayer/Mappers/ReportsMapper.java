@@ -12,7 +12,10 @@ public class ReportsMapper extends Mapper {
     public ReportsMapper(){
         super();
         create_table();
-        rcm = new Reports_CategoriesMapper();
+    }
+
+    public void setRCM(Reports_CategoriesMapper rcm){
+        this.rcm = rcm;
     }
     @Override
     void create_table() {
