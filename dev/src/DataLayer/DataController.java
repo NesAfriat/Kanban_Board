@@ -17,20 +17,23 @@ import java.util.LinkedList;
 
 public class DataController {
     private static DataController instance = null;
-    private ItemMapper itemMapper;
+    private AffectedProductsMapper apMapper;
+    private AffectedCategoriesMapper acMapper;
+    private AgreementDeliveryDaysMapper addMapper;
+    private AgreementProductDiscMapper apdMapper;
+    private AgreementsMapper agreementsMapper;
+    private CategoriesMapper categoriesMapper;
     private DefectsItemsMapper defectsItemsMapper;
     private GeneralProductMapper generalProductMapper;
-    private CategoriesMapper categoriesMapper;
+    private ItemMapper itemMapper;
+    private OrderProductsMapper orderProductsMapper;
+    private OrdersMapper ordersMapper;
+    private Reports_CategoriesMapper rcMapper;
     private ReportsMapper reportsMapper;
+    private SalesMapper salesMapper;
     private SuppliersMapper suppliersMapper;
     private SuppliersContactsMapper suppliersContactsMapper;
     private SuppliersProductsMapper suppliersProductsMapper;
-    private OrdersMapper ordersMapper;
-    private AgreementsMapper agreementsMapper;
-    private OrderProductsMapper orderProductsMapper;
-    private AgreementDeliveryDaysMapper addMapper;
-    private AgreementProductDiscMapper apdMapper;
-    private SalesMapper salesMapper;
 
 
     public static Date getDate(String date) throws ParseException {
@@ -44,6 +47,7 @@ public class DataController {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);
     }
+
     public static DataController getInstance() {
         if (instance == null) {
             instance = new DataController();
@@ -54,19 +58,22 @@ public class DataController {
     private DataController() {
         generalProductMapper = new GeneralProductMapper();
         suppliersMapper = new SuppliersMapper();
-        itemMapper = new ItemMapper();
-        defectsItemsMapper = new DefectsItemsMapper();
         categoriesMapper = new CategoriesMapper();
+        salesMapper = new SalesMapper();
         reportsMapper = new ReportsMapper();
-        salesMapper= new SalesMapper();
-        suppliersContactsMapper = new SuppliersContactsMapper();
-        suppliersProductsMapper = new SuppliersProductsMapper();
-        ordersMapper = new OrdersMapper();
-        agreementsMapper = new AgreementsMapper();
-        orderProductsMapper=new OrderProductsMapper();
-        //TODO: thinks if thos better be in the AgreementMapper
-        addMapper = new AgreementDeliveryDaysMapper();
-        apdMapper = new AgreementProductDiscMapper();
+        agreementsMapper = new AgreementsMapper(); //needs suppliers
+        suppliersContactsMapper = new SuppliersContactsMapper(); //needs suppliers
+        ordersMapper = new OrdersMapper(); //needs supplier
+        addMapper = new AgreementDeliveryDaysMapper(); //needs agreement
+        itemMapper = new ItemMapper(); //needs gp
+        defectsItemsMapper = new DefectsItemsMapper(); //needs gp
+        apMapper= new AffectedProductsMapper(); //needs sales+gp
+        acMapper = new AffectedCategoriesMapper(); //needs sales+categories
+        rcMapper = new Reports_CategoriesMapper(); //needs report+categories
+        suppliersProductsMapper = new SuppliersProductsMapper(); //needs supplier+gp
+        apdMapper = new AgreementProductDiscMapper(); //needs supplier+supProd
+        orderProductsMapper = new OrderProductsMapper(); //needs order+supProd
+
     }
 
     //================================================================================
@@ -275,28 +282,28 @@ public class DataController {
     }
 
 
-
     //===================================order!!!!!!!=============================================
 //productQuantity
 
-    public boolean updateProductInOrder(int orderId,int catalogID,int quantity) {
-        return orderProductsMapper.update(orderId,catalogID,quantity);
+    public boolean updateProductInOrder(int orderId, int catalogID, int quantity) {
+        return orderProductsMapper.update(orderId, catalogID, quantity);
     }
-//removeProduct
-public boolean removeProductFromORder(int orderId,int catalogID) {
-    return orderProductsMapper.delete(orderId,catalogID);
-}
-//
-public boolean insetProduct(int orderId,int catalogID,int quantity) {
-    return orderProductsMapper.insetProduct(orderId,catalogID,quantity);
-}
+
+    //removeProduct
+    public boolean removeProductFromORder(int orderId, int catalogID) {
+        return orderProductsMapper.delete(orderId, catalogID);
+    }
+
+    //
+    public boolean insetProduct(int orderId, int catalogID, int quantity) {
+        return orderProductsMapper.insetProduct(orderId, catalogID, quantity);
+    }
 
 
+    //================================================================================
 
-        //================================================================================
 
-
-        //TODO: return null if item does not exist
+    //TODO: return null if item does not exist
     //Item Actions:
     //If we want to retrive an item which was not in the business
     public Item getDefectedItem(int product_id, int item_id) {
@@ -322,16 +329,20 @@ public boolean insetProduct(int orderId,int catalogID,int quantity) {
     public LinkedList<Sale> getSaleByProduct(String product) {
         return salesMapper.getSaleByProduct(product);
     }
+
     public LinkedList<Sale> getSaleByCategory(String category) {
         return salesMapper.getSaleByCategory(category);
     }
+
     public Sale getSaleByID(int sale_id) {
         return salesMapper.getSaleByID(sale_id);
     }
+
     //If we want to make entire new record of an item
     public boolean insertSaleByProduct(Sale s) {
         return salesMapper.insertSaleByProduct(s);
     }
+
     public boolean insertSaleByCategory(Sale s) {
         return salesMapper.insertSaleByCategory(s);
     }
@@ -343,6 +354,7 @@ public boolean insetProduct(int orderId,int catalogID,int quantity) {
     public boolean delete(Sale s) {
         return salesMapper.delete(s);
     }
+
     public LinkedList<Sale> loadAllSales() {
         return salesMapper.loadAllSales();
     }
