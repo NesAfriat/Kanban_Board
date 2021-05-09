@@ -183,6 +183,13 @@ public class DataController {
     public LinkedList<Category> loadAllCategoreis() {
         return categoriesMapper.loadAllCategories();
     }
+    public String getFatherCategory(Category cat) {
+        return categoriesMapper.getFatherCategory(cat);
+    }
+
+    public LinkedList<String> getChildrenCategories(Category cat) {
+        return categoriesMapper.getChildrenCategories(cat);
+    }
 
     //=============================
     //reports

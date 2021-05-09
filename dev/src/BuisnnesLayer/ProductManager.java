@@ -5,6 +5,7 @@ import DataLayer.DataController;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ProductManager {
     private boolean loadCategories;
@@ -258,7 +259,8 @@ public class ProductManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist!");
         }
-        products.get(product_id).removeItem(item_id);
+        GeneralProduct gp= get_product(product_id);
+        gp.removeItem(item_id);
     }
 
     public void update_product_min_amount(Integer product_id, Integer min_amount) throws Exception {
@@ -315,7 +317,7 @@ public class ProductManager {
     }
 
     //DONE
-    public LinkedList<String> get_product_categories(GeneralProduct product) {
+    public LinkedList<String> get_product_categories(GeneralProduct product) throws Exception {
         LinkedList<String> output = new LinkedList<>();
         Category tmp;
         loadProductCategoryDal(product); //load the product category from the data
@@ -420,7 +422,7 @@ public class ProductManager {
                 categories.put(cDAL, new LinkedList<>());
         }
     }
-    private void loadAllProducts() {
+    private void loadAllProducts()  {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
         LinkedList<GeneralProduct> productsList = dc.loadAllGeneralProducts();
@@ -552,7 +554,7 @@ public class ProductManager {
        else {
             cat = dc.getCategory(category);
             if (cat != null) {
-//                dc.setFather(cat);
+                setFamily(cat);
                 categories.put(cat,new LinkedList<>());
                 im.addCategory(cat);
             }
@@ -561,6 +563,36 @@ public class ProductManager {
     }
     private void changeGPCategory(LinkedList<GeneralProduct> products, Category father) {
         DataController dc = DataController.getInstance();
-        dc.changeGPCategory(products,father);
+        dc.changeGPCategory(products, father);
+    }
+
+    private void setFamily(Category cat)  {
+        if (cat==null)
+            return;
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        String fatherName= dc.getFatherCategory(cat);
+        if(fatherName!=null) {
+            Category father = null;
+            try {
+                father = getCategory(fatherName);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            cat.setFather_Category(father);
+            setFamily(father);
+        }
+        LinkedList<String> children= dc.getChildrenCategories(cat);
+        if(!children.isEmpty()) {
+            for (String childName : children) {
+                Category child = null;
+                try {
+                    child = getCategory(childName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                child.setFather_Category(cat);
+            }
+        }
     }
 }

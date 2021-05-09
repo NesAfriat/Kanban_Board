@@ -29,7 +29,7 @@ public class CategoriesMapper extends Mapper {
     }
 
     public Category getCategory(String cat_name) {
-        Category category = null;
+        Category category =null;
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Categories WHERE catName=? ";
 
@@ -40,7 +40,7 @@ public class CategoriesMapper extends Mapper {
                 if (rs.next()) {
                     String catName = rs.getString(1);
                     String father_Category= rs.getString(2);
-                    category = new Category(catName);
+                    category = new Category(cat_name);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -50,13 +50,14 @@ public class CategoriesMapper extends Mapper {
         }
         return category;
     }
-    public String getFather(String cat_name) {
-        String father = null;
+
+    public String getFatherCategory(Category cat) {
+        String father =null;
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Categories WHERE catName=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setString(1, cat_name);
+                pstmt.setString(1, cat.getCategory_name());
 
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
@@ -69,6 +70,27 @@ public class CategoriesMapper extends Mapper {
             throwables.printStackTrace();
         }
         return father;
+    }
+
+    public LinkedList<String> getChildrenCategories(Category cat) {
+        LinkedList<String> children= new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Categories WHERE father_Category=? ";
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, cat.getCategory_name());
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    String child= rs.getString(1);
+                    children.add(child);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return children;
     }
 
     public boolean update(Category obj) {
