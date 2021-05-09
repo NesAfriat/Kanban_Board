@@ -8,10 +8,10 @@ import java.util.List;
 public class AgreementManager {
     private HashMap<Integer, IAgreement> SupplierAgreement; //- SupplierAgreement : hashmap<SupplierId : int ,agreement :Agreement>
     private int idProductCounter;
-    private productManager productManager;
+    private ProductManager productManager;
     private  boolean isLoadAllAgreement=false;
 
-    public AgreementManager(productManager productManager) {
+    public AgreementManager(ProductManager productManager) {
         // ProductsInTheSystem=new LinkedList<>();
         SupplierAgreement = new HashMap<>();
         idProductCounter = 0;
@@ -126,9 +126,9 @@ public class AgreementManager {
 
         }
         else{
+            idProductCounter++;
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
             productManager.addProduct(product_name,idProductCounter,manufacture_name,-1,cat,-1.0,productSupplier);
-        idProductCounter++;
         }
 //        gp.add_t
    }

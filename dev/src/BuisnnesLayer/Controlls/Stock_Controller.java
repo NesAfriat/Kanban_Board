@@ -6,7 +6,7 @@ package BuisnnesLayer.Controlls;
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
 import BuisnnesLayer.Stock;
-import BuisnnesLayer.productManager;
+import BuisnnesLayer.ProductManager;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -16,13 +16,13 @@ public class Stock_Controller {
     private Stock stock;      //holds all stock ever created
     private static Stock_Controller st_C = null;
 
-    private Stock_Controller(productManager productManager) {
+    private Stock_Controller(ProductManager productManager) {
         this.stock = new Stock(productManager);
     }
 
 
 
-    public static Stock_Controller getInstance(productManager productManager) {
+    public static Stock_Controller getInstance(ProductManager productManager) {
         if (st_C == null)
             st_C = new Stock_Controller(productManager);
         return st_C;

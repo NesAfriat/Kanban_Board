@@ -6,14 +6,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class productManager {
+public class ProductManager {
     private HashMap<Integer, GeneralProduct> productsfuture;                       //all product in store by product id
     private boolean loadCategories;
     private boolean loadProducts;
     private HashMap<Integer, GeneralProduct> products;                       //all product in store by product id
     private HashMap<Category, LinkedList<GeneralProduct>> categories;        //all categories and their products
 
-    public productManager() {
+    public ProductManager() {
         this.products = new HashMap<>();
         this.categories = new HashMap<>();
         this.loadCategories = false;
