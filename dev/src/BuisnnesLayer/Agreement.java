@@ -78,9 +78,9 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product do not have discount with this quantity");
         }
         DiscountByProductQuantity.get(CatalogId).remove(Quantiti);
-//        disc(this); //TODO: what is this supposed to be?
 
     }
+
     public void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery,int numOfDaysFromOrder) {
         this.deliveryMods=deliveryMods;
         this.daysOfDelivery=daysOfDelivery;
@@ -220,6 +220,7 @@ public class Agreement implements IAgreement {
         }
         im.removerProductSupplier(productSupplier);
     }
+
     //TODO - please uncommit this later when its done
 //    private void AddDiscountByProductInTheData(){
 //        IdentityMap im = IdentityMap.getInstance();

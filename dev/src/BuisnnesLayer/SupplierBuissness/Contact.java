@@ -1,11 +1,15 @@
 package BuisnnesLayer.SupplierBuissness;
 
+import BuisnnesLayer.IdentityMap;
+import DataLayer.DataController;
+
 public class Contact {
     private int id;
     private String ContactName;
     private String PhoneNumber;
     private String Email ;
-    public Contact(int id,String ContactName,String PhoneNumber, String Email)
+    private int SupId;
+    public Contact(int id,String ContactName,String PhoneNumber, String Email,int SupID)
     {
         this.id=id;
         this.ContactName=ContactName;
@@ -14,9 +18,6 @@ public class Contact {
     }
 
 
-    public void SetId(int id){
-        this.id=id;
-    }
     public int getId() {
         return id;
     }
@@ -35,6 +36,7 @@ public class Contact {
 
     public void setId(int id) {
         this.id = id;
+        updateContact(this);
     }
 
     public void setContactName(String contactName) {
@@ -43,9 +45,26 @@ public class Contact {
 
     public void setPhoneNumber(String phoneNumber) {
         PhoneNumber = phoneNumber;
+        updateContact(this);
     }
 
     public void setEmail(String email) {
         Email = email;
+        updateContact(this);
     }
+
+
+    //==========================================data==========================
+    public void updateContact(Contact contact){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.update(contact,this.SupId)){
+            System.out.println("EROR");
+        }
+
+    }
+
+
+
+
 }

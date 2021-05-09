@@ -3,6 +3,8 @@ package DataLayer.Mappers;
 import BuisnnesLayer.SupplierBuissness.Supplier;
 
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class SuppliersMapper extends Mapper{
     public SuppliersMapper() {
@@ -117,5 +119,29 @@ public class SuppliersMapper extends Mapper{
             throwables.printStackTrace();
         }
         return output;
+    }
+
+
+    public List<Supplier> getALLSupplier() {
+        List<Supplier> obj = new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Suppliers ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int supID = rs.getInt(1);
+                    String supName = rs.getString(2);
+                    String bank = rs.getString(3);
+                    String payment = rs.getString(4);
+                    obj.add(new Supplier(supID,supName,payment, bank));
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return obj;
     }
 }

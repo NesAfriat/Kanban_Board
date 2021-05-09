@@ -26,7 +26,6 @@ public interface ISupplier {
 
     public void setPayment(paymentMethods payment);
 
-    public void setListOfContacts(List<Contact> listOfContacts);
 
     public paymentMethods getPayment();
 

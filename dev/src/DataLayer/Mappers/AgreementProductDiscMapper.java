@@ -46,6 +46,29 @@ public class AgreementProductDiscMapper extends Mapper{
 
 
 
+
+
+       public boolean RemoveQuantityDiscAgreement(int SupId,int catalogId,int quantity) {
+        //TODO compleate
+           return true;
+
+       }
+
+
+      public boolean UpdateQuantityDiscAgreement(int SupId,int catalogId,int quantity,int price) {
+          //TODO compleate
+          return true;
+       }
+
+
+      public HashMap<Integer, HashMap<Integer, Double>> GetAllQuantityDiscAgreementOfSupplier(int SupId, Set<Integer> catalogIdOfAllProduct) {
+//TODO compleate
+          return null;
+      }
+
+
+
+
     public void addQuantityDiscAgreement(Agreement agr){
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM AgreementProductDisc WHERE supID=? ";
@@ -58,8 +81,10 @@ public class AgreementProductDiscMapper extends Mapper{
                     int catalogID = rs.getInt(2);
                     int amount = rs.getInt(3);
                     double price = rs.getDouble(4);
-
                     agr.addDiscountByProductQuantity(catalogID,amount,price);
+
+
+
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

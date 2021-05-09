@@ -1,6 +1,8 @@
 package BuisnnesLayer.SupplierBuissness;
 
+import BuisnnesLayer.IdentityMap;
 import BuisnnesLayer.paymentMethods;
+import DataLayer.DataController;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +22,14 @@ public class Supplier implements ISupplier {
 
 
 
+
     public Supplier(int id, String SupplierName, paymentMethods payment, String BankAccount, int SupplierIdCounter , String contactName, String contactEmail, String phoneNumber)
     {
        this.ContactIdCounter=0;
        this.ListOfContacts  = new ArrayList<Contact>();
-       ListOfContacts.add(new Contact(ContactIdCounter,contactName,contactEmail,phoneNumber));
+       Contact contact=new Contact(ContactIdCounter,contactName,contactEmail,phoneNumber,id);
+       ListOfContacts.add(contact);
+       addContactToSupplierInTheData(contact,id);
        ContactIdCounter++;
        this.id=id;
        this.SupplierName=SupplierName;
@@ -49,19 +54,19 @@ public class Supplier implements ISupplier {
 
     @Override
     public void addNewContact( String contactName, String phoneNumber, String Email) {
-        Contact newContact=new Contact(ContactIdCounter,contactName,phoneNumber,Email);
+        Contact newContact=new Contact(ContactIdCounter,contactName,phoneNumber,Email,id);
         ListOfContacts.add(newContact);
+        addContactToSupplierInTheData(newContact,id);
         incContactIdCounter();
     }
 
     @Override
     public void removeContact(int contactID) {
-        if(ListOfContacts.size()==1){
-            throw new IllegalArgumentException("you cannot deleat this contact its the last contact");
-        }
+
         for (Contact contact:ListOfContacts) {
             if(contact.getId()==contactID){
                 ListOfContacts.remove(contact);
+                RemoveContactToSupplierInTheData(contact,id);
                 return;//ככה יוצאים מפונקציה? אחרת זה יזרוק לנו שגיאה בלי סיבה
             }
         }
@@ -75,8 +80,8 @@ public class Supplier implements ISupplier {
             if(contact.getId()==ContactId){
                 return contact;
             }
-
         }
+        //
         throw new IllegalArgumentException("the contact is not exist");
     }
 
@@ -102,6 +107,7 @@ public class Supplier implements ISupplier {
 
     public void setId(int id) {
         this.id = id;
+        UpdateSupplierInTheData(this);
     }
 
     public String getSupplierName() {
@@ -110,6 +116,8 @@ public class Supplier implements ISupplier {
 
     public void setSupplierName(String supplierName) {
         SupplierName = supplierName;
+        UpdateSupplierInTheData(this);
+
     }
 
     public String getBankAccount() {
@@ -118,6 +126,8 @@ public class Supplier implements ISupplier {
 
     public void setBankAccount(String bankAccount) {
         BankAccount = bankAccount;
+        UpdateSupplierInTheData(this);
+
     }
 
     public paymentMethods getPayment() {
@@ -126,15 +136,67 @@ public class Supplier implements ISupplier {
 
     public void setPayment(paymentMethods payment) {
        this.payment = payment;
+        UpdateSupplierInTheData(this);
+
     }
 
     public List<Contact> getListOfContacts() {
         return ListOfContacts;
     }
 
-    public void setListOfContacts(List<Contact> listOfContacts) {
-        ListOfContacts = listOfContacts;
+//    public void setListOfContacts(List<Contact> listOfContacts) {
+//        ListOfContacts = listOfContacts;
+//
+//    }
+//
+
+
+///=====================================================data=======================================
+
+public void UpdateSupplierInTheData(Supplier supplier){
+    IdentityMap im = IdentityMap.getInstance();
+    DataController dc = DataController.getInstance();
+    if(!dc.update(supplier)){
+        System.out.println("faild");
     }
+}
+
+
+    public void addContactToSupplierInTheData(Contact contact,int SupId){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.insertContact(contact,SupId)){
+            System.out.println("faild");
+        }
+    }
+
+
+
+    public void RemoveContactToSupplierInTheData(Contact contact,int SupId){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.insertContact(contact,SupId)){
+            System.out.println("faild");
+        }
+    }
+
+    //add contact to the supplier from dal when we do get tu supplier
+    public void addContactFromDal(Contact c){
+        IdentityMap im = IdentityMap.getInstance();
+        //CHECK IF ALREADY EXSIST
+        boolean isContactExsist=false;
+        for (Contact con:ListOfContacts
+             ) {
+            if(con.getId()==c.getId()){
+                isContactExsist=true;
+            }
+        }
+        if(!isContactExsist) {
+            im.addContact(c);
+            ListOfContacts.add(c);
+        }
+    }
+
 
 
 

@@ -1,9 +1,12 @@
 package DataLayer.Mappers;
 
+import BuisnnesLayer.Agreement;
 import BuisnnesLayer.OrderBuissness.Order;
 
 import java.sql.*;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
+import java.util.List;
 
 public class OrdersMapper extends Mapper{
     public OrdersMapper() {
@@ -38,6 +41,35 @@ public class OrdersMapper extends Mapper{
             e.printStackTrace();
         }
     }
+
+
+    public List<Order> getAllOrders() {
+        Order obj = null;
+        List<Order> list=new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Orders";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int sup = rs.getInt(1);
+                    int orderID = rs.getInt(2);
+                    String date = rs.getString(3);
+                    double pay = rs.getDouble(4);
+                    int con = rs.getInt(5);
+                    obj = new Order(orderID,sup,date,pay,con);
+                    list.add(obj);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return list;
+    }
+
 
 
     public Order getOrder(int sup_id, int oID) {
@@ -115,7 +147,6 @@ public class OrdersMapper extends Mapper{
     //TODO: make sure the dates are added properly!
     public boolean insertOrder(Order o) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
@@ -138,4 +169,7 @@ public class OrdersMapper extends Mapper{
         }
         return output;
     }
+
+
+
 }

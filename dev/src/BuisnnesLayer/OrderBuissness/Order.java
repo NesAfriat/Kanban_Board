@@ -246,5 +246,13 @@ public class Order {
         }
     }
 
+    //forDAL WHEN WE DO GET
+    public void insertProductToOrderForDal(int CatalogId,int Quantity){
+        if(!productQuantity.containsKey(CatalogId)){
+            productQuantity.put(CatalogId,Quantity);
+        }
+
+    }
+
 
 }

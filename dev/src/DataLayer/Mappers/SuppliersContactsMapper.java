@@ -1,6 +1,7 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.SupplierBuissness.Contact;
+import BuisnnesLayer.SupplierBuissness.Supplier;
 
 import java.sql.*;
 
@@ -47,11 +48,12 @@ public class SuppliersContactsMapper extends Mapper{
                 pstmt.setInt(2, contact_id);
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
+                    int supid=rs.getInt(1);
                     int id = rs.getInt(2);
                     String name = rs.getString(3);
                     String phone = rs.getString(4);
                     String email = rs.getString(5);
-                    obj = new Contact(id,name, phone, email);
+                    obj = new Contact(id,name, phone, email,supid);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -128,6 +130,34 @@ public class SuppliersContactsMapper extends Mapper{
             throwables.printStackTrace();
         }
         return output;
+    }
+
+
+    public Contact addAllContactsToSupplier(Supplier supplier) {
+        Contact obj = null;
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM SuppliersContacts WHERE supID=?";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, supplier.getId());
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int supId=rs.getInt(1);
+                    int id = rs.getInt(2);
+                    String name = rs.getString(3);
+                    String phone = rs.getString(4);
+                    String email = rs.getString(5);
+                    obj = new Contact(id,name, phone, email,supId);
+                    supplier.addContactFromDal(obj);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return obj;
     }
 
 }
