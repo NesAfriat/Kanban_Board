@@ -144,13 +144,10 @@ public class ProductManager {
                 exist=true;
             }
         if(!exist) {
-            Category c = getCategoryFromDAL(category);
-            if(c!=null)
-                exist=true;
+            exist = CheckCategoryExistDAl(category);
         }
         return exist;
     }
-
 
 
     /**
@@ -436,8 +433,12 @@ public class ProductManager {
     private GeneralProduct getGPFromDAL(Integer product_id) throws Exception {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
-        GeneralProduct gp= dc.getGP(product_id);
-        im.addGeneralProduct(gp);
+        GeneralProduct gp;
+        gp=im.getGeneralProduct(product_id);
+        if(gp==null) {
+            gp = dc.getGP(product_id);
+            im.addGeneralProduct(gp);
+        }
         if (!products.containsKey(gp.getProduct_id()))
             products.put(gp.getProduct_id(),gp);
         String cat_name= dc.getGPCategory(gp);
@@ -517,6 +518,25 @@ public class ProductManager {
     private boolean CheckGPExistByName(String prod_name) {
         DataController dc = DataController.getInstance();
         return dc.checkPrductExist(prod_name);
+    }
+
+    private boolean CheckCategoryExistDAl(String category) {
+        boolean found=false;
+        Category cat;
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        cat= im.getCategory(category);
+        if(cat!=null) {
+            found = true;
+        }
+        else {
+            cat = dc.getCategory(category);
+            if (cat != null) {
+                found = true;
+                im.addCategory(cat);
+            }
+        }
+        return found;
     }
 
     private Category getCategoryFromDAL(String category) {
