@@ -19,4 +19,5 @@ public interface Report {
     public String getTimeRange();
 
     public String getReportData();
+
 }

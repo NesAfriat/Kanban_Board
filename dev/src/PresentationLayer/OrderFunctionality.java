@@ -4,7 +4,6 @@ import BuisnnesLayer.FacedeModel.Objects.Response;
 import BuisnnesLayer.FacedeModel.Objects.ResponseT;
 import BuisnnesLayer.FacedeModel.Objects.orderResponse;
 import BuisnnesLayer.FacedeModel.facade;
-import BuisnnesLayer.FacedeModel.facade;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -73,7 +72,9 @@ public class OrderFunctionality {
     public void removeOrder () {
         System.out.println("please type the order id");
         int orderId = NumberType();
-        Response r = facade.removeOrder(orderId);
+        System.out.println("please type the sup id");
+        int supId = NumberType();
+        Response r = facade.removeOrder(orderId, supId);
         if (r.getErrorOccurred()) {
             System.out.println(r.getErrorMsg());
         }
@@ -127,9 +128,10 @@ public class OrderFunctionality {
     public void PrintSpecificOrder(){
         System.out.println("please type the Order id");
         int OrderId=NumberType();
+        System.out.println("please type the sup id");
+        int supId=NumberType();
 
-
-        ResponseT<orderResponse> response=facade.getOrder(OrderId);
+        ResponseT<orderResponse> response=facade.getOrder(OrderId,supId );
 
         if(response.getErrorOccurred()){
             System.out.println(response.getErrorMsg());

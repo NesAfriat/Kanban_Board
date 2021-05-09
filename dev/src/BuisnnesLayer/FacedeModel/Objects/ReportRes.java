@@ -15,7 +15,7 @@ public class ReportRes {
 
     public ReportRes(Report r) {
         this.subject = r.getSubject();
-        this.date = inventModel.getDate(r.getDate());
+        this.date = inventModel.getDate(r.getCreationDate());
         this.reportID = r.getReportID();
         this.categories = r.getCategories();
         this.timeRange = r.getTimeRange();

@@ -1,7 +1,7 @@
 package BuisnnesLayer;
 
 import DataLayer.DataController;
-import DataLayer.Mappers.DataController;
+import DataLayer.DataController;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -79,7 +79,7 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product do not have discount with this quantity");
         }
         DiscountByProductQuantity.get(CatalogId).remove(Quantiti);
-        disc(this);
+//        disc(this); //TODO: what is this supposed to be?
 
     }
     public void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery,int numOfDaysFromOrder) {
@@ -221,14 +221,14 @@ public class Agreement implements IAgreement {
         }
         im.removerProductSupplier(productSupplier);
     }
-
-    private void AddDiscountByProductInTheData(){
-        IdentityMap im = IdentityMap.getInstance();
-        DataController dc = DataController.getInstance();
-        if (!dc.(productSupplier,SupplierID)) {
-            System.out.println("failed to Remove Prudact to the database");
-        }
-    }
+    //TODO - please uncommit this later when its done
+//    private void AddDiscountByProductInTheData(){
+//        IdentityMap im = IdentityMap.getInstance();
+//        DataController dc = DataController.getInstance();
+//        if (!dc.(productSupplier,SupplierID)) {
+//            System.out.println("failed to Remove Prudact to the database");
+//        }
+//    }
 
     public void setDeliveryDays(HashMap<Integer, ProductSupplier> deliveryDays) {
         this.daysOfDelivery=daysOfDelivery;

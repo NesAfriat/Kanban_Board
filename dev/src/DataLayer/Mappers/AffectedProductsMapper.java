@@ -19,7 +19,7 @@ public class AffectedProductsMapper extends Mapper{
             String AffectedProductsTable = "CREATE TABLE IF NOT EXISTS AffectedProducts(\n" +
                     "\tsaleID INTEGER,\n"+
                     "\tgpName TEXT ,\n"+
-                    "\tPRIMARY KEY (saleID,gpID),\n"+
+                    "\tPRIMARY KEY (saleID,gpName),\n"+
                     "\tFOREIGN KEY (saleID) REFERENCES Sales(saleID),\n"+
                     "\tFOREIGN KEY (gpName) REFERENCES GeneralProducts(gpName)\n"+
                     ");";
