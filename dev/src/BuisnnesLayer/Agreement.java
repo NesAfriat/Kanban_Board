@@ -15,6 +15,7 @@ public class Agreement implements IAgreement {
     private DeliveryMode deliveryMods ;
     private List<Integer> daysOfDelivery;
     private int numOfDaysFromOrder;
+    public boolean isallProductLoaded=false;
 
     public Agreement(int SupplierID , DeliveryMode delivery,List<Integer> daysOfDelivery,int numOfDaysFromOrder) {
         this.SupplierID = SupplierID;
@@ -23,7 +24,6 @@ public class Agreement implements IAgreement {
         this.numOfDaysFromOrder = numOfDaysFromOrder;
         this.daysOfDelivery = daysOfDelivery;
         DiscountByProductQuantity = new HashMap<>(new HashMap<>());
-        add_to_data(this);
     }
 
 
@@ -79,14 +79,14 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product do not have discount with this quantity");
         }
         DiscountByProductQuantity.get(CatalogId).remove(Quantiti);
-        update(this);
+        disc(this);
 
     }
     public void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery,int numOfDaysFromOrder) {
         this.deliveryMods=deliveryMods;
         this.daysOfDelivery=daysOfDelivery;
         this.numOfDaysFromOrder=numOfDaysFromOrder;
-        update(this);
+        updateAgreementInTheData(this);
 
     }
 
@@ -98,9 +98,9 @@ public class Agreement implements IAgreement {
         if(Price<0){
             throw new IllegalArgumentException("the Price is Illegal");
         }
-        ProductSupplier productSupplier=new ProductSupplier(Price,CatalogID,idProductCounter,name);
+        ProductSupplier productSupplier=new ProductSupplier(Price,CatalogID,idProductCounter,name,SupplierID);
         products.put(CatalogID,productSupplier);
-        InsertProduct(productSupplier);
+        InsertProductToAgreementInTheData(productSupplier);
         return productSupplier;
     }
 
@@ -110,7 +110,7 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product is not exist");
         }
 
-        RemoveProduct(products.remove(CatalogID));
+        RemoveProductFromAgreementInTheData(products.remove(CatalogID));
         if (DiscountByProductQuantity.containsKey(CatalogID)){
         DiscountByProductQuantity.remove(CatalogID);
     }
@@ -129,14 +129,13 @@ public class Agreement implements IAgreement {
         }
 
          (DiscountByProductQuantity.get(CatalogID)).put(quantity,newPrice );
-        update(this);
 
     }
     public void SetExtraDiscount(int ExtraDiscount)
     {
         if (ExtraDiscount<0|ExtraDiscount>100)throw new IllegalArgumentException("Illegal Discount, the Discount need to be between 0-100 %");
         this.ExtraDiscount=ExtraDiscount;
-        update(this);
+        updateAgreementInTheData(this);
 
     }
 
@@ -152,7 +151,6 @@ public class Agreement implements IAgreement {
         if (price<0)throw new IllegalArgumentException("Illegal price, the price need to be positive!");
 
         (products.get(CatalogID)).setPrice(price);
-        UpdateProduct(products.get(CatalogID));
     }
 
     public HashMap<Integer, HashMap<Integer, Double>> getDiscountByProductQuantity() {
@@ -185,24 +183,25 @@ public class Agreement implements IAgreement {
     public int getNumOfDaysFromOrder() {
         return numOfDaysFromOrder;
     }
+
+
+
+
+
 ////////////////////////////////DATA Functions////////////////////////////////
-    private void update(Agreement agreement) {
+
+
+
+    private void updateAgreementInTheData(Agreement agreement) {
         //IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.update(agreement)) {
+        if (!dc.updateAgreemnent(agreement)) {
             System.out.println("failed to update new Agreement to the database");
         }
-    }
-    private void add_to_data(Agreement agreement) {
-        IdentityMap im = IdentityMap.getInstance();
-        DataController dc = DataController.getInstance();
-        if (!dc.insertAgreement(agreement)) {
-            System.out.println("failed to update new Agreement to the database");
-        }
-        im.addAgreement(agreement);
     }
 
-    private void InsertProduct(ProductSupplier productSupplier) {
+
+    private void InsertProductToAgreementInTheData(ProductSupplier productSupplier) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if (!dc.insetPS(productSupplier,SupplierID)) {
@@ -210,51 +209,59 @@ public class Agreement implements IAgreement {
         }
         im.addPS(productSupplier);
     }
-    private void UpdateProduct(ProductSupplier productSupplier) {
+
+
+
+
+    private void RemoveProductFromAgreementInTheData(ProductSupplier productSupplier) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.update(productSupplier,SupplierID)) {
-            System.out.println("failed to add productSupplier to the database");
-        }
-//        im.update(productSupplier);// todo : way isnt update methods in IdentityMap? Idan - cuz it suppose to be the same Object
-    }
-    private void RemoveProduct(ProductSupplier productSupplier) {
-        IdentityMap im = IdentityMap.getInstance();
-        DataController dc = DataController.getInstance();
-        if (!dc.delete(productSupplier,SupplierID)) {
+        if (!dc.deleteProducrSupplier(productSupplier,SupplierID)) {
             System.out.println("failed to Remove Prudact to the database");
         }
-        im.delete(productSupplier);// todo : way isnt delete methods in IdentityMap? idan - we didnt add it yet
+        im.removerProductSupplier(productSupplier);
     }
 
-    //DiscountByProductQuantity
-    private void addDiscountByProductQuantity(Agreement agreement) {
+    private void AddDiscountByProductInTheData(){
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.insertAgreement(agreement)) {
-            System.out.println("failed to update new Agreement to the database");
+        if (!dc.(productSupplier,SupplierID)) {
+            System.out.println("failed to Remove Prudact to the database");
         }
-        im.addAgreement(agreement);
-    }
-    //for Dal - load from DB
-    public void addSupplierProduct(ProductSupplier ps) {
-        products.put(ps.getCatalogID(),ps);
-    }
-    //for Dal - load from DB
-    public void addDiscountByProductQuantity(int catalogID, int quantity, double newPrice){
-        if (!DiscountByProductQuantity.containsKey(catalogID)) {
-            DiscountByProductQuantity.put(catalogID, new HashMap<Integer, Double>());
-        }
-
-        (DiscountByProductQuantity.get(catalogID)).put(quantity,newPrice );
     }
 
-    //for Dal - load from DB
-    public void addDeliveryDay(int day) {
-        if(!daysOfDelivery.contains(day)){
-            daysOfDelivery.add(day);
-        }
+    public void setDeliveryDays(HashMap<Integer, ProductSupplier> deliveryDays) {
+        this.daysOfDelivery=daysOfDelivery;
     }
+
+    public void setDiscountByQuantityHash(HashMap<Integer, HashMap<Integer, Double>> disc) {
+        this.DiscountByProductQuantity=disc;
+    }
+
+
+//    //for Dal - load from DB
+//    public void addSupplierProduct(ProductSupplier ps) {
+//        products.put(ps.getCatalogID(),ps);
+//    }
+//
+//    //for Dal - load from DB
+//    public void addDiscountByProductQuantity(int catalogID, int quantity, double newPrice){
+//        if (!DiscountByProductQuantity.containsKey(catalogID)) {
+//            DiscountByProductQuantity.put(catalogID, new HashMap<Integer, Double>());
+//        }
+//
+//        (DiscountByProductQuantity.get(catalogID)).put(quantity,newPrice );
+//    }
+//
+//
+//    //for Dal - load from DB
+//    public void addDeliveryDay(int day) {
+//        if(!daysOfDelivery.contains(day)){
+//            daysOfDelivery.add(day);
+//        }
+//    }
+
+
 /*
     public void AddDaysOfDelivery(int day)
     {

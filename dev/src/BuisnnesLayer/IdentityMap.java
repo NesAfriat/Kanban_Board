@@ -404,4 +404,16 @@ public class IdentityMap {
         output = salesList.remove(sale);
         return output;
     }
+
+    //================================================productSupplier================================================
+    public boolean removerProductSupplier(ProductSupplier ps){
+        for (ProductSupplier p:productSuppliersList
+             ) {
+            if(p==ps){
+                productSuppliersList.remove(ps);
+                return true;
+            }
+        }
+        return false;
+    }
 }

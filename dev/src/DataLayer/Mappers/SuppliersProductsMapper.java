@@ -7,7 +7,7 @@ import BuisnnesLayer.ProductSupplier;
 import java.sql.*;
 import java.util.LinkedList;
 
-public class SuppliersProductsMapper extends Mapper{
+public class SuppliersProductsMapper extends Mapper {
     public SuppliersProductsMapper() {
         super();
         create_table();
@@ -54,12 +54,14 @@ public class SuppliersProductsMapper extends Mapper{
 
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
+                    int Supplierid = rs.getInt(1);
+
                     int catalogID = rs.getInt(2);
                     int gpID = rs.getInt(3);
                     String name = rs.getString(4);
                     double price = rs.getDouble(5);
 
-                    obj = new ProductSupplier(price,catalogID,gpID,name);
+                    obj = new ProductSupplier(price, catalogID, gpID, name, Supplierid);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -70,7 +72,7 @@ public class SuppliersProductsMapper extends Mapper{
         return obj;
     }
 
-    public boolean update(ProductSupplier ps,int sup_id) {
+    public boolean update(ProductSupplier ps, int sup_id) {
         boolean updated = false;
         try (Connection conn = connect()) {
             String statement = "UPDATE SuppliersProducts SET supID=?, catalogID=?, gpID=?, name=?, price=? WHERE supID=? AND catalogID=? ";
@@ -102,7 +104,7 @@ public class SuppliersProductsMapper extends Mapper{
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, sup_id);
-                pstmt.setInt(1,ps.getCatalogID());
+                pstmt.setInt(1, ps.getCatalogID());
                 deleted = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -114,7 +116,7 @@ public class SuppliersProductsMapper extends Mapper{
     }
 
     //TODO: make sure the dates are added properly!
-    public boolean insertProduct(ProductSupplier ps,int sup_id) {
+    public boolean insertProduct(ProductSupplier ps, int sup_id) {
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
@@ -138,7 +140,7 @@ public class SuppliersProductsMapper extends Mapper{
         return output;
     }
 
-    public LinkedList<ProductSupplier> addPStoProduct(GeneralProduct gp){
+    public LinkedList<ProductSupplier> addPStoProduct(GeneralProduct gp) {
         LinkedList<ProductSupplier> output = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM SuppliersProducts WHERE gpID=? ";
@@ -147,13 +149,14 @@ public class SuppliersProductsMapper extends Mapper{
                 pstmt.setInt(1, gp.getProduct_id());
 
                 ResultSet rs = pstmt.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
+                    int Supplierid = rs.getInt(1);
                     int catalogID = rs.getInt(2);
                     int gpID = rs.getInt(3);
                     String name = rs.getString(4);
                     double price = rs.getDouble(5);
 
-                    ProductSupplier ps = new ProductSupplier(price,catalogID,gpID,name);
+                    ProductSupplier ps = new ProductSupplier(price, catalogID, gpID, name, Supplierid);
                     gp.addSupplierProduct(ps);
                     output.add(ps);
                 }
@@ -165,7 +168,8 @@ public class SuppliersProductsMapper extends Mapper{
         }
         return output;
     }
-    public LinkedList<ProductSupplier> addPStoAgreement(Agreement agr){
+
+    public LinkedList<ProductSupplier> addPStoAgreement(Agreement agr) {
         LinkedList<ProductSupplier> output = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM SuppliersProducts WHERE supID=? ";
@@ -174,14 +178,15 @@ public class SuppliersProductsMapper extends Mapper{
                 pstmt.setInt(1, agr.getSupplierID());
 
                 ResultSet rs = pstmt.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
+                    int Supplierid = rs.getInt(1);
+
                     int catalogID = rs.getInt(2);
                     int gpID = rs.getInt(3);
                     String name = rs.getString(4);
                     double price = rs.getDouble(5);
 
-                    ProductSupplier ps = new ProductSupplier(price,catalogID,gpID,name);
-                    agr.addSupplierProduct(ps);
+                    ProductSupplier ps = new ProductSupplier(price, catalogID, gpID, name, Supplierid);
                     output.add(ps);
                 }
             } catch (SQLException e) {
@@ -190,6 +195,8 @@ public class SuppliersProductsMapper extends Mapper{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        agr.isallProductLoaded=true;
         return output;
+
     }
 }

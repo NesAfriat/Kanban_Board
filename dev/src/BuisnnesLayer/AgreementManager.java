@@ -1,5 +1,7 @@
 package BuisnnesLayer;
 
+import DataLayer.DataController;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class AgreementManager {
 
     public void AddNewAgreement(IAgreement agreement) {
         SupplierAgreement.put(agreement.getSupplierID(), agreement);
+        add_to_data_agreement((Agreement)agreement);
 
     }
 
@@ -39,10 +42,10 @@ public class AgreementManager {
                 for (Integer i : HashOfSupplierProducts.keySet()){
                      productSupplier=(HashOfSupplierProducts.get(i));
                 if (cheapest_supplier==-1){
-                    cheapest_supplier=(SupplierAgreement.get(SupplierId)).Calculate_cost(productSupplier,lackMap.get(generalProduct));
+                    cheapest_supplier=(GetAgreement(SupplierId)).Calculate_cost(productSupplier,lackMap.get(generalProduct));
                 }
                 else
-                    cheapest_supplier=Math.min(cheapest_supplier,(SupplierAgreement.get(SupplierId)).Calculate_cost(productSupplier,lackMap.get(generalProduct)));
+                    cheapest_supplier=Math.min(cheapest_supplier,(GetAgreement(SupplierId)).Calculate_cost(productSupplier,lackMap.get(generalProduct)));
                 }
                 if (old_cheapest_supplier!=cheapest_supplier)
                 {
@@ -68,21 +71,33 @@ public class AgreementManager {
 
     public void AddNewAgreement(int id, DeliveryMode deliveryMode, List<Integer> daysOfDelivery, int NumOfDaysFromDelivery) {
         idProductCounter++;
-        SupplierAgreement.put(id,new Agreement(id,deliveryMode,daysOfDelivery,NumOfDaysFromDelivery));
+        Agreement agreement=new Agreement(id,deliveryMode,daysOfDelivery,NumOfDaysFromDelivery);
+        SupplierAgreement.put(id,agreement);
+        add_to_data_agreement(agreement);
     }
 
+    //ok Data
     public IAgreement GetAgreement(int SupplierId) {
         if(!isSupplierExist(SupplierId)){
-            throw new IllegalArgumentException("the Supplier IS nOT exsist");
+            IAgreement AG=get_froM_data_Agreement(SupplierId);
+            if(AG==null)
+                throw new IllegalArgumentException("the Supplier IS nOT exsist");
+            return  AG;
         }
         return SupplierAgreement.get(SupplierId);
 
     }
-    public IAgreement RemoveAgreement(int SupplierId) {
 
-        return SupplierAgreement.remove(SupplierId);
+    //ok data
+    public IAgreement RemoveAgreement(int SupplierId) {
+     Agreement agreement= (Agreement)GetAgreement(SupplierId);
+        SupplierAgreement.remove(SupplierId);
+        remove_from_data_agreement(agreement);
+     return agreement;
 
     }
+
+
 
     //task 2 shinuyim hear!!!!
     //String product_name, Integer product_id, String manufacturer_name, Integer min_amount, Double cost_price, String cat, Double selling_price
@@ -103,11 +118,11 @@ public class AgreementManager {
                 throw new IllegalArgumentException("the genaral product not exsist");
             }
             //TODO with daniels code there is a problem when adding an item which exist in the stock to a supplier - another catagory is created
-            ProductSupplier productSupplier=(SupplierAgreement.get(SupplierId)).AddPrudact(Price,CatalogID,product_id,productManager.get_product(product_id).getProduct_name());
+            ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,product_id,productManager.get_product(product_id).getProduct_name());
             productManager.AddProductSupplierToProductGeneral(productSupplier,product_id);
         }
         else{
-            ProductSupplier productSupplier=(SupplierAgreement.get(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
+            ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
             productManager.addProduct(product_name,idProductCounter,manufacture_name,-1,cat,-1.0,productSupplier);
         idProductCounter++;
         }
@@ -125,8 +140,51 @@ public class AgreementManager {
 
 
     public boolean isSupplierExist(Integer suplplierId){
-        return SupplierAgreement.containsKey(suplplierId);
+        IAgreement agreement=GetAgreement(suplplierId);
+        if(agreement!=null){
+            return true;
+        }
+        return false;
    }
+
+
+/////////=========================================================DATA
+
+    private void add_to_data_agreement(Agreement agreement) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.insertAgreement(agreement)) {
+            System.out.println("failed to update new Agreement to the database");
+        }
+        im.addAgreement(agreement);
+    }
+
+
+    private  void remove_from_data_agreement(Agreement agreement){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.deleteAreementFronData(agreement)){
+            System.out.println("failed to update new Agreement to the database");
+        }
+    }
+
+
+    private Agreement get_froM_data_Agreement(int Supid){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+
+        Agreement agreement=im.getAgreement(Supid);
+        if(agreement!=null){
+            return agreement;
+        }
+        else {
+            agreement=dc.getAgreement(Supid);
+            if(agreement==null){
+                throw new IllegalArgumentException("canot get agrement from the data");
+            }
+            return agreement;
+        }
+    }
 }
  //   public void ReplaceAgreement(int SupplierId,IAgreement agreement){
    //     SupplierAgreement.put(SupplierId,agreement);

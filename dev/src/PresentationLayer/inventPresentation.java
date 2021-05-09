@@ -21,7 +21,7 @@ public class inventPresentation {
         String inputs;
 
         public inventPresentation() {
-            Facade = BuisnnesLayer.FacedeModel.facade.getInstance();
+            Facade = facade.getInstance();
             reader = new BufferedReader(new InputStreamReader(System.in));
 
         }

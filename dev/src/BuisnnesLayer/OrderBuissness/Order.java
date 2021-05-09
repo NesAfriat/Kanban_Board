@@ -80,7 +80,7 @@ public class Order {
         }
         productQuantity.put(productCatalogID, quantity);
         this.TotalPayment = CalculateTotalPayment(this.productQuantity, agreement);
-        add_Product(this.id, productCatalogID,quantity);
+        add_ProductToOrder(this.id, productCatalogID,quantity);// data
     }
 
 
@@ -100,7 +100,7 @@ public class Order {
         System.out.println("CatalogID::::" + CatalogID);
         productQuantity.remove(CatalogID);
         this.TotalPayment = CalculateTotalPayment(this.productQuantity, agreement);
-        removeProduct(this.id, CatalogID);
+        removeProduct(this.id, CatalogID); //data
     }
 
 
@@ -114,7 +114,7 @@ public class Order {
         }
         productQuantity.replace(CatalogID, quantity);
         CalculateTotalPayment(this.productQuantity, agreement);
-        updateProduct(this.id, CatalogID,quantity);
+        updateProductQuantity(this.id, CatalogID,quantity);//data
     }
 
     public double GetTotalPayment() {
@@ -197,6 +197,9 @@ public class Order {
         cal.setTime(date);
         return cal.get(Calendar.DAY_OF_WEEK);
     }
+
+
+
 ////////////////////////////////DATA Functions////////////////////////////////
 
     private void add_to_data(Order order) {
@@ -211,35 +214,37 @@ public class Order {
     private void update(Order order) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.update(this)) {
+        if (!dc.updateOrder(order)) {
             System.out.println("failed to update  Order  to the database with the keys");
         }
-        im.addOrder(order);
     }
-    private void updateProduct(int orderId,int catalogID,int quantity) {
+
+
+    private void updateProductQuantity(int orderId,int catalogID,int quantity) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.updateProduct(orderId,catalogID,quantity)) {
+        if (!dc.updateProductInOrder(orderId,catalogID,quantity)) {
             System.out.println("failed to update Product Order  to the database ");
         }
-        im.addOrder(??);
     }
+
     //        removeProduct(this.id, CatalogID);
     private void removeProduct(int orderId,int catalogID) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.removeProduct(orderId,catalogID)) {
+        if (!dc.removeProductFromORder(orderId,catalogID)) {
             System.out.println("failed to remove Product Order  to the database ");
         }
-        im.addOrder(??);
+
     }
     //insertProduct
-    private void add_Product(int orderId,int catalogID,int quantity) {
+    private void add_ProductToOrder(int orderId,int catalogID,int quantity) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if (!dc.insetProduct(orderId,catalogID,quantity)) {
-            System.out.println("failed to insert Order to the database with the keys");
+            System.out.println("failed to insert product to the database with the keys");
         }
-        im.addOrder(order);
     }
+
+
 }
