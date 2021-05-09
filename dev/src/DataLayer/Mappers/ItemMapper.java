@@ -157,7 +157,7 @@ public class ItemMapper extends Mapper {
                     String sup_date = rs.getString(4);
                     String create_date = rs.getString(5);
                     String exp_date = rs.getString(6);
-                    Item toAdd = new Item(gpID, iID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
+                    Item toAdd = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
                     gp.addItem(toAdd);
                     output.add(toAdd);
                 }

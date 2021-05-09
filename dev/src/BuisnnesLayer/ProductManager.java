@@ -42,6 +42,7 @@ public class ProductManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesn't exist!");
         }
+        get_product(product_id);
         Item item = products.get(product_id).setItem_defected(item_id);
         return item;
     }
@@ -192,7 +193,7 @@ public class ProductManager {
                 categories.get(cat).remove(toRemove);
     }
 
-
+    //remove from the Dal but returned error!
     public void remove_category(String cat_name) throws Exception { //DONE
         if (!isCategory_in_Categories(cat_name)) {
             throw new Exception("category doesnt exist");
