@@ -147,10 +147,10 @@ public class IdentityMap {
         for(Category c:categoryList) {
             if (category.getCategory_name().equals(c.getCategory_name()))
                 isIN = true;
+        }
             if (!isIN)
                 categoryList.add(category);
         }
-    }
 
     //if this function return null - go to the db
     public Category getCategory(String cat) {
@@ -165,7 +165,7 @@ public class IdentityMap {
     public Category removeCategory(Category category) {
         Category output = null;
         for (Category cat : categoryList) {
-            if (cat.getCategory_name().equals(category)) {
+            if (cat.getCategory_name().equals(category.getCategory_name())) {
                 output = cat;
                 categoryList.remove(cat);
             }

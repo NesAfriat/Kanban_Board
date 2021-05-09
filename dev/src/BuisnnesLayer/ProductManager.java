@@ -199,7 +199,7 @@ public class ProductManager {
         }
         Category father = getCategory(cat_name).removed();
         Category removed = removeCategoryPersistence(getCategory(cat_name));
-        LinkedList<GeneralProduct> products = categories.remove(removed);
+        LinkedList<GeneralProduct> products = categories.remove(getCategory(removed.getCategory_name()));
         categories.get(father).addAll(products);
     }
 
@@ -475,7 +475,7 @@ public class ProductManager {
         Category removed;
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
-        removed = im.removeCategory(toRemove);
+        removed=im.removeCategory(toRemove);
         dc.delete(toRemove);
         return removed;
     }
