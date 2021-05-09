@@ -435,8 +435,12 @@ public class ProductManager {
     private GeneralProduct getGPFromDAL(Integer product_id) throws Exception {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
-        GeneralProduct gp= dc.getGP(product_id);
-        im.addGeneralProduct(gp);
+        GeneralProduct gp;
+        gp=im.getGeneralProduct(product_id);
+        if(gp==null) {
+            gp = dc.getGP(product_id);
+            im.addGeneralProduct(gp);
+        }
         if (!products.containsKey(gp.getProduct_id()))
             products.put(gp.getProduct_id(),gp);
         String cat_name= dc.getGPCategory(gp);
