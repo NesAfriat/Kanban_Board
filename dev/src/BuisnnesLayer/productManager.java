@@ -443,15 +443,15 @@ public class productManager {
         }
         im.addGeneralProduct(prod);
     }
-<<<<<<< HEAD
+
     private void removeGP(GeneralProduct product) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         product.removeItems();
         im.removeGeneralProd(product.getProduct_id());
         dc.delete(product);
+    }
 
-=======
     private boolean getCategoryFromDAL(String category) {
         boolean found=false;
         IdentityMap im = IdentityMap.getInstance();
@@ -470,6 +470,5 @@ public class productManager {
             }
         }
     return found;
->>>>>>> daniSupStock
     }
 }
