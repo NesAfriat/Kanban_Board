@@ -28,6 +28,8 @@ public class ProductManager {
     public Category getCategory(String cat) throws Exception {  //DONE
         if (!isCategory_in_Categories(cat))
             throw new Exception("there no such category");
+        else
+            getCategoryFromDAL(cat);
         for (Category c : categories.keySet())
             if (c.getCategory_name().equals(cat)) {
                 return c;
@@ -56,17 +58,6 @@ public class ProductManager {
         return output;
     }
 
-    public HashMap<Category, LinkedList<GeneralProduct>> getAllCategoriesProducts() { //DONE
-        if (!loadCategories) {
-            loadAllCategories();
-            loadCategories = true;
-        }
-        if(!loadProducts) {
-            loadAllProducts();
-            loadProducts=true;
-        }
-        return categories;
-    }
 
     /**
      * add a new product to the stock
@@ -413,10 +404,15 @@ public class ProductManager {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
         LinkedList<Category> categoriesList = dc.loadAllCategoreis();
-        for (Category c : categoriesList) {
-            im.addCategory(c);
-            if (!categories.containsKey(c))
-                categories.put(c, new LinkedList<>());
+        for (Category cDAL : categoriesList) {
+            im.addCategory(cDAL);
+            boolean loaded=false;
+            for(Category cBL: categories.keySet()) {
+                if (cBL.getCategory_name().equals(cDAL.getCategory_name()))
+                    loaded = true;
+            }
+            if(!loaded)
+                categories.put(cDAL, new LinkedList<>());
         }
     }
     private void loadAllProducts() {
@@ -546,13 +542,11 @@ public class ProductManager {
         DataController dc = DataController.getInstance();
         cat= im.getCategory(category);
         if(cat!=null) {
-            found = true;
             categories.put(cat,new LinkedList<>());
         }
        else {
             cat = dc.getCategory(category);
             if (cat != null) {
-                found = true;
                 categories.put(cat,new LinkedList<>());
                 im.addCategory(cat);
             }

@@ -144,11 +144,12 @@ public class IdentityMap {
 
     public void addCategory(Category category) {
         boolean isIN=false;
-        for(Category c:categoryList)
-            if(category.getCategory_name().equals(c.getCategory_name()))
-                isIN=true;
-        if(!isIN)
-            categoryList.add(category);
+        for(Category c:categoryList) {
+            if (category.getCategory_name().equals(c.getCategory_name()))
+                isIN = true;
+            if (!isIN)
+                categoryList.add(category);
+        }
     }
 
     //if this function return null - go to the db
