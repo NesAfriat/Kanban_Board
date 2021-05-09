@@ -32,9 +32,11 @@ public class ShiftController {
     public  List<Worker> getWorkersInShiftByJob(String date, String shiftType, String job) throws InnerLogicException {
         WorkDay workDay = calendar.getWorkDay(date);
         if (workDay == null){
-            throw new InnerLogicException("There's no WorkDay at date: " + date);
+            return new LinkedList<>();
         }
         Shift shift = workDay.getShift(WorkersUtils.parseShiftType(shiftType));
+        if (shift == null)
+            return new LinkedList<>();
         return shift.getCurrentWorkers(WorkersUtils.parseJob(job));
     }
 

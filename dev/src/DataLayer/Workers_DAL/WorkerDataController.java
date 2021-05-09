@@ -822,22 +822,26 @@ public class WorkerDataController {
     private void initWorkersInShifts() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String statement = "INSERT INTO Workers_In_Shift (Worker_ID,Date,ShiftType,Job) VALUES" +
-                " ('000000006',?,'Morning','Cashier'), " +
-                "('000000007',?,'Morning','Cashier'), " +
-                "('000000008',?,'Morning','Storekeeper'), " +
-                "('000000014',?,'Morning','Guard'), " +
-                "('000000004',?,'Morning','Shift_Manager'), " +
-                "('000000010',?,'Morning','DriverA'), " +
-                "('000000011',?,'Morning','DriverB'), " +
-                "('000000012',?,'Morning','DriverC'), " +
-                " ('000000006',?,'Morning','Cashier'), " +
-                "('000000007',?,'Morning','Cashier'), " +
-                "('000000008',?,'Morning','Storekeeper'), " +
-                "('000000014',?,'Morning','Guard'), " +
-                "('000000004',?,'Morning','Shift_Manager'), " +
-                "('000000010',?,'Morning','DriverA'), " +
-                "('000000011',?,'Morning','DriverB'), " +
-                "('000000012',?,'Morning','DriverC');";
+                " ('100000006',?,'Morning','Cashier'), " +
+                "('100000007',?,'Morning','Cashier'), " +
+                "('100000008',?,'Morning','Storekeeper'), " +
+                "('100000014',?,'Morning','Guard'), " +
+                "('100000004',?,'Morning','Shift_Manager'), " +
+                "('100000010',?,'Morning','DriverA'), " +
+                "('100000011',?,'Morning','DriverB'), " +
+                "('100000012',?,'Morning','DriverC'), " +
+                " ('100000006',?,'Morning','Cashier'), " +
+                "('100000007',?,'Morning','Cashier'), " +
+                "('100000008',?,'Morning','Storekeeper'), " +
+                "('100000014',?,'Morning','Guard'), " +
+                "('100000004',?,'Morning','Shift_Manager'), " +
+                "('100000010',?,'Morning','DriverA'), " +
+                "('100000011',?,'Morning','DriverB'), " +
+                "('100000012',?,'Morning','DriverC'), " +
+                "('100000009',?,'Evening','Storekeeper'), "  +
+                "('100000005',?,'Evening','Shift_Manager')," +
+                "('100000009',?,'Evening','Storekeeper'), " +
+                "('100000003',?,'Evening','Shift_Manager')";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
@@ -857,7 +861,10 @@ public class WorkerDataController {
             pstmt.setString(14, LocalDate.now().plusDays(1).format(formatter));
             pstmt.setString(15, LocalDate.now().plusDays(1).format(formatter));
             pstmt.setString(16, LocalDate.now().plusDays(1).format(formatter));
-
+            pstmt.setString(17, LocalDate.now().format(formatter));
+            pstmt.setString(18, LocalDate.now().format(formatter));
+            pstmt.setString(19, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(20, LocalDate.now().plusDays(1).format(formatter));
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -882,9 +889,9 @@ public class WorkerDataController {
             pstmt.setString(2, LocalDate.now().format(formatter));
             pstmt.setString(3, LocalDate.now().plusDays(1).format(formatter));
             pstmt.setString(4, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(5, LocalDate.now().plusDays(3).format(formatter));
-            pstmt.setString(6, LocalDate.now().plusDays(3).format(formatter));
-            pstmt.setString(7, LocalDate.now().plusDays(5).format(formatter));
+            pstmt.setString(5, LocalDate.now().plusDays(2).format(formatter));
+            pstmt.setString(6, LocalDate.now().plusDays(2).format(formatter));
+            pstmt.setString(7, LocalDate.now().plusDays(3).format(formatter));
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -945,30 +952,30 @@ public class WorkerDataController {
 
     private void initOccupationData(){
         String statement = "INSERT INTO Occupation (Worker_ID,Job) VALUES "+
-        "('000000009','Cashier'), " +
-        "('000000009','Storekeeper'), " +
-        "('000000009','Usher'), " +
-        "('000000008','Cashier'), " +
-        "('000000008','Storekeeper'), " +
-        "('000000003','Shift_Manager'), " +
-        "('000000014','Guard'), " +
-        "('000000002','Shift_Manager'), " +
-        "('000000013','Guard'), " +
-        "('000000001','HR_Manager'), " +
-        "('000000012','Guard'), " +
-        "('000000012','Usher'), " +
-        "('000000011','Storekeeper'), " +
-        "('000000011','Usher'), " +
-        "('000000007','Cashier'), " +
-        "('000000006','Cashier')," +
-        " ('000000005','Shift_Manager'), " +
-        "('000000004','Shift_Manager'), " +
-        "('000000010','Cashier')," +
-        " ('000000010','Storekeeper'), " +
-        "('000000010','Usher'), " +
-        "('000000010','DriverA'), " +
-        "('000000011','DriverB'), " +
-        "('000000012','DriverC');";
+        "('100000009','Cashier'), " +
+        "('100000009','Storekeeper'), " +
+        "('100000009','Usher'), " +
+        "('100000008','Cashier'), " +
+        "('100000008','Storekeeper'), " +
+        "('100000003','Shift_Manager'), " +
+        "('100000014','Guard'), " +
+        "('100000002','Shift_Manager'), " +
+        "('100000013','Guard'), " +
+        "('100000001','HR_Manager'), " +
+        "('100000012','Guard'), " +
+        "('100000012','Usher'), " +
+        "('100000011','Storekeeper'), " +
+        "('100000011','Usher'), " +
+        "('100000007','Cashier'), " +
+        "('100000006','Cashier')," +
+        " ('100000005','Shift_Manager'), " +
+        "('100000004','Shift_Manager'), " +
+        "('100000010','Cashier')," +
+        " ('100000010','Storekeeper'), " +
+        "('100000010','Usher'), " +
+        "('100000010','DriverA'), " +
+        "('100000011','DriverB'), " +
+        "('100000012','DriverC');";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
@@ -980,11 +987,11 @@ public class WorkerDataController {
 
     private void initConstraintData(){
         String statement = "INSERT INTO Constraints (Worker_ID,Date,ShiftType,ConstraintType) VALUES" +
-                " ('000000002','21/05/2021','Morning','Cant')," +
-                " ('000000002','21/09/2021','Evening','Cant')," +
-                " ('000000002','22/09/2021','Morning','Cant')," +
-                " ('000000002','22/09/2021','Evening','Cant')," +
-                " ('000000003','22/09/2021','Morning','Cant');";
+                " ('100000002','21/09/2021','Morning','Cant')," +
+                " ('100000002','21/09/2021','Evening','Cant')," +
+                " ('100000002','22/09/2021','Morning','Cant')," +
+                " ('100000002','22/09/2021','Evening','Cant')," +
+                " ('100000003','22/09/2021','Morning','Cant');";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
@@ -997,20 +1004,20 @@ public class WorkerDataController {
     private void initWorkerData(){
         String statement = "INSERT INTO Worker (ID,Name,BankAccount,Salary,EducationFund,vacationDaysPerMonth,sickDaysPerMonth,startWorkingDate,endWorkingDate)" +
                 " VALUES " +
-                "('000000009','ronen','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000008','ronen','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000003','kobi','1',1.0,'1',1,1,'01/01/2021',NULL), " +
-                "('000000014','meni','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000002','avi','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000013','micha','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000001','dan','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000012','eliad','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000011','dolev','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000007','shaol','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000006','moti','1',1.0,'1',1,1,'01/01/2016',NULL), " +
-                "('000000005','eli','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000004','moshe','1',1.0,'1',1,1,'01/01/2018',NULL), " +
-                "('000000010','moshe','1',1.0,'1',1,1,'01/01/2018',NULL);";
+                "('100000009','ronen','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000008','ronen','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000003','kobi','1',1.0,'1',1,1,'01/01/2021',NULL), " +
+                "('100000014','meni','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000002','avi','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000013','micha','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000001','dan','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000012','eliad','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000011','dolev','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000007','shaol','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000006','moti','1',1.0,'1',1,1,'01/01/2016',NULL), " +
+                "('100000005','eli','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000004','moshe','1',1.0,'1',1,1,'01/01/2018',NULL), " +
+                "('100000010','moshe','1',1.0,'1',1,1,'01/01/2018',NULL);";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
             pstmt.executeUpdate();

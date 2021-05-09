@@ -250,7 +250,7 @@ public class Transport_Facade {
 
     public void setTransportDate(int doc, String str) throws Exception {
         if(!driversController.isStoreKeeper(str))
-            throw new Exception("no storekeeper in this date");
+            throw new Exception("no storekeepers in this date");
         docCont.setTranportDate(doc,str);
 
     }

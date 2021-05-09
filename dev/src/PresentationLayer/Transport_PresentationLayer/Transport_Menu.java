@@ -34,7 +34,7 @@ public class Transport_Menu {
         }
     }
 
-        public int displayMenu(){
+    public int displayMenu(){
 
         print("Please choose an option:\n\n");
 
@@ -67,7 +67,7 @@ public class Transport_Menu {
 
 
 
-            input = sc.nextInt();
+        input = sc.nextInt();
         return input;
     }
 
@@ -76,9 +76,9 @@ public class Transport_Menu {
         String str;
         switch (displayMenu()) {
             // case 0:
-               // loadData();
-               // print("Your data has been loaded!\n");
-               // break;
+            // loadData();
+            // print("Your data has been loaded!\n");
+            // break;
             case 1:
                 print("Your Delivery Document ID is " + bc.createNewDelivery() + ". It is important, keep it!\n");
                 break;
@@ -111,7 +111,7 @@ public class Transport_Menu {
                 try {
                     print(bc.getDriversString(str,a,b));
                 } catch (Exception e) {
-                    print(e.toString());
+                    print(e.getMessage()+"\n");
                 }
                 break;
             case 8:
@@ -122,7 +122,7 @@ public class Transport_Menu {
                     c = sc.nextInt();
                     bc.addStore(a, b, c);
                 } catch (Exception e) {
-                    print(e.toString());
+                    print(e.getMessage() + "\n");
                 }
                 break;
 
@@ -135,7 +135,7 @@ public class Transport_Menu {
                     d = sc.nextInt();
                     bc.addProductsToDoc(a, new Tuple<>(b, c), d);
                 } catch (Exception e) {
-                    print(e.toString());
+                    print(e.getMessage() + "\n");
                 }
                 break;
 
@@ -148,7 +148,7 @@ public class Transport_Menu {
                     c = sc.nextInt();
                     bc.addSupplier(a, b, c);
                 } catch (Exception e) {
-                    print(e.toString());
+                    print(e.getMessage() + "\n");
                 }
                 break;
             case 11:
@@ -158,7 +158,7 @@ public class Transport_Menu {
                     b = sc.nextInt();
                     bc.addTruck(a, b);
                 } catch (Exception e) {
-                    print(e.toString());
+                    print(e.getMessage() + "\n");
                 }
                 break;
             case 12:
@@ -168,7 +168,7 @@ public class Transport_Menu {
                     b = sc.nextInt();
                     bc.addDriver(a, b);
                 } catch (Exception e) {
-                    print(e.toString());
+                    print(e.getMessage() + "\n");
                 }
                 break;
 
@@ -179,7 +179,7 @@ public class Transport_Menu {
                 try {
                     bc.setOrigin(a, b);
                 } catch (Exception e) {
-                    print(e.toString());
+                    print(e.getMessage() + "\n");
                 }
                 break;
             case 14:
@@ -191,7 +191,7 @@ public class Transport_Menu {
                 try {
                     bc.setTransportDate(a, str);
                 } catch (Exception e) {
-                    print(e.toString());
+                    print(e.getMessage() + "\n");
                 }
                 break;
             case 15:
@@ -202,7 +202,7 @@ public class Transport_Menu {
                 try {
                     bc.setDepartureTime(a, str);
                 } catch (Exception e) {
-                    print(e.toString());
+                    print(e.getMessage() + "\n");
                 }
                 break;
             case 16:
@@ -225,7 +225,7 @@ public class Transport_Menu {
         return true;
     }
 
-private void makeChanges() {
+    private void makeChanges() {
         int a,b,c;
         print("Please choose an option:\n\n");
         print ("1) return \n");
@@ -239,82 +239,82 @@ private void makeChanges() {
 
         switch (sc.nextInt()) {
 
-        case 1:
-        break;
-        case 2:
-        print("please enter your doc ID and new truck License Plate \n");
-        a= sc.nextInt();
-        b= sc.nextInt();
-        try {
-        bc.editDocTruck(a, b);
-        }catch (Exception e){
-        print(e.toString());
-        }
-        break;
-        case 3:
-        print("please enter your doc ID  and new truck Driver ID \n");
-        a= sc.nextInt();
-        b=sc.nextInt();
-        try {
-        bc.editDocDriver(a, b);
-        }catch (Exception e){
-        print(e.toString());
-        }
-        break;
-        case 4:
-        print("please enter your doc ID, new truck License Plate and new Driver ID \n");
-        a= sc.nextInt();
-        b=sc.nextInt();
-        c=sc.nextInt();
-        try {
-        bc.editDocTruck(a, b);
-        bc.editDocDriver(a, c);
-        }catch (Exception e){
-        print(e.toString());
-        }
-        break;
-        case 5:
-        print("please enter your doc ID, new truck weight on departure \n");
-        a= sc.nextInt();
-        b=sc.nextInt();
-        try {
-        bc.editTruckWeightDep(a, b);
-        }catch (Exception e){
-        print(e.toString());
-        }
-        break;
+            case 1:
+                break;
+            case 2:
+                print("please enter your doc ID and new truck License Plate \n");
+                a= sc.nextInt();
+                b= sc.nextInt();
+                try {
+                    bc.editDocTruck(a, b);
+                }catch (Exception e){
+                    print(e.getMessage()+"\n");
+                }
+                break;
+            case 3:
+                print("please enter your doc ID  and new truck Driver ID \n");
+                a= sc.nextInt();
+                b=sc.nextInt();
+                try {
+                    bc.editDocDriver(a, b);
+                }catch (Exception e){
+                    print(e.getMessage()+"\n");
+                }
+                break;
+            case 4:
+                print("please enter your doc ID, new truck License Plate and new Driver ID \n");
+                a= sc.nextInt();
+                b=sc.nextInt();
+                c=sc.nextInt();
+                try {
+                    bc.editDocTruck(a, b);
+                    bc.editDocDriver(a, c);
+                }catch (Exception e){
+                    print(e.getMessage()+"\n");
+                }
+                break;
+            case 5:
+                print("please enter your doc ID, new truck weight on departure \n");
+                a= sc.nextInt();
+                b=sc.nextInt();
+                try {
+                    bc.editTruckWeightDep(a, b);
+                }catch (Exception e){
+                    print(e.getMessage()+"\n");
+                }
+                break;
 
-        case 6:
-        print("please enter your doc ID, and stop number\n");
-        a= sc.nextInt();
-        b=sc.nextInt();
-        try {
-        bc.removeDestination(a, b);
-        }catch (Exception e){
-        print(e.toString());
-        }
-        break;
-        case 7:
-        print("please enter your doc ID, product ID and store ID\n");
-        a= sc.nextInt();
-        b= sc.nextInt();
-        c= sc.nextInt();
-        try {
-        bc.removeProduct(a, b,c);
-        }catch (Exception e){
-        print(e.toString());
-        }
-        break;
+            case 6:
+                print("please enter your doc ID, and stop number\n");
+                a= sc.nextInt();
+                b=sc.nextInt();
+                try {
+                    bc.removeDestination(a, b);
+                }catch (Exception e){
+                    print(e.getMessage()+"\n");
+                }
+                break;
+            case 7:
+                print("please enter your doc ID, product ID and store ID\n");
+                a= sc.nextInt();
+                b= sc.nextInt();
+                c= sc.nextInt();
+                try {
+                    bc.removeProduct(a, b,c);
+                }catch (Exception e){
+                    print(e.getMessage()+"\n");
+                }
+                break;
 
-
-
-
-        }
 
 
 
         }
-private void printDoc() {
+
+
+
+    }
+    private void printDoc() {
         int a,b;
         print("Please choose an option:\n\n");
         print ("1) Print Basic Info \n");
@@ -324,55 +324,51 @@ private void printDoc() {
         switch (sc.nextInt()) {
 
 
-        case 1:
-        print("please enter your doc ID, will only print initialised variables \n");
-        a= sc.nextInt();
+            case 1:
+                print("please enter your doc ID, will only print initialised variables \n");
+                a= sc.nextInt();
+                try {
+                    print(bc.docInfo(a));
+                }
+                catch (Exception e)
+                {
+                    print(e.getMessage()+"\n");
+                }
+                break;
+            case 2:
+                print("please enter your doc ID\n");
+                a= sc.nextInt();
+                print(bc.docDestinations(a));
+                break;
+            case 3:
+                print("please enter your doc ID\n");
+                a= sc.nextInt();
+                print(bc.docProducts(a));
+                break;
+
+
+        }
+
+
+
+    }
+
+
+
+
+
+    public void loadData()  {
         try {
-        print(bc.docInfo(a));
-        }
-        catch (Exception e)
+            bc.loadData();
+        }catch (Exception e)
         {
-        print(e.toString()+"\n");
+            System.out.println(e.getMessage());
         }
-        break;
-        case 2:
-        print("please enter your doc ID\n");
-        a= sc.nextInt();
-        print(bc.docDestinations(a));
-        break;
-        case 3:
-        print("please enter your doc ID\n");
-        a= sc.nextInt();
-        print(bc.docProducts(a));
-        break;
+    }
 
 
-        }
-
-
-
-        }
-
-
-
-
-
-public void loadData()  {
-try {
-    bc.loadData();
-    }catch (Exception e)
-{
-    System.out.println(e.getMessage());
-}
-        }
-
-
-static void print(String m)
-        {
+    static void print(String m) {
         System.out.print(m);
-        }
+    }
 
-
-
-
-        }
+}

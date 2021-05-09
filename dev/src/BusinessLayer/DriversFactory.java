@@ -118,7 +118,7 @@ public class DriversFactory {
         ResponseT<List<WorkerResponse>> responseT,responseT1;
         responseT= workers_integration.getWorkersInShiftByJob(date, "Morning", "Storekeeper");
         responseT1 = workers_integration.getWorkersInShiftByJob(date, "Evening", "Storekeeper");
-        if(responseT.value.isEmpty() && responseT1.value.isEmpty())
+        if(responseT.value.isEmpty() || responseT1.value.isEmpty())
             return false;
         return true;
 
