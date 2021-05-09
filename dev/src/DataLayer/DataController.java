@@ -288,6 +288,28 @@ public class DataController {
         return ordersMapper.delete(o);
     }
 
+    public boolean addAgreementDeliveryDaysAgreement(int SupID,int Day){
+        return addMapper.addAgreementDeliveryDaysAgreement(SupID,Day);
+    }
+    public boolean RemoveAgreementDeliveryDays(int SupID,int Day){
+        return addMapper.RemoveAgreementDeliveryDays(SupID,Day);
+    }
+
+
+    public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,int Price) {
+        return apdMapper.addQuantityDiscAgreement( SupId, catalogId, quantity, Price);
+    }
+
+    public boolean RemoveQuantityDiscAgreement(int SupId,int catalogId,int quantity) {
+        return apdMapper.RemoveQuantityDiscAgreement( SupId, catalogId, quantity);
+
+    }
+
+
+    public boolean UpdateQuantityDiscAgreement(int SupId,int catalogId,int quantity,int price) {
+        return apdMapper.UpdateQuantityDiscAgreement( SupId, catalogId, quantity, price);
+    }
+
     //================================================================================
     //Agreement Actions:
     //If we want to retrive an Order which was not in the business
@@ -298,6 +320,17 @@ public class DataController {
         addMapper.addDaysDelivery(agr); //DeliveryDays
 
         return agr;
+    }
+
+    public List<Agreement> getAllAgrements(){
+        List<Agreement> agreementList=agreementsMapper.getAllAgreement();
+        for (Agreement agr:agreementList
+             ) {
+            suppliersProductsMapper.addPStoAgreement(agr); //SupplierProducts
+            apdMapper.addQuantityDiscAgreement(agr); //DiscByQuantity
+            addMapper.addDaysDelivery(agr); //DeliveryDays
+        }
+        return agreementList;
     }
 
     //If we want to make entire new record of an item

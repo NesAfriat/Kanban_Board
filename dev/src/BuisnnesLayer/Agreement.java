@@ -78,6 +78,7 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product do not have discount with this quantity");
         }
         DiscountByProductQuantity.get(CatalogId).remove(Quantiti);
+        RemoveQuantityDiscAgreementInTheData(CatalogId,Quantiti,SupplierID);
 
     }
 
@@ -103,6 +104,7 @@ public class Agreement implements IAgreement {
         return productSupplier;
     }
 
+    //ok data
     public void RemovePrudact(int CatalogID)
     {
         if(!isProductExist(CatalogID)){
@@ -111,7 +113,11 @@ public class Agreement implements IAgreement {
 
         RemoveProductFromAgreementInTheData(products.remove(CatalogID));
         if (DiscountByProductQuantity.containsKey(CatalogID)){
-        DiscountByProductQuantity.remove(CatalogID);
+            for (Integer Quantity:DiscountByProductQuantity.get(CatalogID).keySet()
+                 ) {
+                RemoveQuantityDiscAgreementInTheData(SupplierID,CatalogID,Quantity);
+            }
+          DiscountByProductQuantity.remove(CatalogID);
     }
 
     }
@@ -126,8 +132,8 @@ public class Agreement implements IAgreement {
         if (!DiscountByProductQuantity.containsKey(CatalogID)) {
             DiscountByProductQuantity.put(CatalogID, new HashMap<Integer, Double>());
         }
-
          (DiscountByProductQuantity.get(CatalogID)).put(quantity,newPrice );
+        addDiscountByProductQuantity(CatalogID,quantity,newPrice);
 
     }
     public void SetExtraDiscount(int ExtraDiscount)
@@ -138,8 +144,10 @@ public class Agreement implements IAgreement {
 
     }
 
+    ///////////////////////zeeeeeeeeeeeeeeeeeeeeee
     public ProductSupplier GetPrudact(int CatalogID)
     {
+
         if (!products.containsKey(CatalogID))throw new IllegalArgumentException("this CatalogID dose not exist");
         return products.get(CatalogID);
     }
@@ -221,14 +229,40 @@ public class Agreement implements IAgreement {
         im.removerProductSupplier(productSupplier);
     }
 
-    //TODO - please uncommit this later when its done
-//    private void AddDiscountByProductInTheData(){
-//        IdentityMap im = IdentityMap.getInstance();
-//        DataController dc = DataController.getInstance();
-//        if (!dc.(productSupplier,SupplierID)) {
-//            System.out.println("failed to Remove Prudact to the database");
-//        }
-//    }
+    private void AddDiscountByProductInTheData(int SupId,int catalogId,int quantity,int Price){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.addQuantityDiscAgreement(SupId,catalogId,quantity,Price)) {
+            System.out.println("failed to Remove Prudact to the database");
+        }
+    }
+
+
+    private void addAgreementDeliveryDaysAgreement(int SupID,int Day){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.addAgreementDeliveryDaysAgreement(SupID,Day)) {
+            System.out.println("failed to Remove Prudact to the database");
+        }
+    }
+
+    private void RemoveQuantityDiscAgreementInTheData(int SupId,int catalogId,int quantity){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.RemoveQuantityDiscAgreement(SupId,catalogId,quantity)) {
+            System.out.println("failed to Remove Prudact to the database");
+        }
+    }
+    private void UpdateQuantityDiscAgreement(int SupId,int catalogId,int quantity,int price){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.UpdateQuantityDiscAgreement(SupId,catalogId,quantity,price)) {
+            System.out.println("failed to Remove Prudact to the database");
+        }
+    }
+
+
+
 
     public void setDeliveryDays(HashMap<Integer, ProductSupplier> deliveryDays) {
         this.daysOfDelivery=daysOfDelivery;
@@ -258,6 +292,7 @@ public class Agreement implements IAgreement {
     public void addDeliveryDay(int day) {
         if(!daysOfDelivery.contains(day)){
             daysOfDelivery.add(day);
+
         }
     }
 
