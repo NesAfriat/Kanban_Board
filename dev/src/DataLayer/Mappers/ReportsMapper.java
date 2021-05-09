@@ -142,7 +142,7 @@ public class ReportsMapper extends Mapper {
             String statement = "SELECT * FROM Reports  ";
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
+                while (rs.next()) {
                     int repID = rs.getInt(1);
                     String subject = rs.getString(2);
                     String creation_date = rs.getString(3);
