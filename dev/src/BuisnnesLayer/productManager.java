@@ -133,16 +133,17 @@ public class productManager {
      * @return
      */
     private boolean isCategory_in_Categories(String category) {
-        if (!loadCategories) {
-            loadAllCategories();
-            loadCategories = true;
-        }
+        boolean exist=false;
         for (Category c : categories.keySet())
             if (c.getCategory_name().equals(category)) {
-                return true;
+                exist=true;
             }
-        return false;
+        if(!exist)
+            exist= getCategoryFromDAL(category);
+        return exist;
     }
+
+
 
     /**
      * add items of a specific product to the stock
@@ -301,10 +302,7 @@ public class productManager {
     public LinkedList<String> get_product_categories(GeneralProduct product) {
         LinkedList<String> output = new LinkedList<>();
         Category tmp;
-        if (!loadCategories) {
-            loadAllCategories();
-            loadCategories = true;
-        }
+        //TODO: Load the product categories
         for (Category cat : categories.keySet()) {
             if (categories.get(cat).contains(product)) {
                 tmp = cat;
@@ -444,6 +442,7 @@ public class productManager {
         }
         im.addGeneralProduct(prod);
     }
+<<<<<<< HEAD
     private void removeGP(GeneralProduct product) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
@@ -451,5 +450,25 @@ public class productManager {
         im.removeGeneralProd(product.getProduct_id());
         dc.delete(product);
 
+=======
+    private boolean getCategoryFromDAL(String category) {
+        boolean found=false;
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        Category cat= im.getCategory(category);
+        if(cat!=null) {
+            found = true;
+            categories.put(cat,new LinkedList<>());
+        }
+       else {
+            cat = dc.getCategory(category);
+            if (cat != null) {
+                found = true;
+                categories.put(cat,new LinkedList<>());
+                im.addCategory(cat);
+            }
+        }
+    return found;
+>>>>>>> daniSupStock
     }
 }

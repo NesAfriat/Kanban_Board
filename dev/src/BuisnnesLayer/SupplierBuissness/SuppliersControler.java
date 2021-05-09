@@ -207,7 +207,7 @@ public class SuppliersControler implements ISupplierControler {
             loadAllSuppliersFromData();
             isLoadAllSuppliers = true;
         }
-        return isSupplierExist(supplierId);
+        return Suppliers.containsKey(supplierId);
     }
 
 
