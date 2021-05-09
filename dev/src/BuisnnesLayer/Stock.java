@@ -2,6 +2,7 @@ package BuisnnesLayer;
 
 
 import DataLayer.DataController;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,15 +10,14 @@ import java.util.LinkedList;
 
 public class Stock {
     private LinkedList<Item> defects;                                   //all defect items
-    private  productManager productManager;
+    private productManager productManager;
     private boolean loadDefected;
 
     public Stock(productManager productManager) {
         this.defects = new LinkedList<>();
-        this.productManager=productManager;
+        this.productManager = productManager;
         loadDefected = false;
     }
-
 
 
     @Override
@@ -36,6 +36,7 @@ public class Stock {
     public void addCategory(String category) throws Exception {
         this.productManager.addCategory(category);
     }
+
     /**
      * add items of a specific product to the stock
      *
@@ -58,7 +59,7 @@ public class Stock {
      * @param new_location
      */
     public void update_location(Integer item_id, Integer product_id, String new_location) throws Exception {
-        this.productManager.update_location(item_id,product_id, new_location);
+        this.productManager.update_location(item_id, product_id, new_location);
     }
 
     /**
@@ -67,9 +68,9 @@ public class Stock {
      * @return
      */
     public LinkedList<Item> get_defected_items() {
-        if(!loadDefected){
+        if (!loadDefected) {
             loadAllDefected();
-            loadDefected=true;
+            loadDefected = true;
         }
         defects.addAll(this.productManager.getDefects());
         return defects;
@@ -98,9 +99,9 @@ public class Stock {
     }
 
     public void clear_defected() {
+        clearDefects();
         defects.clear();
     }
-
 
 
     public void removeItem(Integer product_id, Integer item_id) throws Exception {
@@ -112,20 +113,22 @@ public class Stock {
     }
 
 
-//get_missing_products_with_amounts
+    //get_missing_products_with_amounts
     public LinkedList<GeneralProduct> get_missing_products() {
         return this.productManager.get_missing_products();
     }
-    public HashMap<Integer, Integer> get_missing_products_with_amounts(){
+
+    public HashMap<Integer, Integer> get_missing_products_with_amounts() {
         return this.productManager.get_missing_products_with_amounts();
     }
-    public HashMap<GeneralProduct, Integer> get_missing_General_products_with_amounts(){
+
+    public HashMap<GeneralProduct, Integer> get_missing_General_products_with_amounts() {
         return this.productManager.get_missing_General_products_with_amounts();
     }
 
 
     public void set_item_defected(Integer product_id, Integer item_id) throws Exception {
-        defects.addLast(this.productManager.set_item_defected(product_id,item_id));
+        defects.addLast(this.productManager.set_item_defected(product_id, item_id));
     }
 
     public LinkedList<String> get_product_categories(GeneralProduct product) {
@@ -159,6 +162,7 @@ public class Stock {
     public LinkedList<Item> get_product_items(Integer product_id) throws Exception {
         return this.productManager.get_product_items(product_id);
     }
+
     //for inside use
     public boolean check_category_exist(String cat_name) {
         return this.productManager.check_category_exist(cat_name);
@@ -171,11 +175,11 @@ public class Stock {
 
     //======================================================================
 //DATA Functions:
-    private void add_to_data(Category category){
+    private void add_to_data(Category category) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if(!dc.insertCategory(category)){
-            System.out.println("failed to insert new Category to the database with the name + " +category.getCategory_name());
+        if (!dc.insertCategory(category)) {
+            System.out.println("failed to insert new Category to the database with the name + " + category.getCategory_name());
         }
         im.addCategory(category);
     }
@@ -189,6 +193,13 @@ public class Stock {
             if (!defects.contains(item))
                 defects.add(item);
         }
+    }
+
+    private void clearDefects() {
+        DataController dc = DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        im.removeAllDefects();
+        dc.removeAllDefects();
     }
 
 }

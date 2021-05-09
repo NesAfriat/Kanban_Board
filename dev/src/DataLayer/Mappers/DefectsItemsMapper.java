@@ -166,4 +166,19 @@ public class DefectsItemsMapper extends Mapper{
         }
         return obj;
     }
+
+    public void removeAllDefects() {
+        try (Connection conn = connect()) {
+            String statement = "DELETE FROM DefectsItems";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
 }

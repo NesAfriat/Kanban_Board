@@ -125,7 +125,7 @@ public class GeneralProduct {
     //TODO: need to add a function ItemsMapper which change the minAmount
     public void setMin_amount(Integer min_amount) {
         this.min_amount = min_amount;
-        update(this);
+        update(this); //update gp min amount in db
     }
 
     public Double getSelling_price() {
@@ -271,7 +271,7 @@ public class GeneralProduct {
 
     public void removeItem(Integer item_id) throws Exception {
         Item item = getItem(item_id);
-        //TODO removeItemPersistence -> ItemMapper
+        removeItemPersistence(item);
         items.remove(item);
     }
 

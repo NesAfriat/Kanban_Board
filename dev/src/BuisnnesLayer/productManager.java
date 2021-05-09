@@ -273,7 +273,6 @@ public class productManager {
 
     //for suppliers, return Map<Product.id, product_missing_amount>
     public HashMap<Integer, Integer> get_missing_products_with_amounts() {
-
         LinkedList<GeneralProduct> missingProd = get_missing_products();
         HashMap<Integer, Integer> output = new HashMap<>();
         for (GeneralProduct p : missingProd) {
@@ -287,6 +286,10 @@ public class productManager {
     //TODO need tp load all producs before this
     public LinkedList<GeneralProduct> get_missing_products() {
         LinkedList<GeneralProduct> output = new LinkedList<>();
+        if(!loadProducts){
+            loadAllProducts();
+            loadProducts=true;
+        }
         for (GeneralProduct p : products.values()) {
             if (p.getTotal_amount() < p.getMin_amount()) {
                 output.add(p);
@@ -399,6 +402,7 @@ public class productManager {
             if (!categories.containsKey(c))
                 categories.put(c, new LinkedList<>());
         }
+        //TODO - nes dont we want to load the categories products as well?
     }
     private void loadAllProducts() {
         DataController dc = DataController.getInstance();

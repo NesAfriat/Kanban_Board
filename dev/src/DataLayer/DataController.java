@@ -358,6 +358,9 @@ public class DataController {
     public LinkedList<Item> loadAllDefected() {
         return defectsItemsMapper.loadAllDefected();
     }
+    public void removeAllDefects() {
+        defectsItemsMapper.removeAllDefects();
+    }
 
     //================================================================================
     //Sales Actions:
@@ -393,7 +396,5 @@ public class DataController {
     public LinkedList<Sale> loadAllSales() {
         return salesMapper.loadAllSales();
     }
-
-
 
 }
