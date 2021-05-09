@@ -460,10 +460,7 @@ public class SupplierFunctionality {
             for(int i=0;i<lrs.size();i++){
                 System.out.printf("%-30s%-30s%-30s%-30s%-30s\n","id","name","bank Account","payment method","Contacts");
                 SupplierResponse supplierResponse=lrs.get(i);
-                System.out.println(supplierResponse.id+"dddddddddddddddddddddddddddddddd");
-                System.out.println(supplierResponse.supplierName+"dddddddddddddddddddddddddddddddd");
-                System.out.println(supplierResponse.bankAcount+"dddddddddddddddddddddddddddddddd");
-                System.out.println(supplierResponse.paymentMethods+"dddddddddddddddddddddddddddddddd");
+
                 System.out.printf("%-30s%-30s%-30s%-30s\n",supplierResponse.id,supplierResponse.supplierName,supplierResponse.bankAcount,supplierResponse.paymentMethods.toString());
                 List<contactResponse> cr=supplierResponse.contacts;
                 System.out.printf("%-120s%-30s%-30s%-30s%-30s\n","","id","name","Email","Phone Number");

@@ -34,7 +34,6 @@ public class AgreementManager {
         int CatalogID=-1;
         int qountity=-1;
         double old_cheapest_supplier=-1;
-
         for (GeneralProduct generalProduct : lackMap.keySet()) {
             HashMap<Integer,ProductSupplier> HashOfSupplierProducts=generalProduct.getHashOfSupplierProducts();
             cheapest_supplier=-1;
@@ -81,14 +80,10 @@ public class AgreementManager {
 
     //ok Data
     public IAgreement GetAgreement(int SupplierId) {
-        if(SupplierAgreement.containsKey(SupplierId)){
-            IAgreement AG=get_froM_data_Agreement(SupplierId);
-            if(AG==null)
-                throw new IllegalArgumentException("the Supplier IS nOT exsist");
-            return  AG;
+        if(isSupplierExist(SupplierId)){
+            return SupplierAgreement.get(SupplierId);
         }
-        return SupplierAgreement.get(SupplierId);
-
+        throw new IllegalArgumentException("not exsist");
     }
 
     //ok data
@@ -146,17 +141,20 @@ public class AgreementManager {
 
 
     public boolean isSupplierExist(Integer suplplierId){
-        IAgreement agreement=GetAgreement(suplplierId);
-        if(agreement!=null){
+        if(SupplierAgreement.containsKey(suplplierId)) {
             return true;
         }
-        return false;
+        else{
+            Agreement agreement= get_froM_data_Agreement(suplplierId);
+            if(agreement==null){
+                return false;
+             }
+            SupplierAgreement.put(suplplierId,agreement);
+            return true;
+        }
    }
 
-   private boolean isAgrementExsist(int SupID){
-        loadAllAgriments();
-        return SupplierAgreement.containsKey(SupID);
-   }
+
 
 /////////=========================================================DATA====================================================================================
 

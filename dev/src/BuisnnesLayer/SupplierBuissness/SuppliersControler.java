@@ -212,6 +212,7 @@ public class SuppliersControler implements ISupplierControler {
           if (s==null){
               return false;
           }
+
           Suppliers.put(supplierId,s);
           return true;
       }
@@ -255,7 +256,8 @@ public class SuppliersControler implements ISupplierControler {
             return supplier;
         }
         supplier = dc.getSupplier(SupId);
-        if (supplier != null) {
+        if (supplier != null)
+        {  im.addSupplier(supplier);
             return supplier;
         }
         return null;
@@ -278,7 +280,6 @@ public class SuppliersControler implements ISupplierControler {
                     im.addSupplier(supllier);
                     Suppliers.put(supllier.getId(), supllier);
                 }
-
             }
         }
         return true;
