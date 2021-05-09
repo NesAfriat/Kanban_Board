@@ -175,7 +175,7 @@ public void UpdateSupplierInTheData(Supplier supplier){
     public void RemoveContactToSupplierInTheData(Contact contact,int SupId){
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if(!dc.insertContact(contact,SupId)){
+        if(!dc.delete(contact,SupId)){
             System.out.println("faild");
         }
     }
