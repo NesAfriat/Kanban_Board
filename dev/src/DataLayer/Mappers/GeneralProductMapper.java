@@ -67,7 +67,6 @@ public class GeneralProductMapper extends Mapper {
         }
     }
 
-
     public GeneralProduct getGeneralProduct(int product_id) {
         GeneralProduct obj = null;
         try (Connection conn = connect()) {
@@ -163,6 +162,115 @@ public class GeneralProductMapper extends Mapper {
             throwables.printStackTrace();
         }
         return output;
+    }
+
+    public boolean checkNamesExist(String product_name, String manufacturer_name) {
+        boolean exist=false;
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM GeneralProducts WHERE gpName=? AND gpManuName=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, product_name);
+                pstmt.setString(2, manufacturer_name);
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    exist=true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return exist;
+    }
+    public boolean checkProductExist(int gpID) {
+        boolean exist=false;
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM GeneralProducts WHERE gpID=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, gpID);
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    exist=true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return exist;
+    }
+    public boolean checkProductExist(String gpName) {
+        boolean exist=false;
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM GeneralProducts WHERE gpName=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, gpName);
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    exist=true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return exist;
+    }
+    public  LinkedList<GeneralProduct> loadProductsByCategory(String cat_name) {
+        LinkedList<GeneralProduct> productsList = new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM GeneralProducts WHERE catName=? ";
+                try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                    pstmt.setString(1, cat_name);
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int gpID = rs.getInt(1);
+                    String gpName = rs.getString(2);
+                    String gpManuName = rs.getString(3);
+                    int amountStore = rs.getInt(4);
+                    int amountStorage = rs.getInt(5);
+                    int minAmount = rs.getInt(6);
+                    double sellingPrice = rs.getDouble(7);
+                    GeneralProduct gp = new GeneralProduct(gpID, gpName, gpManuName, amountStore, amountStorage, minAmount, sellingPrice);
+                    productsList.add(gp);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return productsList;
+    }
+    public String getGPCategory(GeneralProduct gp) {
+        String gpCategory="";
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM GeneralProducts WHERE gpID=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, gp.getProduct_id());
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    gpCategory = rs.getString(8);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return gpCategory;
     }
 }
 
