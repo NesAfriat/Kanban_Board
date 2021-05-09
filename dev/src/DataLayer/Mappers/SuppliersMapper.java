@@ -62,7 +62,7 @@ public class SuppliersMapper extends Mapper{
     public boolean update(Supplier sup) {
         boolean updated = false;
         try (Connection conn = connect()) {
-            String statement = "UPDATE Suppliers SET supID=?, supName=?, bankAccount=?, payment=? WHERE supID=? ";
+            String statement = "UPDATE Suppliers SET supID=?, supName=?, bankAccount=?, paymentMethod=? WHERE supID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, sup.getId());
@@ -103,7 +103,7 @@ public class SuppliersMapper extends Mapper{
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
-            String statement = "INSERT OR IGNORE INTO Suppliers(supID,supName,bankAccount,payment) " +
+            String statement = "INSERT OR IGNORE INTO Suppliers(supID,supName,bankAccount,paymentMethod) " +
                     "VALUES (?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
