@@ -8,6 +8,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
+import org.sqlite.SQLiteConfig;
 
 import java.io.File;
 import java.sql.*;
@@ -120,12 +121,12 @@ public class WorkerDataController {
         initWorkersInShifts();
     }
 
-
-
     private Connection connect() {
         Connection conn = null;
         try {
-            conn = DriverManager.getConnection(connectionPath);
+            SQLiteConfig config = new SQLiteConfig();
+            config.enforceForeignKeys(true);
+            conn = DriverManager.getConnection(connectionPath, config.toProperties());
         } catch (SQLException e) {
             e.printStackTrace();
         }
