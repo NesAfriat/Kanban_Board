@@ -7,7 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SuppliersMapper extends Mapper{
-
     public SuppliersMapper() {
         super();
         create_table();

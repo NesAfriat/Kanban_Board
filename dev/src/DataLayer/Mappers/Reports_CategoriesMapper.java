@@ -6,6 +6,10 @@ import java.sql.*;
 import java.util.LinkedList;
 
 public class Reports_CategoriesMapper extends Mapper{
+    public Reports_CategoriesMapper(){
+        super();
+        create_table();
+    }
     @Override
     void create_table() {
         String ReportsCategoriesTable = "CREATE TABLE IF NOT EXISTS ReportCategories(\n" +

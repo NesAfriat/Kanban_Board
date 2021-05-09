@@ -6,6 +6,10 @@ import BuisnnesLayer.SupplierBuissness.Supplier;
 import java.sql.*;
 
 public class SuppliersContactsMapper extends Mapper{
+    public SuppliersContactsMapper(){
+        super();
+        create_table();
+    }
     @Override
     void create_table() {
         String ContactsTable = "CREATE TABLE IF NOT EXISTS SuppliersContacts(\n" +
@@ -44,11 +48,12 @@ public class SuppliersContactsMapper extends Mapper{
                 pstmt.setInt(2, contact_id);
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
+                    int supid=rs.getInt(1);
                     int id = rs.getInt(2);
                     String name = rs.getString(3);
                     String phone = rs.getString(4);
                     String email = rs.getString(5);
-                    obj = new Contact(id,name, phone, email);
+                    obj = new Contact(id,name, phone, email,supid);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -138,11 +143,12 @@ public class SuppliersContactsMapper extends Mapper{
 
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
+                    int supId=rs.getInt(1);
                     int id = rs.getInt(2);
                     String name = rs.getString(3);
                     String phone = rs.getString(4);
                     String email = rs.getString(5);
-                    obj = new Contact(id,name, phone, email);
+                    obj = new Contact(id,name, phone, email,supId);
                     supplier.addContactFromDal(obj);
                 }
             } catch (SQLException e) {

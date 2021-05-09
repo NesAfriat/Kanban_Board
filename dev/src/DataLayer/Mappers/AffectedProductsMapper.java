@@ -9,13 +9,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AffectedProductsMapper extends Mapper{
+    public AffectedProductsMapper(){
+        super();
+        create_table();
+    }
 
     @Override
     void create_table() {
             String AffectedProductsTable = "CREATE TABLE IF NOT EXISTS AffectedProducts(\n" +
                     "\tsaleID INTEGER,\n"+
                     "\tgpName TEXT ,\n"+
-                    "\tPRIMARY KEY (saleID,gpID),\n"+
+                    "\tPRIMARY KEY (saleID,gpName),\n"+
                     "\tFOREIGN KEY (saleID) REFERENCES Sales(saleID),\n"+
                     "\tFOREIGN KEY (gpName) REFERENCES GeneralProducts(gpName)\n"+
                     ");";

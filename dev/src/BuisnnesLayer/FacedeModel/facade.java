@@ -1,21 +1,13 @@
 package BuisnnesLayer.FacedeModel;
 
 import BuisnnesLayer.*;
-import BuisnnesLayer.Controlls.Reports_Controller;
 import BuisnnesLayer.Controlls.Sales_Controller;
 import BuisnnesLayer.Controlls.Stock_Controller;
 import BuisnnesLayer.FacedeModel.Objects.*;
-import BuisnnesLayer.OrderBuissness.Order;
-import BuisnnesLayer.Reports.Report;
-import BuisnnesLayer.Sales.Sale;
-import BuisnnesLayer.SupplierBuissness.Contact;
-import BuisnnesLayer.SupplierBuissness.ISupplier;
-import BuisnnesLayer.FacedeModel.inventModel;
 //import com.sun.source.tree.NewArrayTree;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 public class facade {
@@ -284,13 +276,13 @@ private facade(){
         return supModel.RemovDiscountByQuantitiyToProduct(SupId,CatalogID,Quantitiy);
     }
 
-    public Response removeOrder(int OrderID) {
-        return supModel.removeOrder(OrderID);
+    public Response removeOrder(int OrderID, int supID) {
+        return supModel.removeOrder(OrderID, supID);
 
     }
 
-    public ResponseT getOrder(int OrderID) {
-    return supModel.getOrder(OrderID);
+    public ResponseT getOrder(int OrderID, int supID) {
+    return supModel.getOrder(OrderID, supID );
     }
 
     public ResponseT getAllOrders() {

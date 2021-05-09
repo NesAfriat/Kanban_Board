@@ -257,7 +257,7 @@ public class SupModel implements supModelI{
             productResponseList.add(copyProduct(p));
         }//    private List<DeliveryMode> deliveryModes ;
 
-        int ExtraDiscount=agreement.getExtraDiscount();
+        double ExtraDiscount=agreement.getExtraDiscount();
         int SupplierId=agreement.getSupplierID();
         DeliveryMode deliveryModes=agreement.getDeliveryMode();
 
@@ -329,9 +329,9 @@ public class SupModel implements supModelI{
     }
 
     @Override
-    public Response removeOrder(int OrderID) {
+    public Response removeOrder(int OrderID, int supID) {
         try {
-            orderControler.RemoveOrder(OrderID);
+            orderControler.RemoveOrder(OrderID, supID);
             return new Response();
         }
         catch (Exception e){
@@ -340,10 +340,9 @@ public class SupModel implements supModelI{
 
     }
 
-    @Override
-    public ResponseT getOrder(int OrderID) {
+    public ResponseT getOrder(int OrderID, int supID) {
         try {
-            Order order=orderControler.GetOrder(OrderID);
+            Order order=orderControler.GetOrder(OrderID,supID);
             orderResponse orderResponse=copyOrder(order);
             return new ResponseT(orderResponse);
         }

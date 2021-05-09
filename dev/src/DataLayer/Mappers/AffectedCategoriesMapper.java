@@ -7,7 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AffectedCategoriesMapper extends Mapper{
-
+    public AffectedCategoriesMapper(){
+        super();
+        create_table();
+    }
     @Override
     void create_table() {
         String AffectedCategoriesTable = "CREATE TABLE IF NOT EXISTS AffectedCategories(\n" +

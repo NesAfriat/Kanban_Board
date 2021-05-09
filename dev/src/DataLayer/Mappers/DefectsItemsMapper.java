@@ -24,7 +24,7 @@ public class DefectsItemsMapper extends Mapper{
                                 "\tcreation_date TEXT,\n" +
                                 "\texpiration_date TEXT,\n" +
                                 "\tPRIMARY KEY (gpID, iID),\n" +
-                                "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID),\n" +
+                                "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)\n" +
                                 "\n" +
                                 ");";
         //        String sql = "BEGIN TRANSACTION;" + itemTable + "COMMIT;";

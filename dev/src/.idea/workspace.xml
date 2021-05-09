@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7e12cf7d-2d0b-4e5d-bcf8-951f10d47cbd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/BuisnnesLayer/Agreement.java" beforeDir="false" afterPath="$PROJECT_DIR$/BuisnnesLayer/Agreement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dev.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +41,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sqlite-jdbc-3.34.0.jar" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.13140607" />
@@ -83,7 +84,9 @@
       <workItem from="1620457572814" duration="10759000" />
       <workItem from="1620489496241" duration="5344000" />
       <workItem from="1620548853583" duration="41000" />
-      <workItem from="1620549007902" duration="2869000" />
+      <workItem from="1620549007902" duration="3196000" />
+      <workItem from="1620553429518" duration="48000" />
+      <workItem from="1620553565544" duration="14000" />
     </task>
     <servers />
   </component>

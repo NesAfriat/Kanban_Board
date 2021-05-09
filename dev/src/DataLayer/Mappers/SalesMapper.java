@@ -17,10 +17,14 @@ public class SalesMapper extends Mapper{
     public SalesMapper() {
         super();
         create_table();
-        acm=new AffectedCategoriesMapper();
-        apm= new AffectedProductsMapper();
     }
 
+    public void setAcm(AffectedCategoriesMapper acm){
+        this.acm = acm;
+    }
+    public void setApm(AffectedProductsMapper apm){
+        this.apm = apm;
+    }
     @Override
     void create_table() {
 //        File f = new File(db_name);
