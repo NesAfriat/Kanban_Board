@@ -50,6 +50,7 @@ public class CategoriesMapper extends Mapper {
         }
         return category;
     }
+
     public String getFatherCategory(Category cat) {
         String father =null;
         try (Connection conn = connect()) {
@@ -70,6 +71,7 @@ public class CategoriesMapper extends Mapper {
         }
         return father;
     }
+
     public LinkedList<String> getChildrenCategories(Category cat) {
         LinkedList<String> children= new LinkedList<>();
         try (Connection conn = connect()) {

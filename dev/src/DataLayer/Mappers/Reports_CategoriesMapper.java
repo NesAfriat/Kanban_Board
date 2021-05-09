@@ -54,7 +54,7 @@ public class Reports_CategoriesMapper extends Mapper{
         LinkedList<String> categories = report.getCategories();
         try (Connection conn = connect()) {
             for (String cat : categories) {
-                String statement = "INSERT OR IGNORE INTO Reports(repID, catName) " +
+                String statement = "INSERT OR IGNORE INTO ReportCategories(repID, catName) " +
                         "VALUES (?,?)";
 
                 try (PreparedStatement pstmt = conn.prepareStatement(statement)) {

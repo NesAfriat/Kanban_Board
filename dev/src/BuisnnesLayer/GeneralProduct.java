@@ -50,6 +50,8 @@ public class GeneralProduct {
     }
 
 
+
+
     public HashMap<Integer, ProductSupplier> getProductSuppliers() {
         return HashOfSupplierProducts;
     }

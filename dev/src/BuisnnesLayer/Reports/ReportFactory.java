@@ -28,5 +28,9 @@ public class ReportFactory {
         }
         return r;
     }
+
+    public void setReportID(int reports_id) {
+        this.report_id = reports_id;
+    }
 }
 

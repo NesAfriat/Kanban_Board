@@ -183,6 +183,7 @@ public class DataController {
         return categoriesMapper.setFather(cat, father_cat);
     }
 
+
     public LinkedList<Category> loadAllCategoreis() {
         return categoriesMapper.loadAllCategories();
     }
@@ -467,4 +468,9 @@ public class DataController {
     }
 
 
+    public void changeGPCategory(LinkedList<GeneralProduct> products, Category father) {
+        for (GeneralProduct prod : products) {
+            generalProductMapper.setGPCategory(prod,father.getCategory_name());
+        }
+    }
 }

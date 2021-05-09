@@ -79,7 +79,7 @@ public class AffectedCategoriesMapper extends Mapper{
         try (Connection conn = connect()) {
             for(String category:affected)
             {
-                String statement = "INSERT OR IGNORE INTO AffectedCategories(saleID, gpName) " +
+                String statement = "INSERT OR IGNORE INTO AffectedCategories(saleID, catName) " +
                         "VALUES (?,?)";
 
                 try (PreparedStatement pstmt = conn.prepareStatement(statement)) {

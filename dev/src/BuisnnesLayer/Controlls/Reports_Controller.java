@@ -61,10 +61,15 @@ public class Reports_Controller {
         return report_C;
     }
 
+    //TODO for defected report - does not load data into db
     public Report createReport( String subject, String timeRange, LinkedList<String> categories) throws Exception {
         check_valid_string(new String[]{subject, timeRange});
         check_valid_string(categories);
         Subject sub = convertSubject(subject);
+        if(!loadedReports){
+            loadAllReports();
+            loadedReports=true;
+        }
         Report r = reportFactory.getReport(sub, timeRange, categories);
         addReportData(r);
         reports.put(r.getReportID(), r);
@@ -94,23 +99,23 @@ public class Reports_Controller {
     }
 
     // search reports by date and subject
-    public String getReportId(String subject, Date date) throws Exception {
+    public LinkedList<Integer> getReportId(String subject, Date date) throws Exception {
         check_valid_Dates(date);
         check_valid_string(new String[]{subject});
-        String output = "Report ID's about " + subject + "from " + date + ":\n";
+        LinkedList<Integer> output = new LinkedList<>();
         if(!loadedReports) {
             loadAllReports();
             loadedReports=true;
         }
         for (Report r : reports.values()) {
-            if (subject.equals(r.getSubject()) &&
+            if (subject.equals(r.getSubject().toLowerCase()) &&
                     date.equals(r.getCreationDate()))
-                output = output + r.getReportID();
+                output.add(r.getReportID());
         }
         return output;
     }
 
-
+    //TODO: does not show report data when loading from db
     public LinkedList<String> get_all_reports() {
         LinkedList<String> output = new LinkedList<>();
         if(!loadedReports) {
@@ -149,12 +154,17 @@ public class Reports_Controller {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
         LinkedList<Report> reportsList = dc.loadAllReports();
+        int reports_id =1;
         for (Report r : reportsList) {
             im.addReport(r);
             if (!reports.containsKey(r.getReportID())) {
                 reports.put(r.getReportID(), r);
             }
+            if(r.getReportID()>reports_id){
+                reports_id=r.getReportID()+1;
+            }
         }
+        reportFactory.setReportID(reports_id);
     }
 }
 

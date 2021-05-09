@@ -1,6 +1,7 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.Item;
+import DataLayer.DataController;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -61,7 +62,7 @@ public class DefectsItemsMapper extends Mapper{
                     String sup_date = rs.getString(4);
                     String create_date = rs.getString(5);
                     String exp_date = rs.getString(6);
-                    obj = new Item(gpID, iID, location, getDate(sup_date), getDate(create_date), getDate(exp_date));
+                   obj = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
                 }
             } catch (SQLException | ParseException e) {
                 e.printStackTrace();
@@ -155,7 +156,7 @@ public class DefectsItemsMapper extends Mapper{
                     String sup_date = rs.getString(4);
                     String create_date = rs.getString(5);
                     String exp_date = rs.getString(6);
-                    Item item = new Item(gpID, iID, location, getDate(sup_date), getDate(create_date), getDate(exp_date));
+                    Item item = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
                     obj.add(item);
                 }
             } catch (SQLException | ParseException e) {
