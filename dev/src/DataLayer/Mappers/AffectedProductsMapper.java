@@ -9,6 +9,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class AffectedProductsMapper extends Mapper{
+    public AffectedProductsMapper(){
+        super();
+        create_table();
+    }
 
     @Override
     void create_table() {

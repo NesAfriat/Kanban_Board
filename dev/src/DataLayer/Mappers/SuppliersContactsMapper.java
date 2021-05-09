@@ -5,6 +5,10 @@ import BuisnnesLayer.SupplierBuissness.Contact;
 import java.sql.*;
 
 public class SuppliersContactsMapper extends Mapper{
+    public SuppliersContactsMapper(){
+        super();
+        create_table();
+    }
     @Override
     void create_table() {
         String ContactsTable = "CREATE TABLE IF NOT EXISTS SuppliersContacts(\n" +

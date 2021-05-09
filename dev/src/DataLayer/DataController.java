@@ -70,9 +70,8 @@ public class DataController {
     }
 
     //================================================================================
-    //TODO: return null if item does not exist
     //Item Actions:
-    //If we want to retrive an item which was not in the business
+    //If we want to retrieve an item which was not in the business
     public Item getItem(int product_id, int item_id) {
         Item ip = itemMapper.getItem(product_id, item_id);
         return ip;
@@ -93,7 +92,7 @@ public class DataController {
 
     //================================================================================
     //GeneralProduct Actions:
-    //If we want to retrive an product which was not in the business
+    //If we want to retrieve an product which was not in the business
     //load all the gp's objects
     public GeneralProduct getGP(int product_id) {
         GeneralProduct gp = generalProductMapper.getGeneralProduct(product_id);
@@ -102,7 +101,7 @@ public class DataController {
         return gp;
     }
 
-    //If we want to make entire new record of an item
+    //If we want to make entire new record of an gp
     public boolean insertGP(GeneralProduct obj, String catName) {
         return generalProductMapper.insertProduct(obj, catName);
     }

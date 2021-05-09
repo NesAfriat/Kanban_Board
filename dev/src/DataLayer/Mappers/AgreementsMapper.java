@@ -5,7 +5,6 @@ import BuisnnesLayer.Agreement;
 import java.sql.*;
 
 public class AgreementsMapper extends Mapper {
-
     public AgreementsMapper() {
         super();
         create_table();

@@ -5,7 +5,6 @@ import BuisnnesLayer.SupplierBuissness.Supplier;
 import java.sql.*;
 
 public class SuppliersMapper extends Mapper{
-
     public SuppliersMapper() {
         super();
         create_table();
