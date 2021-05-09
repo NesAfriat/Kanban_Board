@@ -11,6 +11,7 @@ import DataLayer.Mappers.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 
@@ -220,11 +221,11 @@ public class DataController {
         return suppliersProductsMapper.insertProduct(obj, sup_id);
     }
 
-    public boolean update(ProductSupplier con, int sup_id) {
+    public boolean updateProductSupplier(ProductSupplier con, int sup_id) {
         return suppliersProductsMapper.update(con, sup_id);
     }
 
-    public boolean delete(ProductSupplier con, int sup_id) {
+    public boolean deleteProducrSupplier(ProductSupplier con, int sup_id) {
         return suppliersProductsMapper.delete(con, sup_id);
     }
 
@@ -241,11 +242,11 @@ public class DataController {
         return ordersMapper.insertOrder(o);
     }
 
-    public boolean update(Order o) {
+    public boolean updateOrder(Order o) {
         return ordersMapper.update(o);
     }
 
-    public boolean delete(Order o) {
+    public boolean deleteOrder(Order o) {
         return ordersMapper.delete(o);
     }
 
@@ -255,8 +256,11 @@ public class DataController {
     public Agreement getAgreement(int sup_id) {
         Agreement agr = agreementsMapper.getAgreement(sup_id);
         suppliersProductsMapper.addPStoAgreement(agr); //SupplierProducts
-        apdMapper.addQuantityDiscAgreement(agr); //DiscByQuantity
-        addMapper.addDaysDelivery(agr); //DeliveryDays
+        HashMap<Integer, ProductSupplier>  deliveryDays = addMapper.GetAllAgreementDeliveryDaysSupplier(sup_id);
+        HashMap<Integer, HashMap<Integer, Double>> disc=  apdMapper.GetAllQuantityDiscAgreementOfSupplier(sup_id,agr.getProducts().keySet());
+        agr.setDeliveryDays(deliveryDays);
+        agr.setDiscountByQuantityHash(disc);
+
 
         return agr;
     }
@@ -266,28 +270,32 @@ public class DataController {
         return agreementsMapper.insertAgreement(a);
     }
 
-    public boolean update(Agreement a) {
+    public boolean updateAgreemnent(Agreement a) {
         return agreementsMapper.update(a);
     }
 
-    public boolean delete(Agreement a) {
+    public boolean deleteAreementFronData(Agreement a) {
         return agreementsMapper.delete(a);
     }
 
-    //================================================================================
+
+
+    //===================================order!!!!!!!=============================================
 //productQuantity
 
-    public boolean updateProduct(int orderId,int catalogID,int quantity) {
+    public boolean updateProductInOrder(int orderId,int catalogID,int quantity) {
         return orderProductsMapper.update(orderId,catalogID,quantity);
     }
 //removeProduct
-public boolean removeProduct(int orderId,int catalogID) {
+public boolean removeProductFromORder(int orderId,int catalogID) {
     return orderProductsMapper.delete(orderId,catalogID);
 }
 //
 public boolean insetProduct(int orderId,int catalogID,int quantity) {
     return orderProductsMapper.insetProduct(orderId,catalogID,quantity);
 }
+
+
 
         //================================================================================
 

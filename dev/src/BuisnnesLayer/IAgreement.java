@@ -5,7 +5,7 @@ import java.util.List;
 
 public interface IAgreement {
 
-    public ProductSupplier AddPrudact(double Price, int CatalogID,  int idProductCounter,String name);
+    public ProductSupplier AddPrudact(double Price, int CatalogID, int idProductCounter, String name);
     public void RemovePrudact(int CatalogID);
     public void AddDiscountByProduct(int CatalogID, int quantity, double newPrice);
     public void SetExtraDiscount(int ExtarDiscount);
@@ -21,7 +21,7 @@ public interface IAgreement {
     public boolean isProductExist(int CatalogId);
     public void removeDiscountQuantity(int CatalogId, int Quantiti);
     public void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery, int numOfDaysFromOrder);
-    public double Calculate_cost(ProductSupplier productSupplier,int quantity);
+    public double Calculate_cost(ProductSupplier productSupplier, int quantity);
 
 
 

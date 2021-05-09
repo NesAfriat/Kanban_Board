@@ -2,10 +2,13 @@ package DataLayer.Mappers;
 
 import BuisnnesLayer.Agreement;
 import BuisnnesLayer.ProductSupplier;
+import BuisnnesLayer.Sales.Sale;
 
 import java.sql.*;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 public class AgreementProductDiscMapper extends Mapper{
     public AgreementProductDiscMapper() {
@@ -39,27 +42,49 @@ public class AgreementProductDiscMapper extends Mapper{
             e.printStackTrace();
         }
     }
-    public void addQuantityDiscAgreement(Agreement agr){
-        try (Connection conn = connect()) {
-            String statement = "SELECT * FROM AgreementProductDisc WHERE supID=? ";
 
-            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, agr.getSupplierID());
 
-                ResultSet rs = pstmt.executeQuery();
-                while(rs.next()) {
-                    int catalogID = rs.getInt(2);
-                    int amount = rs.getInt(3);
-                    double price = rs.getDouble(4);
 
-                    agr.addDiscountByProductQuantity(catalogID,amount,price);
+       public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,int Price) {
 
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-    }
+
+       }
+
+       public boolean RemoveQuantityDiscAgreement(int SupId,int catalogId,int quantity) {
+
+       }
+
+
+      public boolean UpdateQuantityDiscAgreement(int SupId,int catalogId,int quantity,int price) {
+       }
+
+
+      public HashMap<Integer, HashMap<Integer, Double>> GetAllQuantityDiscAgreementOfSupplier(int SupId, Set<Integer> catalogIdOfAllProduct) {
+
+       }
+
+
+
+//    public void addQuantityDiscAgreement(Agreement agr){
+//        try (Connection conn = connect()) {
+//            String statement = "SELECT * FROM AgreementProductDisc WHERE supID=? ";
+//
+//            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+//                pstmt.setInt(1, agr.getSupplierID());
+//
+//                ResultSet rs = pstmt.executeQuery();
+//                while(rs.next()) {
+//                    int catalogID = rs.getInt(2);
+//                    int amount = rs.getInt(3);
+//                    double price = rs.getDouble(4);
+//
+//
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//    }
 }

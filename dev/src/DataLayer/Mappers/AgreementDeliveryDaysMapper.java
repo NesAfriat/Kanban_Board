@@ -1,8 +1,10 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.Agreement;
+import BuisnnesLayer.ProductSupplier;
 
 import java.sql.*;
+import java.util.HashMap;
 
 public class AgreementDeliveryDaysMapper extends Mapper{
     public AgreementDeliveryDaysMapper() {
@@ -14,9 +16,8 @@ public class AgreementDeliveryDaysMapper extends Mapper{
     @Override
     void create_table() {
         String Table = "CREATE TABLE IF NOT EXISTS AgreementDeliveryDays(\n" +
-                        "\tdeliveryDay TEXT,\n" +
+                        "\tdeliveryDay INTEGER,\n" +
                         "\tsupID INTEGER,\n" +
-
                         "\tPRIMARY KEY(deliveryDay, supID),\n" +
                         "\tFOREIGN KEY(supID) REFERENCES Agreement(supID)\n" +
                         ");";
@@ -34,25 +35,40 @@ public class AgreementDeliveryDaysMapper extends Mapper{
             e.printStackTrace();
         }
     }
-    public void addDaysDelivery(Agreement agr){
-        try (Connection conn = connect()) {
-            String statement = "SELECT * FROM AgreementDeliveryDays WHERE supID=? ";
 
-            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, agr.getSupplierID());
+    public boolean addAgreementDeliveryDaysAgreement (int SupID,int Day) {
 
-                ResultSet rs = pstmt.executeQuery();
-                while(rs.next()) {
-                    String day = rs.getString(1);
 
-                    agr.addDeliveryDay(Integer.parseInt(day));
-
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
+
+    public boolean RemoveAgreementDeliveryDays(int SupId,int Day) {
+
+    }
+
+
+    public HashMap<Integer, ProductSupplier> GetAllAgreementDeliveryDaysSupplier(int sup_id) {
+
+    }
+
+
+//    public void addDaysDelivery(Agreement agr){
+//        try (Connection conn = connect()) {
+//            String statement = "SELECT * FROM AgreementDeliveryDays WHERE supID=? ";
+//
+//            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+//                pstmt.setInt(1, agr.getSupplierID());
+//
+//                ResultSet rs = pstmt.executeQuery();
+//                while(rs.next()) {
+//                    String day = rs.getString(1);
+//
+//
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//    }
 }

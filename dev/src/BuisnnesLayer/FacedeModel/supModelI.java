@@ -15,7 +15,7 @@ public interface supModelI {
     //-----------------------------------SUPPLIER FUNCTIONALITY------------------------------------------
 
     //this function add new supplier to the system and return a response if exception was thrown
-    public Response addNewSupplier(int id, String name, String bankAccount, paymentMethods paymentMethods, DeliveryMode deliveryMode, List<Integer> daysOfDelivery, int NumOfDaysFromDelivery,String contactName,String contactEmail,String phoneNumber);
+    public Response addNewSupplier(int id, String name, String bankAccount, paymentMethods paymentMethods, DeliveryMode deliveryMode, List<Integer> daysOfDelivery, int NumOfDaysFromDelivery, String contactName, String contactEmail, String phoneNumber);
 
     //this function remove a supplier from the system this function return response if exception was thrown
     public Response removeSupplier(int SupId);
@@ -24,7 +24,7 @@ public interface supModelI {
     public Response setSupplierPayment(paymentMethods paymentMethods, int SupplierId);
 
     //this function add new Product to the agreement of the supplier this function return a response if exception thrown
-    public Response addNewProductToAgreement(int SupplierId,double Price, int CatalogID, String manfucator, String name,String category,int pid, boolean isexsist);
+    public Response addNewProductToAgreement(int SupplierId, double Price, int CatalogID, String manfucator, String name, String category, int pid, boolean isexsist);
 
     //this function remove an Product from the supplier agreement this function return a response if exception was thrown
     public Response removeProductFromSupplier(int SupId, int CatalogID);
@@ -50,11 +50,11 @@ public interface supModelI {
     //this function return response with the agreement ogf the specified supplier
     public ResponseT getAgreement(int SupId);
 
-    public Response RemoveContact(int SupId,int ContactID);
+    public Response RemoveContact(int SupId, int ContactID);
 
     public Response SetDeliveryMode(int SupId, DeliveryMode deliveryMods, List<Integer> daysOfDelivery, int numOfDaysFromOrder);
 
-    public Response create_order_Due_to_lack(HashMap<GeneralProduct, Integer> lackMap,Integer constantorderdayfromdelivery);
+    public Response create_order_Due_to_lack(HashMap<GeneralProduct, Integer> lackMap, Integer constantorderdayfromdelivery);
 
 
     //---------------------------------------------------------------------------------------------------
@@ -63,7 +63,7 @@ public interface supModelI {
 
 
     //this function add a new order to the system this function return a response if exception thrown
-    public Response addNewOrder(int SupId, HashMap<Integer,Integer> productQuantity, boolean isConstant,Integer constantorderdayfromdelivery);
+    public Response addNewOrder(int SupId, HashMap<Integer, Integer> productQuantity, boolean isConstant, Integer constantorderdayfromdelivery);
 
     //this function remove an order from the system
     public Response removeOrder(int SupId);
@@ -74,10 +74,10 @@ public interface supModelI {
     //this function return a response of all the orders in the system
     public ResponseT getAllOrders();
 
-    public Response addProductToOrder(int SupId,int OrderId, int CatalogID, int quantity);
+    public Response addProductToOrder(int SupId, int OrderId, int CatalogID, int quantity);
 
 
-    public Response changeProductQuantityFromOrder(int SupId,int OrderId, int CatalogID, int quantity) ;
+    public Response changeProductQuantityFromOrder(int SupId, int OrderId, int CatalogID, int quantity) ;
 
     public Response RemovDiscountByQuantitiyToProduct(int SupId, int CatalogID, int Quantitiy);
 

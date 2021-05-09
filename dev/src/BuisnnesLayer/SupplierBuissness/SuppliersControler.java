@@ -1,6 +1,7 @@
 package BuisnnesLayer.SupplierBuissness;
 
 import BuisnnesLayer.*;
+import DataLayer.DataController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +24,6 @@ public class SuppliersControler implements ISupplierControler {
      //   agreementManager.AddNewAgreement(agreement);
 
    // }
-
     //HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity;// hashMap<SupllierID:int, hashMap<CatalogID :int , quantitiy:int>>
    public HashMap<Integer, HashMap<Integer, Integer>> get_cheapest_supplier(HashMap<GeneralProduct, Integer> lackMap) {
        return agreementManager.get_cheapest_supplier(lackMap);
@@ -193,6 +193,7 @@ public class SuppliersControler implements ISupplierControler {
     // return true if the supplier exist in the suppliers hash map
     public boolean isSupplierExist(int supplierId){
         return Suppliers.containsKey(supplierId);
+
     }
 
     public static boolean isValidEmail(String email)
@@ -219,4 +220,11 @@ public class SuppliersControler implements ISupplierControler {
     {
         return name.matches("(?i)(^[a-z])((?![ .,'-]$)[a-z .,'-]){0,24}$");
     }
+
+
+
+
+
+
+
 }

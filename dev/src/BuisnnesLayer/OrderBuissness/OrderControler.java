@@ -2,7 +2,9 @@ package BuisnnesLayer.OrderBuissness;
 
 import BuisnnesLayer.AgreementManager;
 import BuisnnesLayer.IAgreement;
+import BuisnnesLayer.IdentityMap;
 import BuisnnesLayer.ProductSupplier;
+import DataLayer.DataController;
 
 
 import java.util.ArrayList;
@@ -41,12 +43,15 @@ public class OrderControler {
 
             Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),true,constantorderdayfromdelivery);
             Orders.put(idOrderCounter, order);
+            add_Order_to_the_data(order);
 
             idOrderCounter++;
         }
         else {
             Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),false,constantorderdayfromdelivery);
             Orders.put(idOrderCounter, order);
+            add_Order_to_the_data(order);
+
             idOrderCounter++;
         }
 
@@ -78,23 +83,32 @@ public class OrderControler {
         return true;
     }
 
-    public void RemoveOrder(int OrderID)
+    //ok with THE DATA
+    public void RemoveOrder(int OrderID,int SupId)
     {
-        if(!Orders.containsKey(OrderID)){
+        if(!isExsist(OrderID,SupId)){
             throw new IllegalArgumentException("the order is not in the system");
         }
         Orders.remove(OrderID);
+        removeOrderFromTheData(OrderID);
     }
 
-    public Order GetOrder(int OrderID)
+    //it ok withe the data
+    public Order GetOrder(int OrderID,int SupId)
     {
-
         if(!Orders.containsKey(OrderID)){
+            Order order=getOrderFromTheData(OrderID,SupId);
+            Orders.put(OrderID,order);
+            if(order==null){
             throw new IllegalArgumentException("the order is not in the system");
+        }
+            return order;
+
         }
         return Orders.get(OrderID);
     }
 
+    //Ok with the DATA
     //after we remoce supliers we shold remove all constant orders of this supplier
     public void RemoveAllSupllierConstOrders(int SupiD){
         for (Order order:Orders.values()
@@ -102,6 +116,7 @@ public class OrderControler {
            if(order.isConstant() &&order.getSupplierID()==SupiD)
            {
                Orders.remove(order.GetId());
+               removeOrderFromTheData(order.GetId());
            }
         }
     }
@@ -117,7 +132,7 @@ public class OrderControler {
         if(!CheckIfSupplierExist(supId)){
             throw new IllegalArgumentException("the supplier is not exist in system");
         }
-        if(!Orders.containsKey(OrderID)){
+        if(!isExsist(OrderID,supId)){
             throw new IllegalArgumentException("the order is not in the system");
         }
         //you canot chacg orders that no constant!!!
@@ -134,7 +149,7 @@ public class OrderControler {
         if(!CheckIfSupplierExist(supId)){
             throw new IllegalArgumentException("the supplier is not exist in system");
         }
-        if(!Orders.containsKey(OrderID)){
+        if(!isExsist(OrderID,supId)){
             throw new IllegalArgumentException("the order is not in the system");
         }
         //you canot chacg orders that no constant!!!
@@ -157,6 +172,21 @@ public class OrderControler {
             order.ReCalculateTotalPayment(agreementManager.GetAgreement(SupId));
         }
     }
+
+
+
+    public Boolean isExsist(int OrderId,int SupId){
+        if(Orders.containsKey(OrderId)){
+            return true;
+        }
+        Order order=getOrderFromTheData(OrderId,SupId);
+        if(order!=null){
+            return true;
+        }
+        return false;
+    }
+
+
     public void RemovePrudactFromOrders (int SupId, int CatalogID)
     {
         for (Order order:Orders.values())
@@ -165,6 +195,45 @@ public class OrderControler {
             order.RemovePrudactFromOrder(CatalogID,agreementManager.GetAgreement(SupId));
              }
         }
+    }
+    //================================================DATA===================================
+
+    //insertProduct
+    private Order getOrderFromTheData(int orderId,int SupId) {
+        IdentityMap im = IdentityMap.getInstance();
+        Order order =im.getOrder(orderId);
+        if(order!=null){
+            return order;
+        }
+        else {
+            DataController dc = DataController.getInstance();
+            order = dc.getOrder(SupId, orderId);
+            if (order == null) {
+                return null;
+            }
+            return order;
+        }
+    }
+
+    private void removeOrderFromTheData(int orderId){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        im.removeOrder(orderId);
+        boolean isOk=dc.deleteOrder(Orders.get(orderId));
+        if(!isOk){
+        throw new IllegalArgumentException("canot remove from the datat order that not exsist");
+}
+    }
+
+
+    //ADD ORDER
+    private void add_Order_to_the_data(Order order) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.insetOrder(order)) {
+            System.out.println("failed to insert Order to the database with the keys");
+        }
+        im.addOrder(order);
     }
 
 }

@@ -58,6 +58,7 @@ public class AgreementsMapper extends Mapper {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+
         return obj;
     }
 
