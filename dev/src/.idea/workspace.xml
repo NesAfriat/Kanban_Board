@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7e12cf7d-2d0b-4e5d-bcf8-951f10d47cbd" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dev.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,7 +40,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../.." />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.13140607" />
@@ -87,6 +86,8 @@
       <workItem from="1620549007902" duration="3196000" />
       <workItem from="1620553429518" duration="48000" />
       <workItem from="1620553565544" duration="14000" />
+      <workItem from="1620569655249" duration="29000" />
+      <workItem from="1620569724330" duration="9000" />
     </task>
     <servers />
   </component>
