@@ -44,7 +44,6 @@ public class GeneralProduct {
         this.min_amount = minAmount;
         this.selling_price = sellingPrice;
 
-        //TODO: those fields will be updated later on!
         this.item_id = 0;
         this.items = new LinkedList<>();
         this.HashOfSupplierProducts = new HashMap<>();
@@ -123,7 +122,6 @@ public class GeneralProduct {
         return min_amount;
     }
 
-    //TODO: need to add a function ItemsMapper which change the minAmount
     public void setMin_amount(Integer min_amount) {
         this.min_amount = min_amount;
         update(this); //update gp min amount in db
@@ -232,7 +230,6 @@ public class GeneralProduct {
     /**
      * @param item_id
      */
-    //TODO: need to add a function ItemsMapper which change the location
     public void setItem_location(Integer item_id, String new_location) throws Exception {
         Item item = getItem(item_id);
         if (item.getLocation().startsWith("storage")) {
@@ -250,7 +247,6 @@ public class GeneralProduct {
         item.setLocation(new_location);
     }
 
-    //TODO need to think of a way to load all product items before this action
     private Item getItem(Integer item_id) throws Exception {
         Item item = null;
         for (Item i : items) {
