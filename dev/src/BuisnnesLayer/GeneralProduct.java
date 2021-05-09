@@ -212,7 +212,6 @@ public class GeneralProduct {
     /**
      * @param item_id
      */
-    //TODO: need to add a function ItemsMapper which change the expiration_date
     public Item setItem_defected(Integer item_id) throws Exception {
         Item item = getItem(item_id);
         item.setExpiration_date(new Date());

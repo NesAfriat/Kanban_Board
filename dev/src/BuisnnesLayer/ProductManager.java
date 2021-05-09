@@ -193,7 +193,7 @@ public class ProductManager {
                 categories.get(cat).remove(toRemove);
     }
 
-
+    //remove from the Dal but returned error!
     public void remove_category(String cat_name) throws Exception { //DONE
         if (!isCategory_in_Categories(cat_name)) {
             throw new Exception("category doesnt exist");
