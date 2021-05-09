@@ -169,12 +169,21 @@ public class ShiftSchedule {
             List<Job> jobs = WorkersUtils.getShiftWorkers();
             for (Job job: jobs) {
                 int[] arr = new int[6];
-                arr[weekDayMorning] = workerDataController.getDefaultAmountRequired(1, "Morning", job.name());
-                arr[weekDayEvening] = workerDataController.getDefaultAmountRequired(1, "Evening", job.name());
-                arr[fridayMorning] = workerDataController.getDefaultAmountRequired(6, "Morning", job.name());
-                arr[fridayEvening] = workerDataController.getDefaultAmountRequired(6, "Evening", job.name());
-                arr[saturdayMorning] = workerDataController.getDefaultAmountRequired(7, "Morning", job.name());
-                arr[saturdayEvening] = workerDataController.getDefaultAmountRequired(7, "Evening", job.name());
+                if(job != Job.Shift_Manager) {
+                    arr[weekDayMorning] = workerDataController.getDefaultAmountRequired(1, "Morning", job.name());
+                    arr[weekDayEvening] = workerDataController.getDefaultAmountRequired(1, "Evening", job.name());
+                    arr[fridayMorning] = workerDataController.getDefaultAmountRequired(6, "Morning", job.name());
+                    arr[fridayEvening] = workerDataController.getDefaultAmountRequired(6, "Evening", job.name());
+                    arr[saturdayMorning] = workerDataController.getDefaultAmountRequired(7, "Morning", job.name());
+                    arr[saturdayEvening] = workerDataController.getDefaultAmountRequired(7, "Evening", job.name());
+                }else {
+                    arr[weekDayMorning] = 1;
+                    arr[weekDayEvening] = 1;
+                    arr[fridayMorning] = 1;
+                    arr[fridayEvening] = 1;
+                    arr[saturdayMorning] = 1;
+                    arr[saturdayEvening] = 1;
+                }
 //                arr[weekDayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[fridayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
 //                arr[weekDayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT;
 //                arr[fridayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
