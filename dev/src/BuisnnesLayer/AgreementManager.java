@@ -118,12 +118,12 @@ public class AgreementManager {
             //TODO with daniels code there is a problem when adding an item which exist in the stock to a supplier - another catagory is created
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,product_id,productManager.get_product(product_id).getProduct_name());
             productManager.AddProductSupplierToProductGeneral(productSupplier,product_id);
-
         }
         else{
+            System.out.println("pooooooooooooooooo"+idProductCounter);
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
             productManager.addProduct(product_name,idProductCounter,manufacture_name,-1,cat,-1.0,productSupplier);
-        idProductCounter++;
+         idProductCounter++;
         }
 //        gp.add_t
    }

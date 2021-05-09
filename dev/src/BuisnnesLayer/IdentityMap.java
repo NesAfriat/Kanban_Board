@@ -377,6 +377,9 @@ public class IdentityMap {
         }
         return output;
     }
+    public void removeAllDefects() {
+        defctedItemsList = new LinkedList<>();
+    }
 
     //================================================================================
     //Sales
@@ -417,4 +420,6 @@ public class IdentityMap {
         }
         return false;
     }
+
+
 }

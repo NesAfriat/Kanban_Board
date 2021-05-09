@@ -18,10 +18,9 @@ public class AffectedProductsMapper extends Mapper{
     void create_table() {
             String AffectedProductsTable = "CREATE TABLE IF NOT EXISTS AffectedProducts(\n" +
                     "\tsaleID INTEGER,\n"+
-                    "\tgpName TEXT ,\n"+
+                    "\tgpName TEXT NOT NULL,\n"+
                     "\tPRIMARY KEY (saleID,gpName),\n"+
-                    "\tFOREIGN KEY (saleID) REFERENCES Sales(saleID),\n"+
-                    "\tFOREIGN KEY (gpName) REFERENCES GeneralProducts(gpName)\n"+
+                    "\tFOREIGN KEY (saleID) REFERENCES Sales(saleID)\n"+
                     ");";
             try (Connection conn = connect();
                  Statement stmt = conn.createStatement()) {

@@ -4,6 +4,7 @@ import BuisnnesLayer.Item;
 
 import java.sql.*;
 import java.text.ParseException;
+import java.util.LinkedList;
 
 import static DataLayer.DataController.getDate;
 
@@ -138,4 +139,46 @@ public class DefectsItemsMapper extends Mapper{
         }
         return output;
     }
+
+    public LinkedList<Item> loadAllDefected() {
+        LinkedList<Item> obj = new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM DefectsItems ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int gpID = rs.getInt(1);
+                    int iID = rs.getInt(2);
+                    String location = rs.getString(3);
+                    String sup_date = rs.getString(4);
+                    String create_date = rs.getString(5);
+                    String exp_date = rs.getString(6);
+                    Item item = new Item(gpID, iID, location, getDate(sup_date), getDate(create_date), getDate(exp_date));
+                    obj.add(item);
+                }
+            } catch (SQLException | ParseException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return obj;
+    }
+
+    public void removeAllDefects() {
+        try (Connection conn = connect()) {
+            String statement = "DELETE FROM DefectsItems";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
 }

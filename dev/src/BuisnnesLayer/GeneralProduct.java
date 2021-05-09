@@ -125,7 +125,7 @@ public class GeneralProduct {
     //TODO: need to add a function ItemsMapper which change the minAmount
     public void setMin_amount(Integer min_amount) {
         this.min_amount = min_amount;
-        update(this);
+        update(this); //update gp min amount in db
     }
 
     public Double getSelling_price() {
@@ -159,7 +159,7 @@ public class GeneralProduct {
         LinkedList<Integer> itemsAdded = new LinkedList<>();
         for (int i = 0; i < quantity; i++) {
             Item item = new Item(item_id, product_id, location, supplied_date, creation_date, expiration_date);
-            add_to_data(item);
+            addItemToGP(item);
             items.add(item);
             itemsAdded.add(item.getItem_id());
             item_id++;
@@ -200,10 +200,14 @@ public class GeneralProduct {
             }
         }
         items = new_items;
+        removeDefectedItem(defects);
+        addDefectedItem(defects);
         addAmount_store(-1 * amount_store);
         addAmount_storage(-1 * amount_storage);
+        update(this); //update amounts in the db
         return defects;
     }
+
 
     /**
      * @param item_id
@@ -233,8 +237,8 @@ public class GeneralProduct {
                 addAmount_storage(1);
             }
         }
+        update(this); //update gp storage/store amount in db
         item.setLocation(new_location);
-
     }
 
     //TODO need to think of a way to load all product items before this action
@@ -249,6 +253,7 @@ public class GeneralProduct {
             throw new Exception("item does not exist");
         return item;
     }
+
 
     @Override
     public String toString() {
@@ -266,7 +271,7 @@ public class GeneralProduct {
 
     public void removeItem(Integer item_id) throws Exception {
         Item item = getItem(item_id);
-        //TODO removeItemPersistence -> ItemMapper
+        removeItemPersistence(item);
         items.remove(item);
     }
 
@@ -276,7 +281,7 @@ public class GeneralProduct {
 
     //======================================================================
 //DATA Functions:
-    private void add_to_data(Item item) {
+    private void addItemToGP(Item item) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if (!dc.insertItem(item)) {
@@ -292,14 +297,25 @@ public class GeneralProduct {
             System.out.println("failed to update new General Product to the database with the keys: gpID= " + prod.getProduct_id());
         }
     }
+    private void addDefectedItem(LinkedList<Item> defects) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        for(Item item: defects){
+            dc.insertDefected(item);
+            im.addDefectedItem(item);
+        }
+    }
+    private void removeDefectedItem(LinkedList<Item> defects) {
+        for(Item item: defects){
+            removeItemPersistence(item);
+        }
+    }
 
-    private Item removeItemPersistence(Item toRemove) {
-        Item removed;
+    private void removeItemPersistence(Item toRemove) {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
-        removed = im.removeItem(toRemove.getItem_id(), toRemove.getProduct_id());
+        im.removeItem(toRemove.getItem_id(), toRemove.getProduct_id());
         dc.delete(toRemove);
-        return removed;
     }
 
     //for Dal - load from DB
@@ -312,5 +328,14 @@ public class GeneralProduct {
     //for Dal - load from DB
     public void addSupplierProduct(ProductSupplier productSupplier) {
         HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
+    }
+
+    public void removeItems() {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        for(Item item: items) {
+            im.removeItem(this.product_id, item.getItem_id());
+            dc.delete(item);
+        }
     }
 }

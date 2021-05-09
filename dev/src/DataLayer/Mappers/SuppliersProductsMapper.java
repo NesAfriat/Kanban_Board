@@ -84,9 +84,10 @@ public class SuppliersProductsMapper extends Mapper {
                 pstmt.setString(4, ps.getName());
                 pstmt.setDouble(5, ps.getPrice());
                 pstmt.setInt(6, sup_id);
-                pstmt.setInt(1, ps.getCatalogID());
+                pstmt.setInt(7, ps.getCatalogID());
 
                 updated = pstmt.executeUpdate() != 0;
+                System.out.println("loll"+updated);
             } catch (SQLException e) {
                 e.printStackTrace();
             }

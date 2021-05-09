@@ -114,7 +114,7 @@ public class productManager {
     //TODO need to add - loadALL of products for this function
     private boolean isProduct_in_Products(Integer product_id) {
         if (!loadProducts) {
-//       TODO     loadAllProducts();
+            loadAllProducts();
             loadProducts = true;
         }
         for (Integer p : products.keySet()) {
@@ -124,6 +124,8 @@ public class productManager {
         }
         return false;
     }
+
+
 
     /**
      * check if category is in categories
@@ -174,16 +176,16 @@ public class productManager {
         products.get(product_id).setItem_location(item_id, new_location);
     }
 
-    //TODO need to add a deleteGP method
+
     public void remove_product(Integer product_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist");
         }
         if(!products.get(product_id).isSupplierProducHashEmpty()){
-            throw new IllegalArgumentException("the supliier product hash is no empty you canot deleate it");
+            throw new IllegalArgumentException("need to remove supplier's product before deleting product");
         }
-        products.remove(product_id);
-//        removeProductPersistence(product_id);
+        removeGP(products.remove(product_id));
+
     }
 
 
@@ -272,7 +274,6 @@ public class productManager {
 
     //for suppliers, return Map<Product.id, product_missing_amount>
     public HashMap<Integer, Integer> get_missing_products_with_amounts() {
-
         LinkedList<GeneralProduct> missingProd = get_missing_products();
         HashMap<Integer, Integer> output = new HashMap<>();
         for (GeneralProduct p : missingProd) {
@@ -286,6 +287,10 @@ public class productManager {
     //TODO need tp load all producs before this
     public LinkedList<GeneralProduct> get_missing_products() {
         LinkedList<GeneralProduct> output = new LinkedList<>();
+        if(!loadProducts){
+            loadAllProducts();
+            loadProducts=true;
+        }
         for (GeneralProduct p : products.values()) {
             if (p.getTotal_amount() < p.getMin_amount()) {
                 output.add(p);
@@ -395,6 +400,17 @@ public class productManager {
             if (!categories.containsKey(c))
                 categories.put(c, new LinkedList<>());
         }
+        //TODO - nes dont we want to load the categories products as well?
+    }
+    private void loadAllProducts() {
+        DataController dc = DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        LinkedList<GeneralProduct> productsList = dc.loadAllGeneralProducts();
+        for (GeneralProduct gp : productsList) {
+            im.addGeneralProduct(gp);
+            if (!products.containsKey(gp.getProduct_id()))
+                productsList.add(gp);
+        }
     }
 
     private void addCategoryPersistence(Category newCat) {
@@ -427,22 +443,29 @@ public class productManager {
         im.addGeneralProduct(prod);
     }
     private boolean getCategoryFromDAL(String category) {
-        boolean found=false;
+        boolean found = false;
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        Category cat= im.getCategory(category);
-        if(cat!=null) {
+        Category cat = im.getCategory(category);
+        if (cat != null) {
             found = true;
-            categories.put(cat,new LinkedList<>());
-        }
-       else {
+            categories.put(cat, new LinkedList<>());
+        } else {
             cat = dc.getCategory(category);
             if (cat != null) {
                 found = true;
-                categories.put(cat,new LinkedList<>());
+                categories.put(cat, new LinkedList<>());
                 im.addCategory(cat);
             }
         }
-    return found;
+        return found;
+    }
+    private void removeGP(GeneralProduct product) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        product.removeItems();
+        im.removeGeneralProd(product.getProduct_id());
+        dc.delete(product);
+
     }
 }
