@@ -167,7 +167,7 @@ public class IdentityMap {
     public Category removeCategory(Category category) {
         Category output = null;
         for (Category cat : categoryList) {
-            if (cat.getCategory_name().equals(category)) {
+            if (cat.getCategory_name().equals(category.getCategory_name())) {
                 output = cat;
                 categoryList.remove(cat);
             }

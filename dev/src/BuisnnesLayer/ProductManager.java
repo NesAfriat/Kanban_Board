@@ -37,7 +37,6 @@ public class ProductManager {
         return null;    //not suppose to happen
     }
 
-    //TODO: Fix update in the db -QUICK!!!!
     public Item set_item_defected(Integer product_id, Integer item_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesn't exist!");
@@ -115,7 +114,7 @@ public class ProductManager {
      */
     private boolean isProduct_in_Products(Integer product_id) { //DONE
         boolean exist=false;
-        if(products.keySet().contains(product_id))
+        if(products.containsKey(product_id))
                 exist=true;
         if(!exist)
             exist= checkProductExistByID(product_id);
@@ -193,7 +192,7 @@ public class ProductManager {
                 categories.get(cat).remove(toRemove);
     }
 
-    //remove from the Dal but returned error!
+    //TODO: remove from the Dal but returned error!
     public void remove_category(String cat_name) throws Exception { //DONE
         if (!isCategory_in_Categories(cat_name)) {
             throw new Exception("category doesnt exist");
@@ -202,6 +201,7 @@ public class ProductManager {
         Category removed = removeCategoryPersistence(getCategory(cat_name));
         LinkedList<GeneralProduct> products = categories.remove(removed);
         categories.get(father).addAll(products);
+
     }
 
     public void RemoveSupplierProductFromGeneralProduct(int pid, int catalogIF){
@@ -325,7 +325,6 @@ public class ProductManager {
         return output;
     }
 
-    //TODO: after load - does not show the products
     public LinkedList<String> get_all_products() {
         LinkedList<String> output = new LinkedList<>();
         if(!loadProducts){
@@ -337,7 +336,6 @@ public class ProductManager {
         }
         return output;
     }
-    //TODO: after load - show the 2 categories - does not show
     public LinkedList<String> get_all_categories() {
         if (!loadCategories) {
             loadAllCategories();
