@@ -1,5 +1,7 @@
 package BuisnnesLayer;
 
+import DataLayer.DataController;
+
 import java.util.LinkedList;
 
 public class Category {
@@ -52,9 +54,15 @@ public class Category {
         for (Category c : sub_Category) {
             c.father_Category = father_Category;
             father_Category.sub_Category.add(c);
+            setFatherPersistence(c, father_Category);
         }
         father_Category.sub_Category.remove(this);
         return father_Category;
+    }
 
+    private void setFatherPersistence(Category category, Category father) {
+        DataController dc = DataController.getInstance();
+        dc.setFather(category, father);
     }
 }
+

@@ -197,12 +197,18 @@ public class ProductManager {
         if (!isCategory_in_Categories(cat_name)) {
             throw new Exception("category doesnt exist");
         }
-        Category father = getCategory(cat_name).removed();
+        Category cat = getCategory(cat_name);
+        LinkedList<GeneralProduct> products = get_category_products(cat.getCategory_name());
+        Category father = cat.removed();
         Category removed = removeCategoryPersistence(getCategory(cat_name));
-        LinkedList<GeneralProduct> products = categories.remove(getCategory(removed.getCategory_name()));
+//        LinkedList<GeneralProduct> products = get_category_products(removed.getCategory_name());
+        categories.remove(getCategory(removed.getCategory_name()));
+        changeGPCategory(products,father);
         categories.get(father).addAll(products);
 
     }
+
+
 
     public void RemoveSupplierProductFromGeneralProduct(int pid, int catalogIF){
         products.get(pid).RemoveSupplierProduct(catalogIF);
@@ -546,10 +552,15 @@ public class ProductManager {
        else {
             cat = dc.getCategory(category);
             if (cat != null) {
+//                dc.setFather(cat);
                 categories.put(cat,new LinkedList<>());
                 im.addCategory(cat);
             }
         }
     return cat;
+    }
+    private void changeGPCategory(LinkedList<GeneralProduct> products, Category father) {
+        DataController dc = DataController.getInstance();
+        dc.changeGPCategory(products,father);
     }
 }

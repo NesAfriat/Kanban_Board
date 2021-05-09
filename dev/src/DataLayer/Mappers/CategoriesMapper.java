@@ -40,10 +40,7 @@ public class CategoriesMapper extends Mapper {
                 if (rs.next()) {
                     String catName = rs.getString(1);
                     String father_Category= rs.getString(2);
-                    category = new Category(cat_name);
-                    Category fatherCat=getCategory(father_Category);
-                    if(fatherCat!=null)
-                    category.setFather_Category(fatherCat);
+                    category = new Category(catName);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -52,6 +49,26 @@ public class CategoriesMapper extends Mapper {
             throwables.printStackTrace();
         }
         return category;
+    }
+    public String getFather(String cat_name) {
+        String father = null;
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Categories WHERE catName=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, cat_name);
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    father= rs.getString(2);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return father;
     }
 
     public boolean update(Category obj) {

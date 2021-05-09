@@ -61,6 +61,7 @@ public class Reports_Controller {
         return report_C;
     }
 
+    //TODO for defected report - does not load data into db
     public Report createReport( String subject, String timeRange, LinkedList<String> categories) throws Exception {
         check_valid_string(new String[]{subject, timeRange});
         check_valid_string(categories);
@@ -110,7 +111,7 @@ public class Reports_Controller {
         return output;
     }
 
-
+    //TODO: does not show report data when loading from db
     public LinkedList<String> get_all_reports() {
         LinkedList<String> output = new LinkedList<>();
         if(!loadedReports) {
