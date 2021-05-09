@@ -36,7 +36,6 @@ public class productManager {
         return null;    //not suppose to happen
     }
 
-    //TODO: add a data function with the DefectsMapper and ItemMapper
     public Item set_item_defected(Integer product_id, Integer item_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesn't exist!");
@@ -45,7 +44,6 @@ public class productManager {
         return item;
     }
 
-    //TODO: add a data function with the DefectsMapper and ItemsMapper
     public LinkedList<Item> getDefects() {
         LinkedList<Item> output = new LinkedList<>();
         for (GeneralProduct product : products.values()) {
@@ -111,7 +109,7 @@ public class productManager {
      * @param product_id
      * @return
      */
-    //TODO need to add - loadALL of products for this function
+    //TODO think about it more
     private boolean isProduct_in_Products(Integer product_id) {
         if (!loadProducts) {
             loadAllProducts();
@@ -200,8 +198,7 @@ public class productManager {
         categories.get(father).addAll(products);
     }
 
-    //TODO need to add a removeSP for SPMapper
-    public void RemoveSupllierProductFromGeneralProduct(int pid,int catalogIF){
+    public void RemoveSupplierProductFromGeneralProduct(int pid, int catalogIF){
         products.get(pid).RemoveSupplierProduct(catalogIF);
     }
 
@@ -212,6 +209,7 @@ public class productManager {
         getCategory(cat_name).setFather_Category(getCategory(cat_father_name));
         setFatherPersistence(getCategory(cat_name), getCategory(cat_father_name));
     }
+
     //TODO need to think of a way to make sure we loaded all the relative products OR use a quary from the db
     public LinkedList<GeneralProduct> get_category_products(String cat_name) throws Exception {
         LinkedList<GeneralProduct> prods = new LinkedList<>();
@@ -284,7 +282,6 @@ public class productManager {
         }
         return output;
     }
-    //TODO need tp load all producs before this
     public LinkedList<GeneralProduct> get_missing_products() {
         LinkedList<GeneralProduct> output = new LinkedList<>();
         if(!loadProducts){
@@ -317,6 +314,10 @@ public class productManager {
 
     public LinkedList<String> get_all_products() {
         LinkedList<String> output = new LinkedList<>();
+        if(!loadProducts){
+            loadAllProducts();
+            loadProducts = true;
+        }
         for (GeneralProduct product : products.values()) {
             output.add("product ID: " + product.getProduct_id() + "- " + product.getProduct_name() + "_" + product.getManufacturer_name() + '\n');
         }
@@ -366,7 +367,7 @@ public class productManager {
 
     public boolean check_product_exist(String prod_name) {
         if (!loadProducts) {
-//    TODO        loadAllProducts();
+            loadAllProducts();
             loadProducts = true;
         }
         for (GeneralProduct p : products.values()) {

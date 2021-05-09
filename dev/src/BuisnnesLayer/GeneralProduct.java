@@ -72,9 +72,10 @@ public class GeneralProduct {
         if (!isSupplierProductExist(Catalofid)) {
             throw new IllegalArgumentException("the supplie product doues not exsist");
         }
-        HashOfSupplierProducts.remove(Catalofid);
+        removeSPPersistence(HashOfSupplierProducts.remove(Catalofid));
 
     }
+
 
     public boolean isSupplierProductExist(int Catalogid) {
         return HashOfSupplierProducts.containsKey(Catalogid);
@@ -134,9 +135,8 @@ public class GeneralProduct {
 
     public void setSelling_price(Double selling_price) {
         this.selling_price = selling_price;
+        update(this);
     }
-
-
 
 
     public LinkedList<Integer> getItems() {
@@ -169,7 +169,7 @@ public class GeneralProduct {
         } else {
             addAmount_store(quantity);
         }
-        update(this);
+        update(this); //update gp's amount storage \ store
         return itemsAdded;
     }
 
@@ -330,6 +330,7 @@ public class GeneralProduct {
         HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
     }
 
+
     public void removeItems() {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
@@ -337,5 +338,11 @@ public class GeneralProduct {
             im.removeItem(this.product_id, item.getItem_id());
             dc.delete(item);
         }
+    }
+    private void removeSPPersistence(ProductSupplier toRemove) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        im.removerProductSupplier(toRemove);
+        dc.deleteProductSupplier(toRemove,toRemove.getSuplierID());
     }
 }

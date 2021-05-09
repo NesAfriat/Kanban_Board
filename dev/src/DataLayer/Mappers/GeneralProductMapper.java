@@ -45,7 +45,7 @@ public class GeneralProductMapper extends Mapper {
         String GeneralProductTable = "CREATE TABLE IF NOT EXISTS GeneralProducts(\n" +
                 "\tgpID INTEGER PRIMARY KEY,\n" +
                 "\tgpName TEXT NOT NULL,\n" +
-                "\tgpManuName TEXT NOT NULL,\n" +
+                "\tgpManuName TEXT,\n" +
                 "\tamountStore INTEGER,\n" +
                 "\tamountStorage INTEGER,\n" +
                 "\tminAmount INTEGER,\n" +

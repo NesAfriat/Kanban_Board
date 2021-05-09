@@ -134,8 +134,7 @@ public class AgreementManager {
    }
 
     public void  removeProduct(int SupplierId,int CatalogID) throws Exception {
-
-        productManager.RemoveSupllierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID).getId(),CatalogID);
+        productManager.RemoveSupplierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID).getId(),CatalogID);
         GeneralProduct generalProduct=productManager.get_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
         if(generalProduct.isSupplierProducHashEmpty()){
             productManager.remove_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
