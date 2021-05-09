@@ -180,7 +180,9 @@ public class DataController {
     //If we want to retrive an suplpier which was not in the business
     public Supplier getSupplier(int supplier_id) {
         Supplier sup = suppliersMapper.getSupplier(supplier_id);
+        if(sup!=null){
         suppliersContactsMapper.addAllContactsToSupplier(sup);
+        }
         return sup;
     }
 

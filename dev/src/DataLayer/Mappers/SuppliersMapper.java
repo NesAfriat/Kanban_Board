@@ -45,10 +45,7 @@ public class SuppliersMapper extends Mapper{
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
                     int supID = rs.getInt(1);
-                    String supName = rs.getString(2);
-                    String bank = rs.getString(3);
-                    String payment = rs.getString(4);
-                    obj = new Supplier(supID,supName,payment, bank);
+
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
