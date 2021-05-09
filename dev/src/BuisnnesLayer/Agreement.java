@@ -239,27 +239,27 @@ public class Agreement implements IAgreement {
     }
 
 
-//    //for Dal - load from DB
-//    public void addSupplierProduct(ProductSupplier ps) {
-//        products.put(ps.getCatalogID(),ps);
-//    }
-//
-//    //for Dal - load from DB
-//    public void addDiscountByProductQuantity(int catalogID, int quantity, double newPrice){
-//        if (!DiscountByProductQuantity.containsKey(catalogID)) {
-//            DiscountByProductQuantity.put(catalogID, new HashMap<Integer, Double>());
-//        }
-//
-//        (DiscountByProductQuantity.get(catalogID)).put(quantity,newPrice );
-//    }
-//
-//
-//    //for Dal - load from DB
-//    public void addDeliveryDay(int day) {
-//        if(!daysOfDelivery.contains(day)){
-//            daysOfDelivery.add(day);
-//        }
-//    }
+    //for Dal - load from DB
+    public void addSupplierProduct(ProductSupplier ps) {
+        products.put(ps.getCatalogID(),ps);
+    }
+
+    //for Dal - load from DB
+    public void addDiscountByProductQuantity(int catalogID, int quantity, double newPrice){
+        if (!DiscountByProductQuantity.containsKey(catalogID)) {
+            DiscountByProductQuantity.put(catalogID, new HashMap<Integer, Double>());
+        }
+
+        (DiscountByProductQuantity.get(catalogID)).put(quantity,newPrice );
+    }
+
+
+    //for Dal - load from DB
+    public void addDeliveryDay(int day) {
+        if(!daysOfDelivery.contains(day)){
+            daysOfDelivery.add(day);
+        }
+    }
 
 
 /*

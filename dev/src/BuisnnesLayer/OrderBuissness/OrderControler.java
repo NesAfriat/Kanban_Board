@@ -209,11 +209,12 @@ public class OrderControler {
             DataController dc = DataController.getInstance();
             order = dc.getOrder(SupId, orderId);
             if (order == null) {
-                return null;
-            }
+                return null; }
+
             return order;
         }
     }
+
 
     private void removeOrderFromTheData(int orderId){
         IdentityMap im = IdentityMap.getInstance();

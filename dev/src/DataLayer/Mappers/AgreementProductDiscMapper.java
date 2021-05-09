@@ -61,30 +61,31 @@ public class AgreementProductDiscMapper extends Mapper{
 
       public HashMap<Integer, HashMap<Integer, Double>> GetAllQuantityDiscAgreementOfSupplier(int SupId, Set<Integer> catalogIdOfAllProduct) {
 
-       }
+      }
 
 
 
-//    public void addQuantityDiscAgreement(Agreement agr){
-//        try (Connection conn = connect()) {
-//            String statement = "SELECT * FROM AgreementProductDisc WHERE supID=? ";
-//
-//            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-//                pstmt.setInt(1, agr.getSupplierID());
-//
-//                ResultSet rs = pstmt.executeQuery();
-//                while(rs.next()) {
-//                    int catalogID = rs.getInt(2);
-//                    int amount = rs.getInt(3);
-//                    double price = rs.getDouble(4);
-//
-//
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//    }
+    public void addQuantityDiscAgreement(Agreement agr){
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM AgreementProductDisc WHERE supID=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, agr.getSupplierID());
+
+                ResultSet rs = pstmt.executeQuery();
+                while(rs.next()) {
+                    int catalogID = rs.getInt(2);
+                    int amount = rs.getInt(3);
+                    double price = rs.getDouble(4);
+                    agr.addDiscountByProductQuantity(catalogID,amount,price);
+
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
 }
