@@ -11,7 +11,6 @@ import DataLayer.Mappers.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 
@@ -56,6 +55,7 @@ public class DataController {
     }
 
     private DataController() {
+        //TODO please do not change this at all, thanks
         generalProductMapper = new GeneralProductMapper();
         suppliersMapper = new SuppliersMapper();
         categoriesMapper = new CategoriesMapper();
@@ -123,7 +123,14 @@ public class DataController {
     public boolean delete(GeneralProduct obj) {
         return generalProductMapper.delete(obj);
     }
-
+    public LinkedList<GeneralProduct> loadAllGeneralProducts() {
+        LinkedList<GeneralProduct> gps = generalProductMapper.loadAllProducts();
+        for(GeneralProduct gp: gps){
+            itemMapper.addItemToProduct(gp); //add gp items
+            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+        }
+        return gps;
+    }
 
     public Category getCategory(String cat_name) {
         Category cat = categoriesMapper.getCategory(cat_name);
@@ -226,7 +233,7 @@ public class DataController {
     }
 
     //If we want to make entire new record of an item
-    public boolean insetPS(ProductSupplier obj, int sup_id) {
+    public boolean insertPS(ProductSupplier obj, int sup_id) {
         return suppliersProductsMapper.insertProduct(obj, sup_id);
     }
 
@@ -234,7 +241,7 @@ public class DataController {
         return suppliersProductsMapper.update(con, sup_id);
     }
 
-    public boolean deleteProducrSupplier(ProductSupplier con, int sup_id) {
+    public boolean deleteProductSupplier(ProductSupplier con, int sup_id) {
         return suppliersProductsMapper.delete(con, sup_id);
     }
 
@@ -326,6 +333,9 @@ public class DataController {
     public boolean deleteDefected(Item obj) {
         return defectsItemsMapper.delete(obj);
     }
+    public LinkedList<Item> loadAllDefected() {
+        return defectsItemsMapper.loadAllDefected();
+    }
 
     //================================================================================
     //Sales Actions:
@@ -361,6 +371,7 @@ public class DataController {
     public LinkedList<Sale> loadAllSales() {
         return salesMapper.loadAllSales();
     }
+
 
 
 }

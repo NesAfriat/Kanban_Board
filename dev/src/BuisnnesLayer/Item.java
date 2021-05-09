@@ -37,6 +37,7 @@ public class Item {
 
     public void setLocation(String location) {
         this.location = location;
+        update(this);// update item location in db
     }
 
     public Date getSupplied_date() {

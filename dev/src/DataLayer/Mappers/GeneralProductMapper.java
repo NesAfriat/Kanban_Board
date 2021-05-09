@@ -3,12 +3,40 @@ package DataLayer.Mappers;
 import BuisnnesLayer.GeneralProduct;
 
 import java.sql.*;
+import java.util.LinkedList;
 
 public class GeneralProductMapper extends Mapper {
-
     public GeneralProductMapper() {
         super();
         create_table();
+    }
+
+    public  LinkedList<GeneralProduct> loadAllProducts() {
+        LinkedList<GeneralProduct> obj = new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM GeneralProducts ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int gpID = rs.getInt(1);
+                    String gpName = rs.getString(2);
+                    String gpManuName = rs.getString(3);
+                    int amountStore = rs.getInt(4);
+                    int amountStorage = rs.getInt(5);
+                    int minAmount = rs.getInt(6);
+                    double sellingPrice = rs.getDouble(7);
+                    GeneralProduct gp = new GeneralProduct(gpID, gpName, gpManuName, amountStore, amountStorage, minAmount, sellingPrice);
+                    obj.add(gp);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return obj;
     }
 
     @Override

@@ -114,7 +114,7 @@ public class productManager {
     //TODO need to add - loadALL of products for this function
     private boolean isProduct_in_Products(Integer product_id) {
         if (!loadProducts) {
-//       TODO     loadAllProducts();
+            loadAllProducts();
             loadProducts = true;
         }
         for (Integer p : products.keySet()) {
@@ -124,6 +124,8 @@ public class productManager {
         }
         return false;
     }
+
+
 
     /**
      * check if category is in categories
@@ -173,16 +175,16 @@ public class productManager {
         products.get(product_id).setItem_location(item_id, new_location);
     }
 
-    //TODO need to add a deleteGP method
+
     public void remove_product(Integer product_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist");
         }
         if(!products.get(product_id).isSupplierProducHashEmpty()){
-            throw new IllegalArgumentException("the supliier product hash is no empty you canot deleate it");
+            throw new IllegalArgumentException("need to remove supplier's product before deleting product");
         }
-        products.remove(product_id);
-//        removeProductPersistence(product_id);
+        removeGP(products.remove(product_id));
+
     }
 
 
@@ -398,6 +400,16 @@ public class productManager {
                 categories.put(c, new LinkedList<>());
         }
     }
+    private void loadAllProducts() {
+        DataController dc = DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        LinkedList<GeneralProduct> productsList = dc.loadAllGeneralProducts();
+        for (GeneralProduct gp : productsList) {
+            im.addGeneralProduct(gp);
+            if (!products.containsKey(gp.getProduct_id()))
+                productsList.add(gp);
+        }
+    }
 
     private void addCategoryPersistence(Category newCat) {
         DataController dc = DataController.getInstance();
@@ -427,5 +439,13 @@ public class productManager {
             System.out.println("failed to insert new General Product to the database with the keys: gpID= " + prod.getProduct_id());
         }
         im.addGeneralProduct(prod);
+    }
+    private void removeGP(GeneralProduct product) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        product.removeItems();
+        im.removeGeneralProd(product.getProduct_id());
+        dc.delete(product);
+
     }
 }

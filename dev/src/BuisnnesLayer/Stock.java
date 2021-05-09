@@ -10,19 +10,15 @@ import java.util.LinkedList;
 public class Stock {
     private LinkedList<Item> defects;                                   //all defect items
     private  productManager productManager;
+    private boolean loadDefected;
 
     public Stock(productManager productManager) {
         this.defects = new LinkedList<>();
         this.productManager=productManager;
+        loadDefected = false;
     }
 
 
-    public Category getCategory(String cat) throws Exception {
-        return this.productManager.getCategory(cat);
-    }
-    public LinkedList<Item> getDefects() {
-        return defects;
-    }
 
     @Override
     public String toString() {
@@ -30,8 +26,6 @@ public class Stock {
                 ", defects=" + defects +
                 '}';
     }
-
-
 
 
     /**
@@ -42,26 +36,6 @@ public class Stock {
     public void addCategory(String category) throws Exception {
         this.productManager.addCategory(category);
     }
-
-    /**
-     * add a new item to the defects
-     *
-     * @param item
-     */
-    public void addDefect(Item item) {
-        defects.add(item);
-    }
-
-    /**
-     * for the controller to check if item in defects
-     *
-     * @param item
-     * @return
-     */
-    private boolean isItem_in_Defects(Item item) {
-        return defects.contains(item);
-    }
-
     /**
      * add items of a specific product to the stock
      *
@@ -93,9 +67,14 @@ public class Stock {
      * @return
      */
     public LinkedList<Item> get_defected_items() {
+        if(!loadDefected){
+            loadAllDefected();
+            loadDefected=true;
+        }
         defects.addAll(this.productManager.getDefects());
         return defects;
     }
+
 
     public void remove_product(Integer product_id) throws Exception {
         this.productManager.remove_product(product_id);
@@ -201,5 +180,15 @@ public class Stock {
         im.addCategory(category);
     }
 
+    private void loadAllDefected() {
+        DataController dc = DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        LinkedList<Item> defList = dc.loadAllDefected();
+        for (Item item : defList) {
+            im.addItem(item);
+            if (!defects.contains(item))
+                defects.add(item);
+        }
+    }
 
 }

@@ -1,7 +1,6 @@
 package BuisnnesLayer;
 
 import DataLayer.DataController;
-import DataLayer.DataController;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -204,7 +203,7 @@ public class Agreement implements IAgreement {
     private void InsertProductToAgreementInTheData(ProductSupplier productSupplier) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.insetPS(productSupplier,SupplierID)) {
+        if (!dc.insertPS(productSupplier,SupplierID)) {
             System.out.println("failed to add productSupplier to the database");
         }
         im.addPS(productSupplier);
@@ -216,7 +215,7 @@ public class Agreement implements IAgreement {
     private void RemoveProductFromAgreementInTheData(ProductSupplier productSupplier) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.deleteProducrSupplier(productSupplier,SupplierID)) {
+        if (!dc.deleteProductSupplier(productSupplier,SupplierID)) {
             System.out.println("failed to Remove Prudact to the database");
         }
         im.removerProductSupplier(productSupplier);
