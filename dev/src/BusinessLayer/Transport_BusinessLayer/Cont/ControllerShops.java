@@ -187,13 +187,13 @@ public class ControllerShops {
             for (Product p: supProductes) {
                 List<ProductArea> list = new ArrayList<ProductArea>(productAreaHash.keySet());
                 Optional<ProductArea> tuple =list.stream().filter(x-> x.getId()==p.getId() && s.getArea().toString().equals(x.getA())).findFirst();
-                if((!tuple.isEmpty()) && (!productAreaHash.get(tuple.get()).contains(s))){
+                if((tuple.isPresent()) && (!productAreaHash.get(tuple.get()).contains(s))){
                     productAreaHash.get(tuple.get()).add(s);
                 }
-                else if((!tuple.isEmpty()) && (productAreaHash.get(tuple.get()).contains(s))){
+                else if((tuple.isPresent()) && (productAreaHash.get(tuple.get()).contains(s))){
                     //do nothing
                 }
-                else if(tuple.isEmpty()){
+                else if(!tuple.isPresent()){
                     List<Supplier> temp= new ArrayList<>();
                     temp.add(s);
                     productAreaHash.put(new ProductArea(p, s.getArea()), temp);
