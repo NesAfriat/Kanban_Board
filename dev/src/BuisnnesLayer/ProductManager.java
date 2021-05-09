@@ -311,7 +311,7 @@ public class ProductManager {
     }
 
     //DONE
-    public LinkedList<String> get_product_categories(GeneralProduct product) throws Exception {
+    public LinkedList<String> get_product_categories(GeneralProduct product)  {
         LinkedList<String> output = new LinkedList<>();
         Category tmp;
         loadProductCategoryDal(product); //load the product category from the data
@@ -544,6 +544,7 @@ public class ProductManager {
         cat= im.getCategory(category);
         if(cat!=null) {
             categories.put(cat,new LinkedList<>());
+            setFamily(cat);
         }
        else {
             cat = dc.getCategory(category);
@@ -557,32 +558,31 @@ public class ProductManager {
     }
 
     private void setFamily(Category cat)  {
-        if (cat==null)
-            return;
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         String fatherName= dc.getFatherCategory(cat);
         if(fatherName!=null) {
             Category father = null;
-            try {
-                father = getCategory(fatherName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            father = loadCategory(fatherName);
             cat.setFather_Category(father);
-            setFamily(father);
         }
         LinkedList<String> children= dc.getChildrenCategories(cat);
         if(!children.isEmpty()) {
             for (String childName : children) {
                 Category child = null;
-                try {
-                    child = getCategory(childName);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                    child = loadCategory(childName);
                 child.setFather_Category(cat);
             }
         }
+    }
+
+    private Category loadCategory(String catName) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        Category output=null;
+        output= im.getCategory(catName);
+        if(output==null)
+            output= dc.getCategory(catName);
+        return output;
     }
 }
