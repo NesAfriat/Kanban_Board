@@ -20,8 +20,7 @@ public class AffectedProductsMapper extends Mapper{
                     "\tsaleID INTEGER,\n"+
                     "\tgpName TEXT ,\n"+
                     "\tPRIMARY KEY (saleID,gpName),\n"+
-                    "\tFOREIGN KEY (saleID) REFERENCES Sales(saleID),\n"+
-                    "\tFOREIGN KEY (gpName) REFERENCES GeneralProducts(gpName)\n"+
+                    "\tFOREIGN KEY (saleID) REFERENCES Sales(saleID)\n"+
                     ");";
             try (Connection conn = connect();
                  Statement stmt = conn.createStatement()) {

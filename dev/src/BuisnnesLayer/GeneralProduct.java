@@ -134,9 +134,8 @@ public class GeneralProduct {
 
     public void setSelling_price(Double selling_price) {
         this.selling_price = selling_price;
+        update(this);
     }
-
-
 
 
     public LinkedList<Integer> getItems() {
