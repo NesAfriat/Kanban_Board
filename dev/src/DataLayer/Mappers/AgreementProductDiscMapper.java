@@ -45,8 +45,8 @@ public class AgreementProductDiscMapper extends Mapper{
 
 
 
-       public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,int Price) {
 
+<<<<<<< HEAD
 
        }
 
@@ -65,6 +65,8 @@ public class AgreementProductDiscMapper extends Mapper{
 
 
 
+=======
+>>>>>>> sup_stock_dal
     public void addQuantityDiscAgreement(Agreement agr){
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM AgreementProductDisc WHERE supID=? ";
@@ -78,6 +80,7 @@ public class AgreementProductDiscMapper extends Mapper{
                     int amount = rs.getInt(3);
                     double price = rs.getDouble(4);
                     agr.addDiscountByProductQuantity(catalogID,amount,price);
+
 
 
                 }

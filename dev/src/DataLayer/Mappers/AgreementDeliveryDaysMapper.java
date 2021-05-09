@@ -36,39 +36,25 @@ public class AgreementDeliveryDaysMapper extends Mapper{
         }
     }
 
-    public boolean addAgreementDeliveryDaysAgreement (int SupID,int Day) {
+    public void addDaysDelivery(Agreement agr){
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM AgreementDeliveryDays WHERE supID=? ";
 
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, agr.getSupplierID());
 
+                ResultSet rs = pstmt.executeQuery();
+                while(rs.next()) {
+                    String day = rs.getString(1);
+
+                    agr.addDeliveryDay(Integer.parseInt(day));
+
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
-
-    public boolean RemoveAgreementDeliveryDays(int SupId,int Day) {
-
-    }
-
-
-    public HashMap<Integer, ProductSupplier> GetAllAgreementDeliveryDaysSupplier(int sup_id) {
-
-    }
-
-
-//    public void addDaysDelivery(Agreement agr){
-//        try (Connection conn = connect()) {
-//            String statement = "SELECT * FROM AgreementDeliveryDays WHERE supID=? ";
-//
-//            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-//                pstmt.setInt(1, agr.getSupplierID());
-//
-//                ResultSet rs = pstmt.executeQuery();
-//                while(rs.next()) {
-//                    String day = rs.getString(1);
-//
-//
-//                }
-//            } catch (SQLException e) {
-//                e.printStackTrace();
-//            }
-//        } catch (SQLException throwables) {
-//            throwables.printStackTrace();
-//        }
-//    }
 }
