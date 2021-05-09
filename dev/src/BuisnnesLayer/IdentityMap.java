@@ -153,7 +153,6 @@ public class IdentityMap {
             categoryList.add(category);
     }
 
-
     //if this function return null - go to the db
     public Category getCategory(String cat) {
         Category output = null;
