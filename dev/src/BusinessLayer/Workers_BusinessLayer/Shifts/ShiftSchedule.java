@@ -158,7 +158,7 @@ public class ShiftSchedule {
         static final int fridayEvening = 3;
         static final int saturdayMorning = 4;
         static final int saturdayEvening = 5;
-        static final int INITIAL_DEFAULT_WORKERS_AMOUNT = 1;
+        static final int DEFAULT_SHIFT_MANAGER_AMOUNT = 1;
 
 
         private final Map<Job, int[]> defaultShiftSetup;
@@ -177,22 +177,19 @@ public class ShiftSchedule {
                     arr[saturdayMorning] = workerDataController.getDefaultAmountRequired(7, "Morning", job.name());
                     arr[saturdayEvening] = workerDataController.getDefaultAmountRequired(7, "Evening", job.name());
                 }else {
-                    arr[weekDayMorning] = 1;
-                    arr[weekDayEvening] = 1;
-                    arr[fridayMorning] = 1;
-                    arr[fridayEvening] = 1;
-                    arr[saturdayMorning] = 1;
-                    arr[saturdayEvening] = 1;
+                    arr[weekDayMorning] = DEFAULT_SHIFT_MANAGER_AMOUNT;
+                    arr[weekDayEvening] = DEFAULT_SHIFT_MANAGER_AMOUNT;
+                    arr[fridayMorning] = DEFAULT_SHIFT_MANAGER_AMOUNT;
+                    arr[fridayEvening] = DEFAULT_SHIFT_MANAGER_AMOUNT;
+                    arr[saturdayMorning] = DEFAULT_SHIFT_MANAGER_AMOUNT;
+                    arr[saturdayEvening] = DEFAULT_SHIFT_MANAGER_AMOUNT;
                 }
-//                arr[weekDayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[fridayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
-//                arr[weekDayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT;
-//                arr[fridayMorning] = INITIAL_DEFAULT_WORKERS_AMOUNT; arr[saturdayEvening] = INITIAL_DEFAULT_WORKERS_AMOUNT;
                 defaultShiftSetup.put(job, arr);
             }
             int numberOfDays = 7;
             int numberOfShifts = 2;
             defaultWorkDaySetup = new boolean[numberOfDays][numberOfShifts];
-            for (int i = 0; i < numberOfDays; i++){//-2; i++){
+            for (int i = 0; i < numberOfDays; i++){
                 boolean[] shifts = workerDataController.getDefaultWorkDayShifts(i + 1);
                 if(shifts == null){
                     defaultWorkDaySetup[i][0] = false;
