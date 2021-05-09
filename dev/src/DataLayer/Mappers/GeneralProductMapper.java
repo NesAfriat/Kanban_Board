@@ -1,5 +1,6 @@
 package DataLayer.Mappers;
 
+import BuisnnesLayer.Category;
 import BuisnnesLayer.GeneralProduct;
 
 import java.sql.*;
@@ -119,6 +120,22 @@ public class GeneralProductMapper extends Mapper {
         return updated;
     }
 
+    public void updateGPCategoryDAL(GeneralProduct gp, String catName) {
+        try (Connection conn = connect()) {
+            String statement = "UPDATE GeneralProducts SET catName=? WHERE gpID=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, catName);
+                pstmt.setInt(2, gp.getProduct_id());
+                 pstmt.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return;
+    }
     //TODO: not sure if it will be used
     public boolean delete(GeneralProduct gp) {
         boolean deleted = false;

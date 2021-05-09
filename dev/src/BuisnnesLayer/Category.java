@@ -32,11 +32,12 @@ public class Category {
         father_Category.sub_Category.add(this);
     }
 
+
     public LinkedList<Category> getSub_Category() {
         return sub_Category;
     }
 
-    @Override
+/*
     public String toString() {
         return "{" +
                 "category_name=" + category_name  +
@@ -44,6 +45,8 @@ public class Category {
                 ", sub_Category=" + sub_Category +
                 '}';
     }
+
+ */
 
     public Category removed() throws Exception {
         if (father_Category == null) {

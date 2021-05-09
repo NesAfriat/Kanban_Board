@@ -115,6 +115,10 @@ public class DataController {
     public String getGPCategory(GeneralProduct gp) {
         return generalProductMapper.getGPCategory(gp);
     }
+    public void updateGPCategoryDAL(GeneralProduct gp, String catName)
+    {
+        generalProductMapper.updateGPCategoryDAL(gp,catName);
+    }
     //If we want to make entire new record of an gp
     public boolean insertGP(GeneralProduct obj, String catName) {
         return generalProductMapper.insertProduct(obj, catName);

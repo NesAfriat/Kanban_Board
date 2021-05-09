@@ -200,10 +200,13 @@ public class ProductManager {
         }
         Category father = getCategory(cat_name).removed();
         Category removed = removeCategoryPersistence(getCategory(cat_name));
-        LinkedList<GeneralProduct> products = categories.remove(getCategory(removed.getCategory_name()));
+        LinkedList<GeneralProduct> products = get_category_products_DAL(cat_name);
+        for(GeneralProduct gp: products)
+            updateGPCategoryDAL(gp,father.getCategory_name());
         categories.get(father).addAll(products);
-
+        categories.remove(removed);
     }
+
 
     public void RemoveSupplierProductFromGeneralProduct(int pid, int catalogIF){
         products.get(pid).RemoveSupplierProduct(catalogIF);
@@ -530,7 +533,6 @@ public class ProductManager {
             cat = dc.getCategory(category);
             if (cat != null) {
                 found = true;
-                im.addCategory(cat);
             }
         }
         return found;
@@ -562,16 +564,24 @@ public class ProductManager {
         DataController dc = DataController.getInstance();
         String fatherName= dc.getFatherCategory(cat);
         if(fatherName!=null) {
-            Category father = null;
-            father = loadCategory(fatherName);
-            cat.setFather_Category(father);
+            Category father = loadCategory(fatherName);
+            if(father!=null) {
+                cat.setFather_Category(father);
+                if (!categories.containsKey(fatherName))
+                    categories.put(father, new LinkedList<>());
+                im.addCategory(father);
+            }
         }
         LinkedList<String> children= dc.getChildrenCategories(cat);
         if(!children.isEmpty()) {
             for (String childName : children) {
-                Category child = null;
-                    child = loadCategory(childName);
-                child.setFather_Category(cat);
+                    Category child = loadCategory(childName);
+                    if (child!=null) {
+                        child.setFather_Category(cat);
+                        if (!categories.containsKey(childName))
+                            categories.put(child, new LinkedList<>());
+                        im.addCategory(child);
+                    }
             }
         }
     }
@@ -584,5 +594,9 @@ public class ProductManager {
         if(output==null)
             output= dc.getCategory(catName);
         return output;
+    }
+    private void updateGPCategoryDAL(GeneralProduct gp, String fatherCat) {
+        DataController dc = DataController.getInstance();
+        dc.updateGPCategoryDAL(gp,fatherCat);
     }
 }
