@@ -78,7 +78,7 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product do not have discount with this quantity");
         }
         DiscountByProductQuantity.get(CatalogId).remove(Quantiti);
-        RemoveQuantityDiscAgreementInTheData(CatalogId,Quantiti,SupplierID);
+        RemoveQuantityDiscAgreementInTheData(SupplierID,CatalogId,Quantiti);
 
     }
 
@@ -145,7 +145,9 @@ public class Agreement implements IAgreement {
             DiscountByProductQuantity.put(CatalogID, new HashMap<Integer, Double>());
         }
          (DiscountByProductQuantity.get(CatalogID)).put(quantity,newPrice );
-        addDiscountByProductQuantity(CatalogID,quantity,newPrice);
+        //addDiscountByProductQuantity(CatalogID,quantity,newPrice);
+        AddDiscountByProductInTheData(SupplierID, CatalogID,quantity,newPrice);
+
 
     }
     public void SetExtraDiscount(int ExtraDiscount)
@@ -241,7 +243,7 @@ public class Agreement implements IAgreement {
         im.removerProductSupplier(productSupplier);
     }
 
-    private void AddDiscountByProductInTheData(int SupId,int catalogId,int quantity,int Price){
+    private void AddDiscountByProductInTheData(int SupId,int catalogId,int quantity,double Price){
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if (!dc.addQuantityDiscAgreement(SupId,catalogId,quantity,Price)) {

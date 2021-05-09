@@ -14,13 +14,13 @@ public class facade {
     private static facade single_instance = null;
     private inventModel inventModel;
     private SupModel supModel;
-    private productManager ProductManager;
+    private BuisnnesLayer.ProductManager ProductManager;
 //    private Stock_Controller stock_controller;
 //    private Sales_Controller sales_controller;
 //    private Reports_Controller reports_controller;
 //for invent
 private facade(){
-    ProductManager=new productManager();
+    ProductManager=new ProductManager();
     inventModel=new inventModel(ProductManager);
     supModel= new SupModel(ProductManager);
 
@@ -112,9 +112,8 @@ private facade(){
     }
 
     public Response show_all_products() {
-     return inventModel.show_all_products();
+        return inventModel.show_all_products();
     }
-
 
     public Response show_all_categories() {
         return inventModel.show_all_categories();

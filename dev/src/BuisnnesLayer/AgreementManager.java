@@ -8,10 +8,10 @@ import java.util.List;
 public class AgreementManager {
     private HashMap<Integer, IAgreement> SupplierAgreement; //- SupplierAgreement : hashmap<SupplierId : int ,agreement :Agreement>
     private int idProductCounter;
-    private productManager productManager;
+    private ProductManager productManager;
     private  boolean isLoadAllAgreement=false;
 
-    public AgreementManager(productManager productManager) {
+    public AgreementManager(ProductManager productManager) {
         // ProductsInTheSystem=new LinkedList<>();
         SupplierAgreement = new HashMap<>();
         idProductCounter = 0;
@@ -107,7 +107,7 @@ public class AgreementManager {
         if(GetAgreement(SupplierId).isProductExist(CatalogID)){
             throw new IllegalArgumentException("the Product already exist");
         }
-        if(!productManager.check_category_exist(cat)){
+        if(!cat.equals("Def")&&!productManager.check_category_exist(cat)){
             productManager.addCategory(cat);
         }
         // the product id is already exis
@@ -120,17 +120,16 @@ public class AgreementManager {
             productManager.AddProductSupplierToProductGeneral(productSupplier,product_id);
         }
         else{
-            System.out.println("pooooooooooooooooo"+idProductCounter);
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
             productManager.addProduct(product_name,idProductCounter,manufacture_name,-1,cat,-1.0,productSupplier);
          idProductCounter++;
+
         }
 //        gp.add_t
    }
 
     public void  removeProduct(int SupplierId,int CatalogID) throws Exception {
-
-        productManager.RemoveSupllierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID).getId(),CatalogID);
+        productManager.RemoveSupplierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID).getId(),CatalogID);
         GeneralProduct generalProduct=productManager.get_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
         if(generalProduct.isSupplierProducHashEmpty()){
             productManager.remove_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());

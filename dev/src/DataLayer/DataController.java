@@ -112,11 +112,23 @@ public class DataController {
         return gp;
     }
 
+    public String getGPCategory(GeneralProduct gp) {
+        return generalProductMapper.getGPCategory(gp);
+    }
     //If we want to make entire new record of an gp
     public boolean insertGP(GeneralProduct obj, String catName) {
         return generalProductMapper.insertProduct(obj, catName);
     }
 
+    public boolean CheckGPInputExist(String product_name, String manufacturer_name) {
+        return generalProductMapper.checkNamesExist(product_name,manufacturer_name);
+    }
+    public boolean checkPrductExist(Integer gpID) {
+        return generalProductMapper.checkProductExist(gpID);
+    }
+    public boolean checkPrductExist(String gpName) {
+        return generalProductMapper.checkProductExist(gpName);
+    }
     public boolean update(GeneralProduct obj) {
         return generalProductMapper.update(obj);
     }
@@ -124,6 +136,7 @@ public class DataController {
     public boolean delete(GeneralProduct obj) {
         return generalProductMapper.delete(obj);
     }
+
     public LinkedList<GeneralProduct> loadAllGeneralProducts() {
         LinkedList<GeneralProduct> gps = generalProductMapper.loadAllProducts();
         for(GeneralProduct gp: gps){
@@ -132,6 +145,17 @@ public class DataController {
         }
         return gps;
     }
+
+    public LinkedList<GeneralProduct> get_category_products_DAL(String cat_name) {
+        LinkedList<GeneralProduct> gps = generalProductMapper.loadProductsByCategory(cat_name);
+        for(GeneralProduct gp: gps){
+            itemMapper.addItemToProduct(gp); //add gp items
+            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+        }
+        return gps;
+    }
+    //================
+    //Categories
 
     public Category getCategory(String cat_name) {
         Category cat = categoriesMapper.getCategory(cat_name);
@@ -189,6 +213,7 @@ public class DataController {
         Supplier sup = suppliersMapper.getSupplier(supplier_id);
         if(sup!=null){
         suppliersContactsMapper.addAllContactsToSupplier(sup);
+        sup.setContactIdCounter(suppliersContactsMapper.getBigestId(supplier_id));
         }
         return sup;
     }
@@ -287,7 +312,16 @@ public class DataController {
     }
 
     public boolean deleteOrder(Order o) {
-        return ordersMapper.delete(o);
+        boolean b= ordersMapper.delete(o);
+        if(b){
+            for (int catalogId:o.getProductQuantity().keySet()
+                 ) {
+                boolean t=orderProductsMapper.delete(o.GetId(),catalogId);
+                if(!t) return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public boolean addAgreementDeliveryDaysAgreement(int SupID,int Day){
@@ -298,7 +332,7 @@ public class DataController {
     }
 
 
-    public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,int Price) {
+    public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,double Price) {
         return apdMapper.addQuantityDiscAgreement( SupId, catalogId, quantity, Price);
     }
 
@@ -366,7 +400,6 @@ public class DataController {
         return orderProductsMapper.insetProduct(orderId, catalogID, quantity);
     }
 
-
     //================================================================================
 
 
@@ -430,6 +463,15 @@ public class DataController {
 
     public LinkedList<Sale> loadAllSales() {
         return salesMapper.loadAllSales();
+    }
+
+    public int getTheBigestIDforTheCounterinContacts(int Supid){
+        return suppliersContactsMapper.getBigestId(Supid);
+    }
+
+    public int getOrderBigestId(){
+        int order=orderProductsMapper.getOrderIdCounterBigest();
+        return order;
     }
 
 }

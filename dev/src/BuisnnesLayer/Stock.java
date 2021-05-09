@@ -10,10 +10,10 @@ import java.util.LinkedList;
 
 public class Stock {
     private LinkedList<Item> defects;                                   //all defect items
-    private productManager productManager;
+    private ProductManager productManager;
     private boolean loadDefected;
 
-    public Stock(productManager productManager) {
+    public Stock(ProductManager productManager) {
         this.defects = new LinkedList<>();
         this.productManager = productManager;
         loadDefected = false;

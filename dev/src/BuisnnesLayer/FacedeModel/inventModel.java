@@ -8,7 +8,7 @@ import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.Sales.Sale;
-import BuisnnesLayer.productManager;
+import BuisnnesLayer.ProductManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,7 +21,7 @@ public class inventModel {
     private Sales_Controller sales_controller;
     private Reports_Controller reports_controller;
 
-    public inventModel(productManager pm) {
+    public inventModel(ProductManager pm) {
         this.stock_controller = Stock_Controller.getInstance(pm);
         this.sales_controller = Sales_Controller.getInstance();
         this.reports_controller = Reports_Controller.getInstance();
