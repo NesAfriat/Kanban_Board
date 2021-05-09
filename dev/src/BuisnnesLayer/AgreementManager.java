@@ -9,12 +9,14 @@ public class AgreementManager {
     private HashMap<Integer, IAgreement> SupplierAgreement; //- SupplierAgreement : hashmap<SupplierId : int ,agreement :Agreement>
     private int idProductCounter;
     private productManager productManager;
+    private  boolean isLoadAllAgreement=false;
 
     public AgreementManager(productManager productManager) {
         // ProductsInTheSystem=new LinkedList<>();
         SupplierAgreement = new HashMap<>();
         idProductCounter = 0;
         this.productManager=productManager;
+
     }
 
     public void AddNewAgreement(IAgreement agreement) {
@@ -24,6 +26,7 @@ public class AgreementManager {
     }
 
     public HashMap<Integer, HashMap<Integer, Integer>> get_cheapest_supplier(HashMap<GeneralProduct, Integer> lackMap) {
+        loadAllAgriments();
         HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity = new HashMap<>(new HashMap<>());
         ProductSupplier productSupplier=null;
         double cheapest_supplier=-1;
@@ -120,6 +123,7 @@ public class AgreementManager {
             //TODO with daniels code there is a problem when adding an item which exist in the stock to a supplier - another catagory is created
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,product_id,productManager.get_product(product_id).getProduct_name());
             productManager.AddProductSupplierToProductGeneral(productSupplier,product_id);
+
         }
         else{
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
@@ -130,12 +134,15 @@ public class AgreementManager {
    }
 
     public void  removeProduct(int SupplierId,int CatalogID) throws Exception {
+
         productManager.RemoveSupllierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID).getId(),CatalogID);
         GeneralProduct generalProduct=productManager.get_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
         if(generalProduct.isSupplierProducHashEmpty()){
             productManager.remove_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
         }
         GetAgreement(SupplierId).RemovePrudact(CatalogID);
+
+
     }
 
 
@@ -147,6 +154,10 @@ public class AgreementManager {
         return false;
    }
 
+   private boolean isAgrementExsist(int SupID){
+        loadAllAgriments();
+        return SupplierAgreement.containsKey(SupID);
+   }
 
 /////////=========================================================DATA====================================================================================
 
@@ -165,6 +176,23 @@ public class AgreementManager {
         DataController dc = DataController.getInstance();
         if(!dc.deleteAreementFronData(agreement)){
             System.out.println("failed to update new Agreement to the database");
+        }
+    }
+
+    private void loadAllAgriments(){
+        if(!isLoadAllAgreement){
+            DataController dc = DataController.getInstance();
+            List<Agreement> agreementList=dc.getAllAgrements();
+            for (Agreement agreement: agreementList
+                 ) {
+                if(!SupplierAgreement.containsKey(agreement.getSupplierID())){
+                    IdentityMap im = IdentityMap.getInstance();
+                    im.addAgreement(agreement);
+                    SupplierAgreement.put(agreement.getSupplierID(),agreement);
+
+                }
+            }
+            isLoadAllAgreement=true;
         }
     }
 
