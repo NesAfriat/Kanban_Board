@@ -20,6 +20,9 @@ public class main {
         DataController dc = DataController.getInstance();
        Response r= facade.getInstance().addNewSupplier(123,"Drinks123","88899988", paymentMethods.Cash, DeliveryMode.Pickup,null,-1,"alon","alon@gmail.com","058967411");
         System.out.println(r.getErrorMsg());
+        Response rd= facade.getInstance().addNewProductToAgreement(123,5,222,"Cola","nesti","drink",1,false);
+        System.out.println(rd.getErrorMsg());
+
 
         IO io=IO.getInstance();
         io.Start_Menu();

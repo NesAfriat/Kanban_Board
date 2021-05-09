@@ -1,6 +1,7 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.SupplierBuissness.Supplier;
+import BuisnnesLayer.paymentMethods;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -45,6 +46,23 @@ public class SuppliersMapper extends Mapper{
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
                     int supID = rs.getInt(1);
+                    String supName = rs.getString(2);
+                    String bank = rs.getString(3);
+                    String payment = rs.getString(4);
+
+                    if(payment== paymentMethods.Cash.toString()){
+                        obj=new Supplier(supID,supName, BuisnnesLayer.paymentMethods.creditcard , bank);
+
+                    }else if(payment== paymentMethods.Cash.toString()){
+                        obj=new Supplier(supID,supName, BuisnnesLayer.paymentMethods.Cash , bank);
+
+                    }else if(payment== paymentMethods.creditcard.toString()){
+                        obj=new Supplier(supID,supName, paymentMethods.paypal , bank);
+
+                    }else {
+                        obj=new Supplier(supID,supName, BuisnnesLayer.paymentMethods.BankTransfers , bank);
+
+                    }
 
                 }
             } catch (SQLException e) {
@@ -131,7 +149,19 @@ public class SuppliersMapper extends Mapper{
                     String supName = rs.getString(2);
                     String bank = rs.getString(3);
                     String payment = rs.getString(4);
-                    obj.add(new Supplier(supID,supName,payment, bank));
+
+                    if(payment== paymentMethods.Cash.toString()){
+                        obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.creditcard , bank));
+
+                    }else if(payment== paymentMethods.Cash.toString()){
+                        obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.Cash , bank));
+
+                    }else if(payment== paymentMethods.creditcard.toString()){
+                        obj.add(new Supplier(supID,supName, paymentMethods.paypal , bank));
+
+                    }else {
+                        obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.BankTransfers , bank));
+                    }
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

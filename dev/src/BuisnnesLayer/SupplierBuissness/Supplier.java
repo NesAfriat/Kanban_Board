@@ -39,7 +39,7 @@ public class Supplier implements ISupplier {
     }
 
     //Constructor for DAL
-    public Supplier(int supID, String supName, String payment, String bank) {
+    public Supplier(int supID, String supName, paymentMethods payment, String bank) {
         this.ContactIdCounter=0;
         this.ListOfContacts  = new ArrayList<>();
         //TODO contacts will be added later
@@ -47,7 +47,7 @@ public class Supplier implements ISupplier {
 //        ContactIdCounter++;
         this.id=supID;
         this.SupplierName=supName;
-//        this.payment=payment; //TODO need to change
+        this.payment=payment; //TODO need to change
         this.BankAccount=bank;
 //        this.SupplierIdCounter=SupplierIdCounter; //TODO what is this????
     }
