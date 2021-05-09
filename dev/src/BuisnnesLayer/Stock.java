@@ -131,7 +131,7 @@ public class Stock {
         defects.addLast(this.productManager.set_item_defected(product_id, item_id));
     }
 
-    public LinkedList<String> get_product_categories(GeneralProduct product) {
+    public LinkedList<String> get_product_categories(GeneralProduct product) throws Exception {
         return this.productManager.get_product_categories(product);
     }
 

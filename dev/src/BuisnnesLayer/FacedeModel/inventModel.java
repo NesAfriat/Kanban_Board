@@ -534,9 +534,9 @@ public class inventModel {
      * @return
      */
     public Response get_reports_id(String subject, String date) {
-        ResponseT<String> res;
+        ResponseT<LinkedList<Integer>> res;
         try {
-            String ids = reports_controller.getReportId(subject, getDate(date));
+            LinkedList<Integer> ids = reports_controller.getReportId(subject, getDate(date));
             res = new ResponseT<>(ids);
         } catch (Exception e) {
             res = new ResponseT<>(e.getMessage());

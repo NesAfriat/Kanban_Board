@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ReportDefects implements Report {
     private final Subject subject = Subject.Defects;
-    private final Date creationDate = new Date();
+    private final Date creationDate;
     private int reportID;
     private LinkedList<String> categories;
     private String timeRange;
@@ -22,7 +22,16 @@ public class ReportDefects implements Report {
         this.reportID = reportId;
         this.categories = categories;
         this.timeRange = time;
+        creationDate = new Date();
         this.report_data = "";
+    }
+    //for Dal
+    public ReportDefects(int repID, String time_range, LinkedList<String> categoriesList, Date date, String data) {
+        this.reportID = repID;
+        this.categories = categoriesList;
+        this.timeRange = time_range;
+        this.report_data = data;
+        this.creationDate = date;
     }
 
     @Override
