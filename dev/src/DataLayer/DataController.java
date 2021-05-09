@@ -256,11 +256,8 @@ public class DataController {
     public Agreement getAgreement(int sup_id) {
         Agreement agr = agreementsMapper.getAgreement(sup_id);
         suppliersProductsMapper.addPStoAgreement(agr); //SupplierProducts
-        HashMap<Integer, ProductSupplier>  deliveryDays = addMapper.GetAllAgreementDeliveryDaysSupplier(sup_id);
-        HashMap<Integer, HashMap<Integer, Double>> disc=  apdMapper.GetAllQuantityDiscAgreementOfSupplier(sup_id,agr.getProducts().keySet());
-        agr.setDeliveryDays(deliveryDays);
-        agr.setDiscountByQuantityHash(disc);
-
+        apdMapper.addQuantityDiscAgreement(agr); //DiscByQuantity
+        addMapper.addDaysDelivery(agr); //DeliveryDays
 
         return agr;
     }

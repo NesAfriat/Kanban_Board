@@ -169,7 +169,7 @@ public class SuppliersProductsMapper extends Mapper {
         return output;
     }
 
-    public LinkedList<ProductSupplier> addPStoAgreement(Agreement agr) {
+    public LinkedList<ProductSupplier> addPStoAgreement(Agreement agr){
         LinkedList<ProductSupplier> output = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM SuppliersProducts WHERE supID=? ";
@@ -178,15 +178,15 @@ public class SuppliersProductsMapper extends Mapper {
                 pstmt.setInt(1, agr.getSupplierID());
 
                 ResultSet rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    int Supplierid = rs.getInt(1);
-
+                while(rs.next()) {
+                    int supID = rs.getInt(1);
                     int catalogID = rs.getInt(2);
                     int gpID = rs.getInt(3);
                     String name = rs.getString(4);
                     double price = rs.getDouble(5);
 
-                    ProductSupplier ps = new ProductSupplier(price, catalogID, gpID, name, Supplierid);
+                    ProductSupplier ps = new ProductSupplier(price,catalogID,gpID,name,supID);
+                    agr.addSupplierProduct(ps);
                     output.add(ps);
                 }
             } catch (SQLException e) {
@@ -195,8 +195,6 @@ public class SuppliersProductsMapper extends Mapper {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        agr.isallProductLoaded=true;
         return output;
-
     }
 }
