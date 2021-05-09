@@ -47,6 +47,9 @@ public class ProductSupplier {
 
     }
 
+    public int getSuplierID(){
+        return SuplierID;
+    }
 
 
     //======================================================================

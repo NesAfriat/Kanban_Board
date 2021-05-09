@@ -197,8 +197,7 @@ public class productManager {
         categories.get(father).addAll(products);
     }
 
-    //TODO need to add a removeSP for SPMapper
-    public void RemoveSupllierProductFromGeneralProduct(int pid,int catalogIF){
+    public void RemoveSupplierProductFromGeneralProduct(int pid, int catalogIF){
         products.get(pid).RemoveSupplierProduct(catalogIF);
     }
 
@@ -209,6 +208,7 @@ public class productManager {
         getCategory(cat_name).setFather_Category(getCategory(cat_father_name));
         setFatherPersistence(getCategory(cat_name), getCategory(cat_father_name));
     }
+
     //TODO need to think of a way to make sure we loaded all the relative products OR use a quary from the db
     public LinkedList<GeneralProduct> get_category_products(String cat_name) throws Exception {
         LinkedList<GeneralProduct> prods = new LinkedList<>();
@@ -281,7 +281,6 @@ public class productManager {
         }
         return output;
     }
-    //TODO need tp load all producs before this
     public LinkedList<GeneralProduct> get_missing_products() {
         LinkedList<GeneralProduct> output = new LinkedList<>();
         if(!loadProducts){
