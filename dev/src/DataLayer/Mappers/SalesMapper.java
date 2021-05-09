@@ -266,7 +266,7 @@ public class SalesMapper extends Mapper{
             String statement = "SELECT * FROM Sales ";
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
+                while (rs.next()) {
                     int saleID = rs.getInt(1);
                     Double discount = rs.getDouble(2);
                     String description = rs.getString(3);

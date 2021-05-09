@@ -144,7 +144,7 @@ public class CategoriesMapper extends Mapper {
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
+                while (rs.next())  {
                     String catName = rs.getString(1);
                     Category newCat= new Category(catName);
                     categories.add(newCat);
