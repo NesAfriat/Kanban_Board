@@ -81,7 +81,7 @@ public class AgreementManager {
 
     //ok Data
     public IAgreement GetAgreement(int SupplierId) {
-        if(!isSupplierExist(SupplierId)){
+        if(SupplierAgreement.containsKey(SupplierId)){
             IAgreement AG=get_froM_data_Agreement(SupplierId);
             if(AG==null)
                 throw new IllegalArgumentException("the Supplier IS nOT exsist");

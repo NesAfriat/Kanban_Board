@@ -140,7 +140,7 @@ public class SuppliersControler implements ISupplierControler {
 
     @Override
     public List<ISupplier> getAllSuppliers() {
-        getAllSuppliers();
+        loadAllSuppliersFromData();
         return new ArrayList<ISupplier>(Suppliers.values());
     }
 
@@ -195,7 +195,8 @@ public class SuppliersControler implements ISupplierControler {
     @Override
     public void removeContact(int SupId, int ContactId) {
         if (!isSupplierExist(SupId)) {
-            throw new IllegalArgumentException("the supplier does not exist");
+
+            getSupplier(SupId);
         }
 
         Suppliers.get(SupId).removeContact(ContactId);
@@ -203,11 +204,17 @@ public class SuppliersControler implements ISupplierControler {
 
     // return true if the supplier exist in the suppliers hash map
     public boolean isSupplierExist(int supplierId) {
-        if (!isLoadAllSuppliers) {
-            loadAllSuppliersFromData();
-            isLoadAllSuppliers = true;
-        }
-        return Suppliers.containsKey(supplierId);
+      if(Suppliers.containsKey(supplierId)){
+          return true;
+      }
+      else {
+          Supplier s=getSupplierFromData(supplierId);
+          if (s==null){
+              return false;
+          }
+          Suppliers.put(supplierId,s);
+          return true;
+      }
     }
 
 

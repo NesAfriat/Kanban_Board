@@ -41,7 +41,7 @@ public class LoadData {
 //        setProducts();
         //setSales();
         facade.addNewSupplier(123,"Drinks123","88899988", paymentMethods.Cash, DeliveryMode.Pickup,null,-1,"alon","alon@gmail.com","058967411");
-       facade.addNewProductToAgreement(123,5,222,"Cola","nesti","drink",1,false);
+       //facade.addNewProductToAgreement(123,5,222,"Cola","nesti","drink",1,false);
 
 
 
