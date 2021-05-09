@@ -112,9 +112,8 @@ private facade(){
     }
 
     public Response show_all_products() {
-     return inventModel.show_all_products();
+        return inventModel.show_all_products();
     }
-
 
     public Response show_all_categories() {
         return inventModel.show_all_categories();

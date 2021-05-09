@@ -258,7 +258,6 @@ public class SupplierFunctionality {
         String name="DEF";
         String category="Def";
         if(!isExsist) {
-
             System.out.println("please type item manfucator : ");
             manfucator = myObj.nextLine();
             System.out.println("please type item name : ");
@@ -269,6 +268,7 @@ public class SupplierFunctionality {
         if(isExsist){
             System.out.println("please type the id of the product in stock");
             int general_product_id=NumberType();
+            //TODO what happens when there is already a product?? what happens to the DEF category??
             Response response= facade.addNewProductToAgreement(id,price,catalogId,manfucator,name,category,general_product_id,isExsist);
             if(response.getErrorOccurred()){
                 System.out.println((response.getErrorMsg()));

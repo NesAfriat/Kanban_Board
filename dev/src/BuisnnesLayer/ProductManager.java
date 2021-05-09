@@ -336,6 +336,7 @@ public class ProductManager {
         return output;
     }
 
+    //TODO: after load - does not show the products
     public LinkedList<String> get_all_products() {
         LinkedList<String> output = new LinkedList<>();
         if(!loadProducts){
@@ -347,7 +348,7 @@ public class ProductManager {
         }
         return output;
     }
-
+    //TODO: after load - show the 2 categories - does not show
     public LinkedList<String> get_all_categories() {
         if (!loadCategories) {
             loadAllCategories();
