@@ -69,6 +69,7 @@ public class IdentityMap {
             if (item.getItem_id() == item_id && item.getProduct_id() == gp_id) {
                 output = item;
                 itemList.remove(item);
+                return output;
             }
         }
         return output;

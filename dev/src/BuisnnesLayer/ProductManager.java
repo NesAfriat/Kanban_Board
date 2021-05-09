@@ -42,6 +42,7 @@ public class ProductManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesn't exist!");
         }
+        get_product(product_id);
         Item item = products.get(product_id).setItem_defected(item_id);
         return item;
     }

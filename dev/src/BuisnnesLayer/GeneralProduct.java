@@ -217,6 +217,16 @@ public class GeneralProduct {
         Item item = getItem(item_id);
         item.setExpiration_date(new Date());
         items.remove(item);
+        removeItemPersistence(item);
+        LinkedList<Item> toRemove = new LinkedList<>();
+        toRemove.add(item);
+        addDefectedItem(toRemove);
+        if(item.getLocation().equals("storage")){
+            amount_storage--;
+        }else{
+            amount_store--;
+        }
+        update(this); //update amounts
         return item;
     }
 
@@ -247,6 +257,7 @@ public class GeneralProduct {
         for (Item i : items) {
             if (i.getItem_id().equals(item_id)) {
                 item = i;
+                break;
             }
         }
         if (item == null)
