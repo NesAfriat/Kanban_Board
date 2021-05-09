@@ -3,6 +3,7 @@ package DataLayer.Mappers;
 import BuisnnesLayer.Agreement;
 import BuisnnesLayer.ProductSupplier;
 import BuisnnesLayer.Sales.Sale;
+import DataLayer.DataController;
 
 import java.sql.*;
 import java.util.HashMap;
@@ -45,31 +46,76 @@ public class AgreementProductDiscMapper extends Mapper{
 
 
 
+           public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,int Price) {
+               boolean output = false;
+               try (Connection conn = connect()) {//String statement = "UPDATE OrderProducts SET oID=?, catalogID=?, quantity=?";
+                   boolean inserted = false;
+                   String statement = "INSERT OR IGNORE INTO AgreementProductDisc(supID, catalogID, quantity, price) " +
+                           "VALUES (?,?,?,?)";
+
+                   try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                       pstmt.setInt(1, SupId);
+                       pstmt.setInt(2, catalogId);
+                       pstmt.setInt(3, quantity);
+                       pstmt.setInt(4, Price);
+
+                       output = pstmt.executeUpdate() != 0;
+                   } catch (SQLException e) {
+                       e.printStackTrace();
+                   }
+               } catch (SQLException throwables) {
+                   throwables.printStackTrace();
+               }
+               return output;
+           }
 
 
 
-       public boolean RemoveQuantityDiscAgreement(int SupId,int catalogId,int quantity) {
-        //TODO compleate
-           return true;
+           public boolean RemoveQuantityDiscAgreement(int SupId,int catalogId,int quantity) {
+               boolean deleted = false;
+               try (Connection conn = connect()) {
+                   String statement = "DELETE FROM AgreementProductDisc WHERE supID=? AND catalogID=? AND quantity=?";
+                   try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                       pstmt.setInt(1, SupId);
+                       pstmt.setInt(2, catalogId);
+                       pstmt.setInt(2, quantity);
 
-       }
+                       deleted = pstmt.executeUpdate() != 0;
+                   } catch (SQLException e) {
+                       e.printStackTrace();
+                   }
+               } catch (SQLException throwables) {
+                   throwables.printStackTrace();
+               }
+               return deleted;
+           }
 
 
-      public boolean UpdateQuantityDiscAgreement(int SupId,int catalogId,int quantity,int price) {
-          //TODO compleate
-          return true;
-       }
+           public boolean UpdateQuantityDiscAgreement(int SupId,int catalogId,int quantity,int price) {
+               boolean updated = false;
+               try (Connection conn = connect()) {
+                   String statement = "UPDATE AgreementProductDisc SET price=? WHERE supID=? AND catalogID=? AND quantity=?";
+
+                   try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                       pstmt.setInt(1, price);
+                       pstmt.setInt(2, SupId);
+                       pstmt.setInt(3, catalogId);
+                       pstmt.setInt(4,quantity );
+                       updated = pstmt.executeUpdate() != 0;
+                   } catch (SQLException e) {
+                       e.printStackTrace();
+                   }
+               } catch (SQLException throwables) {
+                   throwables.printStackTrace();
+               }
+               return updated;
+           }
 
 
-      public HashMap<Integer, HashMap<Integer, Double>> GetAllQuantityDiscAgreementOfSupplier(int SupId, Set<Integer> catalogIdOfAllProduct) {
-//TODO compleate
-          return null;
-      }
 
 
 
-
-    public void addQuantityDiscAgreement(Agreement agr){
+           public void addQuantityDiscAgreement(Agreement agr){
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM AgreementProductDisc WHERE supID=? ";
 
@@ -82,9 +128,6 @@ public class AgreementProductDiscMapper extends Mapper{
                     int amount = rs.getInt(3);
                     double price = rs.getDouble(4);
                     agr.addDiscountByProductQuantity(catalogID,amount,price);
-
-
-
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

@@ -3,6 +3,8 @@ package DataLayer.Mappers;
 import BuisnnesLayer.Agreement;
 
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 public class AgreementsMapper extends Mapper {
     public AgreementsMapper() {
@@ -49,6 +51,32 @@ public class AgreementsMapper extends Mapper {
                     String mod = rs.getString(3);
                     int daysFromOrder = rs.getInt(4);//todo - need to be list of int - like days '(1 ,3) //sunday, tuesday
                     obj = new Agreement(supID, xDisc, mod, daysFromOrder);
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return obj;
+    }
+
+// get all agrements in the data
+    public List<Agreement> getAllAgreement() {
+       List<Agreement> obj = new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Agreements  ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int supID = rs.getInt(1);
+                    double xDisc = rs.getDouble(2);
+                    String mod = rs.getString(3);
+                    int daysFromOrder = rs.getInt(4);//todo - need to be list of int - like days '(1 ,3) //sunday, tuesday
+                    obj.add( new Agreement(supID, xDisc, mod, daysFromOrder));
                 }
 
             } catch (SQLException e) {
