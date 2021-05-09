@@ -79,9 +79,8 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product do not have discount with this quantity");
         }
         DiscountByProductQuantity.get(CatalogId).remove(Quantiti);
-        disc(this);
-
     }
+
     public void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery,int numOfDaysFromOrder) {
         this.deliveryMods=deliveryMods;
         this.daysOfDelivery=daysOfDelivery;
@@ -222,13 +221,7 @@ public class Agreement implements IAgreement {
         im.removerProductSupplier(productSupplier);
     }
 
-    private void AddDiscountByProductInTheData(){
-        IdentityMap im = IdentityMap.getInstance();
-        DataController dc = DataController.getInstance();
-        if (!dc.(productSupplier,SupplierID)) {
-            System.out.println("failed to Remove Prudact to the database");
-        }
-    }
+
 
     public void setDeliveryDays(HashMap<Integer, ProductSupplier> deliveryDays) {
         this.daysOfDelivery=daysOfDelivery;

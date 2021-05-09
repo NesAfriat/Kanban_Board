@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 
 public class DataController {
@@ -170,9 +171,20 @@ public class DataController {
     //If we want to retrive an suplpier which was not in the business
     public Supplier getSupplier(int supplier_id) {
         Supplier sup = suppliersMapper.getSupplier(supplier_id);
-        //TODO: need to add here ContactList
+        suppliersContactsMapper.addAllContactsToSupplier(sup);
         return sup;
     }
+
+
+    public List<Supplier>  getAllSupplier() {
+        List<Supplier> sup_list = suppliersMapper.getALLSupplier();
+        for (Supplier s:sup_list
+             ) {
+            suppliersContactsMapper.addAllContactsToSupplier(s);
+        }
+        return sup_list;
+    }
+
 
     //If we want to make entire new record of an item
     public boolean insertSupplier(Supplier sup) {
@@ -232,9 +244,19 @@ public class DataController {
     //================================================================================
     //Orders Actions:
     //If we want to retrive an Order which was not in the business
+
     public Order getOrder(int sup_id, int oID) {
         Order o = ordersMapper.getOrder(sup_id, oID);
+        orderProductsMapper.addProductsToOrder(o);// this function add all product to the order
         return o;
+    }
+    public List<Order> getAllOrders(){
+       List<Order> orderList= ordersMapper.getAllOrders();
+        for (Order o:orderList
+             ) {
+            orderProductsMapper.addProductsToOrder(o);
+        }
+        return orderList;
     }
 
     //If we want to make entire new record of an item

@@ -17,10 +17,11 @@ public class OrderControler {
     private HashMap<Integer, Order> Orders ;//- Orders: hashMap<OrderID: int, order: Order>
     private AgreementManager agreementManager;
     private int idOrderCounter;
+    boolean isAllOrdersUploudFromData=false;
 
 //    private HashMap<Integer, HashMap<Integer, Integer>> DiscountByProductQuantity;//- DiscountByProductQuantity hashMap<CatalogID:int, hashMap<quantitiy :int , newPrice:int>>
     public List<Order> getAllOrders(){
-
+        loadAllOrders();
         return new ArrayList<Order>(Orders.values());
     }
     public OrderControler(AgreementManager agreementManager){
@@ -39,12 +40,9 @@ public class OrderControler {
             throw new IllegalArgumentException("not all product exist in the Agreement with the supplier");
         }
         if(isConstant){
-
-
             Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),true,constantorderdayfromdelivery);
             Orders.put(idOrderCounter, order);
             add_Order_to_the_data(order);
-
             idOrderCounter++;
         }
         else {
@@ -165,6 +163,7 @@ public class OrderControler {
        // public void EditProductQuantity(int CatalogID,int quantity,IAgreement agreement)
         Orders.get(OrderID).EditProductQuantity(product,Quantity,agreementManager.GetAgreement(supId));
     }
+
     public void ReCalculateTotalPayment (int SupId)
     {
         for (Order order:Orders.values())
@@ -176,11 +175,8 @@ public class OrderControler {
 
 
     public Boolean isExsist(int OrderId,int SupId){
+        loadAllOrders();
         if(Orders.containsKey(OrderId)){
-            return true;
-        }
-        Order order=getOrderFromTheData(OrderId,SupId);
-        if(order!=null){
             return true;
         }
         return false;
@@ -196,7 +192,10 @@ public class OrderControler {
              }
         }
     }
+
     //================================================DATA===================================
+
+
 
     //insertProduct
     private Order getOrderFromTheData(int orderId,int SupId) {
@@ -211,9 +210,12 @@ public class OrderControler {
             if (order == null) {
                 return null; }
 
+            im.addOrder(order);
             return order;
         }
     }
+
+
 
 
     private void removeOrderFromTheData(int orderId){
@@ -227,6 +229,8 @@ public class OrderControler {
     }
 
 
+
+
     //ADD ORDER
     private void add_Order_to_the_data(Order order) {
         IdentityMap im = IdentityMap.getInstance();
@@ -235,6 +239,28 @@ public class OrderControler {
             System.out.println("failed to insert Order to the database with the keys");
         }
         im.addOrder(order);
+    }
+
+
+
+
+    private boolean loadAllOrders(){
+        if(isAllOrdersUploudFromData){
+            return true;
+        }
+        DataController dc = DataController.getInstance();
+        List<Order> orderList=dc.getAllOrders();
+        IdentityMap im = IdentityMap.getInstance();
+        for (Order o:orderList
+             ) {
+            if(!Orders.containsKey(o.GetId())){
+                im.addOrder(o);
+                Orders.put(o.GetId(),o);
+            }
+        }
+        isAllOrdersUploudFromData=true;
+        return true;
+
     }
 
 }

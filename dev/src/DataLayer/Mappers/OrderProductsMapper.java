@@ -1,10 +1,9 @@
 package DataLayer.Mappers;
 
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import BuisnnesLayer.OrderBuissness.Order;
+
+import java.sql.*;
 
 public class OrderProductsMapper extends Mapper {
     public OrderProductsMapper() {
@@ -98,6 +97,32 @@ public class OrderProductsMapper extends Mapper {
         }
         return output;
     }
+
+
+    public void addProductsToOrder(Order order){
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM OrderProducts WHERE oID=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, order.GetId());
+
+                ResultSet rs = pstmt.executeQuery();
+                while(rs.next()) {
+                    int catalogID = rs.getInt(2);
+                    int quantity=rs.getInt(3);
+                    order.insertProductToOrderForDal(catalogID,quantity);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+
+
+
 
 
 }
