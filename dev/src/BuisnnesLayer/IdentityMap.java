@@ -179,8 +179,9 @@ public class IdentityMap {
     public void addReport(Report report) {
         boolean isIN = false;
         for (Report r : reportsList)
-            if (r.getReportID() == report.getReportID())
+        { if (r.getReportID() == report.getReportID())
                 isIN = true;
+       }
         if (!isIN)
             reportsList.add(report);
     }

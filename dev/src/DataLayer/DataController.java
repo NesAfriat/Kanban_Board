@@ -197,6 +197,10 @@ public class DataController {
 
     //=============================
     //reports
+
+    public int getMaxRepID() {
+        return reportsMapper.getMaxReportID();
+    }
     public Report getReport(int rID) {
         Report report = reportsMapper.getReport(rID);
         return report;
@@ -214,6 +218,9 @@ public class DataController {
         return reportsMapper.delete(report);
     }
 
+    public LinkedList<Integer> getReportsIDs(String sub, String date) {
+        return reportsMapper.getIDs(sub,date);
+    }
     public LinkedList<Report> loadAllReports() {
         return reportsMapper.loadAllReports();
     }

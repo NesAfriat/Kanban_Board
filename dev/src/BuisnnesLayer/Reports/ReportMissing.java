@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReportMissing implements Report {
-    private final Subject subject = Subject.Missing;
+    private final String subject = "Missing";
     private final Date creationDate;
     private Integer reportID;
     private LinkedList<String> categories;
@@ -36,20 +36,23 @@ public class ReportMissing implements Report {
     @Override
     public void createReport() throws Exception {
         Stock_Controller st_c = Stock_Controller.getInstance(null);
-        List<GeneralProduct> products = st_c.get_missing_products();
-        List<GeneralProduct> existProducts;
-        for (GeneralProduct p : products) {
+        List<GeneralProduct> missing_products = st_c.get_missing_products();
+        List<GeneralProduct> catProducts;
+        for (GeneralProduct mp : missing_products) {
             for (String cat : this.categories) {
-                existProducts = st_c.get_category_products( cat);
-                if (existProducts.contains(p))
-                    this.report_data = this.report_data +"\n"+ p.toString();
+                catProducts = st_c.get_category_products(cat);
+                for (GeneralProduct gp : catProducts)
+                    if (gp.getProduct_id().equals(mp.getProduct_id())) {
+                        this.report_data = this.report_data + "\n" + mp.toString();
+                        break;
+                    }
             }
         }
     }
 
     @Override
     public String getSubject() {
-        return this.subject.name();
+        return this.subject;
     }
 
     @Override

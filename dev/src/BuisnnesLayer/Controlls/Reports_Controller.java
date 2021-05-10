@@ -36,13 +36,6 @@ public class Reports_Controller {
         }
     }
 
-    private void check_valid_number(Number[] arr) throws Exception {
-        for (Number number : arr) {
-            if (number.doubleValue() < 0) {
-                throw new Exception("negative number is not allowed");
-            }
-        }
-    }
 
     private void check_valid_Dates(Date date) throws Exception {
         Date now = new Date();
@@ -52,7 +45,8 @@ public class Reports_Controller {
 
     private Reports_Controller() {
         this.reports = new HashMap<>();
-        this.reportFactory = new ReportFactory();
+        int maxReport= getMaxReportFromData();
+        this.reportFactory = new ReportFactory(maxReport);
     }
 
     public static Reports_Controller getInstance() {
@@ -61,71 +55,50 @@ public class Reports_Controller {
         return report_C;
     }
 
-    //TODO for defected report - does not load data into db
     public Report createReport( String subject, String timeRange, LinkedList<String> categories) throws Exception {
         check_valid_string(new String[]{subject, timeRange});
         check_valid_string(categories);
-        Subject sub = convertSubject(subject);
-        if(!loadedReports){
-            loadAllReports();
-            loadedReports=true;
-        }
-        Report r = reportFactory.getReport(sub, timeRange, categories);
+        Report r = reportFactory.getReport(subject, timeRange, categories);
         addReportData(r);
         reports.put(r.getReportID(), r);
         return r;
     }
 
-    private Subject convertSubject(String sub) throws Exception {
-        switch (sub.toLowerCase()) {
-            case "stock":
-                return Subject.Stock;
-            case "missing":
-                return Subject.Missing;
-            case "defects":
-                return Subject.Defects;
-            default:
-                throw new Exception("No such Subject");
-        }
-    }
-
     public Report getReportById(int id) throws Exception {
         Report output=null;
-        if (!reports.containsKey(id))
+        if (reports.containsKey(id))
+            output=reports.get(id);
+        else
         output= getReportData(id);
         if (output==null)
             throw new Exception("report id doesnt exist");
-        return reports.get(id);
+        return output;
     }
 
     // search reports by date and subject
-    //TODO get report after it was init doesnt work!
     public LinkedList<Integer> getReportId(String subject, Date date) throws Exception {
         check_valid_Dates(date);
         check_valid_string(new String[]{subject});
         LinkedList<Integer> output = new LinkedList<>();
-        if(!loadedReports) {
-            loadAllReports();
-            loadedReports=true;
-        }
         for (Report r : reports.values()) {
             if (subject.equals(r.getSubject().toLowerCase()) &&
                     date.equals(r.getCreationDate()))
                 output.add(r.getReportID());
         }
+        if(output.isEmpty())
+            output= getReportsIDFromDal(subject,getDate(date));
         return output;
     }
 
-    //TODO: does not show report data when loading from db
-    public LinkedList<String> get_all_reports() {
-        LinkedList<String> output = new LinkedList<>();
+
+    public LinkedList<Report> get_all_reports() {
+        LinkedList<Report> output = new LinkedList<>();
         if(!loadedReports) {
             loadAllReports();
             loadedReports=true;
         }
-        for (Report report : reports.values()) {
-            output.addFirst(report.getReportData() + " " + report.getSubject() + " " + getDate(report.getCreationDate()) + "\n");
-        }
+        for(Report r: reports.values())
+        output.add(r);
         return output;
     }
 
@@ -139,33 +112,39 @@ public class Reports_Controller {
     }
     private Report getReportData(int repID)
     {
+        Report output=null;
         IdentityMap im= IdentityMap.getInstance();
         DataController dc= DataController.getInstance();
-        Report report= im.getReport(repID);
-        if(report==null)
-            report=dc.getReport(repID);
-        if(report!=null)
-        {
-            im.addReport(report);
-            reports.put(repID,report);
+         output= im.getReport(repID);
+        if(output!=null)
+        { return output;}
+        else {
+            output = dc.getReport(repID);
+            if (output != null) {
+                im.addReport(output);
+                reports.put(repID, output);
+            }
         }
-        return report;
+        return output;
     }
     private void loadAllReports() {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
         LinkedList<Report> reportsList = dc.loadAllReports();
-        int reports_id =1;
         for (Report r : reportsList) {
             im.addReport(r);
             if (!reports.containsKey(r.getReportID())) {
                 reports.put(r.getReportID(), r);
             }
-            if(r.getReportID()>reports_id){
-                reports_id=r.getReportID()+1;
-            }
         }
-        reportFactory.setReportID(reports_id);
+    }
+    private LinkedList<Integer> getReportsIDFromDal(String sub, String date) {
+        DataController dc= DataController.getInstance();
+        return dc.getReportsIDs(sub,date);
+    }
+    private int getMaxReportFromData() {
+        DataController dc= DataController.getInstance();
+        return dc.getMaxRepID();
     }
 }
 

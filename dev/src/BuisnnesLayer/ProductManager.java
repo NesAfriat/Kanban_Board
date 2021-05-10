@@ -457,10 +457,10 @@ public class ProductManager {
     private LinkedList<GeneralProduct> get_category_products_DAL(String cat_name) throws Exception {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
-        LinkedList<GeneralProduct> productsList = dc.get_category_products_DAL(cat_name);
+        LinkedList<GeneralProduct> productsList= dc.get_category_products_DAL(cat_name);
         for (GeneralProduct gp : productsList) {
             im.addGeneralProduct(gp);
-            if (!products.containsKey(gp.getProduct_id()))
+            if(!products.containsKey(gp.getProduct_id()))
                 products.put(gp.getProduct_id(),gp);
             Category c= getCategory(cat_name);
             if(!categories.get(c).contains(gp))

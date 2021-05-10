@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public class ReportStock implements Report {
-    private final Subject subject = Subject.Stock;
+    private final String subject = "Stock";
     private final Date creationDate;
     private Integer reportID;
     private LinkedList<String> categories;
@@ -46,7 +46,7 @@ public class ReportStock implements Report {
 
     @Override
     public String getSubject() {
-        return this.subject.name();
+        return this.subject;
     }
 
     @Override
