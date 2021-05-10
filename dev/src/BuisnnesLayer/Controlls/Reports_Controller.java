@@ -99,6 +99,7 @@ public class Reports_Controller {
     }
 
     // search reports by date and subject
+    //TODO get report after it was init doesnt work!
     public LinkedList<Integer> getReportId(String subject, Date date) throws Exception {
         check_valid_Dates(date);
         check_valid_string(new String[]{subject});
