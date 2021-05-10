@@ -28,7 +28,7 @@ public class Order {
     private Integer constsntordersDays;
 
     //constructor for DAL
-    public Order(int orderID, int sup, String date, double pay, int con) {
+    public Order(int orderID, int sup, String date, double pay, int con,int dayOfOrder) {
        //TODO: need to edit this constructor
         this.id = orderID;
         productQuantity=new HashMap<>();
@@ -39,11 +39,14 @@ public class Order {
 //        this.TotalPayment=CalculateTotalPayment(products,agreement);
         this.TotalPayment = pay;
         this.Constant = con == 1;
+        constsntordersDays=dayOfOrder;
 
 //        this.constsntordersDays=constsntordersDays;
     }
 
-
+public int getDayOfOrder(){
+        return constsntordersDays;
+}
     public boolean isConstant() {
         return Constant;
     }
@@ -107,6 +110,9 @@ public class Order {
         productQuantity.remove(CatalogID);
         this.TotalPayment = CalculateTotalPayment(this.productQuantity, agreement);
         removeProduct(this.id, CatalogID); //data
+        update(this);
+        
+
     }
 
 
@@ -119,8 +125,9 @@ public class Order {
 
         }
         productQuantity.replace(CatalogID, quantity);
-        CalculateTotalPayment(this.productQuantity, agreement);
+        TotalPayment=CalculateTotalPayment(this.productQuantity, agreement);
         updateProductQuantity(this.id, CatalogID,quantity);//data
+        update(this);
     }
 
     public double GetTotalPayment() {

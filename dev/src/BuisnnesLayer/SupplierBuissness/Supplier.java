@@ -40,7 +40,7 @@ public class Supplier implements ISupplier {
 
     //Constructor for DAL
     public Supplier(int supID, String supName, paymentMethods payment, String bank) {
-        this.ContactIdCounter=0;
+        this.ContactIdCounter=getTheBigestIDforTheCounterinContacts(supID)+1;
         this.ListOfContacts  = new ArrayList<>();
         //TODO contacts will be added later
 //        ListOfContacts.add(new Contact(ContactIdCounter,contactName,contactEmail,phoneNumber));
@@ -49,7 +49,6 @@ public class Supplier implements ISupplier {
         this.SupplierName=supName;
         this.payment=payment; //TODO need to change
         this.BankAccount=bank;
-//        this.SupplierIdCounter=SupplierIdCounter; //TODO what is this????
     }
 
     @Override
@@ -59,6 +58,7 @@ public class Supplier implements ISupplier {
         addContactToSupplierInTheData(newContact,id);
         incContactIdCounter();
     }
+
 
     @Override
     public void removeContact(int contactID) {
@@ -197,6 +197,13 @@ public void UpdateSupplierInTheData(Supplier supplier){
         }
     }
 
+
+    private int getTheBigestIDforTheCounterinContacts(int supId){
+        DataController dc = DataController.getInstance();
+        int x=dc.getTheBigestIDforTheCounterinContacts(supId);
+        return x;
+
+    }
 
 
 

@@ -426,7 +426,7 @@ public class ProductManager {
         for (GeneralProduct gp : productsList) {
             im.addGeneralProduct(gp);
             if (!products.containsKey(gp.getProduct_id()))
-                productsList.add(gp);
+                products.put(gp.getProduct_id(),gp);
             loadProductCategoryDal(gp);
         }
     }
@@ -558,5 +558,21 @@ public class ProductManager {
             }
         }
         return cat;
+    }
+
+    public void geteGeneralAndPutSupplierProduct(ProductSupplier productSupplier){
+        if(products.containsKey(productSupplier.getId())){
+            if(!products.get(productSupplier.getId()).isSupplierProductExist(productSupplier.getCatalogID())){
+                products.get(productSupplier.getId()).addSupplierProduct(productSupplier);
+            }
+        }
+        else{//need load general product
+            IdentityMap im = IdentityMap.getInstance();
+            DataController dc = DataController.getInstance();
+            GeneralProduct generalProduct=dc.getGP(productSupplier.getId());
+            generalProduct.addSupplierProduct(productSupplier);
+            products.put(generalProduct.getProduct_id(),generalProduct);
+            im.addGeneralProduct(generalProduct);
+        }
     }
 }

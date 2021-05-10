@@ -23,7 +23,7 @@ public class OrdersMapper extends Mapper{
                 "\tdatetime TEXT,\n" +
                 "\ttotalPayment REAL,\n" +
                 "\tconstant INTEGER,\n" +
-
+                "\tdyOfOrder INTEGER, \n"+
                 "\tPRIMARY KEY (supID, oID),\n" +
                 "\tFOREIGN KEY (supID) REFERENCES Suppliers (supID)\n" +
                  ");";
@@ -50,7 +50,7 @@ public class OrdersMapper extends Mapper{
             String statement = "SELECT * FROM Orders";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-
+                int dayoforder=-1;
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     int sup = rs.getInt(1);
@@ -58,7 +58,10 @@ public class OrdersMapper extends Mapper{
                     String date = rs.getString(3);
                     double pay = rs.getDouble(4);
                     int con = rs.getInt(5);
-                    obj = new Order(orderID,sup,date,pay,con);
+                    if(con==1) {
+                        dayoforder = rs.getInt(6);
+                    }
+                    obj = new Order(orderID,sup,date,pay,con,dayoforder);
                     list.add(obj);
                 }
             } catch (SQLException e) {
@@ -80,7 +83,7 @@ public class OrdersMapper extends Mapper{
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, sup_id);
                 pstmt.setInt(2, oID);
-
+                int dayoforder=-1;
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
                     int sup = rs.getInt(1);
@@ -88,8 +91,12 @@ public class OrdersMapper extends Mapper{
                     String date = rs.getString(3);
                     double pay = rs.getDouble(4);
                     int con = rs.getInt(5);
+                    int dayOfOrder=rs.getInt(6);
+                    if(con==1) {
+                        dayoforder = rs.getInt(6);
+                    }
+                    obj = new Order(orderID,sup,date,pay,con,dayoforder);
 
-                    obj = new Order(orderID,sup,date,pay,con);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -105,7 +112,7 @@ public class OrdersMapper extends Mapper{
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         try (Connection conn = connect()) {
-            String statement = "UPDATE Orders SET supID=?, oID=? datetime=?, totalPayment=?, constant=? WHERE supID=? AND oID=? ";
+            String statement = "UPDATE Orders SET supID=?, oID=? ,datetime=?, totalPayment=?, constant=? WHERE supID=? AND oID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, o.getSupplierID());
@@ -150,8 +157,8 @@ public class OrdersMapper extends Mapper{
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
-            String statement = "INSERT OR IGNORE INTO Orders(supID, oID, datetime, totalPayment, constant) " +
-                    "VALUES (?,?,?,?,?)";
+            String statement = "INSERT OR IGNORE INTO Orders(supID, oID, datetime, totalPayment, constant,dyOfOrder) " +
+                    "VALUES (?,?,?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, o.getSupplierID());
@@ -159,7 +166,7 @@ public class OrdersMapper extends Mapper{
                 pstmt.setString(3, (o.getDateTime().format(formatter))); //TODO need to add function for this //new todo -chang from int to stirng in the data base
                 pstmt.setDouble(4, o.getTotalPayment()); //TODO need to add function for this //new todo check if its double in the data base
                 pstmt.setInt(5, o.isConstant_int()); //TODO need to set true == 0, else false// true===1
-
+                pstmt.setInt(6, o.getDayOfOrder());
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();

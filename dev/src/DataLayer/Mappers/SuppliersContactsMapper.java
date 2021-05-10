@@ -178,6 +178,7 @@ public class SuppliersContactsMapper extends Mapper{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        System.out.println(obj);
         return obj;
 
     }

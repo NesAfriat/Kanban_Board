@@ -41,12 +41,12 @@ public class OrderProductsMapper extends Mapper {
     public boolean update(int orderId,int catalogID,int quantity) {
         boolean updated = false;
         try (Connection conn = connect()) {
-            String statement = "UPDATE OrderProducts SET oID=?, catalogID=?, quantity=?";
+            String statement = "UPDATE OrderProducts SET quantity=? where oID=? AND catalogID=?";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, orderId);
-                pstmt.setInt(2, catalogID);
-                pstmt.setInt(3, quantity);
+                pstmt.setInt(1, quantity);
+                pstmt.setInt(2, orderId);
+                pstmt.setInt(3, catalogID);
 
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {

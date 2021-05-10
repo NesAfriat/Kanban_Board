@@ -158,6 +158,18 @@ public class Agreement implements IAgreement {
 
     }
 
+    public void RemovAllProducts(){
+        List<Integer> d=new LinkedList();
+        for (int x:products.keySet()
+        ) {
+            d.add(x);
+        }
+
+        for (int x:d
+             ) {
+            RemovePrudact(x);
+        }
+    }
     ///////////////////////zeeeeeeeeeeeeeeeeeeeeee
     public ProductSupplier GetPrudact(int CatalogID)
     {

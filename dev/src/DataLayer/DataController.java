@@ -108,7 +108,7 @@ public class DataController {
     public GeneralProduct getGP(int product_id) {
         GeneralProduct gp = generalProductMapper.getGeneralProduct(product_id);
         itemMapper.addItemToProduct(gp); //add gp items
-        suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+        //suppliersProductsMapper.addPStoProduct(gp); //add gp ps //TODO
         return gp;
     }
 
@@ -141,7 +141,7 @@ public class DataController {
         LinkedList<GeneralProduct> gps = generalProductMapper.loadAllProducts();
         for(GeneralProduct gp: gps){
             itemMapper.addItemToProduct(gp); //add gp items
-            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+            //suppliersProductsMapper.addPStoProduct(gp); //add gp ps//TODO
         }
         return gps;
     }
@@ -150,7 +150,7 @@ public class DataController {
         LinkedList<GeneralProduct> gps = generalProductMapper.loadProductsByCategory(cat_name);
         for(GeneralProduct gp: gps){
             itemMapper.addItemToProduct(gp); //add gp items
-            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+            //suppliersProductsMapper.addPStoProduct(gp); //add gp ps//TODO
         }
         return gps;
     }
@@ -213,7 +213,7 @@ public class DataController {
         Supplier sup = suppliersMapper.getSupplier(supplier_id);
         if(sup!=null){
         suppliersContactsMapper.addAllContactsToSupplier(sup);
-        sup.setContactIdCounter(suppliersContactsMapper.getBigestId(supplier_id));
+        sup.setContactIdCounter(suppliersContactsMapper.getBigestId(supplier_id)+1);
         }
         return sup;
     }
@@ -291,6 +291,7 @@ public class DataController {
     public Order getOrder(int sup_id, int oID) {
         Order o = ordersMapper.getOrder(sup_id, oID);
         orderProductsMapper.addProductsToOrder(o);// this function add all product to the order
+
         return o;
     }
     public List<Order> getAllOrders(){
@@ -472,6 +473,10 @@ public class DataController {
     public int getOrderBigestId(){
         int order=orderProductsMapper.getOrderIdCounterBigest();
         return order;
+    }
+
+    public int getmaxgpid(){
+        return suppliersProductsMapper.getMaxPGcounterNumber();
     }
 
 }
