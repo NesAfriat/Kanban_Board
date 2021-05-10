@@ -31,7 +31,7 @@ public class IO {
 
     public void Start_Menu() throws Exception {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        String[] arrFunctionality=new String[]{"Supplier Functionality","order Functionality","inventory Functionality","Load Data","exit"};
+        String[] arrFunctionality=new String[]{"Supplier Functionality","order Functionality","inventory Functionality","exit"};
 //        System.out.println("__  _  __ ____ |  |   ____  ____   _____   ____  \n" +
 //                "\\ \\/ \\/ // __ \\|  | _/ ___\\/  _ \\ /     \\_/ __ \\ \n" +
 //                " \\     /\\  ___/|  |_\\  \\__(  <_> )  Y Y  \\  ___/ \n" +
@@ -59,12 +59,8 @@ public class IO {
                     break;
 
                 case "4":
-                  LoadData loadData= new LoadData();
-                   loadData.LoadALLData();
-                   break;
-
-                case "5":
                     return;
+
                 default:
                     System.out.println("Not within bounds");
             }

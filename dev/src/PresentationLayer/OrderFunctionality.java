@@ -241,10 +241,10 @@ public class OrderFunctionality {
                 int day=0;
                 while (true) {
                     day = NumberType();
-                    if (isConstat>= 1 && isConstat <=7 ) {
-                        System.out.println("try again!");
+                    if (day>= 1 && day <=7 ) {
+                        break;
                     }
-                    break;
+                    System.out.println("try again!");
                 }
                 Response r=facade.addNewOrder(id,productQuantity,true,day);
                 if(r.getErrorOccurred()) System.out.println(r.getErrorMsg());
