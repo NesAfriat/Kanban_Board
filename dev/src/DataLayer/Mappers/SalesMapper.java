@@ -81,6 +81,26 @@ public class SalesMapper extends Mapper{
             }
         return s;
     }
+    public int getMaxSaleID() {
+        int output=0;
+        try (Connection conn = connect()) {
+            String statement = "SELECT max(saleID) FROM Sales";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    int saleID = rs.getInt(1);
+                    output=saleID;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
     public LinkedList<Sale> getSaleByProduct(String product) {
         LinkedList<Sale> sales= new LinkedList<>();
         LinkedList<Integer> salesID= apm.getSalesID(product);

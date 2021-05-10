@@ -396,7 +396,7 @@ public class IdentityMap {
     public boolean addSale(Sale sale) {
         boolean added = false;
         for (Sale s : salesList) {
-            if (s.getSale_id() == sale.getSale_id())
+            if (s.getSale_id().equals(sale.getSale_id()))
                 return false;
         }
         salesList.add(sale);
