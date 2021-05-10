@@ -473,4 +473,12 @@ public class DataController {
             generalProductMapper.setGPCategory(prod,father.getCategory_name());
         }
     }
+
+    public Integer getMaxSalesID() {
+        return salesMapper.getMaxSaleID();
+    }
+
+    public int getMaxGPID() {
+        return generalProductMapper.getMaxGPID();
+    }
 }

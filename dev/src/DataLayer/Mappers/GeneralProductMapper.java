@@ -294,6 +294,26 @@ public class GeneralProductMapper extends Mapper {
         return gpCategory;
     }
 
+    public int getMaxGPID() {
+        int output=0;
+        try (Connection conn = connect()) {
+            String statement = "SELECT max(gpID) FROM GeneralProducts";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    int gpID = rs.getInt(1);
+                    output=gpID;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output;
+    }
     public void setGPCategory(GeneralProduct gp, String newCat) {
         try (Connection conn = connect()) {
             String statement = "UPDATE GeneralProducts SET gpID=?, gpName=?, gpManuName=?, amountStore=?, amountStorage=?, minAmount=?, sellingPrice=?, catName=? WHERE gpID=? ";

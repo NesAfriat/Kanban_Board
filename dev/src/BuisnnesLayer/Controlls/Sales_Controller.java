@@ -18,8 +18,10 @@ public class Sales_Controller {
 
     private Sales_Controller() {
         this.sales = new HashMap<>();
-        sales_id = 0;
+        sales_id = getMaxID()+1;
     }
+
+
 
     public static Sales_Controller getInstance() {
         if (sale_C == null)
@@ -100,7 +102,6 @@ public class Sales_Controller {
                 removeSale(s.getSale_id());
         }
     }
-
     public void removeSale(int sales_id) throws Exception {
         Sale toRemove = null;
         if (sales.containsKey(sales_id))
@@ -112,17 +113,12 @@ public class Sales_Controller {
         removeSaleData(toRemove);
     }
 
-    //TODO - there is an error
     public LinkedList<Sale> allSales() {
-        LinkedList<Sale> allSales = new LinkedList<>();
         if (!loadedAllSales) {
             loadAllSalesDal();
             loadedAllSales = true;
         }
-        for(Sale s:sales.values()){
-            allSales.add(s);
-        }
-        return allSales;
+        return new LinkedList<>(sales.values());
     }
 
 
@@ -261,17 +257,16 @@ public class Sales_Controller {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         LinkedList<Sale> salesDal = dc.loadAllSales();
-        int sale_id = 1;
         for (Sale s : salesDal) {
             if (im.addSale(s)) {
                 sales.put(s.getSale_id(), s);
             }
-            if(s.getSale_id()>sale_id)
-                sale_id=s.getSale_id()+1;
         }
-        this.sales_id=sale_id;
     }
-
+    private Integer getMaxID() {
+        DataController dc = DataController.getInstance();
+        return dc.getMaxSalesID();
+    }
     private void removeSaleData(Sale toRemove) {
         DataController dc = DataController.getInstance();
         dc.delete(toRemove);

@@ -14,7 +14,7 @@ public class AgreementManager {
     public AgreementManager(ProductManager productManager) {
         // ProductsInTheSystem=new LinkedList<>();
         SupplierAgreement = new HashMap<>();
-        idProductCounter = 0;
+        idProductCounter = getMaxGPID();
         this.productManager=productManager;
 
     }
@@ -126,6 +126,7 @@ public class AgreementManager {
         }
    }
 
+
     public void  removeProduct(int SupplierId,int CatalogID) throws Exception {
         productManager.RemoveSupplierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID).getId(),CatalogID);
         GeneralProduct generalProduct=productManager.get_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
@@ -191,7 +192,10 @@ public class AgreementManager {
         }
     }
 
-
+    private int getMaxGPID() {
+        DataController dc = DataController.getInstance();
+        return dc.getMaxGPID();
+    }
     private Agreement get_froM_data_Agreement(int Supid){
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
