@@ -46,7 +46,7 @@ public class AgreementProductDiscMapper extends Mapper{
 
 
 
-           public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,int Price) {
+           public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,double Price) {
                boolean output = false;
                try (Connection conn = connect()) {//String statement = "UPDATE OrderProducts SET oID=?, catalogID=?, quantity=?";
                    boolean inserted = false;
@@ -57,7 +57,7 @@ public class AgreementProductDiscMapper extends Mapper{
                        pstmt.setInt(1, SupId);
                        pstmt.setInt(2, catalogId);
                        pstmt.setInt(3, quantity);
-                       pstmt.setInt(4, Price);
+                       pstmt.setDouble(4, Price);
 
                        output = pstmt.executeUpdate() != 0;
                    } catch (SQLException e) {
@@ -78,7 +78,7 @@ public class AgreementProductDiscMapper extends Mapper{
                    try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                        pstmt.setInt(1, SupId);
                        pstmt.setInt(2, catalogId);
-                       pstmt.setInt(2, quantity);
+                       pstmt.setInt(3, quantity);
 
                        deleted = pstmt.executeUpdate() != 0;
                    } catch (SQLException e) {

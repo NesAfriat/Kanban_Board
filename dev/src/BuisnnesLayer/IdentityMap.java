@@ -322,6 +322,7 @@ public class IdentityMap {
             if (o.GetId() == oID) {
                 output = o;
                 ordersList.remove(o);
+                return o;
             }
         }
         return output;

@@ -499,9 +499,9 @@ public class SupplierFunctionality {
             }
             System.out.println("The products in the agreement: ");
             List<productSupplierResponse> productResponseList =agreementResponse.products;
-            System.out.printf("%-22s%-22s%-22s\n","Catalog ID","produc name","produc price");
+            System.out.printf("%-22s%-22s%-22s%-22s\n","Catalog ID","produc name","produc price","id");
             for(int i=0;i<productResponseList.size();i++){
-                System.out.printf("%-22d%-22s%-22s\n",productResponseList.get(i).CatalogID,productResponseList.get(i).name,productResponseList.get(i).price);
+                System.out.printf("%-22d%-22s%-22s%-22s\n",productResponseList.get(i).CatalogID,productResponseList.get(i).name,productResponseList.get(i).price,productResponseList.get(i).id);
             }
             System.out.println("The Discounts in the agreement: ");
             if(agreementResponse.ExtaraDiscount!=-1){

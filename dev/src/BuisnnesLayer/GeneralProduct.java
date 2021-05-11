@@ -75,7 +75,8 @@ public class GeneralProduct {
         }
         removeSPPersistence(HashOfSupplierProducts.remove(Catalofid));
 
-    }
+
+         }
 
 
     public boolean isSupplierProductExist(int Catalogid) {

@@ -28,7 +28,7 @@ public class SuppliersControler implements ISupplierControler {
     // }
     //HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity;// hashMap<SupllierID:int, hashMap<CatalogID :int , quantitiy:int>>
     public HashMap<Integer, HashMap<Integer, Integer>> get_cheapest_supplier(HashMap<GeneralProduct, Integer> lackMap) {
-        return agreementManager.get_cheapest_supplier(lackMap);
+        return agreementManager.get_cheapest_supplier2(lackMap);
     }
 
 
@@ -123,7 +123,7 @@ public class SuppliersControler implements ISupplierControler {
             throw new IllegalArgumentException("the supplier does not exist");
         }
         Supplier supplier=(Supplier)getSupplier(SupId);
-        Suppliers.remove(SupId);
+        agreementManager.GetAgreement(SupId).RemovAllProducts();
         agreementManager.RemoveAgreement(SupId);
         removeSupplierFromTheData(supplier);
 

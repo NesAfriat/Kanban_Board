@@ -17,6 +17,7 @@ public class OrderControler {
     private HashMap<Integer, Order> Orders ;//- Orders: hashMap<OrderID: int, order: Order>
     private AgreementManager agreementManager;
     private int idOrderCounter;
+
     boolean isAllOrdersUploudFromData=false;
 
 //    private HashMap<Integer, HashMap<Integer, Integer>> DiscountByProductQuantity;//- DiscountByProductQuantity hashMap<CatalogID:int, hashMap<quantitiy :int , newPrice:int>>
@@ -25,10 +26,11 @@ public class OrderControler {
         return new ArrayList<Order>(Orders.values());
     }
     public OrderControler(AgreementManager agreementManager){
-       // ProductsOrderedFromSupplier=new HashMap<>();
+        DataController dc = DataController.getInstance();
+        // ProductsOrderedFromSupplier=new HashMap<>();
         Orders=new HashMap<>();
         this.agreementManager=agreementManager;
-        idOrderCounter=0;
+        idOrderCounter=dc.getOrderBigestId()+1;
     }
 
     public void AddOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant,Integer constantorderdayfromdelivery){
@@ -87,8 +89,9 @@ public class OrderControler {
         if(!isExsist(OrderID,SupId)){
             throw new IllegalArgumentException("the order is not in the system");
         }
+        Order order=Orders.get(OrderID);
         Orders.remove(OrderID);
-        removeOrderFromTheData(OrderID);
+        removeOrderFromTheData(order);
     }
 
     //it ok withe the data
@@ -114,7 +117,7 @@ public class OrderControler {
            if(order.isConstant() &&order.getSupplierID()==SupiD)
            {
                Orders.remove(order.GetId());
-               removeOrderFromTheData(order.GetId());
+               removeOrderFromTheData(order);
            }
         }
     }
@@ -218,11 +221,11 @@ public class OrderControler {
 
 
 
-    private void removeOrderFromTheData(int orderId){
+    private void removeOrderFromTheData(Order order){
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        im.removeOrder(orderId);
-        boolean isOk=dc.deleteOrder(Orders.get(orderId));
+        im.removeOrder(order.GetId());
+        boolean isOk=dc.deleteOrder(order);
         if(!isOk){
         throw new IllegalArgumentException("canot remove from the datat order that not exsist");
 }

@@ -50,13 +50,13 @@ public class SuppliersMapper extends Mapper{
                     String bank = rs.getString(3);
                     String payment = rs.getString(4);
 
-                    if(payment== paymentMethods.Cash.toString()){
+                    if(payment.equals(paymentMethods.Cash.toString())){
                         obj=new Supplier(supID,supName, BuisnnesLayer.paymentMethods.creditcard , bank);
 
-                    }else if(payment== paymentMethods.Cash.toString()){
-                        obj=new Supplier(supID,supName, BuisnnesLayer.paymentMethods.Cash , bank);
+                    }else if(payment.equals(paymentMethods.paypal.toString())){
+                        obj=new Supplier(supID,supName, paymentMethods.paypal , bank);
 
-                    }else if(payment== paymentMethods.creditcard.toString()){
+                    }else if(payment.equals(paymentMethods.creditcard.toString())){
                         obj=new Supplier(supID,supName, paymentMethods.paypal , bank);
 
                     }else {
@@ -149,14 +149,16 @@ public class SuppliersMapper extends Mapper{
                     String supName = rs.getString(2);
                     String bank = rs.getString(3);
                     String payment = rs.getString(4);
+                    System.out.println(payment);
+                    System.out.println(paymentMethods.paypal.toString());
 
-                    if(payment== paymentMethods.Cash.toString()){
+                    if(payment.equals(paymentMethods.Cash.toString())){
                         obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.creditcard , bank));
 
-                    }else if(payment== paymentMethods.Cash.toString()){
+                    }else if(payment.equals( paymentMethods.paypal.toString())){
                         obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.Cash , bank));
 
-                    }else if(payment== paymentMethods.creditcard.toString()){
+                    }else if(payment.equals(paymentMethods.creditcard.toString())){
                         obj.add(new Supplier(supID,supName, paymentMethods.paypal , bank));
 
                     }else {
