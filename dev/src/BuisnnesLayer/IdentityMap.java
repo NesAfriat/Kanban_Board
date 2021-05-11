@@ -62,7 +62,6 @@ public class IdentityMap {
         return output;
     }
 
-    //TODO: make sure remove doesnt stop the for
     public Item removeItem(int item_id, int gp_id) {
         Item output = null;
         for (Item item : itemList) {
@@ -115,7 +114,6 @@ public class IdentityMap {
         }
     }
 
-    //TODO: need to add empty constructor for each created object
     //if this function return null - go to the db
     public GeneralProduct getGeneralProduct(int gp_id) {
         GeneralProduct output = null;
@@ -126,8 +124,6 @@ public class IdentityMap {
         return output;
     }
 
-    //TODO: make sure remove doesnt stop the for
-    //TODO: after the remove is done - need to remove the output's productSupplier and items from the identityMap
     public GeneralProduct removeGeneralProd(int gp_id) {
         GeneralProduct output = null;
         for (GeneralProduct prod : generalProductList) {
@@ -141,7 +137,6 @@ public class IdentityMap {
     }
 
     ////Categories//////
-    //TODO: check if object exist in the list before adding
 
     public void addCategory(Category category) {
         boolean isIN = false;
@@ -213,7 +208,6 @@ public class IdentityMap {
         suppliersList.add(sup);
     }
 
-    //TODO: need to add empty constructor for each created object
     //if this function return null - go to the db
     public Supplier getSupplier(int supplier_id) {
         Supplier output = null;
@@ -225,7 +219,6 @@ public class IdentityMap {
         return output;
     }
 
-    //TODO: make sure remove doesnt stop the for
     public Supplier removeSupplier(int supplier_id) {
         Supplier output = null;
         for (Supplier sup : suppliersList) {
@@ -254,7 +247,6 @@ public class IdentityMap {
         return output;
     }
 
-    //TODO: make sure remove doesnt stop the for
     public Contact removeContact(int con_id) {
         Contact output = null;
         for (Contact con : contactsList) {
@@ -270,34 +262,7 @@ public class IdentityMap {
     //add an item to the identityMap
     public void addPS(ProductSupplier ps) {
         productSuppliersList.add(ps);
-    }//todo : doesn't need supplier id?
-
-//    public void updatePS(ProductSupplier ps) {
-//        productSuppliersList.r(ps).
-//    }//todo : ?
-
-    //TODO: need to add a supID or idk how to get a specific ps
-    //if this function return null - go to the db
-//    public ProductSupplier getPS(int sup_id, int cat_id) {
-//        ProductSupplier output = null;
-//        for (ProductSupplier ps: productSuppliersList) {
-//            if (ps.getId() == con_id)
-//                output = con;
-//        }
-//        return output;
-//    }
-//
-//    //TODO: make sure remove doesnt stop the for
-//    public Contact removeContact(int con_id) {
-//        Contact output = null;
-//        for (Contact con: contactsList) {
-//            if (con.getId() == con_id) {
-//                output = con;
-//                contactsList.remove(con);
-//            }
-//        }
-//        return output;
-//    }
+    }
     //================================================================================
     //add an Order to the identityMap
     public void addOrder(Order o) {
@@ -315,7 +280,6 @@ public class IdentityMap {
         return output;
     }
 
-    //TODO: make sure remove doesnt stop the for
     public Order removeOrder(int oID) {
         Order output = null;
         for (Order o : ordersList) {
@@ -345,7 +309,6 @@ public class IdentityMap {
     }
 
 
-    //TODO: make sure remove doesnt stop the for
     public Agreement removeAgreement(int supID) {
         Agreement output = null;
         for (Agreement a : agreementsList) {
@@ -363,7 +326,6 @@ public class IdentityMap {
         defctedItemsList.add(item);
     }
 
-    //TODO: need to add empty constructor for each created object
     //if this function return null - go to the db
     public Item getDefectedItem(int item_id, int gp_id) {
         Item output = null;
@@ -374,7 +336,6 @@ public class IdentityMap {
         return output;
     }
 
-    //TODO: make sure remove doesnt stop the for
     public Item removeDefectedItem(int item_id, int gp_id) {
         Item output = null;
         for (Item item : defctedItemsList) {

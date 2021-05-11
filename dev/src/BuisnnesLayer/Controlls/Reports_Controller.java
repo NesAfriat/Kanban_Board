@@ -3,7 +3,6 @@ package BuisnnesLayer.Controlls;
 import BuisnnesLayer.IdentityMap;
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.Reports.ReportFactory;
-import BuisnnesLayer.Reports.Subject;
 import DataLayer.DataController;
 
 import java.util.Date;
@@ -79,14 +78,8 @@ public class Reports_Controller {
     public LinkedList<Integer> getReportId(String subject, Date date) throws Exception {
         check_valid_Dates(date);
         check_valid_string(new String[]{subject});
-        LinkedList<Integer> output = new LinkedList<>();
-        for (Report r : reports.values()) {
-            if (subject.equals(r.getSubject().toLowerCase()) &&
-                    date.equals(r.getCreationDate()))
-                output.add(r.getReportID());
-        }
-        if(output.isEmpty())
-            output= getReportsIDFromDal(subject,getDate(date));
+        LinkedList<Integer> output;
+        output= getReportsIDFromDal(subject,getDate(date));
         return output;
     }
 

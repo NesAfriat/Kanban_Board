@@ -56,7 +56,6 @@ public class DataController {
     }
 
     private DataController() {
-        //TODO please do not change this at all, thanks
         generalProductMapper = new GeneralProductMapper();
         suppliersMapper = new SuppliersMapper();
         categoriesMapper = new CategoriesMapper();
@@ -68,7 +67,7 @@ public class DataController {
         addMapper = new AgreementDeliveryDaysMapper(); //needs agreement
         itemMapper = new ItemMapper(); //needs gp
         defectsItemsMapper = new DefectsItemsMapper(); //needs gp
-        apMapper= new AffectedProductsMapper(); //needs sales+gp
+        apMapper = new AffectedProductsMapper(); //needs sales+gp
         acMapper = new AffectedCategoriesMapper(); //needs sales+categories
         rcMapper = new Reports_CategoriesMapper(); //needs report+categories
         suppliersProductsMapper = new SuppliersProductsMapper(); //needs supplier+gp
@@ -115,24 +114,28 @@ public class DataController {
     public String getGPCategory(GeneralProduct gp) {
         return generalProductMapper.getGPCategory(gp);
     }
-    public void updateGPCategoryDAL(GeneralProduct gp, String catName)
-    {
-        generalProductMapper.updateGPCategoryDAL(gp,catName);
+
+    public void updateGPCategoryDAL(GeneralProduct gp, String catName) {
+        generalProductMapper.updateGPCategoryDAL(gp, catName);
     }
+
     //If we want to make entire new record of an gp
     public boolean insertGP(GeneralProduct obj, String catName) {
         return generalProductMapper.insertProduct(obj, catName);
     }
 
     public boolean CheckGPInputExist(String product_name, String manufacturer_name) {
-        return generalProductMapper.checkNamesExist(product_name,manufacturer_name);
+        return generalProductMapper.checkNamesExist(product_name, manufacturer_name);
     }
+
     public boolean checkPrductExist(Integer gpID) {
         return generalProductMapper.checkProductExist(gpID);
     }
+
     public boolean checkPrductExist(String gpName) {
         return generalProductMapper.checkProductExist(gpName);
     }
+
     public boolean update(GeneralProduct obj) {
         return generalProductMapper.update(obj);
     }
@@ -143,7 +146,7 @@ public class DataController {
 
     public LinkedList<GeneralProduct> loadAllGeneralProducts() {
         LinkedList<GeneralProduct> gps = generalProductMapper.loadAllProducts();
-        for(GeneralProduct gp: gps){
+        for (GeneralProduct gp : gps) {
             itemMapper.addItemToProduct(gp); //add gp items
             suppliersProductsMapper.addPStoProduct(gp); //add gp ps
         }
@@ -152,7 +155,7 @@ public class DataController {
 
     public LinkedList<GeneralProduct> get_category_products_DAL(String cat_name) {
         LinkedList<GeneralProduct> gps = generalProductMapper.loadProductsByCategory(cat_name);
-        for(GeneralProduct gp: gps){
+        for (GeneralProduct gp : gps) {
             itemMapper.addItemToProduct(gp); //add gp items
             suppliersProductsMapper.addPStoProduct(gp); //add gp ps
         }
@@ -187,6 +190,7 @@ public class DataController {
     public LinkedList<Category> loadAllCategoreis() {
         return categoriesMapper.loadAllCategories();
     }
+
     public String getFatherCategory(Category cat) {
         return categoriesMapper.getFatherCategory(cat);
     }
@@ -201,6 +205,7 @@ public class DataController {
     public int getMaxRepID() {
         return reportsMapper.getMaxReportID();
     }
+
     public Report getReport(int rID) {
         Report report = reportsMapper.getReport(rID);
         return report;
@@ -219,8 +224,9 @@ public class DataController {
     }
 
     public LinkedList<Integer> getReportsIDs(String sub, String date) {
-        return reportsMapper.getIDs(sub,date);
+        return reportsMapper.getIDs(sub, date);
     }
+
     public LinkedList<Report> loadAllReports() {
         return reportsMapper.loadAllReports();
     }
@@ -230,17 +236,17 @@ public class DataController {
     //If we want to retrive an suplpier which was not in the business
     public Supplier getSupplier(int supplier_id) {
         Supplier sup = suppliersMapper.getSupplier(supplier_id);
-        if(sup!=null){
-        suppliersContactsMapper.addAllContactsToSupplier(sup);
+        if (sup != null) {
+            suppliersContactsMapper.addAllContactsToSupplier(sup);
         }
         return sup;
     }
 
 
-    public List<Supplier>  getAllSupplier() {
+    public List<Supplier> getAllSupplier() {
         List<Supplier> sup_list = suppliersMapper.getALLSupplier();
-        for (Supplier s:sup_list
-             ) {
+        for (Supplier s : sup_list
+        ) {
             suppliersContactsMapper.addAllContactsToSupplier(s);
         }
         return sup_list;
@@ -311,10 +317,11 @@ public class DataController {
         orderProductsMapper.addProductsToOrder(o);// this function add all product to the order
         return o;
     }
-    public List<Order> getAllOrders(){
-       List<Order> orderList= ordersMapper.getAllOrders();
-        for (Order o:orderList
-             ) {
+
+    public List<Order> getAllOrders() {
+        List<Order> orderList = ordersMapper.getAllOrders();
+        for (Order o : orderList
+        ) {
             orderProductsMapper.addProductsToOrder(o);
         }
         return orderList;
@@ -333,26 +340,27 @@ public class DataController {
         return ordersMapper.delete(o);
     }
 
-    public boolean addAgreementDeliveryDaysAgreement(int SupID,int Day){
-        return addMapper.addAgreementDeliveryDaysAgreement(SupID,Day);
-    }
-    public boolean RemoveAgreementDeliveryDays(int SupID,int Day){
-        return addMapper.RemoveAgreementDeliveryDays(SupID,Day);
+    public boolean addAgreementDeliveryDaysAgreement(int SupID, int Day) {
+        return addMapper.addAgreementDeliveryDaysAgreement(SupID, Day);
     }
 
-
-    public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,int Price) {
-        return apdMapper.addQuantityDiscAgreement( SupId, catalogId, quantity, Price);
-    }
-
-    public boolean RemoveQuantityDiscAgreement(int SupId,int catalogId,int quantity) {
-        return apdMapper.RemoveQuantityDiscAgreement( SupId, catalogId, quantity);
-
+    public boolean RemoveAgreementDeliveryDays(int SupID, int Day) {
+        return addMapper.RemoveAgreementDeliveryDays(SupID, Day);
     }
 
 
-    public boolean UpdateQuantityDiscAgreement(int SupId,int catalogId,int quantity,int price) {
-        return apdMapper.UpdateQuantityDiscAgreement( SupId, catalogId, quantity, price);
+    public boolean addQuantityDiscAgreement(int SupId, int catalogId, int quantity, int Price) {
+        return apdMapper.addQuantityDiscAgreement(SupId, catalogId, quantity, Price);
+    }
+
+    public boolean RemoveQuantityDiscAgreement(int SupId, int catalogId, int quantity) {
+        return apdMapper.RemoveQuantityDiscAgreement(SupId, catalogId, quantity);
+
+    }
+
+
+    public boolean UpdateQuantityDiscAgreement(int SupId, int catalogId, int quantity, int price) {
+        return apdMapper.UpdateQuantityDiscAgreement(SupId, catalogId, quantity, price);
     }
 
     //================================================================================
@@ -367,10 +375,10 @@ public class DataController {
         return agr;
     }
 
-    public List<Agreement> getAllAgrements(){
-        List<Agreement> agreementList=agreementsMapper.getAllAgreement();
-        for (Agreement agr:agreementList
-             ) {
+    public List<Agreement> getAllAgrements() {
+        List<Agreement> agreementList = agreementsMapper.getAllAgreement();
+        for (Agreement agr : agreementList
+        ) {
             suppliersProductsMapper.addPStoAgreement(agr); //SupplierProducts
             apdMapper.addQuantityDiscAgreement(agr); //DiscByQuantity
             addMapper.addDaysDelivery(agr); //DeliveryDays
@@ -412,7 +420,6 @@ public class DataController {
     //================================================================================
 
 
-    //TODO: return null if item does not exist
     //Item Actions:
     //If we want to retrive an item which was not in the business
     public Item getDefectedItem(int product_id, int item_id) {
@@ -432,9 +439,11 @@ public class DataController {
     public boolean deleteDefected(Item obj) {
         return defectsItemsMapper.delete(obj);
     }
+
     public LinkedList<Item> loadAllDefected() {
         return defectsItemsMapper.loadAllDefected();
     }
+
     public void removeAllDefects() {
         defectsItemsMapper.removeAllDefects();
     }
@@ -477,7 +486,7 @@ public class DataController {
 
     public void changeGPCategory(LinkedList<GeneralProduct> products, Category father) {
         for (GeneralProduct prod : products) {
-            generalProductMapper.setGPCategory(prod,father.getCategory_name());
+            generalProductMapper.setGPCategory(prod, father.getCategory_name());
         }
     }
 

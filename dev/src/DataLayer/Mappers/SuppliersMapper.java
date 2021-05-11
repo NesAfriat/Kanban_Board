@@ -25,11 +25,7 @@ public class SuppliersMapper extends Mapper{
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(SuppliersTable);
-            //TODO: in DataController - need to activate loadData
-//            if (!identityMap.initialized){
-//                LoadPreData();
-//                identityMap.initialized = true;
-//            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -83,7 +79,7 @@ public class SuppliersMapper extends Mapper{
                 pstmt.setInt(1, sup.getId());
                 pstmt.setString(2, sup.getSupplierName());
                 pstmt.setString(3, sup.getBankAccount());
-                pstmt.setString(4, sup.getPayment().toString()); //TODO - better change it to String and not enum
+                pstmt.setString(4, sup.getPayment().toString());
                 pstmt.setInt(5, sup.getId());
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
@@ -95,7 +91,6 @@ public class SuppliersMapper extends Mapper{
         return updated;
     }
 
-    //TODO: not sure if it will be used
     public boolean delete(Supplier sup) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -113,7 +108,6 @@ public class SuppliersMapper extends Mapper{
         return deleted;
     }
 
-    //TODO: make sure the dates are added properly!
     public boolean insertSupplier(Supplier sup) {
         boolean output = false;
         try (Connection conn = connect()) {
@@ -125,7 +119,7 @@ public class SuppliersMapper extends Mapper{
                 pstmt.setInt(1, sup.getId());
                 pstmt.setString(2, sup.getSupplierName());
                 pstmt.setString(3, sup.getBankAccount());
-                pstmt.setString(4, sup.getPayment().toString()); //TODO - better change it to String and not enum
+                pstmt.setString(4, sup.getPayment().toString());
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
