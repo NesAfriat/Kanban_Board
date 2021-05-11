@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReportDefects implements Report {
-    private final String subject = "Defects";
+    private final String subject = "defects";
     private final Date creationDate;
     private int reportID;
     private LinkedList<String> categories;

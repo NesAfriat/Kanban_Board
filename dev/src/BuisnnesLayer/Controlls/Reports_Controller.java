@@ -80,13 +80,17 @@ public class Reports_Controller {
         check_valid_Dates(date);
         check_valid_string(new String[]{subject});
         LinkedList<Integer> output = new LinkedList<>();
+        if(!loadedReports) {
+            loadAllReports();
+            loadedReports=true;
+        }
         for (Report r : reports.values()) {
             if (subject.equals(r.getSubject().toLowerCase()) &&
                     date.equals(r.getCreationDate()))
                 output.add(r.getReportID());
         }
-        if(output.isEmpty())
-            output= getReportsIDFromDal(subject,getDate(date));
+//        if(output.isEmpty())
+//            output= getReportsIDFromDal(subject,getDate(date));
         return output;
     }
 

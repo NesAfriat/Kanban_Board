@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReportMissing implements Report {
-    private final String subject = "Missing";
+    private final String subject = "missing";
     private final Date creationDate;
     private Integer reportID;
     private LinkedList<String> categories;
