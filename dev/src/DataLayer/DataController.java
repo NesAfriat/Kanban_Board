@@ -107,7 +107,7 @@ public class DataController {
     public GeneralProduct getGP(int product_id) {
         GeneralProduct gp = generalProductMapper.getGeneralProduct(product_id);
         itemMapper.addItemToProduct(gp); //add gp items
-        suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+//        suppliersProductsMapper.addPStoProduct(gp); //add gp ps
         return gp;
     }
 
@@ -148,7 +148,7 @@ public class DataController {
         LinkedList<GeneralProduct> gps = generalProductMapper.loadAllProducts();
         for (GeneralProduct gp : gps) {
             itemMapper.addItemToProduct(gp); //add gp items
-            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+//            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
         }
         return gps;
     }
@@ -157,7 +157,7 @@ public class DataController {
         LinkedList<GeneralProduct> gps = generalProductMapper.loadProductsByCategory(cat_name);
         for (GeneralProduct gp : gps) {
             itemMapper.addItemToProduct(gp); //add gp items
-            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+//            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
         }
         return gps;
     }
@@ -236,8 +236,9 @@ public class DataController {
     //If we want to retrive an suplpier which was not in the business
     public Supplier getSupplier(int supplier_id) {
         Supplier sup = suppliersMapper.getSupplier(supplier_id);
-        if (sup != null) {
+        if(sup!=null){
             suppliersContactsMapper.addAllContactsToSupplier(sup);
+            sup.setContactIdCounter(suppliersContactsMapper.getBigestId(supplier_id)+1);
         }
         return sup;
     }
@@ -337,7 +338,16 @@ public class DataController {
     }
 
     public boolean deleteOrder(Order o) {
-        return ordersMapper.delete(o);
+        boolean b= ordersMapper.delete(o);
+        if(b){
+            for (int catalogId:o.getProductQuantity().keySet()
+            ) {
+                boolean t=orderProductsMapper.delete(o.GetId(),catalogId);
+                if(!t) return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public boolean addAgreementDeliveryDaysAgreement(int SupID, int Day) {
@@ -349,7 +359,7 @@ public class DataController {
     }
 
 
-    public boolean addQuantityDiscAgreement(int SupId, int catalogId, int quantity, int Price) {
+    public boolean addQuantityDiscAgreement(int SupId, int catalogId, int quantity, double Price) {
         return apdMapper.addQuantityDiscAgreement(SupId, catalogId, quantity, Price);
     }
 
@@ -493,8 +503,19 @@ public class DataController {
     public Integer getMaxSalesID() {
         return salesMapper.getMaxSaleID();
     }
+    public int getmaxgpid(){
+        return suppliersProductsMapper.getMaxPGcounterNumber();
+    }
 
     public int getMaxGPID() {
         return generalProductMapper.getMaxGPID();
+    }
+    public int getTheBigestIDforTheCounterinContacts(int Supid){
+        return suppliersContactsMapper.getBigestId(Supid);
+    }
+
+    public int getOrderBigestId(){
+        int order=orderProductsMapper.getOrderIdCounterBigest();
+        return order;
     }
 }

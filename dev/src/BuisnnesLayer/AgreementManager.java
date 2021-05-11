@@ -14,7 +14,7 @@ public class AgreementManager {
     public AgreementManager(ProductManager productManager) {
         // ProductsInTheSystem=new LinkedList<>();
         SupplierAgreement = new HashMap<>();
-        idProductCounter = getMaxGPID();
+        idProductCounter = getBixestpiDGp()+1;
         this.productManager=productManager;
 
     }
@@ -71,8 +71,56 @@ public class AgreementManager {
     }
 
 
+
+    public HashMap<Integer, HashMap<Integer, Integer>> get_cheapest_supplier2(HashMap<GeneralProduct, Integer> lackMap) {
+        loadAllAgriments();
+        HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity = new HashMap<>(new HashMap<>());
+        ProductSupplier productSupplier=null;
+        double cheapest_supplier=-1;
+        int supllierid=-1;
+        int CatalogID=-1;
+        int qountity=-1;
+        double old_cheapest_supplier=-1;
+        for (GeneralProduct generalProduct : lackMap.keySet()) {//loop ont the general products tha have luch
+            HashMap<Integer,ProductSupplier> HashOfSupplierProducts=generalProduct.getHashOfSupplierProducts();
+            cheapest_supplier=-1;
+            qountity=lackMap.get(generalProduct);
+
+            for (ProductSupplier ps : HashOfSupplierProducts.values()) {
+                old_cheapest_supplier=cheapest_supplier;
+
+                if(cheapest_supplier==-1){//the fitst iteration
+                    supllierid=ps.getSuplierID();
+                    cheapest_supplier=ps.getPrice();
+                    CatalogID=ps.getCatalogID();
+                }
+                else {
+                    if(cheapest_supplier>ps.getPrice()){
+                        supllierid=ps.getSuplierID();
+                        cheapest_supplier=ps.getPrice();
+                        CatalogID=ps.getCatalogID();
+                    }
+                }
+
+            }
+
+            if (cheapest_supplier!=-1){
+                if (!cheapest_supplier_products_by_quantity.containsKey(supllierid))
+                {
+                    cheapest_supplier_products_by_quantity.put(supllierid,new HashMap<>());
+                }
+                (cheapest_supplier_products_by_quantity.get(supllierid)).put(CatalogID,qountity);
+
+            }
+
+        }
+        return cheapest_supplier_products_by_quantity;
+    }
+
+
+
+
     public void AddNewAgreement(int id, DeliveryMode deliveryMode, List<Integer> daysOfDelivery, int NumOfDaysFromDelivery) {
-        idProductCounter++;
         Agreement agreement=new Agreement(id,deliveryMode,daysOfDelivery,NumOfDaysFromDelivery);
         SupplierAgreement.put(id,agreement);
         add_to_data_agreement(agreement);
@@ -115,24 +163,25 @@ public class AgreementManager {
            if (!productManager.check_product_id_exist(product_id)){
                 throw new IllegalArgumentException("the genaral product not exsist");
             }
+            //TODO with daniels code there is a problem when adding an item which exist in the stock to a supplier - another catagory is created
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,product_id,productManager.get_product(product_id).getProduct_name());
             productManager.AddProductSupplierToProductGeneral(productSupplier,product_id);
-
         }
         else{
             ProductSupplier productSupplier=(GetAgreement(SupplierId)).AddPrudact(Price,CatalogID,idProductCounter,product_name);
             productManager.addProduct(product_name,idProductCounter,manufacture_name,-1,cat,-1.0,productSupplier);
-            idProductCounter++;
-        }
-   }
+         idProductCounter++;
 
+        }
+//        gp.add_t
+   }
 
     public void  removeProduct(int SupplierId,int CatalogID) throws Exception {
         productManager.RemoveSupplierProductFromGeneralProduct(GetAgreement(SupplierId).GetPrudact(CatalogID).getId(),CatalogID);
-        GeneralProduct generalProduct=productManager.get_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
-        if(generalProduct.isSupplierProducHashEmpty()){
-            productManager.remove_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
-        }
+//        GeneralProduct generalProduct=productManager.get_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
+//        if(generalProduct.isSupplierProducHashEmpty()){
+//            productManager.remove_product(GetAgreement(SupplierId).GetPrudact(CatalogID).getId());
+//        }
         GetAgreement(SupplierId).RemovePrudact(CatalogID);
 
 
@@ -181,6 +230,12 @@ public class AgreementManager {
             List<Agreement> agreementList=dc.getAllAgrements();
             for (Agreement agreement: agreementList
                  ) {
+                HashMap<Integer, ProductSupplier> productSupplierHashMap=  agreement.getProducts();
+                for (ProductSupplier ps:productSupplierHashMap.values()
+                ) {
+                    productManager.geteGeneralAndPutSupplierProduct(ps);
+
+                }
                 if(!SupplierAgreement.containsKey(agreement.getSupplierID())){
                     IdentityMap im = IdentityMap.getInstance();
                     im.addAgreement(agreement);
@@ -192,10 +247,7 @@ public class AgreementManager {
         }
     }
 
-    private int getMaxGPID() {
-        DataController dc = DataController.getInstance();
-        return dc.getMaxGPID();
-    }
+
     private Agreement get_froM_data_Agreement(int Supid){
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
@@ -209,8 +261,20 @@ public class AgreementManager {
             if(agreement==null){
                 throw new IllegalArgumentException("canot get agrement from the data");
             }
+            HashMap<Integer, ProductSupplier> productSupplierHashMap=  agreement.getProducts();
+            for (ProductSupplier ps:productSupplierHashMap.values()
+                 ) {
+                productManager.geteGeneralAndPutSupplierProduct(ps);
+
+            }
             return agreement;
         }
+    }
+
+    private int getBixestpiDGp(){
+        DataController dc = DataController.getInstance();
+        return dc.getmaxgpid();
+
     }
 }
  //   public void ReplaceAgreement(int SupplierId,IAgreement agreement){
