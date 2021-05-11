@@ -9,8 +9,8 @@ import java.util.List;
 
 
 public class ReportStock implements Report {
-    private final Subject subject = Subject.Stock;
-    private final Date creationDate = new Date();
+    private final String subject = "stock";
+    private final Date creationDate;
     private Integer reportID;
     private LinkedList<String> categories;
     private String timeRange;
@@ -20,8 +20,18 @@ public class ReportStock implements Report {
         this.reportID = reportId;
         this.categories = categories;
         this.timeRange = time;
+        creationDate = new Date();
         this.report_data = "";
     }
+    //for Dal
+    public ReportStock(int repID, String time_range, LinkedList<String> categoriesList, Date creation_date, String data) {
+        this.reportID = repID;
+        this.categories = categoriesList;
+        this.timeRange = time_range;
+        this.report_data = data;
+        this.creationDate = creation_date;
+    }
+
 
     @Override
     public void createReport() throws Exception {
@@ -36,7 +46,7 @@ public class ReportStock implements Report {
 
     @Override
     public String getSubject() {
-        return this.subject.name();
+        return this.subject;
     }
 
     @Override

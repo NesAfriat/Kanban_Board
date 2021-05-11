@@ -1,5 +1,7 @@
 package BuisnnesLayer;
 
+import DataLayer.DataController;
+
 import java.util.LinkedList;
 
 public class Category {
@@ -29,14 +31,16 @@ public class Category {
     public void setFather_Category(Category father_Category) {
         this.father_Category = father_Category;
         if(father_Category!=null)
-        father_Category.sub_Category.add(this);
+            if(!father_Category.sub_Category.contains(this))
+                father_Category.sub_Category.add(this);
     }
+
 
     public LinkedList<Category> getSub_Category() {
         return sub_Category;
     }
 
-    @Override
+/*
     public String toString() {
         return "{" +
                 "category_name=" + category_name  +
@@ -45,6 +49,8 @@ public class Category {
                 '}';
     }
 
+ */
+
     public Category removed() throws Exception {
         if (father_Category == null) {
             throw new Exception("Cant delete category without a father");
@@ -52,9 +58,15 @@ public class Category {
         for (Category c : sub_Category) {
             c.father_Category = father_Category;
             father_Category.sub_Category.add(c);
+            setFatherPersistence(c, father_Category);
         }
         father_Category.sub_Category.remove(this);
         return father_Category;
+    }
 
+    private void setFatherPersistence(Category category, Category father) {
+        DataController dc = DataController.getInstance();
+        dc.setFather(category, father);
     }
 }
+

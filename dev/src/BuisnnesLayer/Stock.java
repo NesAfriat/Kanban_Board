@@ -131,7 +131,7 @@ public class Stock {
         defects.addLast(this.productManager.set_item_defected(product_id, item_id));
     }
 
-    public LinkedList<String> get_product_categories(GeneralProduct product) {
+    public LinkedList<String> get_product_categories(GeneralProduct product) throws Exception {
         return this.productManager.get_product_categories(product);
     }
 
@@ -190,7 +190,14 @@ public class Stock {
         LinkedList<Item> defList = dc.loadAllDefected();
         for (Item item : defList) {
             im.addItem(item);
-            if (!defects.contains(item))
+            boolean flag = false;
+            for(Item i: defects){
+                if (i.getItem_id().equals(item.getItem_id())) {
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag)
                 defects.add(item);
         }
     }

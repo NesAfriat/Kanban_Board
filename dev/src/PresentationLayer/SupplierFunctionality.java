@@ -268,12 +268,11 @@ public class SupplierFunctionality {
         if(isExsist){
             System.out.println("please type the id of the product in stock");
             int general_product_id=NumberType();
-            //TODO what happens when there is already a product?? what happens to the DEF category??
             Response response= facade.addNewProductToAgreement(id,price,catalogId,manfucator,name,category,general_product_id,isExsist);
             if(response.getErrorOccurred()){
                 System.out.println((response.getErrorMsg()));
             }
-            else   System.out.println("Product added successfully\n");
+            else  System.out.println("Product added successfully\n");
 
         }
         else
@@ -500,9 +499,9 @@ public class SupplierFunctionality {
             }
             System.out.println("The products in the agreement: ");
             List<productSupplierResponse> productResponseList =agreementResponse.products;
-            System.out.printf("%-22s%-22s%-22s%-22s\n","Catalog ID","produc name","produc price","id");
+            System.out.printf("%-22s%-22s%-22s\n","Catalog ID","produc name","produc price");
             for(int i=0;i<productResponseList.size();i++){
-                System.out.printf("%-22d%-22s%-22s%-22s\n",productResponseList.get(i).CatalogID,productResponseList.get(i).name,productResponseList.get(i).price,productResponseList.get(i).id);
+                System.out.printf("%-22d%-22s%-22s\n",productResponseList.get(i).CatalogID,productResponseList.get(i).name,productResponseList.get(i).price);
             }
             System.out.println("The Discounts in the agreement: ");
             if(agreementResponse.ExtaraDiscount!=-1){

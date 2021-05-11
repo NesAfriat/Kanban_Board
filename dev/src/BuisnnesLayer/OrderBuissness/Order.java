@@ -28,10 +28,9 @@ public class Order {
     private Integer constsntordersDays;
 
     //constructor for DAL
-    public Order(int orderID, int sup, String date, double pay, int con,int dayOfOrder) {
+    public Order(int orderID, int sup, String date, double pay, int con) {
        //TODO: need to edit this constructor
         this.id = orderID;
-        productQuantity=new HashMap<>();
         this.SupplierID = sup;
 //        this.productQuantity=products;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -39,14 +38,10 @@ public class Order {
 //        this.TotalPayment=CalculateTotalPayment(products,agreement);
         this.TotalPayment = pay;
         this.Constant = con == 1;
-        constsntordersDays=dayOfOrder;
-
 //        this.constsntordersDays=constsntordersDays;
     }
 
-public int getDayOfOrder(){
-        return constsntordersDays;
-}
+
     public boolean isConstant() {
         return Constant;
     }
@@ -55,15 +50,11 @@ public int getDayOfOrder(){
         this.id = id;
         this.SupplierID = SupplierID;
         this.productQuantity = products;
-
         this.dateTime = LocalDate.now();
         this.TotalPayment = CalculateTotalPayment(products, agreement);
         this.Constant = constant;
         this.constsntordersDays = constsntordersDays;
-        for (int pr:products.keySet()
-             ) {
-            add_ProductToOrder(this.id, pr,products.get(pr));
-        }
+        add_to_data(this);
     }
     public LocalDate getDateTime(){return dateTime; }
     public int getSupplierID() {
@@ -110,9 +101,6 @@ public int getDayOfOrder(){
         productQuantity.remove(CatalogID);
         this.TotalPayment = CalculateTotalPayment(this.productQuantity, agreement);
         removeProduct(this.id, CatalogID); //data
-        update(this);
-
-
     }
 
 
@@ -125,9 +113,8 @@ public int getDayOfOrder(){
 
         }
         productQuantity.replace(CatalogID, quantity);
-        TotalPayment=CalculateTotalPayment(this.productQuantity, agreement);
+        CalculateTotalPayment(this.productQuantity, agreement);
         updateProductQuantity(this.id, CatalogID,quantity);//data
-        update(this);
     }
 
     public double GetTotalPayment() {
@@ -231,8 +218,6 @@ public int getDayOfOrder(){
             System.out.println("failed to update  Order  to the database with the keys");
         }
     }
-
-
 
 
     private void updateProductQuantity(int orderId,int catalogID,int quantity) {

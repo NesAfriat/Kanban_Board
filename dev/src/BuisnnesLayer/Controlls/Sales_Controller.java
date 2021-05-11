@@ -14,12 +14,14 @@ public class Sales_Controller {
     private static Sales_Controller sale_C = null;
     private HashMap<Integer, Sale> sales;           //holds all sales ever created
     private Integer sales_id;
-    private boolean loadedAllSales=false;
+    private boolean loadedAllSales = false;
 
     private Sales_Controller() {
         this.sales = new HashMap<>();
-        sales_id = 0;
+        sales_id = getMaxID()+1;
     }
+
+
 
     public static Sales_Controller getInstance() {
         if (sale_C == null)
@@ -100,27 +102,32 @@ public class Sales_Controller {
                 removeSale(s.getSale_id());
         }
     }
-
     public void removeSale(int sales_id) throws Exception {
-       Sale toRemove=null;
+        Sale toRemove = null;
         if (sales.containsKey(sales_id))
-            toRemove=sales.remove(sales_id);
-        if(toRemove!=null) {
+            toRemove = sales.remove(sales_id);
+        if (toRemove == null) {
             IdentityMap im = IdentityMap.getInstance();
-            im.removeSale(toRemove);
+            toRemove = im.getSale(sales_id);
+            if(toRemove==null){
+                DataController dc = DataController.getInstance();
+                toRemove = dc.getSaleByID(sales_id);
+                if(toRemove == null){
+                    throw new Exception("sale does not exist!");
+                }
+            }
         }
-            removeSaleData(toRemove);
+        IdentityMap im = IdentityMap.getInstance();
+        im.removeSale(toRemove);
+        removeSaleData(toRemove);
     }
 
     public LinkedList<Sale> allSales() {
-        LinkedList<Sale> allSales;
-        if(!loadedAllSales)
-        {
+        if (!loadedAllSales) {
             loadAllSalesDal();
-            loadedAllSales=true;
+            loadedAllSales = true;
         }
-            allSales= (LinkedList<Sale>) sales.values();
-        return allSales;
+        return new LinkedList<>(sales.values());
     }
 
 
@@ -136,135 +143,145 @@ public class Sales_Controller {
         return salesByCat;
     }
 
-        public LinkedList<Sale> getSalesByProduct (String product) throws Exception {
-            check_valid_string(new String[]{product});
-            getSalesByProductDal(product);
-            LinkedList<Sale> salesByProd = new LinkedList<>();
-            for (Sale s : sales.values()) {
-                for (String a : s.getAffected())
-                    if (a.equals(product))
-                        salesByProd.add(s);
-            }
-            return salesByProd;
+    public LinkedList<Sale> getSalesByProduct(String product) throws Exception {
+        check_valid_string(new String[]{product});
+        getSalesByProductDal(product);
+        LinkedList<Sale> salesByProd = new LinkedList<>();
+        for (Sale s : sales.values()) {
+            for (String a : s.getAffected())
+                if (a.equals(product))
+                    salesByProd.add(s);
         }
-
-        //inside use
-        public Double getDiscountByCategory (LinkedList < String > categories) throws Exception {
-            Double discount;
-            Double max_discount = -1.0;
-            for (String cat : categories) {
-                getSalesByCategoryDal(cat);
-                for (Sale s : sales.values()) {
-                    if (s.getAffected().contains(cat)) {
-                        discount = s.getDiscount_percent();
-                        if (max_discount < discount)
-                            max_discount = discount;
-                    }
-                }
-            }
-            if (max_discount == -1.0)
-                return 0.0;
-            return max_discount;
-        }
-
+        return salesByProd;
+    }
 
     //inside use
-        public Double getDiscountByProduct (String product){
-            Double discount;
-            Double max_discount = -1.0;
-            getSalesByProductDal(product);
+    public Double getDiscountByCategory(LinkedList<String> categories) throws Exception {
+        Double discount;
+        Double max_discount = -1.0;
+        for (String cat : categories) {
+            getSalesByCategoryDal(cat);
             for (Sale s : sales.values()) {
-                if (s.getAffected().contains(product)) {
+                if (s.getAffected().contains(cat)) {
                     discount = s.getDiscount_percent();
                     if (max_discount < discount)
                         max_discount = discount;
                 }
             }
-            if (max_discount == -1.0)
-                return 0.0;
-            return max_discount;
         }
+        if (max_discount == -1.0)
+            return 0.0;
+        return max_discount;
+    }
 
-        public void update_sale_description ( int sale_id, String desc) throws Exception {
-            check_valid_string(new String[]{desc});
-            check_valid_number(new Number[]{sale_id});
-            if (!sales.containsKey(sale_id) && !getSalesByIdDal(sale_id))
-                throw new Exception("sale id does not exist");
-            sales.get(sale_id).setSale_description(desc);
-            updateSaleDal(sales.get(sale_id));
+
+    //inside use
+    public Double getDiscountByProduct(String product) {
+        Double discount;
+        Double max_discount = -1.0;
+        getSalesByProductDal(product);
+        for (Sale s : sales.values()) {
+            if (s.getAffected().contains(product)) {
+                discount = s.getDiscount_percent();
+                if (max_discount < discount)
+                    max_discount = discount;
+            }
         }
+        if (max_discount == -1.0)
+            return 0.0;
+        return max_discount;
+    }
+
+    public void update_sale_description(int sale_id, String desc) throws Exception {
+        check_valid_string(new String[]{desc});
+        check_valid_number(new Number[]{sale_id});
+        if (!sales.containsKey(sale_id) && !getSalesByIdDal(sale_id))
+            throw new Exception("sale id does not exist");
+        sales.get(sale_id).setSale_description(desc);
+        updateSaleDal(sales.get(sale_id));
+    }
 
 
-        public void update_sale_discount ( int sale_id, double disc) throws Exception {
-            check_valid_number(new Number[]{sale_id, disc});
-            check_discount(disc);
-            if (!sales.containsKey(sale_id) && !getSalesByIdDal(sale_id))
-                throw new Exception("sale id does not exist");
-            sales.get(sale_id).setDiscount_percent(disc);
-            updateSaleDal(sales.get(sale_id));
-        }
+    public void update_sale_discount(int sale_id, double disc) throws Exception {
+        check_valid_number(new Number[]{sale_id, disc});
+        check_discount(disc);
+        if (!sales.containsKey(sale_id) && !getSalesByIdDal(sale_id))
+            throw new Exception("sale id does not exist");
+        sales.get(sale_id).setDiscount_percent(disc);
+        updateSaleDal(sales.get(sale_id));
+    }
 
 
-        //==================
-        //data functions
-        private void addSaleByCategoryDAL (Sale newSale){
-        IdentityMap im= IdentityMap.getInstance();
-        DataController dc= DataController.getInstance();
+    //==================
+    //data functions
+    private void addSaleByCategoryDAL(Sale newSale) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
         im.addSale(newSale);
         dc.insertSaleByCategory(newSale);
-        }
+    }
+
     private void addSaleByProductDAL(Sale newSale) {
-        IdentityMap im= IdentityMap.getInstance();
-        DataController dc= DataController.getInstance();
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
         im.addSale(newSale);
         dc.insertSaleByProduct(newSale);
     }
+
     private void updateSaleDal(Sale sale) {
-        DataController dc= DataController.getInstance();
+        DataController dc = DataController.getInstance();
         dc.update(sale);
     }
-    private void getSalesByProductDal (String product){
-        IdentityMap im= IdentityMap.getInstance();
-        DataController dc= DataController.getInstance();
-        LinkedList<Sale> salesDal= dc.getSaleByProduct(product);
-        for(Sale s: salesDal)
-            if(im.addSale(s))
-                sales.put(s.getSale_id(),s);
-        }
-    private void getSalesByCategoryDal(String cat) {
-        IdentityMap im= IdentityMap.getInstance();
-        DataController dc= DataController.getInstance();
-        LinkedList<Sale> salesDal= dc.getSaleByCategory(cat);
-        for(Sale s: salesDal)
-            if(im.addSale(s))
-                sales.put(s.getSale_id(),s);
+
+    private void getSalesByProductDal(String product) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        LinkedList<Sale> salesDal = dc.getSaleByProduct(product);
+        for (Sale s : salesDal)
+            if (im.addSale(s))
+                sales.put(s.getSale_id(), s);
     }
-        private boolean getSalesByIdDal( int sale_id){
-            IdentityMap im= IdentityMap.getInstance();
-            DataController dc= DataController.getInstance();
-            Sale saleDal= dc.getSaleByID(sale_id);
-                if(im.addSale(saleDal)) {
-                    sales.put(saleDal.getSale_id(), saleDal);
-                    return true;
-                }
-                return false;
+
+    private void getSalesByCategoryDal(String cat) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        LinkedList<Sale> salesDal = dc.getSaleByCategory(cat);
+        for (Sale s : salesDal)
+            if (im.addSale(s))
+                sales.put(s.getSale_id(), s);
+    }
+
+    private boolean getSalesByIdDal(int sale_id) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        Sale saleDal = dc.getSaleByID(sale_id);
+        if (im.addSale(saleDal)) {
+            sales.put(saleDal.getSale_id(), saleDal);
+            return true;
         }
+        return false;
+    }
+
     private void loadAllSalesDal() {
-        IdentityMap im= IdentityMap.getInstance();
-        DataController dc= DataController.getInstance();
-        LinkedList<Sale> salesDal= dc.loadAllSales();
-        for(Sale s: salesDal)
-            if(im.addSale(s)) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        LinkedList<Sale> salesDal = dc.loadAllSales();
+        for (Sale s : salesDal) {
+            if (im.addSale(s)) {
                 sales.put(s.getSale_id(), s);
             }
-    }
-
-    private void removeSaleData(Sale toRemove) {
-            DataController dc= DataController.getInstance();
-            dc.delete(toRemove);
         }
-
     }
+    private Integer getMaxID() {
+        DataController dc = DataController.getInstance();
+        return dc.getMaxSalesID();
+    }
+    private void removeSaleData(Sale toRemove) {
+        DataController dc = DataController.getInstance();
+        dc.delete(toRemove);
+    }
+
+}
 
 
 

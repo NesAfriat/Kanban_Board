@@ -25,11 +25,7 @@ public class SuppliersMapper extends Mapper{
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(SuppliersTable);
-            //TODO: in DataController - need to activate loadData
-//            if (!identityMap.initialized){
-//                LoadPreData();
-//                identityMap.initialized = true;
-//            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -50,13 +46,13 @@ public class SuppliersMapper extends Mapper{
                     String bank = rs.getString(3);
                     String payment = rs.getString(4);
 
-                    if(payment.equals(paymentMethods.Cash.toString())){
+                    if(payment== paymentMethods.Cash.toString()){
                         obj=new Supplier(supID,supName, BuisnnesLayer.paymentMethods.creditcard , bank);
 
-                    }else if(payment.equals(paymentMethods.paypal.toString())){
-                        obj=new Supplier(supID,supName, paymentMethods.paypal , bank);
+                    }else if(payment== paymentMethods.Cash.toString()){
+                        obj=new Supplier(supID,supName, BuisnnesLayer.paymentMethods.Cash , bank);
 
-                    }else if(payment.equals(paymentMethods.creditcard.toString())){
+                    }else if(payment== paymentMethods.creditcard.toString()){
                         obj=new Supplier(supID,supName, paymentMethods.paypal , bank);
 
                     }else {
@@ -83,7 +79,7 @@ public class SuppliersMapper extends Mapper{
                 pstmt.setInt(1, sup.getId());
                 pstmt.setString(2, sup.getSupplierName());
                 pstmt.setString(3, sup.getBankAccount());
-                pstmt.setString(4, sup.getPayment().toString()); //TODO - better change it to String and not enum
+                pstmt.setString(4, sup.getPayment().toString());
                 pstmt.setInt(5, sup.getId());
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
@@ -95,7 +91,6 @@ public class SuppliersMapper extends Mapper{
         return updated;
     }
 
-    //TODO: not sure if it will be used
     public boolean delete(Supplier sup) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -113,7 +108,6 @@ public class SuppliersMapper extends Mapper{
         return deleted;
     }
 
-    //TODO: make sure the dates are added properly!
     public boolean insertSupplier(Supplier sup) {
         boolean output = false;
         try (Connection conn = connect()) {
@@ -125,7 +119,7 @@ public class SuppliersMapper extends Mapper{
                 pstmt.setInt(1, sup.getId());
                 pstmt.setString(2, sup.getSupplierName());
                 pstmt.setString(3, sup.getBankAccount());
-                pstmt.setString(4, sup.getPayment().toString()); //TODO - better change it to String and not enum
+                pstmt.setString(4, sup.getPayment().toString());
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -149,16 +143,14 @@ public class SuppliersMapper extends Mapper{
                     String supName = rs.getString(2);
                     String bank = rs.getString(3);
                     String payment = rs.getString(4);
-                    System.out.println(payment);
-                    System.out.println(paymentMethods.paypal.toString());
 
-                    if(payment.equals(paymentMethods.Cash.toString())){
+                    if(payment== paymentMethods.Cash.toString()){
                         obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.creditcard , bank));
 
-                    }else if(payment.equals( paymentMethods.paypal.toString())){
+                    }else if(payment== paymentMethods.Cash.toString()){
                         obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.Cash , bank));
 
-                    }else if(payment.equals(paymentMethods.creditcard.toString())){
+                    }else if(payment== paymentMethods.creditcard.toString()){
                         obj.add(new Supplier(supID,supName, paymentMethods.paypal , bank));
 
                     }else {

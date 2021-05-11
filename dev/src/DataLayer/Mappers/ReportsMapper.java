@@ -1,22 +1,25 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.Reports.*;
-import DataLayer.DataController;
 
 import java.sql.*;
+import java.text.ParseException;
 import java.util.LinkedList;
+
+import static DataLayer.DataController.getDate;
 
 public class ReportsMapper extends Mapper {
     private Reports_CategoriesMapper rcm;
 
-    public ReportsMapper(){
+    public ReportsMapper() {
         super();
         create_table();
     }
 
-    public void setRCM(Reports_CategoriesMapper rcm){
+    public void setRCM(Reports_CategoriesMapper rcm) {
         this.rcm = rcm;
     }
+
     @Override
     void create_table() {
         String ReportsTable = "CREATE TABLE IF NOT EXISTS Reports(\n" +
@@ -36,6 +39,26 @@ public class ReportsMapper extends Mapper {
         }
     }
 
+    public int getMaxReportID() {
+        int output=0;
+        try (Connection conn = connect()) {
+            String statement = "SELECT max(repID) FROM Reports";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    int repID = rs.getInt(1);
+                    output=repID;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return output+1;
+    }
 
     public Report getReport(int rID) {
         Report report = null;
@@ -55,11 +78,11 @@ public class ReportsMapper extends Mapper {
                     LinkedList<String> categoriesList = rcm.getCategories(repID);
                     switch (subject.toLowerCase()) {
                         case "stock":
-                            report = new ReportStock(repID, time_range, categoriesList);
+                            report = new ReportStock(repID, time_range, categoriesList, getDate(creation_date), data);
                         case "missing":
-                            report = new ReportMissing(repID, time_range, categoriesList);
+                            report = new ReportMissing(repID, time_range, categoriesList, getDate(creation_date), data);
                         case "defects":
-                            report = new ReportDefects(repID, time_range, categoriesList);
+                            report = new ReportDefects(repID, time_range, categoriesList, getDate(creation_date), data);
                     }
                 }
             } catch (SQLException e) {
@@ -83,7 +106,7 @@ public class ReportsMapper extends Mapper {
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, report.getReportID());
                 pstmt.setString(2, report.getSubject());
-                pstmt.setString(3, DataController.getDate(report.getCreationDate()));
+                pstmt.setString(3, getDate(report.getCreationDate()));
                 pstmt.setString(4, report.getTimeRange());
                 pstmt.setString(5, report.getReportData());
                 output = pstmt.executeUpdate() != 0;
@@ -105,7 +128,7 @@ public class ReportsMapper extends Mapper {
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, report.getReportID());
                 pstmt.setString(2, report.getSubject());
-                pstmt.setString(3, DataController.getDate(report.getCreationDate()));
+                pstmt.setString(3, getDate(report.getCreationDate()));
                 pstmt.setString(4, report.getTimeRange());
                 pstmt.setString(5, report.getReportData());
                 pstmt.setInt(6, report.getReportID());
@@ -142,7 +165,7 @@ public class ReportsMapper extends Mapper {
             String statement = "SELECT * FROM Reports  ";
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
+                while (rs.next()) {
                     int repID = rs.getInt(1);
                     String subject = rs.getString(2);
                     String creation_date = rs.getString(3);
@@ -151,14 +174,14 @@ public class ReportsMapper extends Mapper {
                     LinkedList<String> categoriesList = rcm.getCategories(repID);
                     switch (subject.toLowerCase()) {
                         case "stock":
-                            reports.add(new ReportStock(repID,time_range , categoriesList));
+                            reports.add(new ReportStock(repID, time_range, categoriesList, getDate(creation_date), data));
                         case "missing":
-                            reports.add(new ReportMissing(repID, time_range, categoriesList));
+                            reports.add(new ReportMissing(repID, time_range, categoriesList, getDate(creation_date), data));
                         case "defects":
-                            reports.add(new ReportDefects(repID, time_range, categoriesList));
+                            reports.add(new ReportDefects(repID, time_range, categoriesList, getDate(creation_date), data));
                     }
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | ParseException e) {
                 e.printStackTrace();
             }
         } catch (SQLException throwables) {
@@ -166,5 +189,31 @@ public class ReportsMapper extends Mapper {
         }
         return reports;
     }
+    public LinkedList<Integer> getIDs(String sub, String date){
+        LinkedList<Integer> rIDs= new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Reports WHERE subject=? AND creation_date=? ";
 
-}
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, sub);
+                pstmt.setString(2, date);
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    int repID = rs.getInt(1);
+                    rIDs.add(repID);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return rIDs;
+    }
+
+    }
+
+
