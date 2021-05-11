@@ -78,12 +78,6 @@ public class Reports_Controller {
     public LinkedList<Integer> getReportId(String subject, Date date) throws Exception {
         check_valid_Dates(date);
         check_valid_string(new String[]{subject});
-//        LinkedList<Integer> output = new LinkedList<>();
-//        for (Report r : reports.values()) {
-//            if (subject.equals(r.getSubject()) &&
-//                    date.equals(r.getCreationDate()))
-//                output.add(r.getReportID());
-//        }
         return getReportsIDFromDal(subject, getDate(date));
     }
 
