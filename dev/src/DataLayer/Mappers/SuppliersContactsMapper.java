@@ -5,23 +5,24 @@ import BuisnnesLayer.SupplierBuissness.Supplier;
 
 import java.sql.*;
 
-public class SuppliersContactsMapper extends Mapper{
-    public SuppliersContactsMapper(){
+public class SuppliersContactsMapper extends Mapper {
+    public SuppliersContactsMapper() {
         super();
         create_table();
     }
+
     @Override
     void create_table() {
         String ContactsTable = "CREATE TABLE IF NOT EXISTS SuppliersContacts(\n" +
-                                   "\tsupID INTEGER,\n" +
-                                   "\tcntcID INTEGER,\n" +
-                                   "\tcntcName TEXT,\n" +
-                                   "\tphoneNumber TEXT,\n" +
-                                   "\temail TEXT,\n" +
+                "\tsupID INTEGER,\n" +
+                "\tcntcID INTEGER,\n" +
+                "\tcntcName TEXT,\n" +
+                "\tphoneNumber TEXT,\n" +
+                "\temail TEXT,\n" +
 
-                                    "\tPRIMARY KEY (supID, cntcID),\n" +
-                                    "\tFOREIGN KEY (supID) REFERENCES Suppliers (supID)\n" +
-                                    " );";
+                "\tPRIMARY KEY (supID, cntcID),\n" +
+                "\tFOREIGN KEY (supID) REFERENCES Suppliers (supID)\n" +
+                " );";
 
 //        String sql = "BEGIN TRANSACTION;" + GeneralProductTable + "COMMIT;";
         try (Connection conn = connect();
@@ -48,12 +49,12 @@ public class SuppliersContactsMapper extends Mapper{
                 pstmt.setInt(2, contact_id);
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
-                    int supid=rs.getInt(1);
+                    int supid = rs.getInt(1);
                     int id = rs.getInt(2);
                     String name = rs.getString(3);
                     String phone = rs.getString(4);
                     String email = rs.getString(5);
-                    obj = new Contact(id,name, phone, email,supid);
+                    obj = new Contact(id, name, phone, email, supid);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -143,12 +144,12 @@ public class SuppliersContactsMapper extends Mapper{
 
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    int supId=rs.getInt(1);
+                    int supId = rs.getInt(1);
                     int id = rs.getInt(2);
                     String name = rs.getString(3);
                     String phone = rs.getString(4);
                     String email = rs.getString(5);
-                    obj = new Contact(id,name, phone, email,supId);
+                    obj = new Contact(id, name, phone, email, supId);
                     supplier.addContactFromDal(obj);
                 }
             } catch (SQLException e) {
@@ -169,8 +170,8 @@ public class SuppliersContactsMapper extends Mapper{
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, SupID);
                 ResultSet rs = pstmt.executeQuery();
-                if(rs.next()){
-                    obj=rs.getInt(1);
+                if (rs.next()) {
+                    obj = rs.getInt(1);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -178,8 +179,7 @@ public class SuppliersContactsMapper extends Mapper{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
-        System.out.println(obj);
         return obj;
 
     }
-    }
+}

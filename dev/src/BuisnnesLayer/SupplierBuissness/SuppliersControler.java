@@ -125,7 +125,9 @@ public class SuppliersControler implements ISupplierControler {
         Supplier supplier=(Supplier)getSupplier(SupId);
         agreementManager.GetAgreement(SupId).RemovAllProducts();
         agreementManager.RemoveAgreement(SupId);
+        supplier.removeAllContacts();
         removeSupplierFromTheData(supplier);
+        Suppliers.remove(supplier.getId());
 
     }
 

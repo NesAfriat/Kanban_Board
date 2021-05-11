@@ -214,7 +214,6 @@ public class SupModel implements supModelI{
             List<SupplierResponse> supplierResponseList=new LinkedList<>();
             for (ISupplier supplier:listOfSupplier
             ) {
-                System.out.println("Dsdsfsdfsdfdfsffffffff"+supplier.getId());
                 SupplierResponse supplierResponse=copySupplier(supplier);
                 supplierResponseList.add(supplierResponse);
             }

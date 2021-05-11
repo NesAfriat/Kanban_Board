@@ -149,8 +149,6 @@ public class SuppliersMapper extends Mapper{
                     String supName = rs.getString(2);
                     String bank = rs.getString(3);
                     String payment = rs.getString(4);
-                    System.out.println(payment);
-                    System.out.println(paymentMethods.paypal.toString());
 
                     if(payment.equals(paymentMethods.Cash.toString())){
                         obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.creditcard , bank));

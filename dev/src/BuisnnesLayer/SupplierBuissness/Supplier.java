@@ -5,6 +5,7 @@ import BuisnnesLayer.paymentMethods;
 import DataLayer.DataController;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Supplier implements ISupplier {
@@ -171,6 +172,16 @@ public void UpdateSupplierInTheData(Supplier supplier){
     }
 
 
+    public void removeAllContacts(){
+        List<Integer> list=new LinkedList<>();
+        for(int i=0;i<ListOfContacts.size();i++){
+            list.add(ListOfContacts.get(i).getId());
+        }
+        for (Integer id:list
+        ) {
+            removeContact(id);
+        }
+    }
 
     public void RemoveContactToSupplierInTheData(Contact contact,int SupId){
         IdentityMap im = IdentityMap.getInstance();
