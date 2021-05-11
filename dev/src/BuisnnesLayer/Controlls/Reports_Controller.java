@@ -85,7 +85,7 @@ public class Reports_Controller {
             loadedReports=true;
         }
         for (Report r : reports.values()) {
-            if (subject.equals(r.getSubject().toLowerCase()) &&
+            if (subject.equals(r.getSubject()) &&
                     date.equals(r.getCreationDate()))
                 output.add(r.getReportID());
         }
