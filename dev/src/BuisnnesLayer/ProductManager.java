@@ -254,21 +254,13 @@ public class ProductManager {
         return gp;
     }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> quickTest
     public void removeItem(Integer product_id, Integer item_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist!");
         }
-<<<<<<< HEAD
-        products.get(product_id).removeItem(item_id);
-=======
         GeneralProduct gp= get_product(product_id);
         gp.removeItem(item_id);
 
->>>>>>> quickTest
     }
 
     public void update_product_min_amount(Integer product_id, Integer min_amount) throws Exception {
