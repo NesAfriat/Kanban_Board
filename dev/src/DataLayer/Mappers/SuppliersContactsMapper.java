@@ -160,4 +160,26 @@ public class SuppliersContactsMapper extends Mapper{
         return obj;
     }
 
-}
+    public int getBigestId(int SupID) {
+
+        int obj = 0;
+        try (Connection conn = connect()) {
+            String statement = "SELECT MAX (cntcID) FROM SuppliersContacts WHERE supID=?";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, SupID);
+                ResultSet rs = pstmt.executeQuery();
+                if(rs.next()){
+                    obj=rs.getInt(1);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        System.out.println(obj);
+        return obj;
+
+    }
+    }

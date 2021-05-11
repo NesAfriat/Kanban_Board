@@ -11,8 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReportDefects implements Report {
-    private final String subject = "Defects";
-    private final Date creationDate;
+    private final Subject subject = Subject.Defects;
+    private final Date creationDate = new Date();
     private int reportID;
     private LinkedList<String> categories;
     private String timeRange;
@@ -22,16 +22,7 @@ public class ReportDefects implements Report {
         this.reportID = reportId;
         this.categories = categories;
         this.timeRange = time;
-        creationDate = new Date();
         this.report_data = "";
-    }
-
-    public ReportDefects(int repID, String time_range, LinkedList<String> categoriesList, Date date, String data) {
-        this.reportID = repID;
-        this.categories = categoriesList;
-        this.timeRange = time_range;
-        this.report_data = data;
-        this.creationDate = date;
     }
 
     @Override
@@ -70,7 +61,7 @@ public class ReportDefects implements Report {
 
     @Override
     public String getSubject() {
-        return this.subject;
+        return this.subject.name();
     }
 
     @Override

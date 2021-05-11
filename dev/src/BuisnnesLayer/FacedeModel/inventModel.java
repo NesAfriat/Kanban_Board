@@ -534,9 +534,9 @@ public class inventModel {
      * @return
      */
     public Response get_reports_id(String subject, String date) {
-        ResponseT<LinkedList<Integer>> res;
+        ResponseT<String> res;
         try {
-            LinkedList<Integer> ids = reports_controller.getReportId(subject, getDate(date));
+            String ids = reports_controller.getReportId(subject, getDate(date));
             res = new ResponseT<>(ids);
         } catch (Exception e) {
             res = new ResponseT<>(e.getMessage());
@@ -550,13 +550,10 @@ public class inventModel {
      * @return
      */
     public Response show_all_reports() {
-        LinkedList<ReportRes> repRes= new LinkedList<>();
-        ResponseT<LinkedList<ReportRes>> res;
+        ResponseT<LinkedList<String>> res;
         try {
-            LinkedList<Report> reports = reports_controller.get_all_reports();
-            for(Report r: reports)
-                 repRes.add(new ReportRes(r));
-            res = new ResponseT<>(repRes);
+            LinkedList<String> names = reports_controller.get_all_reports();
+            res = new ResponseT<>(names);
         } catch (Exception e) {
             res = new ResponseT<>(e.getMessage());
         }

@@ -108,16 +108,12 @@ public class DataController {
     public GeneralProduct getGP(int product_id) {
         GeneralProduct gp = generalProductMapper.getGeneralProduct(product_id);
         itemMapper.addItemToProduct(gp); //add gp items
-        suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+        //suppliersProductsMapper.addPStoProduct(gp); //add gp ps //TODO
         return gp;
     }
 
     public String getGPCategory(GeneralProduct gp) {
         return generalProductMapper.getGPCategory(gp);
-    }
-    public void updateGPCategoryDAL(GeneralProduct gp, String catName)
-    {
-        generalProductMapper.updateGPCategoryDAL(gp,catName);
     }
     //If we want to make entire new record of an gp
     public boolean insertGP(GeneralProduct obj, String catName) {
@@ -145,7 +141,7 @@ public class DataController {
         LinkedList<GeneralProduct> gps = generalProductMapper.loadAllProducts();
         for(GeneralProduct gp: gps){
             itemMapper.addItemToProduct(gp); //add gp items
-            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+            //suppliersProductsMapper.addPStoProduct(gp); //add gp ps//TODO
         }
         return gps;
     }
@@ -154,7 +150,7 @@ public class DataController {
         LinkedList<GeneralProduct> gps = generalProductMapper.loadProductsByCategory(cat_name);
         for(GeneralProduct gp: gps){
             itemMapper.addItemToProduct(gp); //add gp items
-            suppliersProductsMapper.addPStoProduct(gp); //add gp ps
+            //suppliersProductsMapper.addPStoProduct(gp); //add gp ps//TODO
         }
         return gps;
     }
@@ -183,24 +179,12 @@ public class DataController {
         return categoriesMapper.setFather(cat, father_cat);
     }
 
-
     public LinkedList<Category> loadAllCategoreis() {
         return categoriesMapper.loadAllCategories();
-    }
-    public String getFatherCategory(Category cat) {
-        return categoriesMapper.getFatherCategory(cat);
-    }
-
-    public LinkedList<String> getChildrenCategories(Category cat) {
-        return categoriesMapper.getChildrenCategories(cat);
     }
 
     //=============================
     //reports
-
-    public int getMaxRepID() {
-        return reportsMapper.getMaxReportID();
-    }
     public Report getReport(int rID) {
         Report report = reportsMapper.getReport(rID);
         return report;
@@ -218,9 +202,6 @@ public class DataController {
         return reportsMapper.delete(report);
     }
 
-    public LinkedList<Integer> getReportsIDs(String sub, String date) {
-        return reportsMapper.getIDs(sub,date);
-    }
     public LinkedList<Report> loadAllReports() {
         return reportsMapper.loadAllReports();
     }
@@ -232,6 +213,7 @@ public class DataController {
         Supplier sup = suppliersMapper.getSupplier(supplier_id);
         if(sup!=null){
         suppliersContactsMapper.addAllContactsToSupplier(sup);
+        sup.setContactIdCounter(suppliersContactsMapper.getBigestId(supplier_id)+1);
         }
         return sup;
     }
@@ -309,6 +291,7 @@ public class DataController {
     public Order getOrder(int sup_id, int oID) {
         Order o = ordersMapper.getOrder(sup_id, oID);
         orderProductsMapper.addProductsToOrder(o);// this function add all product to the order
+
         return o;
     }
     public List<Order> getAllOrders(){
@@ -330,7 +313,16 @@ public class DataController {
     }
 
     public boolean deleteOrder(Order o) {
-        return ordersMapper.delete(o);
+        boolean b= ordersMapper.delete(o);
+        if(b){
+            for (int catalogId:o.getProductQuantity().keySet()
+                 ) {
+                boolean t=orderProductsMapper.delete(o.GetId(),catalogId);
+                if(!t) return false;
+            }
+            return true;
+        }
+        return false;
     }
 
     public boolean addAgreementDeliveryDaysAgreement(int SupID,int Day){
@@ -341,7 +333,7 @@ public class DataController {
     }
 
 
-    public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,int Price) {
+    public boolean addQuantityDiscAgreement(int SupId,int catalogId,int quantity,double Price) {
         return apdMapper.addQuantityDiscAgreement( SupId, catalogId, quantity, Price);
     }
 
@@ -474,18 +466,17 @@ public class DataController {
         return salesMapper.loadAllSales();
     }
 
-
-    public void changeGPCategory(LinkedList<GeneralProduct> products, Category father) {
-        for (GeneralProduct prod : products) {
-            generalProductMapper.setGPCategory(prod,father.getCategory_name());
-        }
+    public int getTheBigestIDforTheCounterinContacts(int Supid){
+        return suppliersContactsMapper.getBigestId(Supid);
     }
 
-    public Integer getMaxSalesID() {
-        return salesMapper.getMaxSaleID();
+    public int getOrderBigestId(){
+        int order=orderProductsMapper.getOrderIdCounterBigest();
+        return order;
     }
 
-    public int getMaxGPID() {
-        return generalProductMapper.getMaxGPID();
+    public int getmaxgpid(){
+        return suppliersProductsMapper.getMaxPGcounterNumber();
     }
+
 }

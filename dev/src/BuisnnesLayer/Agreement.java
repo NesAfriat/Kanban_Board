@@ -78,15 +78,27 @@ public class Agreement implements IAgreement {
             throw new IllegalArgumentException("the product do not have discount with this quantity");
         }
         DiscountByProductQuantity.get(CatalogId).remove(Quantiti);
-        RemoveQuantityDiscAgreementInTheData(CatalogId,Quantiti,SupplierID);
+        RemoveQuantityDiscAgreementInTheData(SupplierID,CatalogId,Quantiti);
 
     }
 
     public void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery,int numOfDaysFromOrder) {
+        if(this.deliveryMods==DeliveryMode.DeliveryByDay){
+            for (int day:this.daysOfDelivery
+                 ) {
+                RemoveAgreementDeliveryDays(SupplierID,day);
+            }
+        }
         this.deliveryMods=deliveryMods;
         this.daysOfDelivery=daysOfDelivery;
         this.numOfDaysFromOrder=numOfDaysFromOrder;
         updateAgreementInTheData(this);
+        if(deliveryMods==DeliveryMode.DeliveryByDay){
+            for (int day:daysOfDelivery
+                 ) {
+                addAgreementDeliveryDaysAgreement(SupplierID,day);
+            }
+        }
 
     }
 
@@ -133,7 +145,9 @@ public class Agreement implements IAgreement {
             DiscountByProductQuantity.put(CatalogID, new HashMap<Integer, Double>());
         }
          (DiscountByProductQuantity.get(CatalogID)).put(quantity,newPrice );
-        addDiscountByProductQuantity(CatalogID,quantity,newPrice);
+        //addDiscountByProductQuantity(CatalogID,quantity,newPrice);
+        AddDiscountByProductInTheData(SupplierID, CatalogID,quantity,newPrice);
+
 
     }
     public void SetExtraDiscount(int ExtraDiscount)
@@ -144,6 +158,18 @@ public class Agreement implements IAgreement {
 
     }
 
+    public void RemovAllProducts(){
+        List<Integer> d=new LinkedList();
+        for (int x:products.keySet()
+        ) {
+            d.add(x);
+        }
+
+        for (int x:d
+             ) {
+            RemovePrudact(x);
+        }
+    }
     ///////////////////////zeeeeeeeeeeeeeeeeeeeeee
     public ProductSupplier GetPrudact(int CatalogID)
     {
@@ -229,7 +255,7 @@ public class Agreement implements IAgreement {
         im.removerProductSupplier(productSupplier);
     }
 
-    private void AddDiscountByProductInTheData(int SupId,int catalogId,int quantity,int Price){
+    private void AddDiscountByProductInTheData(int SupId,int catalogId,int quantity,double Price){
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if (!dc.addQuantityDiscAgreement(SupId,catalogId,quantity,Price)) {
@@ -261,7 +287,13 @@ public class Agreement implements IAgreement {
         }
     }
 
-
+    public void RemoveAgreementDeliveryDays(int SupID,int Day){
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if(!dc.RemoveAgreementDeliveryDays(SupID,Day)){
+            System.out.println("failed to update new Agreement to the database");
+        }
+    }
 
 
     public void setDeliveryDays(HashMap<Integer, ProductSupplier> deliveryDays) {

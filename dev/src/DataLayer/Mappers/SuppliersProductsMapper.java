@@ -24,7 +24,7 @@ public class SuppliersProductsMapper extends Mapper {
                 "\tprice REAL,\n" +
 
                 "\tPRIMARY KEY (supID, catalogID),\n" +
-                "\tFOREIGN KEY (supID) REFERENCES Suppliers (supID),\n" +
+                "\tFOREIGN KEY (supID) REFERENCES Suppliers (supID) ON DELETE NO ACTION,\n" +
                 "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)\n" +
                 ");";
 //        String sql = "BEGIN TRANSACTION;" + GeneralProductTable + "COMMIT;";
@@ -84,9 +84,10 @@ public class SuppliersProductsMapper extends Mapper {
                 pstmt.setString(4, ps.getName());
                 pstmt.setDouble(5, ps.getPrice());
                 pstmt.setInt(6, sup_id);
-                pstmt.setInt(1, ps.getCatalogID());
+                pstmt.setInt(7, ps.getCatalogID());
 
                 updated = pstmt.executeUpdate() != 0;
+                System.out.println("loll"+updated);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -104,7 +105,7 @@ public class SuppliersProductsMapper extends Mapper {
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, sup_id);
-                pstmt.setInt(1, ps.getCatalogID());
+                pstmt.setInt(2, ps.getCatalogID());
                 deleted = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -140,34 +141,34 @@ public class SuppliersProductsMapper extends Mapper {
         return output;
     }
 
-    public LinkedList<ProductSupplier> addPStoProduct(GeneralProduct gp) {
-        LinkedList<ProductSupplier> output = new LinkedList<>();
-        try (Connection conn = connect()) {
-            String statement = "SELECT * FROM SuppliersProducts WHERE gpID=? ";
-
-            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, gp.getProduct_id());
-
-                ResultSet rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    int Supplierid = rs.getInt(1);
-                    int catalogID = rs.getInt(2);
-                    int gpID = rs.getInt(3);
-                    String name = rs.getString(4);
-                    double price = rs.getDouble(5);
-
-                    ProductSupplier ps = new ProductSupplier(price, catalogID, gpID, name, Supplierid);
-                    gp.addSupplierProduct(ps);
-                    output.add(ps);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return output;
-    }
+//    public LinkedList<ProductSupplier> addPStoProduct(GeneralProduct gp) {
+//        LinkedList<ProductSupplier> output = new LinkedList<>();
+//        try (Connection conn = connect()) {
+//            String statement = "SELECT * FROM SuppliersProducts WHERE gpID=? ";
+//
+//            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+//                pstmt.setInt(1, gp.getProduct_id());
+//
+//                ResultSet rs = pstmt.executeQuery();
+//                while (rs.next()) {
+//                    int Supplierid = rs.getInt(1);
+//                    int catalogID = rs.getInt(2);
+//                    int gpID = rs.getInt(3);
+//                    String name = rs.getString(4);
+//                    double price = rs.getDouble(5);
+//
+//                    ProductSupplier ps = new ProductSupplier(price, catalogID, gpID, name, Supplierid);
+//                    gp.addSupplierProduct(ps);
+//                    output.add(ps);
+//                }
+//            } catch (SQLException e) {
+//                e.printStackTrace();
+//            }
+//        } catch (SQLException throwables) {
+//            throwables.printStackTrace();
+//        }
+//        return output;
+//    }
 
     public LinkedList<ProductSupplier> addPStoAgreement(Agreement agr){
         LinkedList<ProductSupplier> output = new LinkedList<>();
@@ -196,5 +197,25 @@ public class SuppliersProductsMapper extends Mapper {
             throwables.printStackTrace();
         }
         return output;
+    }
+
+    public int getMaxPGcounterNumber(){
+        int obj = 0;
+        try (Connection conn = connect()) {
+            String statement = "SELECT MAX (gpID) FROM SuppliersProducts";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                ResultSet rs = pstmt.executeQuery();
+                if(rs.next()){
+                    obj=rs.getInt(1);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return obj;
+
     }
 }

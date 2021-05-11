@@ -43,7 +43,7 @@ public class IdentityMap {
         ordersList = new LinkedList<>();
         agreementsList = new LinkedList<>();
         defctedItemsList = new LinkedList<>();
-        salesList = new LinkedList<>();
+        salesList= new LinkedList<>();
     }
 
     //================================================================================
@@ -69,7 +69,6 @@ public class IdentityMap {
             if (item.getItem_id() == item_id && item.getProduct_id() == gp_id) {
                 output = item;
                 itemList.remove(item);
-                return output;
             }
         }
         return output;
@@ -79,37 +78,37 @@ public class IdentityMap {
     //function which retrieve the info from the database
     public void addGeneralProduct(GeneralProduct product) {
         boolean flag;
-        flag = false;
-        for (GeneralProduct gp : generalProductList) {
+        flag=false;
+        for(GeneralProduct gp: generalProductList){
             if (product.getProduct_id().equals(gp.getProduct_id())) {
                 flag = true;
                 break;
             }
         }
-        if (!flag) {
+        if(!flag){
             generalProductList.add(product);
         }
-        for (Item i : product.get_items()) {
+        for(Item i:product.get_items()){
             flag = false;
-            for (Item item : itemList) {
+            for(Item item: itemList){
                 if (i.getItem_id().equals(item.getItem_id()) && i.getProduct_id().equals(item.getProduct_id())) {
                     flag = true;
                     break;
                 }
             }
-            if (!flag) {
+            if(!flag){
                 itemList.add(i);
             }
         }
-        for (ProductSupplier ps : product.getHashOfSupplierProducts().values()) {
+        for(ProductSupplier ps:product.getHashOfSupplierProducts().values()){
             flag = false;
-            for (ProductSupplier prod : productSuppliersList) {
+            for(ProductSupplier prod: productSuppliersList){
                 if (ps.getId() == prod.getId() && ps.getCatalogID() == prod.getCatalogID()) {
                     flag = true;
                     break;
                 }
             }
-            if (!flag) {
+            if(!flag){
                 productSuppliersList.add(ps);
             }
         }
@@ -141,15 +140,14 @@ public class IdentityMap {
     }
 
     ////Categories//////
-    //TODO: check if object exist in the list before adding
+ //TODO: check if object exist in the list before adding
 
     public void addCategory(Category category) {
-        boolean isIN = false;
-        for (Category c : categoryList) {
-            if (category.getCategory_name().equals(c.getCategory_name()))
-                isIN = true;
-        }
-        if (!isIN)
+        boolean isIN=false;
+        for(Category c:categoryList)
+            if(category.getCategory_name().equals(c.getCategory_name()))
+                isIN=true;
+        if(!isIN)
             categoryList.add(category);
     }
 
@@ -166,7 +164,7 @@ public class IdentityMap {
     public Category removeCategory(Category category) {
         Category output = null;
         for (Category cat : categoryList) {
-            if (cat.getCategory_name().equals(category.getCategory_name())) {
+            if (cat.getCategory_name().equals(category)) {
                 output = cat;
                 categoryList.remove(cat);
             }
@@ -174,31 +172,28 @@ public class IdentityMap {
         return output;
     }
 
-    //==============================================
+//==============================================
     /////Reports//////
     public void addReport(Report report) {
-        boolean isIN = false;
-        for (Report r : reportsList)
-        { if (r.getReportID() == report.getReportID())
-                isIN = true;
-       }
-        if (!isIN)
+        boolean isIN=false;
+        for(Report r:reportsList)
+        if(r.getReportID()==report.getReportID())
+            isIN=true;
+        if(!isIN)
             reportsList.add(report);
     }
-
     //if this function return null - go to the db
     public Report getReport(int reportID) {
         Report output = null;
         for (Report r : reportsList) {
-            if (r.getReportID() == reportID)
+            if (r.getReportID()==reportID)
                 output = r;
         }
         return output;
     }
-
     public Report removeReport(int reportID) {
         Report output = null;
-        for (Report r : reportsList) {
+        for (Report r: reportsList) {
             if (r.getReportID() == reportID) {
                 output = r;
                 reportsList.remove(r);
@@ -247,7 +242,7 @@ public class IdentityMap {
     //if this function return null - go to the db
     public Contact getContact(int con_id) {
         Contact output = null;
-        for (Contact con : contactsList) {
+        for (Contact con: contactsList) {
             if (con.getId() == con_id)
                 output = con;
         }
@@ -257,7 +252,7 @@ public class IdentityMap {
     //TODO: make sure remove doesnt stop the for
     public Contact removeContact(int con_id) {
         Contact output = null;
-        for (Contact con : contactsList) {
+        for (Contact con: contactsList) {
             if (con.getId() == con_id) {
                 output = con;
                 contactsList.remove(con);
@@ -265,7 +260,6 @@ public class IdentityMap {
         }
         return output;
     }
-
     //================================================================================
     //add an item to the identityMap
     public void addPS(ProductSupplier ps) {
@@ -308,7 +302,7 @@ public class IdentityMap {
     //if this function return null - go to the db
     public Order getOrder(int oID) {
         Order output = null;
-        for (Order o : ordersList) {
+        for (Order o: ordersList) {
             if (o.GetId() == oID)
                 output = o;
         }
@@ -318,15 +312,15 @@ public class IdentityMap {
     //TODO: make sure remove doesnt stop the for
     public Order removeOrder(int oID) {
         Order output = null;
-        for (Order o : ordersList) {
+        for (Order o: ordersList) {
             if (o.GetId() == oID) {
                 output = o;
                 ordersList.remove(o);
+                return o;
             }
         }
         return output;
     }
-
     //================================================================================
     //add an Agreement to the identityMap
     public void addAgreement(Agreement a) {
@@ -337,7 +331,7 @@ public class IdentityMap {
     //if this function return null - go to the db
     public Agreement getAgreement(int supID) {
         Agreement output = null;
-        for (Agreement a : agreementsList) {
+        for (Agreement a: agreementsList) {
             if (a.getSupplierID() == supID)
                 output = a;
         }
@@ -348,7 +342,7 @@ public class IdentityMap {
     //TODO: make sure remove doesnt stop the for
     public Agreement removeAgreement(int supID) {
         Agreement output = null;
-        for (Agreement a : agreementsList) {
+        for (Agreement a: agreementsList) {
             if (a.getSupplierID() == supID) {
                 output = a;
                 agreementsList.remove(a);
@@ -384,7 +378,6 @@ public class IdentityMap {
         }
         return output;
     }
-
     public void removeAllDefects() {
         defctedItemsList = new LinkedList<>();
     }
@@ -394,25 +387,23 @@ public class IdentityMap {
     //==============================================
     /////sales//////
     public boolean addSale(Sale sale) {
-        boolean added = false;
-        for (Sale s : salesList) {
-            if (s.getSale_id().equals(sale.getSale_id()))
-                return false;
-        }
+       boolean added=false;
+       for(Sale s: salesList) {
+           if (s.getSale_id() == sale.getSale_id())
+               return false;
+       }
         salesList.add(sale);
         return true;
     }
-
     //if this function return null - go to the db
     public Sale getSale(int saleID) {
         Sale output = null;
         for (Sale s : salesList) {
-            if (s.getSale_id() == saleID)
+            if (s.getSale_id()==saleID)
                 output = s;
         }
         return output;
     }
-
     public boolean removeSale(Sale sale) {
         boolean output = false;
         output = salesList.remove(sale);
@@ -420,10 +411,10 @@ public class IdentityMap {
     }
 
     //================================================productSupplier================================================
-    public boolean removerProductSupplier(ProductSupplier ps) {
-        for (ProductSupplier p : productSuppliersList
-        ) {
-            if (p == ps) {
+    public boolean removerProductSupplier(ProductSupplier ps){
+        for (ProductSupplier p:productSuppliersList
+             ) {
+            if(p==ps){
                 productSuppliersList.remove(ps);
                 return true;
             }
