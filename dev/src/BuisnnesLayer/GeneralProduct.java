@@ -282,6 +282,12 @@ public class GeneralProduct {
         Item item = getItem(item_id);
         removeItemPersistence(item);
         items.remove(item);
+        if(item.getLocation().equals("storage")){
+            amount_storage--;
+        }else{
+            amount_store--;
+        }
+        update(this); //update amounts
     }
 
     public LinkedList<Item> get_items() {
