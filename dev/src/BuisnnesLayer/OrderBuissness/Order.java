@@ -111,7 +111,7 @@ public int getDayOfOrder(){
         this.TotalPayment = CalculateTotalPayment(this.productQuantity, agreement);
         removeProduct(this.id, CatalogID); //data
         update(this);
-        
+
 
     }
 
