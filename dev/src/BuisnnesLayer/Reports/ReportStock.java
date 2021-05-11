@@ -9,7 +9,7 @@ import java.util.List;
 
 
 public class ReportStock implements Report {
-    private final String subject = "stock";
+    private final String subject = "Stock";
     private final Date creationDate;
     private Integer reportID;
     private LinkedList<String> categories;

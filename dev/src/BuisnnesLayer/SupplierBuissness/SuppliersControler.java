@@ -28,7 +28,7 @@ public class SuppliersControler implements ISupplierControler {
     // }
     //HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity;// hashMap<SupllierID:int, hashMap<CatalogID :int , quantitiy:int>>
     public HashMap<Integer, HashMap<Integer, Integer>> get_cheapest_supplier(HashMap<GeneralProduct, Integer> lackMap) {
-        return agreementManager.get_cheapest_supplier2(lackMap);
+        return agreementManager.get_cheapest_supplier(lackMap);
     }
 
 
@@ -73,7 +73,7 @@ public class SuppliersControler implements ISupplierControler {
         }
         ISupplier supplier = Suppliers.get(SupplierId);
         supplier.setPayment(paymentMethods);
-        updateSupplierFromTheData((Supplier) getSupplier(SupplierId));
+        updateSupplierFromTheData((Supplier)getSupplier(SupplierId));
 
     }
 
@@ -82,10 +82,10 @@ public class SuppliersControler implements ISupplierControler {
         if (!isSupplierExist(SupplierId)) {
             throw new IllegalArgumentException("the Supplier doues not exsist");
         }
-        if (manfucator == null || manfucator.equals("")) {
+        if (manfucator == null || manfucator == "") {
             throw new IllegalArgumentException("the manfucator input is incorrect");
         }
-        if (name == null || name.equals("")) {
+        if (name == null || name == "") {
             throw new IllegalArgumentException("the name input is incorrect");
         }
         agreementManager.AddProduct(SupplierId, Price, CatalogID, name, manfucator, category, pid, isexist);
@@ -100,7 +100,7 @@ public class SuppliersControler implements ISupplierControler {
         if (contactEmail == null || contactName == null || phoneNumber == null) {
             throw new IllegalArgumentException("one of the given values is null");
         }
-        if (contactEmail.equals("") || contactName.equals("") || phoneNumber.equals("")) {
+        if (contactEmail == "" || contactName == "" || phoneNumber == "") {
             throw new IllegalArgumentException("one of the given values is empty");
         }
         if (!validatePhoneNumber(phoneNumber)) {
@@ -122,8 +122,8 @@ public class SuppliersControler implements ISupplierControler {
         if (!isSupplierExist(SupId)) {
             throw new IllegalArgumentException("the supplier does not exist");
         }
-        Supplier supplier = (Supplier) getSupplier(SupId);
-        agreementManager.GetAgreement(SupId).RemovAllProducts();
+        Supplier supplier=(Supplier)getSupplier(SupId);
+        Suppliers.remove(SupId);
         agreementManager.RemoveAgreement(SupId);
         removeSupplierFromTheData(supplier);
 
@@ -149,14 +149,14 @@ public class SuppliersControler implements ISupplierControler {
         if (BankAccount == null) {
             throw new IllegalArgumentException("the Bank Acount is null");
         }
-        if (BankAccount.equals("")) {
+        if (BankAccount == "") {
             throw new IllegalArgumentException("the Bank Acount value is empty");
         }
         if (!isSupplierExist(SupId)) {
             throw new IllegalArgumentException("the supplier does not exist");
         }
         Suppliers.get(SupId).setBankAccount(BankAccount);
-        updateSupplierFromTheData((Supplier) getSupplier(SupId));
+        updateSupplierFromTheData((Supplier)getSupplier(SupId));
     }
 
     @Override
@@ -204,17 +204,18 @@ public class SuppliersControler implements ISupplierControler {
 
     // return true if the supplier exist in the suppliers hash map
     public boolean isSupplierExist(int supplierId) {
-        if (Suppliers.containsKey(supplierId)) {
-            return true;
-        } else {
-            Supplier s = getSupplierFromData(supplierId);
-            if (s == null) {
-                return false;
-            }
+      if(Suppliers.containsKey(supplierId)){
+          return true;
+      }
+      else {
+          Supplier s=getSupplierFromData(supplierId);
+          if (s==null){
+              return false;
+          }
 
-            Suppliers.put(supplierId, s);
-            return true;
-        }
+          Suppliers.put(supplierId,s);
+          return true;
+      }
     }
 
 
@@ -233,12 +234,16 @@ public class SuppliersControler implements ISupplierControler {
     private boolean validatePhoneNumber(String phoneNumber) {
         if (phoneNumber.matches("\\d{10}"))
             return true;
-        else return phoneNumber.matches("\\d{9}");
+        else if (phoneNumber.matches("\\d{9}")) {
+            return true;
+        }
+        return false;
     }
 
     private boolean isValidUsername(String name) {
         return name.matches("(?i)(^[a-z])((?![ .,'-]$)[a-z .,'-]){0,24}$");
     }
+
 
 
 //===============================================dal=================================
@@ -251,8 +256,8 @@ public class SuppliersControler implements ISupplierControler {
             return supplier;
         }
         supplier = dc.getSupplier(SupId);
-        if (supplier != null) {
-            im.addSupplier(supplier);
+        if (supplier != null)
+        {  im.addSupplier(supplier);
             return supplier;
         }
         return null;

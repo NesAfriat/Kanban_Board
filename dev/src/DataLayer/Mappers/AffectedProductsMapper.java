@@ -1,7 +1,8 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.Sales.Sale;
-
+import BuisnnesLayer.Sales.SaleByProduct;
+import DataLayer.DataController;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -42,6 +43,8 @@ public class AffectedProductsMapper extends Mapper{
                             int saleID = rs.getInt(1);
                             sales.add(saleID);
                         }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -62,6 +65,8 @@ public class AffectedProductsMapper extends Mapper{
                         String prodName = rs.getString(2);
                         afftectedProducts.add(prodName);
                     }
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

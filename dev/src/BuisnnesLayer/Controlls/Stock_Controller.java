@@ -1,6 +1,8 @@
 package BuisnnesLayer.Controlls;
 
 
+
+
 import BuisnnesLayer.GeneralProduct;
 import BuisnnesLayer.Item;
 import BuisnnesLayer.Stock;
@@ -17,6 +19,7 @@ public class Stock_Controller {
     private Stock_Controller(ProductManager productManager) {
         this.stock = new Stock(productManager);
     }
+
 
 
     public static Stock_Controller getInstance(ProductManager productManager) {
@@ -79,6 +82,7 @@ public class Stock_Controller {
     }
 
 
+
     public LinkedList<Integer> addItems(Integer product_id, Integer quantity, String location, Date
             supplied_date, Date creation_date, Date expiration_date) throws Exception {
         check_valid_string(new String[]{location});
@@ -120,9 +124,10 @@ public class Stock_Controller {
         return stock.get_product(product_id);
     }
 
-    public void clear_stock_defected() {
+    public void clear_stock_defected() throws Exception {
         stock.clear_defected();
     }
+
 
 
     public void removeItems(Integer product_id, Integer item_id) throws Exception {
@@ -145,16 +150,15 @@ public class Stock_Controller {
     }
 
     public HashMap<GeneralProduct, Integer> get_missing_General_products_with_amounts() {
-        return stock.get_missing_General_products_with_amounts();
-    }
-
+    return stock.get_missing_General_products_with_amounts();
+}
     //for inside use
     public LinkedList<GeneralProduct> get_category_products(String cat_name) throws Exception {
         return stock.get_category_products(cat_name);
     }
 
     //for inside use
-    public LinkedList<Item> get_defected_items() {
+    public LinkedList<Item> get_defected_items() throws Exception {
         return stock.get_defected_items();
     }
 
@@ -170,11 +174,11 @@ public class Stock_Controller {
         return stock.get_product_categories(product);
     }
 
-    public LinkedList<String> get_all_products() {
+    public LinkedList<String> get_all_products() throws Exception {
         return stock.get_all_products();
     }
 
-    public LinkedList<String> get_all_categories() {
+    public LinkedList<String> get_all_categories() throws Exception {
         return stock.get_all_categories();
     }
 
@@ -189,20 +193,20 @@ public class Stock_Controller {
     }
 
     public void check_categories_exist(LinkedList<String> affected_category) throws Exception {
-        boolean flag = false;
-        for (String cat_name : affected_category)
+        boolean flag=false;
+        for(String cat_name: affected_category)
             flag = flag | stock.check_category_exist(cat_name);
 
-        if (!flag)
+        if(!flag)
             throw new Exception("category does not exist");
     }
 
 
     public void check_product_exist(LinkedList<String> affected_products) throws Exception {
-        boolean flag = false;
-        for (String prod_name : affected_products)
+        boolean flag=false;
+        for(String prod_name: affected_products)
             flag = flag | stock.check_product_exist(prod_name);
-        if (!flag)
+        if(!flag)
             throw new Exception("product does not exist");
     }
 }

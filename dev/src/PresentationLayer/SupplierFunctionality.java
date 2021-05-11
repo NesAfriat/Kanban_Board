@@ -4,7 +4,7 @@ import BuisnnesLayer.DeliveryMode;
 import BuisnnesLayer.FacedeModel.Objects.*;
 import BuisnnesLayer.FacedeModel.facade;
 import BuisnnesLayer.paymentMethods;
-
+import BuisnnesLayer.FacedeModel.facade;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -115,7 +115,7 @@ public class SupplierFunctionality {
         int catalogid=NumberType();
         System.out.println("please type product quantity : ");
         int quantity=NumberType();
-        Response r=facade.RemoveDiscountByQuantityToProduct(id,catalogid,quantity);
+        Response r=facade.RemovDiscountByQuantitiyToProduct(id,catalogid,quantity);
         if(r.getErrorOccurred()){
             System.out.println(r.getErrorMsg());
         }
@@ -316,7 +316,7 @@ public class SupplierFunctionality {
         else
         {
             System.out.println("Product removed  successfully\n");
-            Response response2=facade.RemoveProductFromOrders(id,catalogId);
+            Response response2=facade.RemovePrudactFromOrders(id,catalogId);
             if(response2.getErrorOccurred()){
                 System.out.println((response2.getErrorMsg()));
             }
@@ -355,7 +355,7 @@ public class SupplierFunctionality {
         int Quantity=NumberType();
         System.out.println("please type price after discount: ");
         double price=doubleType();
-        Response response=facade.addNewDiscountByQuantityToProduct(id,catalogId,Quantity,price);
+        Response response=facade.addNewDiscountByQuantitiyToProduct(id,catalogId,Quantity,price);
         if(response.getErrorOccurred()){
             System.out.println((response.getErrorMsg()));
         }
@@ -435,7 +435,7 @@ public class SupplierFunctionality {
         }
         else{
             System.out.printf("%-30s%-30s%-30s%-30s%-30s\n","id","name","bank Account","payment method","Contacts");
-            System.out.printf("%-30s%-30s%-30s%-30s\n",responseT.getValue().id,responseT.getValue().supplierName,responseT.getValue().bankAccount,responseT.getValue().paymentMethods);
+            System.out.printf("%-30s%-30s%-30s%-30s\n",responseT.getValue().id,responseT.getValue().supplierName,responseT.getValue().bankAcount,responseT.getValue().paymentMethods);
             List<contactResponse> cr=responseT.getValue().contacts;
             System.out.printf("%-120s%-30s%-30s%-30s%-30s\n","","id","name","Email","Phone Number");
             for(int i=0;i<responseT.getValue().contacts.size();i++){
@@ -460,7 +460,7 @@ public class SupplierFunctionality {
                 System.out.printf("%-30s%-30s%-30s%-30s%-30s\n","id","name","bank Account","payment method","Contacts");
                 SupplierResponse supplierResponse=lrs.get(i);
 
-                System.out.printf("%-30s%-30s%-30s%-30s\n",supplierResponse.id,supplierResponse.supplierName,supplierResponse.bankAccount,supplierResponse.paymentMethods.toString());
+                System.out.printf("%-30s%-30s%-30s%-30s\n",supplierResponse.id,supplierResponse.supplierName,supplierResponse.bankAcount,supplierResponse.paymentMethods.toString());
                 List<contactResponse> cr=supplierResponse.contacts;
                 System.out.printf("%-120s%-30s%-30s%-30s%-30s\n","","id","name","Email","Phone Number");
                 for(int j=0;j<supplierResponse.contacts.size();j++){
@@ -499,13 +499,13 @@ public class SupplierFunctionality {
             }
             System.out.println("The products in the agreement: ");
             List<productSupplierResponse> productResponseList =agreementResponse.products;
-            System.out.printf("%-22s%-22s%-22s%-22s\n","Catalog ID","produc name","produc price","id");
+            System.out.printf("%-22s%-22s%-22s\n","Catalog ID","produc name","produc price");
             for(int i=0;i<productResponseList.size();i++){
-                System.out.printf("%-22d%-22s%-22s%-22s\n",productResponseList.get(i).CatalogID,productResponseList.get(i).name,productResponseList.get(i).price,productResponseList.get(i).id);
+                System.out.printf("%-22d%-22s%-22s\n",productResponseList.get(i).CatalogID,productResponseList.get(i).name,productResponseList.get(i).price);
             }
             System.out.println("The Discounts in the agreement: ");
-            if(agreementResponse.ExtraDiscount !=-1){
-                System.out.println("ExtraDiscount:  "+agreementResponse.ExtraDiscount +" %");
+            if(agreementResponse.ExtaraDiscount!=-1){
+                System.out.println("ExtraDiscount:  "+agreementResponse.ExtaraDiscount+" %");
             }
             System.out.println("Discount of products: ");
             System.out.printf("%-22s%-22s%-22s\n","CatalogID","Quantity","new price per product");

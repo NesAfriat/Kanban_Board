@@ -7,15 +7,14 @@ public class Contact {
     private int id;
     private String ContactName;
     private String PhoneNumber;
-    private String Email;
+    private String Email ;
     private int SupId;
-
-    public Contact(int id, String ContactName, String PhoneNumber, String Email, int SupID) {
-        this.id = id;
-        this.ContactName = ContactName;
-        this.PhoneNumber = PhoneNumber;
-        this.Email = Email;
-        this.SupId = SupID;
+    public Contact(int id,String ContactName,String PhoneNumber, String Email,int SupID)
+    {
+        this.id=id;
+        this.ContactName=ContactName;
+        this.PhoneNumber=PhoneNumber;
+        this.Email=Email;
     }
 
 
@@ -56,14 +55,16 @@ public class Contact {
 
 
     //==========================================data==========================
-    public void updateContact(Contact contact) {
+    public void updateContact(Contact contact){
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.update(contact, this.SupId)) {
-            System.out.println("ERROR");
+        if(!dc.update(contact,this.SupId)){
+            System.out.println("EROR");
         }
 
     }
+
+
 
 
 }

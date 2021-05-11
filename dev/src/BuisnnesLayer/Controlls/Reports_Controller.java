@@ -3,6 +3,7 @@ package BuisnnesLayer.Controlls;
 import BuisnnesLayer.IdentityMap;
 import BuisnnesLayer.Reports.Report;
 import BuisnnesLayer.Reports.ReportFactory;
+import BuisnnesLayer.Reports.Subject;
 import DataLayer.DataController;
 
 import java.util.Date;
@@ -15,7 +16,7 @@ public class Reports_Controller {
     private static Reports_Controller report_C = null;
     private HashMap<Integer, Report> reports;           //holds all reports ever created
     private ReportFactory reportFactory;//hold the class which create a report
-    private boolean loadedReports = false;
+    private boolean loadedReports=false;
 
     private void check_valid_string(String[] arr) throws Exception {
         for (String str : arr) {
@@ -44,7 +45,7 @@ public class Reports_Controller {
 
     private Reports_Controller() {
         this.reports = new HashMap<>();
-        int maxReport = getMaxReportFromData();
+        int maxReport= getMaxReportFromData();
         this.reportFactory = new ReportFactory(maxReport);
     }
 
@@ -54,7 +55,7 @@ public class Reports_Controller {
         return report_C;
     }
 
-    public Report createReport(String subject, String timeRange, LinkedList<String> categories) throws Exception {
+    public Report createReport( String subject, String timeRange, LinkedList<String> categories) throws Exception {
         check_valid_string(new String[]{subject, timeRange});
         check_valid_string(categories);
         Report r = reportFactory.getReport(subject, timeRange, categories);
@@ -64,12 +65,12 @@ public class Reports_Controller {
     }
 
     public Report getReportById(int id) throws Exception {
-        Report output;
+        Report output=null;
         if (reports.containsKey(id))
-            output = reports.get(id);
+            output=reports.get(id);
         else
-            output = getReportData(id);
-        if (output == null)
+        output= getReportData(id);
+        if (output==null)
             throw new Exception("report id doesnt exist");
         return output;
     }
@@ -78,35 +79,46 @@ public class Reports_Controller {
     public LinkedList<Integer> getReportId(String subject, Date date) throws Exception {
         check_valid_Dates(date);
         check_valid_string(new String[]{subject});
-        return getReportsIDFromDal(subject, getDate(date));
+        LinkedList<Integer> output = new LinkedList<>();
+        for (Report r : reports.values()) {
+            if (subject.equals(r.getSubject().toLowerCase()) &&
+                    date.equals(r.getCreationDate()))
+                output.add(r.getReportID());
+        }
+        if(output.isEmpty())
+            output= getReportsIDFromDal(subject,getDate(date));
+        return output;
     }
 
 
     public LinkedList<Report> get_all_reports() {
-        if (!loadedReports) {
+        LinkedList<Report> output = new LinkedList<>();
+        if(!loadedReports) {
             loadAllReports();
-            loadedReports = true;
+            loadedReports=true;
         }
-        return new LinkedList<>(reports.values());
+        for(Report r: reports.values())
+        output.add(r);
+        return output;
     }
 
     //==============================
     //reports Data function
     private void addReportData(Report r) {
-        IdentityMap im = IdentityMap.getInstance();
-        DataController dc = DataController.getInstance();
+        IdentityMap im= IdentityMap.getInstance();
+        DataController dc= DataController.getInstance();
         im.addReport(r);
         dc.insertReport(r);
     }
-
-    private Report getReportData(int repID) {
-        Report output;
-        IdentityMap im = IdentityMap.getInstance();
-        DataController dc = DataController.getInstance();
-        output = im.getReport(repID);
-        if (output != null) {
-            return output;
-        } else {
+    private Report getReportData(int repID)
+    {
+        Report output=null;
+        IdentityMap im= IdentityMap.getInstance();
+        DataController dc= DataController.getInstance();
+         output= im.getReport(repID);
+        if(output!=null)
+        { return output;}
+        else {
             output = dc.getReport(repID);
             if (output != null) {
                 im.addReport(output);
@@ -115,7 +127,6 @@ public class Reports_Controller {
         }
         return output;
     }
-
     private void loadAllReports() {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
@@ -127,14 +138,12 @@ public class Reports_Controller {
             }
         }
     }
-
     private LinkedList<Integer> getReportsIDFromDal(String sub, String date) {
-        DataController dc = DataController.getInstance();
-        return dc.getReportsIDs(sub, date);
+        DataController dc= DataController.getInstance();
+        return dc.getReportsIDs(sub,date);
     }
-
     private int getMaxReportFromData() {
-        DataController dc = DataController.getInstance();
+        DataController dc= DataController.getInstance();
         return dc.getMaxRepID();
     }
 }

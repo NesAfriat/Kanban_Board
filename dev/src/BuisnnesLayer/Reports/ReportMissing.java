@@ -9,7 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReportMissing implements Report {
-    private final String subject = "missing";
+    private final String subject = "Missing";
     private final Date creationDate;
     private Integer reportID;
     private LinkedList<String> categories;
@@ -43,7 +43,7 @@ public class ReportMissing implements Report {
                 catProducts = st_c.get_category_products(cat);
                 for (GeneralProduct gp : catProducts)
                     if (gp.getProduct_id().equals(mp.getProduct_id())) {
-                        this.report_data = this.report_data + "\n" + mp;
+                        this.report_data = this.report_data + "\n" + mp.toString();
                         break;
                     }
             }

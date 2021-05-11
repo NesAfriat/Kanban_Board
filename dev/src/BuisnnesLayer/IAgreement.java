@@ -22,7 +22,7 @@ public interface IAgreement {
     public void removeDiscountQuantity(int CatalogId, int Quantiti);
     public void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery, int numOfDaysFromOrder);
     public double Calculate_cost(ProductSupplier productSupplier, int quantity);
-    public void RemovAllProducts();
+
 
 
 }

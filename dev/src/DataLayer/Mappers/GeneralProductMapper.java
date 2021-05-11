@@ -1,5 +1,6 @@
 package DataLayer.Mappers;
 
+import BuisnnesLayer.Category;
 import BuisnnesLayer.GeneralProduct;
 
 import java.sql.*;
@@ -57,6 +58,11 @@ public class GeneralProductMapper extends Mapper {
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(GeneralProductTable);
+            //TODO: in DataController - need to activate loadData
+//            if (!identityMap.initialized){
+//                LoadPreData();
+//                identityMap.initialized = true;
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -128,7 +134,9 @@ public class GeneralProductMapper extends Mapper {
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        return;
     }
+    //TODO: not sure if it will be used
     public boolean delete(GeneralProduct gp) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -146,6 +154,7 @@ public class GeneralProductMapper extends Mapper {
         return deleted;
     }
 
+    //TODO: make sure the dates are added properly!
     public boolean insertProduct(GeneralProduct gp, String catName) {
         boolean output = false;
         try (Connection conn = connect()) {
@@ -194,13 +203,13 @@ public class GeneralProductMapper extends Mapper {
         return exist;
     }
 
-    public boolean checkProductExist(String gpName) {
+    public boolean checkProductExist(int gpID) {
         boolean exist = false;
         try (Connection conn = connect()) {
-            String statement = "SELECT * FROM GeneralProducts WHERE gpName=? ";
+            String statement = "SELECT * FROM GeneralProducts WHERE gpID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setString(1, gpName);
+                pstmt.setInt(1, gpID);
 
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
@@ -214,7 +223,8 @@ public class GeneralProductMapper extends Mapper {
         }
         return exist;
     }
-    public boolean checkProductExist(int gpID) {
+
+    public boolean checkProductExist(String gpName) {
         boolean exist = false;
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM GeneralProducts WHERE gpName=? ";
@@ -293,7 +303,8 @@ public class GeneralProductMapper extends Mapper {
 
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
-                    output= rs.getInt(1);
+                    int gpID = rs.getInt(1);
+                    output=gpID;
                 }
             } catch (Exception e) {
                 e.printStackTrace();

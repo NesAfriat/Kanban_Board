@@ -13,7 +13,7 @@ import java.util.LinkedList;
 public class IdentityMap {
     private static IdentityMap instance = null;
     private LinkedList<Item> itemList;
-    private LinkedList<Item> defectedItemsList;
+    private LinkedList<Item> defctedItemsList;
     private LinkedList<GeneralProduct> generalProductList;
     private LinkedList<Category> categoryList;
     private LinkedList<Supplier> suppliersList;
@@ -42,7 +42,7 @@ public class IdentityMap {
         productSuppliersList = new LinkedList<>();
         ordersList = new LinkedList<>();
         agreementsList = new LinkedList<>();
-        defectedItemsList = new LinkedList<>();
+        defctedItemsList = new LinkedList<>();
         salesList = new LinkedList<>();
     }
 
@@ -52,6 +52,17 @@ public class IdentityMap {
         itemList.add(item);
     }
 
+    //if this function return null - go to the db
+    public Item getItem(int item_id, int gp_id) {
+        Item output = null;
+        for (Item item : itemList) {
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
+                output = item;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
     public Item removeItem(int item_id, int gp_id) {
         Item output = null;
         for (Item item : itemList) {
@@ -104,6 +115,7 @@ public class IdentityMap {
         }
     }
 
+    //TODO: need to add empty constructor for each created object
     //if this function return null - go to the db
     public GeneralProduct getGeneralProduct(int gp_id) {
         GeneralProduct output = null;
@@ -114,6 +126,8 @@ public class IdentityMap {
         return output;
     }
 
+    //TODO: make sure remove doesnt stop the for
+    //TODO: after the remove is done - need to remove the output's productSupplier and items from the identityMap
     public GeneralProduct removeGeneralProd(int gp_id) {
         GeneralProduct output = null;
         for (GeneralProduct prod : generalProductList) {
@@ -127,6 +141,8 @@ public class IdentityMap {
     }
 
     ////Categories//////
+    //TODO: check if object exist in the list before adding
+
     public void addCategory(Category category) {
         boolean isIN = false;
         for (Category c : categoryList) {
@@ -162,10 +178,10 @@ public class IdentityMap {
     /////Reports//////
     public void addReport(Report report) {
         boolean isIN = false;
-        for (Report r : reportsList) {
-            if (r.getReportID() == report.getReportID())
+        for (Report r : reportsList)
+        { if (r.getReportID() == report.getReportID())
                 isIN = true;
-        }
+       }
         if (!isIN)
             reportsList.add(report);
     }
@@ -176,6 +192,17 @@ public class IdentityMap {
         for (Report r : reportsList) {
             if (r.getReportID() == reportID)
                 output = r;
+        }
+        return output;
+    }
+
+    public Report removeReport(int reportID) {
+        Report output = null;
+        for (Report r : reportsList) {
+            if (r.getReportID() == reportID) {
+                output = r;
+                reportsList.remove(r);
+            }
         }
         return output;
     }
@@ -295,7 +322,6 @@ public class IdentityMap {
             if (o.GetId() == oID) {
                 output = o;
                 ordersList.remove(o);
-                return o;
             }
         }
         return output;
@@ -334,11 +360,33 @@ public class IdentityMap {
     //================================================================================
     //add an item to the identityMap
     public void addDefectedItem(Item item) {
-        defectedItemsList.add(item);
+        defctedItemsList.add(item);
+    }
+
+    //TODO: need to add empty constructor for each created object
+    //if this function return null - go to the db
+    public Item getDefectedItem(int item_id, int gp_id) {
+        Item output = null;
+        for (Item item : defctedItemsList) {
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
+                output = item;
+        }
+        return output;
+    }
+
+    //TODO: make sure remove doesnt stop the for
+    public Item removeDefectedItem(int item_id, int gp_id) {
+        Item output = null;
+        for (Item item : defctedItemsList) {
+            if (item.getItem_id() == item_id && item.getProduct_id() == gp_id)
+                output = item;
+            defctedItemsList.remove(item);
+        }
+        return output;
     }
 
     public void removeAllDefects() {
-        defectedItemsList = new LinkedList<>();
+        defctedItemsList = new LinkedList<>();
     }
 
     //================================================================================
@@ -366,7 +414,7 @@ public class IdentityMap {
     }
 
     public boolean removeSale(Sale sale) {
-        boolean output;
+        boolean output = false;
         output = salesList.remove(sale);
         return output;
     }

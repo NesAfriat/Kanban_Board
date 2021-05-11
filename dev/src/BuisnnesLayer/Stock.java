@@ -131,7 +131,7 @@ public class Stock {
         defects.addLast(this.productManager.set_item_defected(product_id, item_id));
     }
 
-    public LinkedList<String> get_product_categories(GeneralProduct product) {
+    public LinkedList<String> get_product_categories(GeneralProduct product) throws Exception {
         return this.productManager.get_product_categories(product);
     }
 
@@ -151,6 +151,14 @@ public class Stock {
 
     ///////////////////////TEST FUNCTIONS/////////////////////////
 
+
+    public boolean getDefectedItem_Test(int item_id) {
+        for (Item i : defects)
+            if (i.getItem_id() == item_id)
+                return true;
+        return false;
+    }
+
     public LinkedList<Item> get_product_items(Integer product_id) throws Exception {
         return this.productManager.get_product_items(product_id);
     }
@@ -165,20 +173,24 @@ public class Stock {
         return this.productManager.check_product_exist(prod_name);
     }
 
+    //======================================================================
+//DATA Functions:
+    private void add_to_data(Category category) {
+        IdentityMap im = IdentityMap.getInstance();
+        DataController dc = DataController.getInstance();
+        if (!dc.insertCategory(category)) {
+            System.out.println("failed to insert new Category to the database with the name + " + category.getCategory_name());
+        }
+        im.addCategory(category);
+    }
+
     private void loadAllDefected() {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
         LinkedList<Item> defList = dc.loadAllDefected();
         for (Item item : defList) {
             im.addItem(item);
-            boolean flag = false;
-            for(Item i: defects){
-                if (i.getItem_id().equals(item.getItem_id())) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag)
+            if (!defects.contains(item))
                 defects.add(item);
         }
     }

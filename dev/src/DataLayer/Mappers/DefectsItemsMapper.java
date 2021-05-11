@@ -34,6 +34,11 @@ public class DefectsItemsMapper extends Mapper{
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(DefItemTable);
+            //TODO: in DataController - need to activate loadData
+//                      if (!identityMap.initialized){
+//                                LoadPreData();
+//                                identityMap.initialized = true;
+//                            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -111,6 +116,7 @@ public class DefectsItemsMapper extends Mapper{
         return deleted;
     }
 
+    //TODO: make sure the dates are added properly!
     public boolean insertDefectedItem(Item item) {
         boolean output = false;
         try (Connection conn = connect()) {

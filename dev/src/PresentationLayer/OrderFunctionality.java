@@ -138,7 +138,7 @@ public class OrderFunctionality {
         }else {
             orderResponse orderResponse=response.getValue();
             int id=orderResponse.id;
-            int SupplierId=orderResponse.supplierID;
+            int SupplierId=orderResponse.Supplierid;
             HashMap<Integer,Integer> products=orderResponse.quantity;
             LocalDate date=orderResponse.date;
             double Totalpayment=orderResponse.TotalPayment;
@@ -167,7 +167,7 @@ public class OrderFunctionality {
             List<orderResponse> orderResponseList=response.getValue();
             for (orderResponse orderResponse:orderResponseList) {
                 int id=orderResponse.id;
-                int SupplierId=orderResponse.supplierID;
+                int SupplierId=orderResponse.Supplierid;
                 HashMap<Integer,Integer> products=orderResponse.quantity;
                 LocalDate date=orderResponse.date;
                 double Totalpayment=orderResponse.TotalPayment;
@@ -241,10 +241,10 @@ public class OrderFunctionality {
                 int day=0;
                 while (true) {
                     day = NumberType();
-                    if (day>= 1 && day <=7 ) {
-                        break;
+                    if (isConstat>= 1 && isConstat <=7 ) {
+                        System.out.println("try again!");
                     }
-                    System.out.println("try again!");
+                    break;
                 }
                 Response r=facade.addNewOrder(id,productQuantity,true,day);
                 if(r.getErrorOccurred()) System.out.println(r.getErrorMsg());

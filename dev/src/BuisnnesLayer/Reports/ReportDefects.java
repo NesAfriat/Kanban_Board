@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ReportDefects implements Report {
-    private final String subject = "defects";
+    private final String subject = "Defects";
     private final Date creationDate;
     private int reportID;
     private LinkedList<String> categories;
@@ -44,7 +44,7 @@ public class ReportDefects implements Report {
                 products = st_c.get_category_products(cat);
                 for (GeneralProduct p : products)
                     if (item.getProduct_id().equals(p.getProduct_id()) && relevantToTimeRange(item.getExpiration_date()))
-                        this.report_data = this.report_data + '\n' + item;
+                        this.report_data = this.report_data +'\n' +item;
             }
         }
     }

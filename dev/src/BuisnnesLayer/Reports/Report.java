@@ -4,20 +4,20 @@ import java.util.Date;
 import java.util.LinkedList;
 
 public interface Report {
-    void createReport() throws Exception;
+    public void createReport() throws Exception;
 
-    String toString();
+    public String toString();
 
-    String getSubject();
+    public String getSubject();
 
-    Date getCreationDate();
+    public Date getCreationDate();
 
-    int getReportID();
+    public int getReportID();
 
-    LinkedList<String> getCategories();
+    public LinkedList<String> getCategories();
 
-    String getTimeRange();
+    public String getTimeRange();
 
-    String getReportData();
+    public String getReportData();
 
 }

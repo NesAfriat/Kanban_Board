@@ -1,6 +1,7 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.Reports.*;
+import DataLayer.DataController;
 
 import java.sql.*;
 import java.text.ParseException;
@@ -48,7 +49,8 @@ public class ReportsMapper extends Mapper {
 
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
-                    output= rs.getInt(1);
+                    int repID = rs.getInt(1);
+                    output=repID;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -84,6 +86,8 @@ public class ReportsMapper extends Mapper {
                             report = new ReportDefects(repID, time_range, categoriesList, getDate(creation_date), data);
                     }
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -200,6 +204,8 @@ public class ReportsMapper extends Mapper {
                     int repID = rs.getInt(1);
                     rIDs.add(repID);
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
             }

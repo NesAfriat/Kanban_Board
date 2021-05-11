@@ -1,6 +1,7 @@
 package PresentationLayer;
 import BuisnnesLayer.FacedeModel.facade;
 
+import java.io.IOException;
 import java.util.*;
 
 public class IO {
@@ -30,7 +31,7 @@ public class IO {
 
     public void Start_Menu() throws Exception {
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
-        String[] arrFunctionality=new String[]{"Supplier Functionality","order Functionality","inventory Functionality","exit"};
+        String[] arrFunctionality=new String[]{"Supplier Functionality","order Functionality","inventory Functionality","Load Data","exit"};
 //        System.out.println("__  _  __ ____ |  |   ____  ____   _____   ____  \n" +
 //                "\\ \\/ \\/ // __ \\|  | _/ ___\\/  _ \\ /     \\_/ __ \\ \n" +
 //                " \\     /\\  ___/|  |_\\  \\__(  <_> )  Y Y  \\  ___/ \n" +
@@ -58,8 +59,12 @@ public class IO {
                     break;
 
                 case "4":
-                    return;
+                  LoadData loadData= new LoadData();
+                   loadData.LoadALLData();
+                   break;
 
+                case "5":
+                    return;
                 default:
                     System.out.println("Not within bounds");
             }

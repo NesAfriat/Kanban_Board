@@ -134,6 +134,7 @@ public class CategoriesMapper extends Mapper {
         return deleted;
     }
 
+    //TODO: make sure the dates are added properly!
     public boolean insertCategory(Category category) {
         boolean output = false;
         try (Connection conn = connect()) {

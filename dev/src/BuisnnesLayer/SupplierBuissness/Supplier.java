@@ -20,10 +20,13 @@ public class Supplier implements ISupplier {
 
 
 
+
+
+
     public Supplier(int id, String SupplierName, paymentMethods payment, String BankAccount, int SupplierIdCounter , String contactName, String contactEmail, String phoneNumber)
     {
        this.ContactIdCounter=0;
-       this.ListOfContacts  = new ArrayList<>();
+       this.ListOfContacts  = new ArrayList<Contact>();
        Contact contact=new Contact(ContactIdCounter,contactName,contactEmail,phoneNumber,id);
        ListOfContacts.add(contact);
        addContactToSupplierInTheData(contact,id);
@@ -37,7 +40,7 @@ public class Supplier implements ISupplier {
 
     //Constructor for DAL
     public Supplier(int supID, String supName, paymentMethods payment, String bank) {
-        this.ContactIdCounter=getTheBigestIDforTheCounterinContacts(supID)+1;
+        this.ContactIdCounter=0;
         this.ListOfContacts  = new ArrayList<>();
         //TODO contacts will be added later
 //        ListOfContacts.add(new Contact(ContactIdCounter,contactName,contactEmail,phoneNumber));
@@ -46,6 +49,7 @@ public class Supplier implements ISupplier {
         this.SupplierName=supName;
         this.payment=payment; //TODO need to change
         this.BankAccount=bank;
+//        this.SupplierIdCounter=SupplierIdCounter; //TODO what is this????
     }
 
     @Override
@@ -55,7 +59,6 @@ public class Supplier implements ISupplier {
         addContactToSupplierInTheData(newContact,id);
         incContactIdCounter();
     }
-
 
     @Override
     public void removeContact(int contactID) {
@@ -172,7 +175,7 @@ public void UpdateSupplierInTheData(Supplier supplier){
     public void RemoveContactToSupplierInTheData(Contact contact,int SupId){
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if(!dc.delete(contact,SupId)){
+        if(!dc.insertContact(contact,SupId)){
             System.out.println("faild");
         }
     }
@@ -184,9 +187,8 @@ public void UpdateSupplierInTheData(Supplier supplier){
         boolean isContactExsist=false;
         for (Contact con:ListOfContacts
              ) {
-            if (con.getId() == c.getId()) {
-                isContactExsist = true;
-                break;
+            if(con.getId()==c.getId()){
+                isContactExsist=true;
             }
         }
         if(!isContactExsist) {
@@ -196,9 +198,7 @@ public void UpdateSupplierInTheData(Supplier supplier){
     }
 
 
-    private int getTheBigestIDforTheCounterinContacts(int supId){
-        DataController dc = DataController.getInstance();
-        return dc.getTheBigestIDforTheCounterinContacts(supId);
 
-    }
+
+
 }
