@@ -8,7 +8,6 @@ import java.sql.*;
 import java.text.ParseException;
 import java.util.LinkedList;
 
-import static DataLayer.DataController.getDate;
 
 public class ItemMapper extends Mapper {
 
@@ -35,43 +34,9 @@ public class ItemMapper extends Mapper {
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(itemTable);
-            //TODO: in DataController - need to activate loadData
-//                      if (!identityMap.initialized){
-//                                LoadPreData();
-//                                identityMap.initialized = true;
-//                            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-
-    public Item getItem(int product_id, int item_id) {
-        Item obj = null;
-        try (Connection conn = connect()) {
-            String statement = "SELECT * FROM Items WHERE gpID=? AND iID=? ";
-
-            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, product_id);
-                pstmt.setInt(2, item_id);
-
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    int gpID = rs.getInt(1);
-                    int iID = rs.getInt(2);
-                    String location = rs.getString(3);
-                    String sup_date = rs.getString(4);
-                    String create_date = rs.getString(5);
-                    String exp_date = rs.getString(6);
-                    obj = new Item(gpID, iID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
-                }
-            } catch (SQLException | ParseException e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return obj;
     }
 
     public boolean update(Item item) {
@@ -116,7 +81,6 @@ public class ItemMapper extends Mapper {
         return deleted;
     }
 
-    //TODO: make sure the dates are added properly!
     public boolean insertItem(Item item) {
         boolean output = false;
         try (Connection conn = connect()) {

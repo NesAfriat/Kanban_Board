@@ -28,11 +28,6 @@ public class SuppliersContactsMapper extends Mapper{
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(ContactsTable);
-            //TODO: in DataController - need to activate loadData
-//            if (!identityMap.initialized){
-//                LoadPreData();
-//                identityMap.initialized = true;
-//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -88,7 +83,6 @@ public class SuppliersContactsMapper extends Mapper{
         return updated;
     }
 
-    //TODO: not sure if it will be used
     public boolean delete(Contact con, int supplier_id) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -108,7 +102,6 @@ public class SuppliersContactsMapper extends Mapper{
         return deleted;
     }
 
-    //TODO: make sure the dates are added properly!
     public boolean insertContact(Contact con, int supplier_id) {
         boolean output = false;
         try (Connection conn = connect()) {
@@ -121,7 +114,7 @@ public class SuppliersContactsMapper extends Mapper{
                 pstmt.setInt(2, con.getId());
                 pstmt.setString(3, con.getContactName());
                 pstmt.setString(4, con.getPhoneNumber());
-                pstmt.setString(5, con.getEmail()); //TODO - better change it to String and not enum
+                pstmt.setString(5, con.getEmail());
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();

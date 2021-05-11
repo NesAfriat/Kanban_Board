@@ -5,7 +5,6 @@ import DataLayer.DataController;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 public class ProductManager {
     private boolean loadCategories;
@@ -43,8 +42,7 @@ public class ProductManager {
             throw new Exception("product doesn't exist!");
         }
         get_product(product_id);
-        Item item = products.get(product_id).setItem_defected(item_id);
-        return item;
+        return products.get(product_id).setItem_defected(item_id);
     }
 
     public LinkedList<Item> getDefects() {
@@ -114,9 +112,7 @@ public class ProductManager {
      * @return
      */
     private boolean isProduct_in_Products(Integer product_id) { //DONE
-        boolean exist = false;
-        if (products.containsKey(product_id))
-            exist = true;
+        boolean exist = products.containsKey(product_id);
         if (!exist)
             exist = checkProductExistByID(product_id);
         return exist;
@@ -133,6 +129,7 @@ public class ProductManager {
         for (Category c : categories.keySet())
             if (c.getCategory_name().equals(category)) {
                 exist = true;
+                break;
             }
         if (!exist) {
             exist = CheckCategoryExistDAl(category);
@@ -177,7 +174,7 @@ public class ProductManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist");
         }
-        if (!products.get(product_id).isSupplierProducHashEmpty()) {
+        if (!products.get(product_id).isSupplierProductHashEmpty()) {
             throw new IllegalArgumentException("need to remove supplier's product before deleting product");
         }
         removeGP(products.remove(product_id));
@@ -188,11 +185,9 @@ public class ProductManager {
 
     private void removeFromCategories(GeneralProduct toRemove) { //DONE
         for (Category cat : categories.keySet())
-            if (categories.get(cat).contains(toRemove))
-                categories.get(cat).remove(toRemove);
+            categories.get(cat).remove(toRemove);
     }
 
-    //TODO: remove from the Dal but returned error!
     public void remove_category(String cat_name) throws Exception { //DONE
         if (!isCategory_in_Categories(cat_name)) {
             throw new Exception("category doesnt exist");
@@ -251,7 +246,6 @@ public class ProductManager {
         return gp;
     }
 
-    //TODO - doesnt work!!!!
     public void removeItem(Integer product_id, Integer item_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist!");
@@ -380,8 +374,10 @@ public class ProductManager {
     public boolean check_product_exist(String prod_name) {
         boolean exist = false;
         for (GeneralProduct p : products.values()) {
-            if (p.getProduct_name().equals(prod_name))
+            if (p.getProduct_name().equals(prod_name)) {
                 exist = true;
+                break;
+            }
         }
         if (!exist)
             exist = CheckGPExistByName(prod_name);
@@ -390,7 +386,7 @@ public class ProductManager {
 
 
     public boolean check_product_id_exist(int id) {
-        boolean exist = false;
+        boolean exist;
         for (GeneralProduct p : products.values()) {
             if (p.getProduct_id() == id)
                 return true;
@@ -401,13 +397,13 @@ public class ProductManager {
 
     public void AddProductSupplierToProductGeneral(ProductSupplier productSupplier, int generalId) {
         if (!products.containsKey(generalId)) {
-            throw new IllegalArgumentException("the stock product is not exsist");
+            throw new IllegalArgumentException("the stock product is not exist");
         }
         products.get(generalId).addSupplierProduct(productSupplier);
     }
 
     //=================================
-    //Data Fucntions
+    //Data Functions
     private void loadAllCategories() {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
@@ -416,8 +412,10 @@ public class ProductManager {
             im.addCategory(cDAL);
             boolean loaded = false;
             for (Category cBL : categories.keySet()) {
-                if (cBL.getCategory_name().equals(cDAL.getCategory_name()))
+                if (cBL.getCategory_name().equals(cDAL.getCategory_name())) {
                     loaded = true;
+                    break;
+                }
             }
             if (!loaded)
                 categories.put(cDAL, new LinkedList<>());
@@ -540,7 +538,7 @@ public class ProductManager {
 
     private boolean CheckGPExistByName(String prod_name) {
         DataController dc = DataController.getInstance();
-        return dc.checkPrductExist(prod_name);
+        return dc.checkProductExist(prod_name);
     }
 
     private boolean CheckCategoryExistDAl(String category) {
@@ -561,7 +559,6 @@ public class ProductManager {
     }
 
     private Category getCategoryFromDAL(String category) {
-        boolean found = false;
         Category cat;
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
@@ -580,7 +577,7 @@ public class ProductManager {
         return cat;
     }
 
-    public void geteGeneralAndPutSupplierProduct(ProductSupplier productSupplier) {
+    public void getGeneralAndPutSupplierProduct(ProductSupplier productSupplier) {
         if (products.containsKey(productSupplier.getId())) {
             if (!products.get(productSupplier.getId()).isSupplierProductExist(productSupplier.getCatalogID())) {
                 products.get(productSupplier.getId()).addSupplierProduct(productSupplier);
@@ -595,10 +592,6 @@ public class ProductManager {
         }
     }
 
-    private void changeGPCategory(LinkedList<GeneralProduct> products, Category father) {
-        DataController dc = DataController.getInstance();
-        dc.changeGPCategory(products, father);
-    }
 
     private void setFamily(Category cat) {
         IdentityMap im = IdentityMap.getInstance();
@@ -608,7 +601,7 @@ public class ProductManager {
             Category father = loadCategory(fatherName);
             if (father != null) {
                 cat.setFather_Category(father);
-                if (!categories.containsKey(fatherName))
+                if (!categories.containsKey(father))
                     categories.put(father, new LinkedList<>());
                 im.addCategory(father);
             }
@@ -619,7 +612,7 @@ public class ProductManager {
                 Category child = loadCategory(childName);
                 if (child != null) {
                     child.setFather_Category(cat);
-                    if (!categories.containsKey(childName))
+                    if (!categories.containsKey(child))
                         categories.put(child, new LinkedList<>());
                     im.addCategory(child);
                 }
@@ -630,7 +623,7 @@ public class ProductManager {
     private Category loadCategory(String catName) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        Category output = null;
+        Category output;
         output = im.getCategory(catName);
         if (output == null)
             output = dc.getCategory(catName);

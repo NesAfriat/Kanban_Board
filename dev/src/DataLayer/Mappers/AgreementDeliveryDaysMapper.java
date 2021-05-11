@@ -1,10 +1,7 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.Agreement;
-import BuisnnesLayer.ProductSupplier;
-
 import java.sql.*;
-import java.util.HashMap;
 
 public class AgreementDeliveryDaysMapper extends Mapper{
     public AgreementDeliveryDaysMapper() {
@@ -68,11 +65,6 @@ public class AgreementDeliveryDaysMapper extends Mapper{
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(Table);
-            //TODO: in DataController - need to activate loadData
-//                      if (!identityMap.initialized){
-//                                LoadPreData();
-//                                identityMap.initialized = true;
-//                            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

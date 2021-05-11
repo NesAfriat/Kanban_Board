@@ -138,7 +138,7 @@ public class OrderFunctionality {
         }else {
             orderResponse orderResponse=response.getValue();
             int id=orderResponse.id;
-            int SupplierId=orderResponse.Supplierid;
+            int SupplierId=orderResponse.supplierID;
             HashMap<Integer,Integer> products=orderResponse.quantity;
             LocalDate date=orderResponse.date;
             double Totalpayment=orderResponse.TotalPayment;
@@ -167,7 +167,7 @@ public class OrderFunctionality {
             List<orderResponse> orderResponseList=response.getValue();
             for (orderResponse orderResponse:orderResponseList) {
                 int id=orderResponse.id;
-                int SupplierId=orderResponse.Supplierid;
+                int SupplierId=orderResponse.supplierID;
                 HashMap<Integer,Integer> products=orderResponse.quantity;
                 LocalDate date=orderResponse.date;
                 double Totalpayment=orderResponse.TotalPayment;

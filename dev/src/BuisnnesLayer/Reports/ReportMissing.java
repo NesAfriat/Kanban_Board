@@ -43,7 +43,7 @@ public class ReportMissing implements Report {
                 catProducts = st_c.get_category_products(cat);
                 for (GeneralProduct gp : catProducts)
                     if (gp.getProduct_id().equals(mp.getProduct_id())) {
-                        this.report_data = this.report_data + "\n" + mp.toString();
+                        this.report_data = this.report_data + "\n" + mp;
                         break;
                     }
             }

@@ -33,7 +33,7 @@ public interface supModelI {
     public Response setProductPrice(int SupId, int CatalogID, double price);
 
     //this function adds a new discount to Product in the supplier agreement. this function return response if exception thrown
-    public Response addNewDiscountByQuantitiyToProduct(int SupId, int CatalogID, int Quantitiy, double newPrice);
+    public Response addNewDiscountByQuantityToProduct(int SupId, int CatalogID, int Quantitiy, double newPrice);
 
     public Response setExtraDiscountToSupplier(int SupId, int ExtraDiscount);
 
@@ -69,7 +69,7 @@ public interface supModelI {
     public Response removeOrder(int SupId, int supID);
 
     //this function return a response of specific order
-    public ResponseT getOrder(int OrderId,int SupId);
+    public ResponseT getOrder(int OrderId, int SupId);
 
     //this function return a response of all the orders in the system
     public ResponseT getAllOrders();
@@ -77,10 +77,10 @@ public interface supModelI {
     public Response addProductToOrder(int SupId, int OrderId, int CatalogID, int quantity);
 
 
-    public Response changeProductQuantityFromOrder(int SupId, int OrderId, int CatalogID, int quantity) ;
+    public Response changeProductQuantityFromOrder(int SupId, int OrderId, int CatalogID, int quantity);
 
-    public Response RemovDiscountByQuantitiyToProduct(int SupId, int CatalogID, int Quantitiy);
+    public Response RemoveDiscountByQuantityToProduct(int SupId, int CatalogID, int Quantitiy);
 
-    public Response RemovePrudactFromOrders(int SupId, int CatalogID);
+    public Response RemoveProductFromOrders(int SupId, int CatalogID);
 
 }

@@ -11,7 +11,6 @@ public class Item {
     private final Date supplied_date;          //the date which the item was supplied
     private final Date creation_date;         //item creation date and time
     private Date expiration_date;               //item expiration date and time of defected date
-//    private Double selling_price;               //item price tag in store
 
     public Item(Integer item_id, Integer product_id, String location, Date supplied_date, Date creation_date, Date expiration_date) {
         this.item_id = item_id;
@@ -74,7 +73,6 @@ public class Item {
     //==================================================
     //DATA Actions:
     private void update(Item item) {
-        IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         if(!dc.update(this)){
             System.out.println("failed to update new Item to the database with the keys: gpID= "+item.getProduct_id()+" iID= "+item.getItem_id());

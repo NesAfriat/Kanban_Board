@@ -49,38 +49,16 @@ public class GeneralProduct {
         this.HashOfSupplierProducts = new HashMap<>();
     }
 
-
-
-
-    public HashMap<Integer, ProductSupplier> getProductSuppliers() {
-        return HashOfSupplierProducts;
-    }
-
-    //add new product supplier,product supplier can have multiple product suppliers, it must have at least one product supplier
-    public void AddSupplierProduct(ProductSupplier productSupplier) {
-        if (CheckIfSupplierProductExist(productSupplier.getCatalogID())) {
-            throw new IllegalArgumentException("the product is already exsist in the system ");
+    public void RemoveSupplierProduct(Integer catalogID) {
+        if (!isSupplierProductExist(catalogID)) {
+            throw new IllegalArgumentException("the supplier product does not exist");
         }
-        // if ok we want to add the product to the system
-        HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
+        removeSPPersistence(HashOfSupplierProducts.remove(catalogID));
     }
 
-    public boolean CheckIfSupplierProductExist(int catalog_id) {
-        return HashOfSupplierProducts.containsKey(catalog_id);
-    }
 
-    public void RemoveSupplierProduct(Integer Catalofid) {
-        if (!isSupplierProductExist(Catalofid)) {
-            throw new IllegalArgumentException("the supplie product doues not exsist");
-        }
-        removeSPPersistence(HashOfSupplierProducts.remove(Catalofid));
-
-
-         }
-
-
-    public boolean isSupplierProductExist(int Catalogid) {
-        return HashOfSupplierProducts.containsKey(Catalogid);
+    public boolean isSupplierProductExist(int catalogId) {
+        return HashOfSupplierProducts.containsKey(catalogId);
     }
 
 
@@ -174,7 +152,7 @@ public class GeneralProduct {
         return itemsAdded;
     }
 
-    public boolean isSupplierProducHashEmpty() {
+    public boolean isSupplierProductHashEmpty() {
         return HashOfSupplierProducts.keySet().size() == 0;
     }
 
@@ -221,9 +199,9 @@ public class GeneralProduct {
         LinkedList<Item> toRemove = new LinkedList<>();
         toRemove.add(item);
         addDefectedItem(toRemove);
-        if(item.getLocation().equals("storage")){
+        if (item.getLocation().equals("storage")) {
             amount_storage--;
-        }else{
+        } else {
             amount_store--;
         }
         update(this); //update amounts
@@ -282,9 +260,9 @@ public class GeneralProduct {
         Item item = getItem(item_id);
         removeItemPersistence(item);
         items.remove(item);
-        if(item.getLocation().equals("storage")){
+        if (item.getLocation().equals("storage")) {
             amount_storage--;
-        }else{
+        } else {
             amount_store--;
         }
         update(this); //update amounts
@@ -312,16 +290,18 @@ public class GeneralProduct {
             System.out.println("failed to update new General Product to the database with the keys: gpID= " + prod.getProduct_id());
         }
     }
+
     private void addDefectedItem(LinkedList<Item> defects) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        for(Item item: defects){
+        for (Item item : defects) {
             dc.insertDefected(item);
             im.addDefectedItem(item);
         }
     }
+
     private void removeDefectedItem(LinkedList<Item> defects) {
-        for(Item item: defects){
+        for (Item item : defects) {
             removeItemPersistence(item);
         }
     }
@@ -336,10 +316,11 @@ public class GeneralProduct {
     //for Dal - load from DB
     public void addItem(Item toAdd) {
         items.add(toAdd);
-        if(item_id<toAdd.getItem_id()){
+        if (item_id < toAdd.getItem_id()) {
             item_id = toAdd.getItem_id();
         }
     }
+
     //for Dal - load from DB
     public void addSupplierProduct(ProductSupplier productSupplier) {
         HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
@@ -349,15 +330,16 @@ public class GeneralProduct {
     public void removeItems() {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        for(Item item: items) {
+        for (Item item : items) {
             im.removeItem(this.product_id, item.getItem_id());
             dc.delete(item);
         }
     }
+
     private void removeSPPersistence(ProductSupplier toRemove) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         im.removerProductSupplier(toRemove);
-        dc.deleteProductSupplier(toRemove,toRemove.getSuplierID());
+        dc.deleteProductSupplier(toRemove, toRemove.getSuplierID());
     }
 }

@@ -219,7 +219,7 @@ public class AgreementManager {
                 HashMap<Integer, ProductSupplier> productSupplierHashMap = agreement.getProducts();
                 for (ProductSupplier ps : productSupplierHashMap.values()
                 ) {
-                    productManager.geteGeneralAndPutSupplierProduct(ps);
+                    productManager.getGeneralAndPutSupplierProduct(ps);
 
                 }
                 if (!SupplierAgreement.containsKey(agreement.getSupplierID())) {
@@ -253,7 +253,7 @@ public class AgreementManager {
             HashMap<Integer, ProductSupplier> productSupplierHashMap = agreement.getProducts();
             for (ProductSupplier ps : productSupplierHashMap.values()
             ) {
-                productManager.geteGeneralAndPutSupplierProduct(ps);
+                productManager.getGeneralAndPutSupplierProduct(ps);
 
             }
             return agreement;

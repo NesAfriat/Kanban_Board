@@ -18,9 +18,8 @@ public class Sales_Controller {
 
     private Sales_Controller() {
         this.sales = new HashMap<>();
-        sales_id = getMaxID()+1;
+        sales_id = getMaxID() + 1;
     }
-
 
 
     public static Sales_Controller getInstance() {
@@ -102,17 +101,18 @@ public class Sales_Controller {
                 removeSale(s.getSale_id());
         }
     }
+
     public void removeSale(int sales_id) throws Exception {
         Sale toRemove = null;
         if (sales.containsKey(sales_id))
             toRemove = sales.remove(sales_id);
-        if(toRemove == null){
+        if (toRemove == null) {
             IdentityMap im = IdentityMap.getInstance();
             toRemove = im.getSale(sales_id);
-            if(toRemove==null){
+            if (toRemove == null) {
                 DataController dc = DataController.getInstance();
                 toRemove = dc.getSaleByID(sales_id);
-                if(toRemove == null){
+                if (toRemove == null) {
                     throw new Exception("sale does not exist!");
                 }
             }
@@ -156,7 +156,7 @@ public class Sales_Controller {
     }
 
     //inside use
-    public Double getDiscountByCategory(LinkedList<String> categories) throws Exception {
+    public Double getDiscountByCategory(LinkedList<String> categories) {
         Double discount;
         Double max_discount = -1.0;
         for (String cat : categories) {
@@ -272,10 +272,12 @@ public class Sales_Controller {
             }
         }
     }
+
     private Integer getMaxID() {
         DataController dc = DataController.getInstance();
         return dc.getMaxSalesID();
     }
+
     private void removeSaleData(Sale toRemove) {
         DataController dc = DataController.getInstance();
         dc.delete(toRemove);

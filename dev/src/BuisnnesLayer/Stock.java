@@ -131,7 +131,7 @@ public class Stock {
         defects.addLast(this.productManager.set_item_defected(product_id, item_id));
     }
 
-    public LinkedList<String> get_product_categories(GeneralProduct product) throws Exception {
+    public LinkedList<String> get_product_categories(GeneralProduct product) {
         return this.productManager.get_product_categories(product);
     }
 
@@ -151,14 +151,6 @@ public class Stock {
 
     ///////////////////////TEST FUNCTIONS/////////////////////////
 
-
-    public boolean getDefectedItem_Test(int item_id) {
-        for (Item i : defects)
-            if (i.getItem_id() == item_id)
-                return true;
-        return false;
-    }
-
     public LinkedList<Item> get_product_items(Integer product_id) throws Exception {
         return this.productManager.get_product_items(product_id);
     }
@@ -171,17 +163,6 @@ public class Stock {
 
     public boolean check_product_exist(String prod_name) {
         return this.productManager.check_product_exist(prod_name);
-    }
-
-    //======================================================================
-//DATA Functions:
-    private void add_to_data(Category category) {
-        IdentityMap im = IdentityMap.getInstance();
-        DataController dc = DataController.getInstance();
-        if (!dc.insertCategory(category)) {
-            System.out.println("failed to insert new Category to the database with the name + " + category.getCategory_name());
-        }
-        im.addCategory(category);
     }
 
     private void loadAllDefected() {

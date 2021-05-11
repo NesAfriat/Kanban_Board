@@ -26,11 +26,6 @@ public class AgreementsMapper extends Mapper {
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(AgreementsTable);
-            //TODO: in DataController - need to activate loadData
-//            if (!identityMap.initialized){
-//                LoadPreData();
-//                identityMap.initialized = true;
-//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -97,7 +92,7 @@ public class AgreementsMapper extends Mapper {
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, agreement.getSupplierID());
                 pstmt.setDouble(2, agreement.getExtraDiscount());
-                pstmt.setString(3, agreement.getDeliveryMode().toString()); //TODO - better change it to String and not enum
+                pstmt.setString(3, agreement.getDeliveryMode().toString());
                 pstmt.setInt(4, agreement.getNumOfDaysFromOrder());
                 pstmt.setInt(5, agreement.getSupplierID());
                 updated = pstmt.executeUpdate() != 0;
@@ -110,7 +105,6 @@ public class AgreementsMapper extends Mapper {
         return updated;
     }
 
-    //TODO: not sure if it will be used
     public boolean delete(Agreement agreement) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -128,7 +122,6 @@ public class AgreementsMapper extends Mapper {
         return deleted;
     }
 
-    //TODO: make sure the dates are added properly!
     public boolean insertAgreement(Agreement agreement) {
         boolean output = false;
         try (Connection conn = connect()) {
@@ -139,7 +132,7 @@ public class AgreementsMapper extends Mapper {
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, agreement.getSupplierID());
                 pstmt.setDouble(2, agreement.getExtraDiscount());
-                pstmt.setString(3, agreement.getDeliveryMode().toString()); //TODO - better change it to String and not enum
+                pstmt.setString(3, agreement.getDeliveryMode().toString());
                 pstmt.setInt(4, agreement.getNumOfDaysFromOrder());
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {

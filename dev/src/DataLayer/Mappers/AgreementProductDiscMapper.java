@@ -1,15 +1,7 @@
 package DataLayer.Mappers;
 
 import BuisnnesLayer.Agreement;
-import BuisnnesLayer.ProductSupplier;
-import BuisnnesLayer.Sales.Sale;
-import DataLayer.DataController;
-
 import java.sql.*;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
 
 public class AgreementProductDiscMapper extends Mapper{
     public AgreementProductDiscMapper() {
@@ -34,11 +26,6 @@ public class AgreementProductDiscMapper extends Mapper{
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(AgreementProductsDiscTable);
-            //TODO: in DataController - need to activate loadData
-//                      if (!identityMap.initialized){
-//                                LoadPreData();
-//                                identityMap.initialized = true;
-//                            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

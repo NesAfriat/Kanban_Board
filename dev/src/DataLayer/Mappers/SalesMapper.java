@@ -90,8 +90,7 @@ public class SalesMapper extends Mapper{
 
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
-                    int saleID = rs.getInt(1);
-                    output=saleID;
+                    output= rs.getInt(1);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -269,8 +268,6 @@ public class SalesMapper extends Mapper{
                         if(byCat==1)
                             byCategory=true;
                         }
-                    } catch (SQLException e) {
-                        e.printStackTrace();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -306,9 +303,7 @@ public class SalesMapper extends Mapper{
                     }
 
                 }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
+            } catch (ParseException | SQLException e) {
                 e.printStackTrace();
             }
         } catch (SQLException throwables) {

@@ -13,42 +13,42 @@ import java.util.List;
 
 public class OrderControler {
     //private static OrderControler single_instance = null;
-   // HashMap<Integer, List<Integer>> ProductsOrderedFromSupplier ;//+ ProductsOrderedFromSupplier : HashMap<supplierID:int , List<CatalogID:int>>
-    private HashMap<Integer, Order> Orders ;//- Orders: hashMap<OrderID: int, order: Order>
+    // HashMap<Integer, List<Integer>> ProductsOrderedFromSupplier ;//+ ProductsOrderedFromSupplier : HashMap<supplierID:int , List<CatalogID:int>>
+    private HashMap<Integer, Order> Orders;//- Orders: hashMap<OrderID: int, order: Order>
     private AgreementManager agreementManager;
     private int idOrderCounter;
 
-    boolean isAllOrdersUploudFromData=false;
+    boolean isAllOrdersUploudFromData = false;
 
-//    private HashMap<Integer, HashMap<Integer, Integer>> DiscountByProductQuantity;//- DiscountByProductQuantity hashMap<CatalogID:int, hashMap<quantitiy :int , newPrice:int>>
-    public List<Order> getAllOrders(){
+    //    private HashMap<Integer, HashMap<Integer, Integer>> DiscountByProductQuantity;//- DiscountByProductQuantity hashMap<CatalogID:int, hashMap<quantitiy :int , newPrice:int>>
+    public List<Order> getAllOrders() {
         loadAllOrders();
-        return new ArrayList<Order>(Orders.values());
+        return new ArrayList<>(Orders.values());
     }
-    public OrderControler(AgreementManager agreementManager){
+
+    public OrderControler(AgreementManager agreementManager) {
         DataController dc = DataController.getInstance();
         // ProductsOrderedFromSupplier=new HashMap<>();
-        Orders=new HashMap<>();
-        this.agreementManager=agreementManager;
-        idOrderCounter=dc.getOrderBigestId()+1;
+        Orders = new HashMap<>();
+        this.agreementManager = agreementManager;
+        idOrderCounter = dc.getOrderBigestId() + 1;
     }
 
-    public void AddOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant,Integer constantorderdayfromdelivery){
-        if(!CheckIfSupplierExist(SupId)){
+    public void AddOrder(int SupId, HashMap<Integer, Integer> productQuantity, boolean isConstant, Integer constantorderdayfromdelivery) {
+        if (!CheckIfSupplierExist(SupId)) {
             throw new IllegalArgumentException("the supplier is not exist in system");
         }
         //now check if all the products exist in the agreement of the supplier
-        if(!checkIfAllItemsExistInTheSupplierAgreement(SupId, new ArrayList<Integer>(productQuantity.keySet()))){
+        if (!checkIfAllItemsExistInTheSupplierAgreement(SupId, new ArrayList<>(productQuantity.keySet()))) {
             throw new IllegalArgumentException("not all product exist in the Agreement with the supplier");
         }
-        if(isConstant){
-            Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),true,constantorderdayfromdelivery);
+        if (isConstant) {
+            Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId), true, constantorderdayfromdelivery);
             Orders.put(idOrderCounter, order);
             add_Order_to_the_data(order);
             idOrderCounter++;
-        }
-        else {
-            Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),false,constantorderdayfromdelivery);
+        } else {
+            Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId), false, constantorderdayfromdelivery);
             Orders.put(idOrderCounter, order);
             add_Order_to_the_data(order);
 
@@ -56,27 +56,29 @@ public class OrderControler {
         }
 
     }
-    public void create_order_Due_to_lack( HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity,Integer constantorderdayfromdelivery){
+
+    public void create_order_Due_to_lack(HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity, Integer constantorderdayfromdelivery) {
         for (Integer SupId : cheapest_supplier_products_by_quantity.keySet()) {
-            AddOrder(SupId,cheapest_supplier_products_by_quantity.get(SupId),false,constantorderdayfromdelivery);
+            AddOrder(SupId, cheapest_supplier_products_by_quantity.get(SupId), false, constantorderdayfromdelivery);
         }
     }
 
 
     // check if supplier exist in the agreements
-    private boolean CheckIfSupplierExist(int SupId){
+    private boolean CheckIfSupplierExist(int SupId) {
         return agreementManager.isSupplierExist(SupId);
     }
-    private boolean CheckIfSupplierProvidesThePruduct(int SupId,int productId){
+
+    private boolean CheckIfSupplierProvidesThePruduct(int SupId, int productId) {
         return (agreementManager.GetAgreement(SupId)).isProductExist(productId);
     }
 
     // check if items exist in the supplier agrement
-    private boolean checkIfAllItemsExistInTheSupplierAgreement(int SupId,List<Integer> productsCtalogId){
-        HashMap<Integer, ProductSupplier> AgreemntProduct =agreementManager.GetAgreement(SupId).getProducts();
-        for (Integer CatalogId:productsCtalogId
-             ) {
-            if(!AgreemntProduct.containsKey(CatalogId)){
+    private boolean checkIfAllItemsExistInTheSupplierAgreement(int SupId, List<Integer> productsCtalogId) {
+        HashMap<Integer, ProductSupplier> AgreemntProduct = agreementManager.GetAgreement(SupId).getProducts();
+        for (Integer CatalogId : productsCtalogId
+        ) {
+            if (!AgreemntProduct.containsKey(CatalogId)) {
                 return false;
             }
         }
@@ -84,25 +86,23 @@ public class OrderControler {
     }
 
     //ok with THE DATA
-    public void RemoveOrder(int OrderID,int SupId)
-    {
-        if(!isExsist(OrderID,SupId)){
+    public void RemoveOrder(int OrderID, int SupId) {
+        if (!isExsist(OrderID, SupId)) {
             throw new IllegalArgumentException("the order is not in the system");
         }
-        Order order=Orders.get(OrderID);
+        Order order = Orders.get(OrderID);
         Orders.remove(OrderID);
         removeOrderFromTheData(order);
     }
 
     //it ok withe the data
-    public Order GetOrder(int OrderID,int SupId)
-    {
-        if(!Orders.containsKey(OrderID)){
-            Order order=getOrderFromTheData(OrderID,SupId);
-            Orders.put(OrderID,order);
-            if(order==null){
-            throw new IllegalArgumentException("the order is not in the system");
-        }
+    public Order GetOrder(int OrderID, int SupId) {
+        if (!Orders.containsKey(OrderID)) {
+            Order order = getOrderFromTheData(OrderID, SupId);
+            Orders.put(OrderID, order);
+            if (order == null) {
+                throw new IllegalArgumentException("the order is not in the system");
+            }
             return order;
 
         }
@@ -111,107 +111,97 @@ public class OrderControler {
 
     //Ok with the DATA
     //after we remoce supliers we shold remove all constant orders of this supplier
-    public void RemoveAllSupllierConstOrders(int SupiD){
-        for (Order order:Orders.values()
-             ) {
-           if(order.isConstant() &&order.getSupplierID()==SupiD)
-           {
-               Orders.remove(order.GetId());
-               removeOrderFromTheData(order);
-           }
+    public void RemoveAllSupllierConstOrders(int SupiD) {
+        for (Order order : Orders.values()
+        ) {
+            if (order.isConstant() && order.getSupplierID() == SupiD) {
+                Orders.remove(order.GetId());
+                removeOrderFromTheData(order);
+            }
         }
     }
 
 
-    private IAgreement GetAgreement(int supplierID)
-    {
+    private IAgreement GetAgreement(int supplierID) {
         return agreementManager.GetAgreement(supplierID);
     }
 
 
-    public void addProductToOrder(Integer product,Integer Quantity,Integer OrderID,int supId){
-        if(!CheckIfSupplierExist(supId)){
+    public void addProductToOrder(Integer product, Integer Quantity, Integer OrderID, int supId) {
+        if (!CheckIfSupplierExist(supId)) {
             throw new IllegalArgumentException("the supplier is not exist in system");
         }
-        if(!isExsist(OrderID,supId)){
+        if (!isExsist(OrderID, supId)) {
             throw new IllegalArgumentException("the order is not in the system");
         }
         //you canot chacg orders that no constant!!!
-        if(!Orders.get(OrderID).isConstant()){
+        if (!Orders.get(OrderID).isConstant()) {
             throw new IllegalArgumentException("the Order is not Constant you cannot change order tht done already");
         }
-        if(!CheckIfSupplierProvidesThePruduct(supId,product)){
+        if (!CheckIfSupplierProvidesThePruduct(supId, product)) {
             throw new IllegalArgumentException("the supplier dose not Supply this product");
         }
 
-        Orders.get(OrderID).AddPrudactToOrder(product,Quantity,agreementManager.GetAgreement(supId));
+        Orders.get(OrderID).AddPrudactToOrder(product, Quantity, agreementManager.GetAgreement(supId));
     }
-    public void changeProductQuantityFromOrder(Integer product,Integer Quantity,Integer OrderID,int supId){
-        if(!CheckIfSupplierExist(supId)){
+
+    public void changeProductQuantityFromOrder(Integer product, Integer Quantity, Integer OrderID, int supId) {
+        if (!CheckIfSupplierExist(supId)) {
             throw new IllegalArgumentException("the supplier is not exist in system");
         }
-        if(!isExsist(OrderID,supId)){
+        if (!isExsist(OrderID, supId)) {
             throw new IllegalArgumentException("the order is not in the system");
         }
         //you canot chacg orders that no constant!!!
-        if(!Orders.get(OrderID).isConstant()){
+        if (!Orders.get(OrderID).isConstant()) {
             throw new IllegalArgumentException("the Order is not Constant you cannot change order tht done already");
         }
-        if(!CheckIfSupplierProvidesThePruduct(supId,product)){
+        if (!CheckIfSupplierProvidesThePruduct(supId, product)) {
             throw new IllegalArgumentException("the supplier dose not Supply this product");
         }
         //if(!(Orders.get(OrderID)).checkIfProductIsAlreadyExist(product)){
-         //   throw new IllegalArgumentException("this Product dose not exist in this order");
-       // }
-       // public void EditProductQuantity(int CatalogID,int quantity,IAgreement agreement)
-        Orders.get(OrderID).EditProductQuantity(product,Quantity,agreementManager.GetAgreement(supId));
+        //   throw new IllegalArgumentException("this Product dose not exist in this order");
+        // }
+        // public void EditProductQuantity(int CatalogID,int quantity,IAgreement agreement)
+        Orders.get(OrderID).EditProductQuantity(product, Quantity, agreementManager.GetAgreement(supId));
     }
 
-    public void ReCalculateTotalPayment (int SupId)
-    {
-        for (Order order:Orders.values())
-        {
+    public void ReCalculateTotalPayment(int SupId) {
+        for (Order order : Orders.values()) {
             order.ReCalculateTotalPayment(agreementManager.GetAgreement(SupId));
         }
     }
 
 
-
-    public Boolean isExsist(int OrderId,int SupId){
+    public Boolean isExsist(int OrderId, int SupId) {
         loadAllOrders();
-        if(Orders.containsKey(OrderId)){
-            return true;
-        }
-        return false;
+        return Orders.containsKey(OrderId);
     }
 
 
-    public void RemovePrudactFromOrders (int SupId, int CatalogID)
-    {
-        for (Order order:Orders.values())
-        {
-            if (order.isConstant()&&(order.getSupplierID()==SupId)&&order.checkIfProductIsAlreadyExist(CatalogID)){
-            order.RemovePrudactFromOrder(CatalogID,agreementManager.GetAgreement(SupId));
-             }
+    public void RemovePrudactFromOrders(int SupId, int CatalogID) {
+        for (Order order : Orders.values()) {
+            if (order.isConstant() && (order.getSupplierID() == SupId) && order.checkIfProductIsAlreadyExist(CatalogID)) {
+                order.RemovePrudactFromOrder(CatalogID, agreementManager.GetAgreement(SupId));
+            }
         }
     }
 
     //================================================DATA===================================
 
 
-
     //insertProduct
-    private Order getOrderFromTheData(int orderId,int SupId) {
+    private Order getOrderFromTheData(int orderId, int SupId) {
         IdentityMap im = IdentityMap.getInstance();
-        Order order =im.getOrder(orderId);
-        if(order!=null){
+        Order order = im.getOrder(orderId);
+        if (order != null) {
             return order;
-        }
-        else {
+        } else {
             DataController dc = DataController.getInstance();
             order = dc.getOrder(SupId, orderId);
             if (order == null) {
-                return null; }
+                return null;
+            }
 
             im.addOrder(order);
             return order;
@@ -219,19 +209,15 @@ public class OrderControler {
     }
 
 
-
-
-    private void removeOrderFromTheData(Order order){
+    private void removeOrderFromTheData(Order order) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         im.removeOrder(order.GetId());
-        boolean isOk=dc.deleteOrder(order);
-        if(!isOk){
-        throw new IllegalArgumentException("canot remove from the datat order that not exsist");
-}
+        boolean isOk = dc.deleteOrder(order);
+        if (!isOk) {
+            throw new IllegalArgumentException("canot remove from the datat order that not exsist");
+        }
     }
-
-
 
 
     //ADD ORDER
@@ -245,23 +231,21 @@ public class OrderControler {
     }
 
 
-
-
-    private boolean loadAllOrders(){
-        if(isAllOrdersUploudFromData){
+    private boolean loadAllOrders() {
+        if (isAllOrdersUploudFromData) {
             return true;
         }
         DataController dc = DataController.getInstance();
-        List<Order> orderList=dc.getAllOrders();
+        List<Order> orderList = dc.getAllOrders();
         IdentityMap im = IdentityMap.getInstance();
-        for (Order o:orderList
-             ) {
-            if(!Orders.containsKey(o.GetId())){
+        for (Order o : orderList
+        ) {
+            if (!Orders.containsKey(o.GetId())) {
                 im.addOrder(o);
-                Orders.put(o.GetId(),o);
+                Orders.put(o.GetId(), o);
             }
         }
-        isAllOrdersUploudFromData=true;
+        isAllOrdersUploudFromData = true;
         return true;
 
     }

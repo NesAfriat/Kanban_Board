@@ -20,13 +20,10 @@ public class Supplier implements ISupplier {
 
 
 
-
-
-
     public Supplier(int id, String SupplierName, paymentMethods payment, String BankAccount, int SupplierIdCounter , String contactName, String contactEmail, String phoneNumber)
     {
        this.ContactIdCounter=0;
-       this.ListOfContacts  = new ArrayList<Contact>();
+       this.ListOfContacts  = new ArrayList<>();
        Contact contact=new Contact(ContactIdCounter,contactName,contactEmail,phoneNumber,id);
        ListOfContacts.add(contact);
        addContactToSupplierInTheData(contact,id);
@@ -187,8 +184,9 @@ public void UpdateSupplierInTheData(Supplier supplier){
         boolean isContactExsist=false;
         for (Contact con:ListOfContacts
              ) {
-            if(con.getId()==c.getId()){
-                isContactExsist=true;
+            if (con.getId() == c.getId()) {
+                isContactExsist = true;
+                break;
             }
         }
         if(!isContactExsist) {
@@ -200,13 +198,7 @@ public void UpdateSupplierInTheData(Supplier supplier){
 
     private int getTheBigestIDforTheCounterinContacts(int supId){
         DataController dc = DataController.getInstance();
-        int x=dc.getTheBigestIDforTheCounterinContacts(supId);
-        return x;
+        return dc.getTheBigestIDforTheCounterinContacts(supId);
 
     }
-
-
-
-
-
 }

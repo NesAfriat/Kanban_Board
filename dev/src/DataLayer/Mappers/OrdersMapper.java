@@ -32,11 +32,6 @@ public class OrdersMapper extends Mapper{
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(OrdersTable);
-            //TODO: in DataController - need to activate loadData
-//            if (!identityMap.initialized){
-//                LoadPreData();
-//                identityMap.initialized = true;
-//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -132,7 +127,6 @@ public class OrdersMapper extends Mapper{
         return updated;
     }
 
-    //TODO: not sure if it will be used
     public boolean delete(Order o) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -151,7 +145,6 @@ public class OrdersMapper extends Mapper{
         return deleted;
     }
 
-    //TODO: make sure the dates are added properly!
     public boolean insertOrder(Order o) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         boolean output = false;

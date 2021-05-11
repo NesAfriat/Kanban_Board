@@ -12,7 +12,7 @@ public class Category {
 
     public Category(String category_name) {
         this.category_name = category_name;
-        father_Category=null;
+        father_Category = null;
         sub_Category = new LinkedList<>();
     }
 
@@ -20,9 +20,6 @@ public class Category {
         return category_name;
     }
 
-    public void setCategory_name(String category_name) {
-        this.category_name = category_name;
-    }
 
     public Category getFather_Category() {
         return father_Category;
@@ -30,8 +27,8 @@ public class Category {
 
     public void setFather_Category(Category father_Category) {
         this.father_Category = father_Category;
-        if(father_Category!=null)
-            if(!father_Category.sub_Category.contains(this))
+        if (father_Category != null)
+            if (!father_Category.sub_Category.contains(this))
                 father_Category.sub_Category.add(this);
     }
 
@@ -39,17 +36,6 @@ public class Category {
     public LinkedList<Category> getSub_Category() {
         return sub_Category;
     }
-
-/*
-    public String toString() {
-        return "{" +
-                "category_name=" + category_name  +
-                ", father_Category=" + father_Category +
-                ", sub_Category=" + sub_Category +
-                '}';
-    }
-
- */
 
     public Category removed() throws Exception {
         if (father_Category == null) {
