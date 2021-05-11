@@ -518,22 +518,8 @@ public class ProductManager {
     }
 
     private boolean checkProductExistByID(Integer gpID) {
-        boolean found = false;
-        GeneralProduct gp;
-        IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        gp = im.getGeneralProduct(gpID);
-        if (gp != null) {
-            found = true;
-        } else {
-            gp = dc.getGP(gpID);
-            if (gp != null) {
-                im.addGeneralProduct(gp);
-                products.put(gp.getProduct_id(),gp);
-                found = true;
-            }
-        }
-        return found;
+        return dc.checkProductExist(gpID);
     }
 
     private boolean CheckGPExistByName(String prod_name) {

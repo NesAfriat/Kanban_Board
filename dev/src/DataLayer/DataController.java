@@ -297,6 +297,12 @@ public class DataController {
         return suppliersProductsMapper.delete(con, sup_id);
     }
 
+    public boolean checkProductExist(Integer gpID) {
+        return generalProductMapper.checkProductExist(gpID);
+    }
+    public boolean checkProductExist(String gpName) {
+        return generalProductMapper.checkProductExist(gpName);
+    }
     //================================================================================
     //Orders Actions:
     //If we want to retrive an Order which was not in the business
@@ -509,4 +515,6 @@ public class DataController {
     public int getMaxGPID() {
         return generalProductMapper.getMaxGPID();
     }
+
+
 }

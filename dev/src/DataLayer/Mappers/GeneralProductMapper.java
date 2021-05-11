@@ -214,6 +214,26 @@ public class GeneralProductMapper extends Mapper {
         }
         return exist;
     }
+    public boolean checkProductExist(int gpID) {
+        boolean exist = false;
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM GeneralProducts WHERE gpName=? ";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, gpName);
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    exist = true;
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return exist;
+    }
 
     public LinkedList<GeneralProduct> loadProductsByCategory(String cat_name) {
         LinkedList<GeneralProduct> productsList = new LinkedList<>();
