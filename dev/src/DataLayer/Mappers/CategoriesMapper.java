@@ -39,11 +39,11 @@ public class CategoriesMapper extends Mapper {
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
                     String catName = rs.getString(1);
-                    String father_Category= rs.getString(2);
+                    String father_Category = rs.getString(2);
                     category = new Category(cat_name);
-                    Category fatherCat=getCategory(father_Category);
-                    if(fatherCat!=null)
-                    category.setFather_Category(fatherCat);
+                    Category fatherCat = getCategory(father_Category);
+                    if (fatherCat != null)
+                        category.setFather_Category(fatherCat);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -61,12 +61,11 @@ public class CategoriesMapper extends Mapper {
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setString(1, obj.getCategory_name());
-                Category father_Cat= obj.getFather_Category();
-                if(father_Cat!=null) {
+                Category father_Cat = obj.getFather_Category();
+                if (father_Cat != null) {
                     pstmt.setString(2, father_Cat.getCategory_name());
                     update(father_Cat);
-                }
-                else
+                } else
                     pstmt.setString(2, null);
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
@@ -95,7 +94,6 @@ public class CategoriesMapper extends Mapper {
         return deleted;
     }
 
-    //TODO: make sure the dates are added properly!
     public boolean insertCategory(Category category) {
         boolean output = false;
         try (Connection conn = connect()) {
@@ -105,8 +103,8 @@ public class CategoriesMapper extends Mapper {
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setString(1, category.getCategory_name());
-                if(category.getFather_Category()!=null)
-                pstmt.setString(2, category.getFather_Category().getCategory_name());
+                if (category.getFather_Category() != null)
+                    pstmt.setString(2, category.getFather_Category().getCategory_name());
                 else
                     pstmt.setString(2, null);
                 output = pstmt.executeUpdate() != 0;
@@ -119,7 +117,7 @@ public class CategoriesMapper extends Mapper {
         return output;
     }
 
-    public boolean setFather(Category cat,Category father_cat) {
+    public boolean setFather(Category cat, Category father_cat) {
         boolean updated = false;
         try (Connection conn = connect()) {
             String statement = "UPDATE Categories SET father_Category=? WHERE catName=? ";
@@ -138,7 +136,7 @@ public class CategoriesMapper extends Mapper {
     }
 
     public LinkedList<Category> loadAllCategories() {
-        LinkedList<Category> categories=new LinkedList<>();
+        LinkedList<Category> categories = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Categories  ";
 
@@ -146,7 +144,7 @@ public class CategoriesMapper extends Mapper {
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
                     String catName = rs.getString(1);
-                    Category newCat= new Category(catName);
+                    Category newCat = new Category(catName);
                     categories.add(newCat);
                 }
             } catch (SQLException e) {
@@ -158,6 +156,7 @@ public class CategoriesMapper extends Mapper {
         setFathers(categories);
         return categories;
     }
+
     private void setFathers(LinkedList<Category> categories) {
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Categories WHERE catName=? ";
@@ -166,19 +165,59 @@ public class CategoriesMapper extends Mapper {
                     ResultSet rs = pstmt.executeQuery();
                     if (rs.next()) {
                         String fathersCatString = rs.getString(2);
-                        for(Category fc: categories)
-                        if(fc.getCategory_name().equals(fathersCatString))
-                        category.setFather_Category(fc);
+                        for (Category fc : categories)
+                            if (fc.getCategory_name().equals(fathersCatString))
+                                category.setFather_Category(fc);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-             catch(SQLException throwables){
-                throwables.printStackTrace();
-            }
-        }
+    }
+    public String getFatherCategory(Category cat) {
+        String father =null;
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Categories WHERE catName=? ";
 
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, cat.getCategory_name());
+
+                ResultSet rs = pstmt.executeQuery();
+                if (rs.next()) {
+                    father= rs.getString(2);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
+        return father;
+    }
+
+    public LinkedList<String> getChildrenCategories(Category cat) {
+        LinkedList<String> children= new LinkedList<>();
+        try (Connection conn = connect()) {
+            String statement = "SELECT * FROM Categories WHERE father_Category=? ";
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setString(1, cat.getCategory_name());
+
+                ResultSet rs = pstmt.executeQuery();
+                while (rs.next()) {
+                    String child= rs.getString(1);
+                    children.add(child);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return children;
+    }
+
+}
 

@@ -32,11 +32,7 @@ public class SuppliersProductsMapper extends Mapper {
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(SPTable);
-            //TODO: in DataController - need to activate loadData
-//            if (!identityMap.initialized){
-//                LoadPreData();
-//                identityMap.initialized = true;
-//            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -97,7 +93,6 @@ public class SuppliersProductsMapper extends Mapper {
         return updated;
     }
 
-    //TODO: not sure if it will be used
     public boolean delete(ProductSupplier ps, int sup_id) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -116,7 +111,6 @@ public class SuppliersProductsMapper extends Mapper {
         return deleted;
     }
 
-    //TODO: make sure the dates are added properly!
     public boolean insertProduct(ProductSupplier ps, int sup_id) {
         boolean output = false;
         try (Connection conn = connect()) {

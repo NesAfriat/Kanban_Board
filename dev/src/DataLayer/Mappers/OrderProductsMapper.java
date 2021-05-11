@@ -29,11 +29,6 @@ public class OrderProductsMapper extends Mapper {
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(OrderProductsTable);
-            //TODO: in DataController - need to activate loadData
-//                      if (!identityMap.initialized){
-//                                LoadPreData();
-//                                identityMap.initialized = true;
-//                            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

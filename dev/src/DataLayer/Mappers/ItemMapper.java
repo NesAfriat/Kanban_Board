@@ -35,11 +35,7 @@ public class ItemMapper extends Mapper {
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(itemTable);
-            //TODO: in DataController - need to activate loadData
-//                      if (!identityMap.initialized){
-//                                LoadPreData();
-//                                identityMap.initialized = true;
-//                            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -116,7 +112,6 @@ public class ItemMapper extends Mapper {
         return deleted;
     }
 
-    //TODO: make sure the dates are added properly!
     public boolean insertItem(Item item) {
         boolean output = false;
         try (Connection conn = connect()) {

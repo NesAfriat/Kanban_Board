@@ -224,7 +224,7 @@ public class inventPresentation {
                         int product_id = Integer.parseInt(reader.readLine());
                         System.out.println("please type the item id: ");
                         int item_id = Integer.parseInt(reader.readLine());
-                        System.out.println("please type new location for the item (<storage>\\<store_letter_number>): ");
+                        System.out.println("please type new location for the item (<storage>\\<store_number_letter>): ");
                         String loc = reader.readLine().trim().toLowerCase();
                         res = Facade.update_location(item_id, product_id, loc);
                         check_action(res);
