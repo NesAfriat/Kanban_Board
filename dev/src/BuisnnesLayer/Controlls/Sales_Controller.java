@@ -106,10 +106,19 @@ public class Sales_Controller {
         Sale toRemove = null;
         if (sales.containsKey(sales_id))
             toRemove = sales.remove(sales_id);
-        if (toRemove != null) {
+        if(toRemove == null){
             IdentityMap im = IdentityMap.getInstance();
-            im.removeSale(toRemove);
+            toRemove = im.getSale(sales_id);
+            if(toRemove==null){
+                DataController dc = DataController.getInstance();
+                toRemove = dc.getSaleByID(sales_id);
+                if(toRemove == null){
+                    throw new Exception("sale does not exist!");
+                }
+            }
         }
+        IdentityMap im = IdentityMap.getInstance();
+        im.removeSale(toRemove);
         removeSaleData(toRemove);
     }
 
