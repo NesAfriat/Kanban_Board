@@ -26,7 +26,11 @@ public class AgreementsMapper extends Mapper {
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(AgreementsTable);
-
+            //TODO: in DataController - need to activate loadData
+//            if (!identityMap.initialized){
+//                LoadPreData();
+//                identityMap.initialized = true;
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -45,7 +49,7 @@ public class AgreementsMapper extends Mapper {
                     int supID = rs.getInt(1);
                     double xDisc = rs.getDouble(2);
                     String mod = rs.getString(3);
-                    int daysFromOrder = rs.getInt(4);
+                    int daysFromOrder = rs.getInt(4);//todo - need to be list of int - like days '(1 ,3) //sunday, tuesday
                     obj = new Agreement(supID, xDisc, mod, daysFromOrder);
                 }
 
@@ -71,7 +75,7 @@ public class AgreementsMapper extends Mapper {
                     int supID = rs.getInt(1);
                     double xDisc = rs.getDouble(2);
                     String mod = rs.getString(3);
-                    int daysFromOrder = rs.getInt(4);
+                    int daysFromOrder = rs.getInt(4);//todo - need to be list of int - like days '(1 ,3) //sunday, tuesday
                     obj.add( new Agreement(supID, xDisc, mod, daysFromOrder));
                 }
 
@@ -93,7 +97,7 @@ public class AgreementsMapper extends Mapper {
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, agreement.getSupplierID());
                 pstmt.setDouble(2, agreement.getExtraDiscount());
-                pstmt.setString(3, agreement.getDeliveryMode().toString());
+                pstmt.setString(3, agreement.getDeliveryMode().toString()); //TODO - better change it to String and not enum
                 pstmt.setInt(4, agreement.getNumOfDaysFromOrder());
                 pstmt.setInt(5, agreement.getSupplierID());
                 updated = pstmt.executeUpdate() != 0;
@@ -106,6 +110,7 @@ public class AgreementsMapper extends Mapper {
         return updated;
     }
 
+    //TODO: not sure if it will be used
     public boolean delete(Agreement agreement) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -123,6 +128,7 @@ public class AgreementsMapper extends Mapper {
         return deleted;
     }
 
+    //TODO: make sure the dates are added properly!
     public boolean insertAgreement(Agreement agreement) {
         boolean output = false;
         try (Connection conn = connect()) {
@@ -133,7 +139,7 @@ public class AgreementsMapper extends Mapper {
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, agreement.getSupplierID());
                 pstmt.setDouble(2, agreement.getExtraDiscount());
-                pstmt.setString(3, agreement.getDeliveryMode().toString());
+                pstmt.setString(3, agreement.getDeliveryMode().toString()); //TODO - better change it to String and not enum
                 pstmt.setInt(4, agreement.getNumOfDaysFromOrder());
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {

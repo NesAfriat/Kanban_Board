@@ -190,14 +190,7 @@ public class Stock {
         LinkedList<Item> defList = dc.loadAllDefected();
         for (Item item : defList) {
             im.addItem(item);
-            boolean flag = false;
-            for(Item i: defects){
-                if (i.getItem_id().equals(item.getItem_id())) {
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag)
+            if (!defects.contains(item))
                 defects.add(item);
         }
     }

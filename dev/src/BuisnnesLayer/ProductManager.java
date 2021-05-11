@@ -201,6 +201,7 @@ public class ProductManager {
                 categories.get(cat).remove(toRemove);
     }
 
+
     public void remove_category(String cat_name) throws Exception { //DONE
         if (!isCategory_in_Categories(cat_name)) {
             throw new Exception("category doesnt exist");
@@ -254,13 +255,12 @@ public class ProductManager {
         return gp;
     }
 
+
     public void removeItem(Integer product_id, Integer item_id) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist!");
         }
-        GeneralProduct gp= get_product(product_id);
-        gp.removeItem(item_id);
-
+        products.get(product_id).removeItem(item_id);
     }
 
     public void update_product_min_amount(Integer product_id, Integer min_amount) throws Exception {

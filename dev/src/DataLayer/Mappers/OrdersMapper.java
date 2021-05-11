@@ -1,5 +1,6 @@
 package DataLayer.Mappers;
 
+import BuisnnesLayer.Agreement;
 import BuisnnesLayer.OrderBuissness.Order;
 
 import java.sql.*;
@@ -31,7 +32,11 @@ public class OrdersMapper extends Mapper{
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(OrdersTable);
-
+            //TODO: in DataController - need to activate loadData
+//            if (!identityMap.initialized){
+//                LoadPreData();
+//                identityMap.initialized = true;
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -112,9 +117,9 @@ public class OrdersMapper extends Mapper{
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, o.getSupplierID());
                 pstmt.setInt(2, o.GetId());
-                pstmt.setString(3, (o.getDateTime().format(formatter)));
-                pstmt.setDouble(4, o.getTotalPayment());
-                pstmt.setInt(5, o.isConstant_int());
+                pstmt.setString(3, (o.getDateTime().format(formatter))); //TODO need to add function for this //new todo -chang from int to stirng in the data base
+                pstmt.setDouble(4, o.getTotalPayment()); //TODO need to add function for this //new todo check if its double in the data base
+                pstmt.setInt(5, o.isConstant_int()); //TODO need to set true == 0, else false // true===1
                 pstmt.setInt(6, o.getSupplierID());
                 pstmt.setInt(7, o.GetId());
                 updated = pstmt.executeUpdate() != 0;
@@ -127,6 +132,7 @@ public class OrdersMapper extends Mapper{
         return updated;
     }
 
+    //TODO: not sure if it will be used
     public boolean delete(Order o) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -145,6 +151,7 @@ public class OrdersMapper extends Mapper{
         return deleted;
     }
 
+    //TODO: make sure the dates are added properly!
     public boolean insertOrder(Order o) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         boolean output = false;
@@ -160,7 +167,6 @@ public class OrdersMapper extends Mapper{
                 pstmt.setDouble(4, o.getTotalPayment()); //TODO need to add function for this //new todo check if its double in the data base
                 pstmt.setInt(5, o.isConstant_int()); //TODO need to set true == 0, else false// true===1
                 pstmt.setInt(6, o.getDayOfOrder());
-
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();

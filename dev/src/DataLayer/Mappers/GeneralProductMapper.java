@@ -57,7 +57,11 @@ public class GeneralProductMapper extends Mapper {
              Statement stmt = conn.createStatement()) {
             // create a new tables
             stmt.execute(GeneralProductTable);
-
+            //TODO: in DataController - need to activate loadData
+//            if (!identityMap.initialized){
+//                LoadPreData();
+//                identityMap.initialized = true;
+//            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -115,23 +119,7 @@ public class GeneralProductMapper extends Mapper {
         return updated;
     }
 
-    public void updateGPCategoryDAL(GeneralProduct gp, String catName) {
-        try (Connection conn = connect()) {
-            String statement = "UPDATE GeneralProducts SET catName=? WHERE gpID=? ";
-
-            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setString(1, catName);
-                pstmt.setInt(2, gp.getProduct_id());
-                 pstmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return;
-    }
-
+    //TODO: not sure if it will be used
     public boolean delete(GeneralProduct gp) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -149,8 +137,8 @@ public class GeneralProductMapper extends Mapper {
         return deleted;
     }
 
-
-    public boolean insertProduct(GeneralProduct gp, String catName) {
+    //TODO: make sure the dates are added properly!
+    public boolean insertProduct(GeneralProduct gp,String catName) {
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
@@ -283,29 +271,6 @@ public class GeneralProductMapper extends Mapper {
             throwables.printStackTrace();
         }
         return gpCategory;
-    }
-
-    public void setGPCategory(GeneralProduct gp, String newCat) {
-        try (Connection conn = connect()) {
-            String statement = "UPDATE GeneralProducts SET gpID=?, gpName=?, gpManuName=?, amountStore=?, amountStorage=?, minAmount=?, sellingPrice=?, catName=? WHERE gpID=? ";
-
-            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1, gp.getProduct_id());
-                pstmt.setString(2, gp.getProduct_name());
-                pstmt.setString(3, gp.getManufacturer_name());
-                pstmt.setInt(4, gp.getAmount_store());
-                pstmt.setInt(5, gp.getAmount_storage());
-                pstmt.setInt(6, gp.getMin_amount());
-                pstmt.setDouble(7, gp.getSelling_price());
-                pstmt.setInt(8, gp.getProduct_id());
-                pstmt.setString(9, newCat);
-                pstmt.executeUpdate();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
     }
 }
 

@@ -69,7 +69,7 @@ public interface supModelI {
     public Response removeOrder(int SupId, int supID);
 
     //this function return a response of specific order
-    public ResponseT getOrder(int OrderId,int SupId);
+    public ResponseT getOrder(int OrderId, int SupId);
 
     //this function return a response of all the orders in the system
     public ResponseT getAllOrders();

@@ -9,15 +9,14 @@ import java.util.LinkedList;
 public class ReportsMapper extends Mapper {
     private Reports_CategoriesMapper rcm;
 
-    public ReportsMapper() {
+    public ReportsMapper(){
         super();
         create_table();
     }
 
-    public void setRCM(Reports_CategoriesMapper rcm) {
+    public void setRCM(Reports_CategoriesMapper rcm){
         this.rcm = rcm;
     }
-
     @Override
     void create_table() {
         String ReportsTable = "CREATE TABLE IF NOT EXISTS Reports(\n" +
@@ -37,51 +36,6 @@ public class ReportsMapper extends Mapper {
         }
     }
 
-    public int getMaxReportID() {
-        int output = 0;
-        try (Connection conn = connect()) {
-            String statement = "SELECT max(repID) FROM Reports";
-
-            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-
-                ResultSet rs = pstmt.executeQuery();
-                if (rs.next()) {
-                    int repID = rs.getInt(1);
-                    output = repID;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return output + 1;
-    }
-
-    public LinkedList<Integer> getIDs(String sub, String date) {
-        LinkedList<Integer> rIDs = new LinkedList<>();
-        try (Connection conn = connect()) {
-            String statement = "SELECT * FROM Reports WHERE subject=? AND creation_date=? ";
-
-            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setString(1, sub);
-                pstmt.setString(2, date);
-
-                ResultSet rs = pstmt.executeQuery();
-                while (rs.next()) {
-                    int repID = rs.getInt(1);
-                    rIDs.add(repID);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return rIDs;
-    }
 
     public Report getReport(int rID) {
         Report report = null;
@@ -197,7 +151,7 @@ public class ReportsMapper extends Mapper {
                     LinkedList<String> categoriesList = rcm.getCategories(repID);
                     switch (subject.toLowerCase()) {
                         case "stock":
-                            reports.add(new ReportStock(repID, time_range, categoriesList));
+                            reports.add(new ReportStock(repID,time_range , categoriesList));
                         case "missing":
                             reports.add(new ReportMissing(repID, time_range, categoriesList));
                         case "defects":

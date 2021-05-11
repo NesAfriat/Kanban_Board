@@ -1,6 +1,7 @@
 package BuisnnesLayer.FacedeModel.Objects;
 
 import BuisnnesLayer.paymentMethods;
+import BuisnnesLayer.paymentMethods;
 
 import java.util.List;
 
