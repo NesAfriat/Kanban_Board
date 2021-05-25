@@ -1,10 +1,10 @@
 package PresentationLayer;
 
-import BuisnnesLayer.DeliveryMode;
-import BuisnnesLayer.FacedeModel.Objects.*;
-import BuisnnesLayer.FacedeModel.facade;
-import BuisnnesLayer.paymentMethods;
-import BuisnnesLayer.FacedeModel.facade;
+import BusinessLayer.DeliveryMode;
+import BusinessLayer.FacedeModel.Objects.*;
+import BusinessLayer.FacedeModel.facade;
+import BusinessLayer.paymentMethods;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;

@@ -1,6 +1,6 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.Reports.Report;
+import BusinessLayer.Reports.Report;
 
 import java.sql.*;
 import java.util.LinkedList;

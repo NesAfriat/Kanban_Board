@@ -1,7 +1,7 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.SupplierBuissness.Supplier;
-import BuisnnesLayer.paymentMethods;
+import BusinessLayer.SupplierBuissness.Supplier;
+import BusinessLayer.paymentMethods;
 
 import java.sql.*;
 import java.util.LinkedList;
@@ -51,7 +51,7 @@ public class SuppliersMapper extends Mapper{
                     String payment = rs.getString(4);
 
                     if(payment.equals(paymentMethods.Cash.toString())){
-                        obj=new Supplier(supID,supName, BuisnnesLayer.paymentMethods.creditcard , bank);
+                        obj=new Supplier(supID,supName, BusinessLayer.paymentMethods.creditcard , bank);
 
                     }else if(payment.equals(paymentMethods.paypal.toString())){
                         obj=new Supplier(supID,supName, paymentMethods.paypal , bank);
@@ -60,7 +60,7 @@ public class SuppliersMapper extends Mapper{
                         obj=new Supplier(supID,supName, paymentMethods.paypal , bank);
 
                     }else {
-                        obj=new Supplier(supID,supName, BuisnnesLayer.paymentMethods.BankTransfers , bank);
+                        obj=new Supplier(supID,supName, BusinessLayer.paymentMethods.BankTransfers , bank);
 
                     }
 
@@ -151,16 +151,16 @@ public class SuppliersMapper extends Mapper{
                     String payment = rs.getString(4);
 
                     if(payment.equals(paymentMethods.Cash.toString())){
-                        obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.creditcard , bank));
+                        obj.add(new Supplier(supID,supName, BusinessLayer.paymentMethods.creditcard , bank));
 
                     }else if(payment.equals( paymentMethods.paypal.toString())){
-                        obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.Cash , bank));
+                        obj.add(new Supplier(supID,supName, BusinessLayer.paymentMethods.Cash , bank));
 
                     }else if(payment.equals(paymentMethods.creditcard.toString())){
                         obj.add(new Supplier(supID,supName, paymentMethods.paypal , bank));
 
                     }else {
-                        obj.add(new Supplier(supID,supName, BuisnnesLayer.paymentMethods.BankTransfers , bank));
+                        obj.add(new Supplier(supID,supName, BusinessLayer.paymentMethods.BankTransfers , bank));
                     }
                 }
             } catch (SQLException e) {

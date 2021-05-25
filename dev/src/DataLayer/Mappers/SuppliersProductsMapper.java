@@ -1,8 +1,7 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.Agreement;
-import BuisnnesLayer.GeneralProduct;
-import BuisnnesLayer.ProductSupplier;
+import BusinessLayer.Agreement;
+import BusinessLayer.ProductSupplier;
 
 import java.sql.*;
 import java.util.LinkedList;

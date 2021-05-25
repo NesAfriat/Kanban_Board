@@ -1,6 +1,6 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.Reports.*;
+import BusinessLayer.Reports.*;
 
 import java.sql.*;
 import java.text.ParseException;

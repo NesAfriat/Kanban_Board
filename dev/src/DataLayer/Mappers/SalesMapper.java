@@ -1,9 +1,9 @@
 package DataLayer.Mappers;
 
 
-import BuisnnesLayer.Sales.Sale;
-import BuisnnesLayer.Sales.SaleByProduct;
-import BuisnnesLayer.Sales.Sale_Category;
+import BusinessLayer.Sales.Sale;
+import BusinessLayer.Sales.SaleByProduct;
+import BusinessLayer.Sales.Sale_Category;
 import DataLayer.DataController;
 
 import java.sql.*;

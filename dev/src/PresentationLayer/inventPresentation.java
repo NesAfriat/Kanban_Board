@@ -1,15 +1,12 @@
 package PresentationLayer;
 
-import BuisnnesLayer.FacedeModel.Objects.Response;
-import BuisnnesLayer.FacedeModel.facade;
+import BusinessLayer.FacedeModel.Objects.Response;
+import BusinessLayer.FacedeModel.facade;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
-import BuisnnesLayer.FacedeModel.facade;
-
-import javax.sql.DataSource;
 
 public class inventPresentation {
 

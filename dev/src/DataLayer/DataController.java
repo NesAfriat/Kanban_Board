@@ -1,11 +1,11 @@
 package DataLayer;
 
-import BuisnnesLayer.*;
-import BuisnnesLayer.Reports.Report;
-import BuisnnesLayer.OrderBuissness.Order;
-import BuisnnesLayer.Sales.Sale;
-import BuisnnesLayer.SupplierBuissness.Contact;
-import BuisnnesLayer.SupplierBuissness.Supplier;
+import BusinessLayer.*;
+import BusinessLayer.Reports.Report;
+import BusinessLayer.OrderBuissness.Order;
+import BusinessLayer.Sales.Sale;
+import BusinessLayer.SupplierBuissness.Contact;
+import BusinessLayer.SupplierBuissness.Supplier;
 import DataLayer.Mappers.*;
 
 import java.text.ParseException;

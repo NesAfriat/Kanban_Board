@@ -1,7 +1,7 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.SupplierBuissness.Contact;
-import BuisnnesLayer.SupplierBuissness.Supplier;
+import BusinessLayer.SupplierBuissness.Contact;
+import BusinessLayer.SupplierBuissness.Supplier;
 
 import java.sql.*;
 

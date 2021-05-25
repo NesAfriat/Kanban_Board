@@ -1,7 +1,6 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.Agreement;
-import BuisnnesLayer.OrderBuissness.Order;
+import BusinessLayer.OrderBuissness.Order;
 
 import java.sql.*;
 import java.time.format.DateTimeFormatter;

@@ -1,7 +1,7 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.GeneralProduct;
-import BuisnnesLayer.Item;
+import BusinessLayer.GeneralProduct;
+import BusinessLayer.Item;
 import DataLayer.DataController;
 
 import java.sql.*;

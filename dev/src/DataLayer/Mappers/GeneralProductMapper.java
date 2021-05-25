@@ -1,7 +1,6 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.Category;
-import BuisnnesLayer.GeneralProduct;
+import BusinessLayer.GeneralProduct;
 
 import java.sql.*;
 import java.util.LinkedList;

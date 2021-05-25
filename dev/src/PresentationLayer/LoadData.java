@@ -1,19 +1,12 @@
 package PresentationLayer;
 
-import BuisnnesLayer.Controlls.Sales_Controller;
-import BuisnnesLayer.Controlls.Stock_Controller;
-import BuisnnesLayer.DeliveryMode;
-import BuisnnesLayer.FacedeModel.Objects.Response;
-import BuisnnesLayer.FacedeModel.facade;
+import BusinessLayer.Controlls.Sales_Controller;
+import BusinessLayer.Controlls.Stock_Controller;
+import BusinessLayer.DeliveryMode;
+import BusinessLayer.FacedeModel.facade;
 //import BuissnessLayer.DeliveryMode;
 //import BuissnessLayer.FacadeBuissness.Facade;
-import BuisnnesLayer.ProductSupplier;
-import BuisnnesLayer.paymentMethods;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import BusinessLayer.paymentMethods;
 
 public class LoadData {
     facade facade;

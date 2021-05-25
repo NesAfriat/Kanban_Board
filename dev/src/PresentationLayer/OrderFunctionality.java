@@ -1,9 +1,9 @@
 package PresentationLayer;
 
-import BuisnnesLayer.FacedeModel.Objects.Response;
-import BuisnnesLayer.FacedeModel.Objects.ResponseT;
-import BuisnnesLayer.FacedeModel.Objects.orderResponse;
-import BuisnnesLayer.FacedeModel.facade;
+import BusinessLayer.FacedeModel.Objects.Response;
+import BusinessLayer.FacedeModel.Objects.ResponseT;
+import BusinessLayer.FacedeModel.Objects.orderResponse;
+import BusinessLayer.FacedeModel.facade;
 
 import java.time.LocalDate;
 import java.util.HashMap;

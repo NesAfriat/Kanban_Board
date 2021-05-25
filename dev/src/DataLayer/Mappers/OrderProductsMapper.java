@@ -1,7 +1,7 @@
 package DataLayer.Mappers;
 
 
-import BuisnnesLayer.OrderBuissness.Order;
+import BusinessLayer.OrderBuissness.Order;
 
 import java.sql.*;
 

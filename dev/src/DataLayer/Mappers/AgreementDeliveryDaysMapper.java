@@ -1,10 +1,8 @@
 package DataLayer.Mappers;
 
-import BuisnnesLayer.Agreement;
-import BuisnnesLayer.ProductSupplier;
+import BusinessLayer.Agreement;
 
 import java.sql.*;
-import java.util.HashMap;
 
 public class AgreementDeliveryDaysMapper extends Mapper{
     public AgreementDeliveryDaysMapper() {
