@@ -1,16 +1,19 @@
-package BusinessLayer;
+package BusinessLayer.Transport_BusinessLayer;
 
 import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
+import BusinessLayer.Workers_Integration;
 
-import javax.lang.model.UnknownEntityException;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,6 +39,45 @@ public class DriversFactory {
         return driverList;
 
     }
+
+    public String getDriversWeekly(String date,List<License> license) throws ParseException {
+
+        //todo check what happens if get null response from
+        List<Driver> output=new LinkedList<>();
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("dd/MM/yyyy");
+
+
+        for (int i = 0; i < 7; i++) {
+
+            output = Stream.concat(output.stream(), getDrivers(date, 0, license).stream()).collect(Collectors.toList());
+            output = Stream.concat(output.stream(), getDrivers(date, 1, license).stream()).collect(Collectors.toList());
+            if(!(output.isEmpty()))
+                return date;
+
+            //move from sdf2 to sdf format
+            Date dateTimeobj = sdf2.parse(date);
+            String newdate = sdf.format(dateTimeobj);
+
+
+            Calendar c = Calendar.getInstance();
+            try {
+                c.setTime(sdf.parse(newdate));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //Incrementing the date by 1 day
+            c.add(Calendar.DAY_OF_MONTH, 1);
+
+            date = sdf2.format(c.getTime());
+
+        }
+
+        return null;
+    }
+
 
 
     public List<Driver> getDrivers(String date,int shift,List<License> license){
