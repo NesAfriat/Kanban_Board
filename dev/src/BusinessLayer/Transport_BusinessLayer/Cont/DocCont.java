@@ -8,15 +8,14 @@ import BusinessLayer.Transport_BusinessLayer.Shops.Area;
 import BusinessLayer.Transport_BusinessLayer.Shops.Product;
 import BusinessLayer.Transport_BusinessLayer.Shops.Store;
 import BusinessLayer.Transport_BusinessLayer.Shops.Supplier;
+import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
 import DataLayer.Transport_DAL.DALController;
 import DataLayer.Transport_DAL.ProductDAL;
 import DataLayer.Transport_DAL.TransportDocDAL;
 
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DocCont {
 
@@ -69,22 +68,22 @@ public class DocCont {
     public Area getArea(int doc){
         return getUpToDateDoc(theTransportBible.get(doc)).getArea();
     }
-    public void addStore(int doc, Store st,int place ) throws Exception {
-        getUpToDateDoc(theTransportBible.get(doc)).addStore(st,place);
+    public void addStore(int doc, int store,int place ) throws Exception {
+        getUpToDateDoc(theTransportBible.get(doc)).addStore(store,place);
     }
-    public void addSupplier(int doc, Supplier sp, int place) throws Exception {
-        getUpToDateDoc(theTransportBible.get(doc)).addSupplier(sp,place);
+    public void addSupplier(int doc, int supplier , int place) throws Exception {
+        getUpToDateDoc(theTransportBible.get(doc)).addSupplier(supplier,place);
     }
-    public List<Store> getStores(int doc){
+    public List<Integer/*Store*/> getStores(int doc){
         return getUpToDateDoc(theTransportBible.get(doc)).getStores();
     }
-    public void addProducts(int doc, Triple<Product,Integer,Store> tp){
+    public void addProducts(int doc, Triple<Integer,Integer,Integer> tp){
         getUpToDateDoc(theTransportBible.get(doc)).addProduct(tp);
     }
-    public List<Product> getProducts (int doc) {
-        List<Product > pd = new LinkedList<>();
-        List<Triple<Product, Integer, Store>> trip = getUpToDateDoc(theTransportBible.get(doc)).getProductList();
-                for (Triple<Product, Integer, Store> tr : trip){
+    public List<Integer/*Product*/> getProducts (int doc) {
+        List<Integer/*Product*/ > pd = new LinkedList<>();
+        List<Triple<Integer, Integer, Integer>> trip = getUpToDateDoc(theTransportBible.get(doc)).getProductList();
+                for (Triple<Integer/*Product*/, Integer, Integer/*Store*/> tr : trip){
                     pd.add(tr.getFirst());
                 }
         return pd;
@@ -141,7 +140,7 @@ public class DocCont {
         origin.change(td);
         td.addDriver(dr);
     }
-    public void editOrigin(int doc, Store orig ) throws Exception {
+    public void editOrigin(int doc, Integer orig ) throws Exception {
         TransportDoc origin = theTransportBible.get(doc);
         origin = getUpToDateDoc(origin);
         TransportDoc td= origin.copyDeep();
@@ -172,8 +171,8 @@ public class DocCont {
         td.removeProduct(prodId,storeId);
 
     }
-    public void setOrigin (int doc, Store st) throws Exception {
-        theTransportBible.get(doc).setOrigin(st);
+    public void setOrigin (int doc, Integer store) throws Exception {
+        theTransportBible.get(doc).setOrigin(store);
     }
     public String docProdString(int doc){
         TransportDoc origin = theTransportBible.get(doc);
@@ -217,7 +216,12 @@ public class DocCont {
         origin.change(td);
         td.setLeftOrigin(date);
     }
-
+    public void approved(int doc,boolean trueToApprove) throws Exception {
+        theTransportBible.get(doc).setApproved(trueToApprove);
+    }
+    public boolean checkApproved(int doc){
+        return theTransportBible.get(doc).isApproved();
+    }
 
 
     public void save(int DocId){
@@ -234,4 +238,34 @@ public class DocCont {
         }
     }
 
+    public int addTranportFromSupplier(int supplierId, HashMap<Integer,Integer> productAndAmount) throws Exception {//add TranportFromSupplier Without DriversAndTrucks and dates return the doc id
+        int DeliveryID=newDelivery();
+        addSupplier(DeliveryID, supplierId, 1);
+        addStore(DeliveryID,Transport_Facade.theOneStoreId,2);
+        for (Triple<Integer,Integer,Integer> t:
+                convertProductAndAmountToProductAndAmountAndStore(convertHasMapToList(productAndAmount))) {
+            addProducts(DeliveryID,t);
+        }
+
+        setOrigin(DeliveryID, Transport_Facade.theOneStoreId);
+
+        return DeliveryID;
+    }
+
+    private <T>List<Tuple<T,T>> convertHasMapToList(HashMap<T,T> hashMap){
+        List<Tuple<T,T>> output=new LinkedList<>();
+        Iterator it = hashMap.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            output.add(new Tuple<>((T) pair.getKey(), (T)pair.getValue()));
+        }
+        return output;
+    }
+    private List<Triple<Integer,Integer,Integer>> convertProductAndAmountToProductAndAmountAndStore(List<Tuple<Integer,Integer>> productAndAmount){
+        List<Triple<Integer,Integer,Integer>> output=new LinkedList<>();
+        for (Tuple t:productAndAmount) {
+            output.add(new Triple(t.x,t.y,Transport_Facade.theOneStoreId));
+        }
+        return output;
+    }
 }

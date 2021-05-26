@@ -14,7 +14,7 @@ public class TransportDoc {
     String LeftOrigin=null;
     Truck truck=null;
     Driver driver=null;
-
+    boolean approved= false;
     public int getVersion() {
         return version;
     }
@@ -28,7 +28,7 @@ public class TransportDoc {
     ArrayList<Integer> allStops = new ArrayList<>();
     Area area=Area.A;
     double truckWeightDep=-1;
-    List<Triple<Integer/*Product*/, Integer, Integer/*Store*/>> productList;
+    List<Triple<Integer/*Product*/, Integer/*amount*/, Integer/*Store*/>> productList;
     public TransportDoc upDates=null;
     public TransportDoc(int id) {
         this.id = id;
@@ -66,6 +66,18 @@ public class TransportDoc {
         acc = "id "+ id  +(TransDate!=null? ", Trasnport Date "+ TransDate.toString():"") + (LeftOrigin!=null? ", Time Left Origin "+ LeftOrigin.toString():"") + (truck!=null?", Truck: "+ truck.getName():"")
                 +"\n" + (driver!=null?"Driver "+ driver.getName():"") + (origin!=-2147483648?", Origin "+ origin:"") + (area!=null?", Area "+ area:"") + (truckWeightDep!=-1?", Truck weight "+ truckWeightDep:"" )+"\n ";
         return acc;
+    }
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) throws Exception {
+        if (truck!=null&&driver!=null&&origin!=-2147483648&&TransDate!=null&&LeftOrigin!=null&&truckWeightDep!=-1) {
+            this.approved = approved;
+        }
+        else{
+            throw new Exception("all fileds must be filled before the doc is approved");
+        }
     }
     public String destinationsString(){
         String acc="";
