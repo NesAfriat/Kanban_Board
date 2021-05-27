@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class ControllerShops {
-    private List<Product> productList;
+ /*   private List<Product> productList;
     private List<Store> storeList;
     private List<Supplier> supplierList;
 
@@ -203,5 +203,5 @@ public class ControllerShops {
         findSupp=productAreaHash;
 
 
-    }
+    }*/
 }

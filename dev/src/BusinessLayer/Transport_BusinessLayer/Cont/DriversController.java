@@ -9,6 +9,9 @@ import BusinessLayer.Workers_Integration;
 import DataLayer.Transport_DAL.DALController;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +32,14 @@ public class DriversController {
         return DriversFac.isStoreKeeper(date);
 
     }
-
+    public Tuple<String, List<Driver>> getDateWithDriver(String date) throws ParseException {
+        List<License> licenses=new ArrayList<>();
+        licenses.add(License.typeA);
+        licenses.add(License.typeB);
+        licenses.add(License.typeC);
+        licenses.add(License.typeD);
+        return DriversFac.getDriversWeekly(date,licenses);
+    }
 
     /*public DriversController(List<Driver> drivers, List<Truck> trucks, List<Tuple<Truck,Driver>> occupied) {
         Drivers = drivers;
