@@ -168,7 +168,7 @@ public class TransportDocDAL {
                 //now save to all tables for id
                 String insert1 = "INSERT INTO TransportDocument " + "VALUES ("+ doc.getId() + "," + doc.getVersion() + ",'" + doc.getTransDate() +
                         "','" + doc.getLeftOrigin() + "','" + doc.getDriver().getName() + "'," + doc.getDriver().getId() + ",'" + LicenseToString(doc.getDriver().getLicense()) +
-                        "'," + doc.getTruck().getLicensePlate() + "," + doc.getOrigin().getId() + ",'" + doc.getArea().toString() + "'," + doc.getTruckWeightDep() + ");";
+                        "'," + doc.getTruck().getLicensePlate() + "," + doc.getOrigin() + ",'" + doc.getArea().toString() + "'," + doc.getTruckWeightDep() + ");";
                 st.executeUpdate(insert1);
 
                 Iterator itStore=doc.getDestinationStore().entrySet().iterator();
@@ -187,9 +187,9 @@ public class TransportDocDAL {
                     st.executeUpdate(insert2);
                 }
 
-                List<Triple<Product, Integer, Store>> l=doc.getProductList();
-                for (Triple<Product,Integer,Store> t: l) {
-                    String insert2 = "INSERT INTO TransportDocStoreProduct " + "VALUES (" + t.getFirst().getId() + "," + t.getThird().getId()+ "," + doc.getId()  +
+                List<Triple<Integer/*Product*/, Integer,Integer/* Store*/>> l=doc.getProductList();
+                for (Triple<Integer,Integer,Integer> t: l) {
+                    String insert2 = "INSERT INTO TransportDocStoreProduct " + "VALUES (" + t.getFirst() + "," + t.getThird()+ "," + doc.getId()  +
                             "," + t.getSecond() +  "," + doc.getVersion() +" );";
                     st.executeUpdate(insert2);
                 }

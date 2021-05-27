@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SupplierDAL {
-
+/*
     public static Supplier findSupplier(int supplierID) {
 
         Connection conn = null;
@@ -152,6 +152,6 @@ public class SupplierDAL {
         return stList;
     }
 
-
+*/
 }
 
