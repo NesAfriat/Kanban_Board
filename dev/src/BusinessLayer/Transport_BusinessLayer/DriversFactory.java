@@ -2,6 +2,7 @@ package BusinessLayer.Transport_BusinessLayer;
 
 import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
+import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
@@ -40,7 +41,7 @@ public class DriversFactory {
 
     }
 
-    public String getDriversWeekly(String date,List<License> license) throws ParseException {
+    public Tuple<String,List<Driver>> getDriversWeekly(String date,List<License> license) throws ParseException {
 
         //todo check what happens if get null response from
         List<Driver> output=new LinkedList<>();
@@ -54,9 +55,10 @@ public class DriversFactory {
 
             output = Stream.concat(output.stream(), getDrivers(date, 0, license).stream()).collect(Collectors.toList());
             output = Stream.concat(output.stream(), getDrivers(date, 1, license).stream()).collect(Collectors.toList());
-            if(!(output.isEmpty()))
-                return date;
-
+            if(!(output.isEmpty())) {
+                Tuple<String,List<Driver>> tupleDateDrivers = new Tuple<>(date,output);
+                return tupleDateDrivers;
+            }
             //move from sdf2 to sdf format
             Date dateTimeobj = sdf2.parse(date);
             String newdate = sdf.format(dateTimeobj);
@@ -74,6 +76,7 @@ public class DriversFactory {
             date = sdf2.format(c.getTime());
 
         }
+
 
         return null;
     }
