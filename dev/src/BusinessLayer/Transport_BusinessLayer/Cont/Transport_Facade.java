@@ -1,5 +1,6 @@
 package BusinessLayer.Transport_BusinessLayer.Cont;
 
+import BusinessLayer.DriversFactory;
 import BusinessLayer.Transport_BusinessLayer.Document.Triple;
 import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
@@ -260,10 +261,20 @@ public class Transport_Facade {
         docCont.approved(doc,true);
     }
     public String addTranportFromSupplier(int supplierId, HashMap<Integer,Integer> productAndAmount, String date) throws Exception {
-        int docId=docCont.addTranportFromSupplier(supplierId, productAndAmount);//add TranportFromSupplier Without DriversAndTrucks and dates return the doc id
-        //now need to check if in this date driver exist
-        
+
+        Tuple<String, List<Driver>> dateWithDriverList = driversController.getDateWithDriver(date);
+        if(dateWithDriverList==null){
+            return null;
+        }
+
+        int docId=docCont.addTranportFromSupplier(supplierId, productAndAmount,dateWithDriverList.x);//add TranportFromSupplier Without DriversAndTrucks and dates return the doc id
+
+
+
+
+        return dateWithDriverList.x;
     }
+
     /*public String getAllStores(){
 
         return buildListToString(controllerShops.getStoreList());

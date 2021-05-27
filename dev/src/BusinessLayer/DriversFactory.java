@@ -2,11 +2,13 @@ package BusinessLayer;
 
 import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
+import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 
 import javax.lang.model.UnknownEntityException;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +38,7 @@ public class DriversFactory {
         return driverList;
 
     }
-
+    public Tuple<String, List<Driver>> getDriversWeekly(String date, List<License> license) throws ParseException {return null;}
 
     public List<Driver> getDrivers(String date,int shift,List<License> license){
         List<Driver> output=new LinkedList<>();

@@ -23,7 +23,18 @@ public class DocCont {
     HashMap<Integer,TransportDoc> theTransportBible;
 
 
+    public List<TransportDoc> getUnapprovedDocs(){//returns all unapproved docs
+        List<Tuple<Integer,TransportDoc>> toFilter=convertHasMapToList(theTransportBible);
+        List<TransportDoc> unapprovedDos=new ArrayList<>();
+        for (Tuple<Integer,TransportDoc> tuple:toFilter) {
+            TransportDoc latestVersionDoc=getUpToDateDoc(tuple.y);
+            if(!latestVersionDoc.isApproved()){
+                unapprovedDos.add(latestVersionDoc);
+            }
+        }
 
+        return unapprovedDos;
+    }
 
 
 
@@ -238,7 +249,7 @@ public class DocCont {
         }
     }
 
-    public int addTranportFromSupplier(int supplierId, HashMap<Integer,Integer> productAndAmount) throws Exception {//add TranportFromSupplier Without DriversAndTrucks and dates return the doc id
+    public int addTranportFromSupplier(int supplierId, HashMap<Integer,Integer> productAndAmount,String date) throws Exception {//add TranportFromSupplier Without DriversAndTrucks and dates return the doc id
         int DeliveryID=newDelivery();
         addSupplier(DeliveryID, supplierId, 1);
         addStore(DeliveryID,Transport_Facade.theOneStoreId,2);
@@ -249,15 +260,18 @@ public class DocCont {
 
         setOrigin(DeliveryID, Transport_Facade.theOneStoreId);
 
+        setDepartureTime(DeliveryID,date);
+        setTranportDate(DeliveryID,date);
+
         return DeliveryID;
     }
 
-    private <T>List<Tuple<T,T>> convertHasMapToList(HashMap<T,T> hashMap){
-        List<Tuple<T,T>> output=new LinkedList<>();
+    private <T,S>List<Tuple<T,S>> convertHasMapToList(HashMap<T,S> hashMap){
+        List<Tuple<T,S>> output=new LinkedList<>();
         Iterator it = hashMap.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
-            output.add(new Tuple<>((T) pair.getKey(), (T)pair.getValue()));
+            output.add(new Tuple<>((T) pair.getKey(), (S)pair.getValue()));
         }
         return output;
     }
