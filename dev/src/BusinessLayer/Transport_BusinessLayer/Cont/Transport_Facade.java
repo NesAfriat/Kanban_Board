@@ -1,5 +1,6 @@
 package BusinessLayer.Transport_BusinessLayer.Cont;
 
+
 import BusinessLayer.Transport_BusinessLayer.Document.Triple;
 import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
@@ -303,7 +304,13 @@ public class Transport_Facade {
         }
 
         int docId=docCont.addTranportFromSupplier(supplierId, productAndAmount,dateWithDriverList.x);//add TranportFromSupplier Without DriversAndTrucks and dates return the doc id
-
+        for (Driver d : dateWithDriverList.y) {
+            List <Truck> truckList= driversController.getCompatibleTrucks(d);
+            Truck t= truckList.get(0);
+            docCont.addDriver(docId,d);
+            docCont.addTruck(docId, t);
+            break;
+        }
 
 
 

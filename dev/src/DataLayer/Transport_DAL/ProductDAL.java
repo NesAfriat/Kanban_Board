@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ProductDAL {
 
-
+/*
     public static Product findProduct (int prodId) throws SQLException {
         Connection conn = null;
         try{
@@ -111,6 +111,6 @@ public class ProductDAL {
         }
     }
 
-
+*/
 }
 
