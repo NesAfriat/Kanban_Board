@@ -35,6 +35,15 @@ public class DocCont {
 
         return unapprovedDos;
     }
+    public void approveAllTransports() throws Exception {
+        List<TransportDoc> unapproved =getUnapprovedDocs();
+        for (TransportDoc td: unapproved){
+            td.setApproved(true);
+        }
+    }
+    public void approveSingleTranposrt(int id) throws Exception {
+        theTransportBible.get(id).setApproved(true);
+    }
 
 
 

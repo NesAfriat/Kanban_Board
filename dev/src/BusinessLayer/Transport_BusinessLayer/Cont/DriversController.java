@@ -5,6 +5,7 @@ import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
 import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
 import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
+import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
 import BusinessLayer.Workers_Integration;
 import DataLayer.Transport_DAL.DALController;
 

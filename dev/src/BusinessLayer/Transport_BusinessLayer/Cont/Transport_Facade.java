@@ -1,6 +1,5 @@
 package BusinessLayer.Transport_BusinessLayer.Cont;
 
-import BusinessLayer.DriversFactory;
 import BusinessLayer.Transport_BusinessLayer.Document.Triple;
 import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
@@ -38,6 +37,42 @@ public class Transport_Facade {
         this.docCont = docCont;
        // this.controllerShops = controllerShops;
     }
+
+    /*
+    public List<TransportDoc> getUnapprovedDocs(){//returns all unapproved docs
+        List<Tuple<Integer,TransportDoc>> toFilter=convertHasMapToList(theTransportBible);
+        List<TransportDoc> unapprovedDos=new ArrayList<>();
+        for (Tuple<Integer,TransportDoc> tuple:toFilter) {
+            TransportDoc latestVersionDoc=getUpToDateDoc(tuple.y);
+            if(!latestVersionDoc.isApproved()){
+                unapprovedDos.add(latestVersionDoc);
+            }
+        }
+
+        return unapprovedDos;
+    }
+    public void approveAllTransports() throws Exception {
+        List<TransportDoc> unapproved =getUnapprovedDocs();
+        for (TransportDoc td: unapproved){
+            td.setApproved(true);
+        }
+    }
+    public void approveSingleTranposrt(int id) throws Exception {
+        theTransportBible.get(id).setApproved(true);
+    }
+     */
+    public String getUnapprovedDocs(){
+       return buildListToString(docCont.getUnapprovedDocs());
+    }
+
+    public void approveAllTransports() throws Exception {
+        docCont.approveAllTransports();
+    }
+
+    public void approveSingleTransports(int id) throws Exception {
+        docCont.approveSingleTranposrt(id);
+    }
+
     public int createNewDelivery() {
         return docCont.newDelivery();
     }
