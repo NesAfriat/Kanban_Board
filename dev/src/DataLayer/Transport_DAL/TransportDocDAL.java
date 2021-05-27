@@ -113,9 +113,9 @@ public class TransportDocDAL {
                         Triple<Integer, Integer, Integer> trp = new Triple<>(prodID,Amount,StoreID);
                         productList.add(trp);
                     }
-                            Collections.sort(allStops);
+                           Collections.sort(allStops);
                           TransportDoc td = new TransportDoc(id,TransDate, LeftOrigin,trk,drv,originStoreID,destinationStore,destinationSupplier, Area.A,truckWeightDep,productList, allStops,index);
-
+                          td.setVersion(index);
                           if(index==0)
                               theTransportBible.put(td.getId(),td);
 

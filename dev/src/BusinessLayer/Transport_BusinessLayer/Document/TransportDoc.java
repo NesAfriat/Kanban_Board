@@ -42,10 +42,12 @@ public class TransportDoc {
         return id;
     }
 
+
+
     public TransportDoc(int id, String transDate, String leftOrigin, Truck truck, Driver driver,
                         int origin, HashMap<Integer, Integer> destinationStore, HashMap<Integer,
                         Integer> destinationSupplier, Area area, double truckWeightDep,
-                        List<Triple<Integer, Integer, Integer>> productList,ArrayList<Integer >allStops,int version) {
+                        List<Triple<Integer, Integer, Integer>> productList, ArrayList<Integer >allStops, int version) {
         this.id = id;
         TransDate = transDate;
         LeftOrigin = leftOrigin;
@@ -192,6 +194,9 @@ public class TransportDoc {
             //    throw new Exception("wrong area\n");
         }
         allStops.add(place);
+    }
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public void addProduct(Triple<Integer, Integer, Integer> trip) {
