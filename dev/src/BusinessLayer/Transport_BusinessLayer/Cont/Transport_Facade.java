@@ -10,6 +10,7 @@ import BusinessLayer.Transport_BusinessLayer.Shops.*;
 import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
 import BusinessLayer.Workers_Integration;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,29 +40,8 @@ public class Transport_Facade {
        // this.controllerShops = controllerShops;
     }
 
-    /*
-    public List<TransportDoc> getUnapprovedDocs(){//returns all unapproved docs
-        List<Tuple<Integer,TransportDoc>> toFilter=convertHasMapToList(theTransportBible);
-        List<TransportDoc> unapprovedDos=new ArrayList<>();
-        for (Tuple<Integer,TransportDoc> tuple:toFilter) {
-            TransportDoc latestVersionDoc=getUpToDateDoc(tuple.y);
-            if(!latestVersionDoc.isApproved()){
-                unapprovedDos.add(latestVersionDoc);
-            }
-        }
 
-        return unapprovedDos;
-    }
-    public void approveAllTransports() throws Exception {
-        List<TransportDoc> unapproved =getUnapprovedDocs();
-        for (TransportDoc td: unapproved){
-            td.setApproved(true);
-        }
-    }
-    public void approveSingleTranposrt(int id) throws Exception {
-        theTransportBible.get(id).setApproved(true);
-    }
-     */
+
     public String getUnapprovedDocs(){
        return buildListToString(docCont.getUnapprovedDocs());
     }
@@ -296,8 +276,24 @@ public class Transport_Facade {
     public void ApproveDoc(int doc) throws Exception {
         docCont.approved(doc,true);
     }
-    public String addTranportFromSupplier(int supplierId, HashMap<Integer,Integer> productAndAmount, String date) throws Exception {
+    public String addTranportFromSupplierConstant(int supplierId, HashMap<Integer,Integer> productAndAmount) throws Exception {
+        Date date = Calendar.getInstance().getTime();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        //add 3 days
+        cal.add(Calendar.DATE,3);
+        date = cal.getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String strDate = dateFormat.format(date);
+        return addTranportFromSupplier(supplierId,productAndAmount,strDate);
 
+    }
+
+
+
+
+
+    public String addTranportFromSupplier(int supplierId, HashMap<Integer,Integer> productAndAmount, String date) throws Exception {
         Tuple<String, List<Driver>> dateWithDriverList = driversController.getDateWithDriver(date);
         if(dateWithDriverList==null){
             return null;
@@ -316,6 +312,10 @@ public class Transport_Facade {
 
         return dateWithDriverList.x;
     }
+    public void sendTransportToStock() {
+        docCont.sendTransportToStock();
+    }
+
 
     /*public String getAllStores(){
 
@@ -446,4 +446,6 @@ try {
 
 }
     }
+
+
 }

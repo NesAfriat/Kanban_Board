@@ -42,7 +42,6 @@ public class Main_Menu {
                 "0000  0000  0     0000  0  0              0000 0000  0000" + '\n');
         System.out.println("----------------------------------------------------------" + '\n');
         System.out.println("Welcome to Super-Lee system!");
-
         boolean run = true;
         while (run) {
             System.out.println("1) Enter workers manage system");

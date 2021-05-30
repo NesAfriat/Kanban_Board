@@ -30,6 +30,7 @@ public class Transport_Menu {
             loadData();
         boolean run = true;
         while(run){
+            bc.sendTransportToStock();
             run = runProgram();
         }
     }

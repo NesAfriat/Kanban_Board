@@ -1,5 +1,6 @@
 package BusinessLayer.Transport_BusinessLayer.Cont;
 
+import BusinessLayer.ProductManager;
 import BusinessLayer.Transport_BusinessLayer.Document.TransportDoc;
 import BusinessLayer.Transport_BusinessLayer.Document.Triple;
 import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
@@ -14,6 +15,8 @@ import DataLayer.Transport_DAL.ProductDAL;
 import DataLayer.Transport_DAL.TransportDocDAL;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,7 +24,35 @@ public class DocCont {
 
 
     HashMap<Integer,TransportDoc> theTransportBible;
+    ProductManager pm;
 
+
+    public void sendTransportToStock() {
+        Iterator iter = theTransportBible.entrySet().iterator();
+        Date date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        String today = dateFormat.format(date);
+        while(iter.hasNext()){
+            Map.Entry pair = (Map.Entry)iter.next();
+            TransportDoc td = (TransportDoc) pair.getValue();
+            String tdDate = td.getTransDate();
+
+            // turn triple into hash map, the supplier is with id 1 in the hashmap.
+            if(today.equals(tdDate)) {
+               // pm.recieveShipment(tripleToHashMap(td.getProductList()), td.getDestinationSupplier().get(1));
+            }
+        }
+
+    }
+
+    public HashMap<Integer, Integer> tripleToHashMap(List<Triple<Integer,Integer,Integer>> lt) {
+        HashMap <Integer,Integer> ret= new HashMap<>();
+        for(Triple <Integer,Integer,Integer> trp: lt)
+        {
+            ret.put(trp.getFirst(),trp.getSecond());
+        }
+        return ret;
+    }
 
     public List<TransportDoc> getUnapprovedDocs(){//returns all unapproved docs
         List<Tuple<Integer,TransportDoc>> toFilter=convertHasMapToList(theTransportBible);
@@ -275,6 +306,10 @@ public class DocCont {
         return DeliveryID;
     }
 
+
+
+
+
     private <T,S>List<Tuple<T,S>> convertHasMapToList(HashMap<T,S> hashMap){
         List<Tuple<T,S>> output=new LinkedList<>();
         Iterator it = hashMap.entrySet().iterator();
@@ -291,4 +326,6 @@ public class DocCont {
         }
         return output;
     }
+
+
 }
