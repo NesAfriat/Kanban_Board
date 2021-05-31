@@ -294,6 +294,11 @@ public class Transport_Facade {
 
 
     public String addTranportFromSupplier(int supplierId, HashMap<Integer,Integer> productAndAmount, String date) throws Exception {
+        List<License> a = new LinkedList();
+        a.add(License.typeA);
+        a.add(License.typeB);
+        a.add(License.typeC);
+        driversController.getDrivers(date, 0,a);
         Tuple<String, List<Driver>> dateWithDriverList = driversController.getDateWithDriver(date);
         if(dateWithDriverList==null){
             return null;
@@ -302,10 +307,12 @@ public class Transport_Facade {
         int docId=docCont.addTranportFromSupplier(supplierId, productAndAmount,dateWithDriverList.x);//add TranportFromSupplier Without DriversAndTrucks and dates return the doc id
         for (Driver d : dateWithDriverList.y) {
             List <Truck> truckList= driversController.getCompatibleTrucks(d);
-            Truck t= truckList.get(0);
-            docCont.addDriver(docId,d);
-            docCont.addTruck(docId, t);
-            break;
+            if(!truckList.isEmpty()) {
+                Truck t = truckList.get(0);
+                docCont.addDriver(docId, d);
+                docCont.addTruck(docId, t);
+                break;
+            }
         }
 
 

@@ -38,7 +38,7 @@ public class DriversController {
         licenses.add(License.typeA);
         licenses.add(License.typeB);
         licenses.add(License.typeC);
-        licenses.add(License.typeD);
+
         return DriversFac.getDriversWeekly(date,licenses);
     }
 

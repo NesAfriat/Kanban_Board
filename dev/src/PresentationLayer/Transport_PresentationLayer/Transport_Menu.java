@@ -5,6 +5,7 @@ import BusinessLayer.Workers_Integration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Transport_Menu {
@@ -25,11 +26,22 @@ public class Transport_Menu {
         firstRun=false;
     }
 
-    public void mainMenu(){
+    public void mainMenu() {
         if(!firstRun)
             loadData();
         boolean run = true;
         while(run){
+           /* HashMap<Integer,Integer>hm = new HashMap<>();
+            hm.put(1,3);
+            hm.put(2,1);
+            hm.put(3,2);
+            try {
+                bc.addTranportFromSupplier(1, hm, "10/05/2021");
+            }catch (Exception e)
+            {
+                System.out.println(e.toString());
+            }*/
+
             bc.sendTransportToStock();
             run = runProgram();
         }
@@ -187,7 +199,7 @@ public class Transport_Menu {
 
                 try {
                     bc.approveAllTransports();
-                    print("great success");
+                    print("great success\n");
                 } catch (Exception e) {
                     print("At least one transport isn't full, action failed\n");
                 }
@@ -199,7 +211,7 @@ public class Transport_Menu {
 
                 try {
                     bc.approveSingleTransports(a);
-                    print("great success");
+                    print("great success\n");
                 } catch (Exception e) {
                     print("the transport isn't full, action failed\n");
                 }

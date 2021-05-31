@@ -74,7 +74,7 @@ public class TransportDoc {
     }
 
     public void setApproved(boolean approved) throws Exception {
-        if (truck!=null&&driver!=null&&origin!=-2147483648&&TransDate!=null&&LeftOrigin!=null&&truckWeightDep!=-1) {
+        if (truck!=null&&driver!=null&&origin!=-2147483648&&TransDate!=null&&LeftOrigin!=null) {
             this.approved = approved;
         }
         else{
