@@ -158,11 +158,12 @@ public class GeneralProduct {
     public LinkedList<Integer> addItems(Integer quantity, String location, Date supplied_date, Date creation_date, Date expiration_date) {
         LinkedList<Integer> itemsAdded = new LinkedList<>();
         for (int i = 0; i < quantity; i++) {
+            item_id++;
             Item item = new Item(item_id, product_id, location, supplied_date, creation_date, expiration_date);
             addItemToGP(item);
             items.add(item);
             itemsAdded.add(item.getItem_id());
-            item_id++;
+
         }
         if (location.equals("storage")) {
             addAmount_storage(quantity);
