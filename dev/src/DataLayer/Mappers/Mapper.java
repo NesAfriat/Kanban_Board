@@ -26,4 +26,5 @@ public abstract class Mapper {
 
     abstract void create_table();
 
+
 }

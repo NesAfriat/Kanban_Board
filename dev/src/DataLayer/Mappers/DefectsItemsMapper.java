@@ -56,9 +56,8 @@ public class DefectsItemsMapper extends Mapper{
                     int iID = rs.getInt(2);
                     String location = rs.getString(3);
                     String sup_date = rs.getString(4);
-                    String create_date = rs.getString(5);
-                    String exp_date = rs.getString(6);
-                   obj = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
+                    String exp_date = rs.getString(5);
+                   obj = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(exp_date));
                 }
             } catch (SQLException | ParseException e) {
                 e.printStackTrace();
@@ -73,17 +72,16 @@ public class DefectsItemsMapper extends Mapper{
     public boolean update(Item item) {
         boolean updated = false;
         try (Connection conn = connect()) {
-            String statement = "UPDATE DefectsItems SET gpID=?, iID=?, location=?, supplied_date=?, creation_date=?, expiration_date=? WHERE gpID=? AND iID=? ";
+            String statement = "UPDATE DefectsItems SET gpID=?, iID=?, location=?, supplied_date=?, expiration_date=? WHERE gpID=? AND iID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, item.getProduct_id());
                 pstmt.setInt(2, item.getItem_id());
                 pstmt.setString(3, item.getLocation());
                 pstmt.setString(4, getDate(item.getSupplied_date()));
-                pstmt.setString(5, getDate(item.getCreation_date()));
-                pstmt.setString(6, getDate(item.getExpiration_date()));
-                pstmt.setInt(7, item.getProduct_id());
-                pstmt.setInt(8, item.getItem_id());
+                pstmt.setString(5, getDate(item.getExpiration_date()));
+                pstmt.setInt(6, item.getProduct_id());
+                pstmt.setInt(7, item.getItem_id());
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -124,8 +122,7 @@ public class DefectsItemsMapper extends Mapper{
                 pstmt.setInt(2, item.getItem_id());
                 pstmt.setString(3, item.getLocation());
                 pstmt.setString(4, getDate(item.getSupplied_date()));
-                pstmt.setString(5, getDate(item.getCreation_date()));
-                pstmt.setString(6, getDate(item.getExpiration_date()));
+                pstmt.setString(5, getDate(item.getExpiration_date()));
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -149,9 +146,8 @@ public class DefectsItemsMapper extends Mapper{
                     int iID = rs.getInt(2);
                     String location = rs.getString(3);
                     String sup_date = rs.getString(4);
-                    String create_date = rs.getString(5);
-                    String exp_date = rs.getString(6);
-                    Item item = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
+                    String exp_date = rs.getString(5);
+                    Item item = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(exp_date));
                     obj.add(item);
                 }
             } catch (SQLException | ParseException e) {

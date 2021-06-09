@@ -216,4 +216,27 @@ public class SuppliersProductsMapper extends Mapper {
         return obj;
 
     }
+
+    //written by stock
+    public int get_gpId(int catalogID, int supID)
+    {
+        int gpID = -1;
+        try (Connection conn = connect()) {
+            String statement = "SELECT (gpID) FROM SuppliersProducts WHERE supID=? AND catalogID=?";
+
+            try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
+                pstmt.setInt(1, supID);
+                pstmt.setInt(2, catalogID);
+                ResultSet rs = pstmt.executeQuery();
+                if(rs.next()){
+                    gpID=rs.getInt(1);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return gpID;
+    }
 }

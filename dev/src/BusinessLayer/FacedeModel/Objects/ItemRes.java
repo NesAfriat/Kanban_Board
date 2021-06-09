@@ -18,7 +18,6 @@ public class ItemRes {
         this.product_id = item.getProduct_id();
         this.location = item.getLocation();
         this.supplied_date = getDate(item.getSupplied_date());
-        this.creation_date = getDate(item.getCreation_date());
         this.expiration_date = getDate(item.getExpiration_date());
     }
 

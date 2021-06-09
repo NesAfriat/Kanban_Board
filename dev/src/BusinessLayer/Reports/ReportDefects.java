@@ -37,17 +37,18 @@ public class ReportDefects implements Report {
     @Override
     public void createReport() throws Exception {
         Stock_Controller st_c = Stock_Controller.getInstance(null);
-        List<Item> items = st_c.get_defected_items(); //TODO: send categories
+        List<Item> items = st_c.get_defected_items();
         List<GeneralProduct> products;
         for (Item item : items) {
             for (String cat : this.categories) {
-                products = st_c.get_category_products(cat);  //TODO: pointless
+                products = st_c.get_category_products(cat);
                 for (GeneralProduct p : products)
                     if (item.getProduct_id().equals(p.getProduct_id()) && relevantToTimeRange(item.getExpiration_date()))
-                        this.report_data = this.report_data +'\n' +item;
+                        this.report_data = this.report_data + '\n' + item;
             }
         }
     }
+
 
     private boolean relevantToTimeRange(Date expiration_date) {
         switch (timeRange) {

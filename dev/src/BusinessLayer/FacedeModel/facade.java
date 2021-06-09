@@ -87,8 +87,8 @@ private facade(){
 
     }
 
-    public Response add_product_items(Integer product_id, Integer quantity, String location, String supplied_date, String creation_date, String expiration_date) {
-        return inventModel.add_product_items(product_id,quantity,location,supplied_date,creation_date,expiration_date);
+    public Response add_product_items(Integer product_id, Integer quantity, String location, String supplied_date, String expiration_date) {
+        return inventModel.add_product_items(product_id,quantity,location,supplied_date,expiration_date);
 
     }
     //needed to chang to Response

@@ -186,11 +186,9 @@ public class inventPresentation {
                         String loc = reader.readLine().trim().toLowerCase();
                         System.out.println("please type the supplied date (YYYY-MM-DD)");
                         String sup_date = reader.readLine().trim().toLowerCase();
-                        System.out.println("please type the creation date (YYYY-MM-DD)");
-                        String cre_date = reader.readLine().trim().toLowerCase();
                         System.out.println("please type the expiration date (YYYY-MM-DD)");
                         String exp_date = reader.readLine().trim().toLowerCase();
-                        res = Facade.add_product_items(product_id, quantity, loc, sup_date, cre_date, exp_date);
+                        res = Facade.add_product_items(product_id, quantity, loc, sup_date, exp_date);
                         if (check_action(res))
                             System.out.println(res.print());
                         break;

@@ -180,10 +180,10 @@ public class inventModel {
      * @param expiration_date
      * @return
      */
-    public Response add_product_items(Integer product_id, Integer quantity, String location, String supplied_date, String creation_date, String expiration_date) {
+    public Response add_product_items(Integer product_id, Integer quantity, String location, String supplied_date, String expiration_date) {
         ResponseT<LinkedList<Integer>> res;
         try {
-            LinkedList<Integer> itemsIds = stock_controller.addItems(product_id, quantity, location, getDate(supplied_date), getDate(creation_date), getDate(expiration_date));
+            LinkedList<Integer> itemsIds = stock_controller.addItems(product_id, quantity, location, getDate(supplied_date), getDate(expiration_date));
             res = new ResponseT<>(itemsIds);
         } catch (Exception e) {
             res = new ResponseT<>(e.getMessage());

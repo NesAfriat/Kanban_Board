@@ -44,11 +44,10 @@ public class Stock {
      * @param quantity
      * @param location
      * @param supplied_date
-     * @param creation_date
      * @param expiration_date
      */
-    public LinkedList<Integer> addItems(Integer product_id, Integer quantity, String location, Date supplied_date, Date creation_date, Date expiration_date) throws Exception {
-        return this.productManager.addItems(product_id, quantity, location, supplied_date, creation_date, expiration_date);
+    public LinkedList<Integer> addItems(Integer product_id, Integer quantity, String location, Date supplied_date, Date expiration_date) throws Exception {
+        return this.productManager.addItems(product_id, quantity, location, supplied_date, expiration_date);
     }
 
     /**

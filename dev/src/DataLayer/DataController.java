@@ -395,7 +395,9 @@ public class DataController {
         }
         return agreementList;
     }
-
+    public int get_gpId_from_Suppliers(int catalogID, int supID) {
+        return suppliersProductsMapper.get_gpId(catalogID, supID); //SupplierProducts
+    }
     //If we want to make entire new record of an item
     public boolean insertAgreement(Agreement a) {
         return agreementsMapper.insertAgreement(a);
@@ -518,4 +520,6 @@ public class DataController {
         int order=orderProductsMapper.getOrderIdCounterBigest();
         return order;
     }
+
+
 }

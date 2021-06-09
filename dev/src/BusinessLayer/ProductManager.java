@@ -2,9 +2,13 @@ package BusinessLayer;
 
 import DataLayer.DataController;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Scanner;
 
 public class ProductManager {
     private boolean loadCategories;
@@ -148,14 +152,13 @@ public class ProductManager {
      * @param quantity
      * @param location
      * @param supplied_date
-     * @param creation_date
      * @param expiration_date
      */
-    public LinkedList<Integer> addItems(Integer product_id, Integer quantity, String location, Date supplied_date, Date creation_date, Date expiration_date) throws Exception {
+    public LinkedList<Integer> addItems(Integer product_id, Integer quantity, String location, Date supplied_date, Date expiration_date) throws Exception {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product does not exist!");
         }
-        return products.get(product_id).addItems(quantity, location, supplied_date, creation_date, expiration_date);
+        return products.get(product_id).addItems(quantity, location, supplied_date, expiration_date);
     }
 
     /**
@@ -401,6 +404,32 @@ public class ProductManager {
         }
         products.get(generalId).addSupplierProduct(productSupplier);
     }
+    //=========================================
+    //Transport-integration
+    public void receiveShipment(int catalogID,int supID, int quantity,Date exp_date) {
+        int gpID = getProductIdFromDB(catalogID, supID);
+        GeneralProduct gp=null;
+        int badItems=0;
+        String location="";
+        try {
+            gp= get_product(gpID);
+            System.out.println("Please enter the defected items amount of the product's quantity");
+            BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+            badItems = Integer.parseInt(bf.readLine());
+            System.out.println("please type the location which the items are stored (<storage>\\<store_number_letter>): ");
+            location = bf.readLine().trim().toLowerCase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        gp.addItems(quantity-badItems,location,new Date(),exp_date);
+    }
+
+
+
+
+
     //=================================
     //Data Fucntions
     private void loadAllCategories() {
@@ -617,5 +646,15 @@ public class ProductManager {
             products.put(generalProduct.getProduct_id(),generalProduct);
             im.addGeneralProduct(generalProduct);
         }
+    }
+
+    public int getProductIdFromDB(int catalogID,int supID){
+        DataController dc = DataController.getInstance();
+        int gpId;
+        gpId=dc.get_gpId_from_Suppliers(catalogID,supID);
+        //TODO: delete check after tests
+            if (gpId==-1)
+            System.out.println("failed getting gpID by supplier with supdID="+supID+"catalogID="+catalogID);
+             return gpId;
     }
 }

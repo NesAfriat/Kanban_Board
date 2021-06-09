@@ -36,12 +36,10 @@ public class Stock_Controller {
         }
     }
 
-    private void check_valid_Dates(Date supplied, Date create, Date exp) throws Exception {
+    private void check_valid_Dates(Date supplied, Date exp) throws Exception {
         Date now = new Date();
-        if (supplied.after(now) || create.after(now))
+        if (supplied.after(now))
             throw new Exception("supplied date / create date can't be after today");
-        if (create.after(supplied))
-            throw new Exception("create date can't be after supplied date");
         if (exp.before(now))
             throw new Exception("expiration date can't be before today");
     }
@@ -84,12 +82,12 @@ public class Stock_Controller {
 
 
     public LinkedList<Integer> addItems(Integer product_id, Integer quantity, String location, Date
-            supplied_date, Date creation_date, Date expiration_date) throws Exception {
+            supplied_date, Date expiration_date) throws Exception {
         check_valid_string(new String[]{location});
         check_valid_location(location);
         check_valid_number(new Number[]{product_id, quantity});
-        check_valid_Dates(supplied_date, creation_date, expiration_date);
-        return stock.addItems(product_id, quantity, location, supplied_date, creation_date, expiration_date);
+        check_valid_Dates(supplied_date, expiration_date);
+        return stock.addItems(product_id, quantity, location, supplied_date, expiration_date);
     }
 
     public void update_location(Integer item_id, Integer product_id, String new_location) throws Exception {

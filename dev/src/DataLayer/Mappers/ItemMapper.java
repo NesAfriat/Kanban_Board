@@ -25,7 +25,6 @@ public class ItemMapper extends Mapper {
                 "\tiID INTEGER,\n" +
                 "\tlocation TEXT,\n" +
                 "\tsupplied_date TEXT,\n" +
-                "\tcreation_date TEXT,\n" +
                 "\texpiration_date TEXT,\n" +
                 "\tPRIMARY KEY (gpID, iID),\n" +
                 "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)\n" +
@@ -57,9 +56,8 @@ public class ItemMapper extends Mapper {
                     int iID = rs.getInt(2);
                     String location = rs.getString(3);
                     String sup_date = rs.getString(4);
-                    String create_date = rs.getString(5);
-                    String exp_date = rs.getString(6);
-                    obj = new Item(gpID, iID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
+                    String exp_date = rs.getString(5);
+                    obj = new Item(gpID, iID, location, DataController.getDate(sup_date), DataController.getDate(exp_date));
                 }
             } catch (SQLException | ParseException e) {
                 e.printStackTrace();
@@ -73,17 +71,16 @@ public class ItemMapper extends Mapper {
     public boolean update(Item item) {
         boolean updated = false;
         try (Connection conn = connect()) {
-            String statement = "UPDATE Items SET gpID=?, iID=?, location=?, supplied_date=?, creation_date=?, expiration_date=? WHERE gpID=? AND iID=? ";
+            String statement = "UPDATE Items SET gpID=?, iID=?, location=?, supplied_date=?, expiration_date=? WHERE gpID=? AND iID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, item.getProduct_id());
                 pstmt.setInt(2, item.getItem_id());
                 pstmt.setString(3, item.getLocation());
                 pstmt.setString(4, DataController.getDate(item.getSupplied_date()));
-                pstmt.setString(5, DataController.getDate(item.getCreation_date()));
-                pstmt.setString(6, DataController.getDate(item.getExpiration_date()));
-                pstmt.setInt(7, item.getProduct_id());
-                pstmt.setInt(8, item.getItem_id());
+                pstmt.setString(5, DataController.getDate(item.getExpiration_date()));
+                pstmt.setInt(6, item.getProduct_id());
+                pstmt.setInt(7, item.getItem_id());
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -116,7 +113,7 @@ public class ItemMapper extends Mapper {
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
-            String statement = "INSERT OR IGNORE INTO Items (gpID, iID, location, supplied_date, creation_date, expiration_date) " +
+            String statement = "INSERT OR IGNORE INTO Items (gpID, iID, location, supplied_date, expiration_date) " +
                     "VALUES (?,?,?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
@@ -124,8 +121,7 @@ public class ItemMapper extends Mapper {
                 pstmt.setInt(2, item.getItem_id());
                 pstmt.setString(3, item.getLocation());
                 pstmt.setString(4, DataController.getDate(item.getSupplied_date()));
-                pstmt.setString(5, DataController.getDate(item.getCreation_date()));
-                pstmt.setString(6, DataController.getDate(item.getExpiration_date()));
+                pstmt.setString(5, DataController.getDate(item.getExpiration_date()));
                 output = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -150,9 +146,8 @@ public class ItemMapper extends Mapper {
                     int iID = rs.getInt(2);
                     String location = rs.getString(3);
                     String sup_date = rs.getString(4);
-                    String create_date = rs.getString(5);
-                    String exp_date = rs.getString(6);
-                    Item toAdd = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(create_date), DataController.getDate(exp_date));
+                    String exp_date = rs.getString(5);
+                    Item toAdd = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(exp_date));
                     gp.addItem(toAdd);
                     output.add(toAdd);
                 }
