@@ -72,7 +72,7 @@ public class ProductManager {
         } else if (!isCategory_in_Categories(cat)) {
             throw new Exception("category doesn't exist");
         } else {
-            product = new GeneralProduct(product_name, product_id, manufacturer_name, min_amount, selling_price, productSupplier);
+            product = new GeneralProduct(product_name, product_id, manufacturer_name, min_amount, selling_price, productSupplier); //TODO: no persistency for holding supplierProduct
             addGPPersistence(product, cat);
             categories.get(getCategory(cat)).add(product);
             products.put(product_id, product);
@@ -298,7 +298,7 @@ public class ProductManager {
         }
         return output;
     }
-    public LinkedList<GeneralProduct> get_missing_products() { //DONE
+    public LinkedList<GeneralProduct> get_missing_products() { //TODO: more sophisticated function
         LinkedList<GeneralProduct> output = new LinkedList<>();
         if(!loadProducts){
             loadAllProducts();

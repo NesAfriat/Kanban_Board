@@ -36,7 +36,7 @@ public class ReportMissing implements Report {
     @Override
     public void createReport() throws Exception {
         Stock_Controller st_c = Stock_Controller.getInstance(null);
-        List<GeneralProduct> missing_products = st_c.get_missing_products();
+        List<GeneralProduct> missing_products = st_c.get_missing_products(); //TODO: send categories
         List<GeneralProduct> catProducts;
         for (GeneralProduct mp : missing_products) {
             for (String cat : this.categories) {
