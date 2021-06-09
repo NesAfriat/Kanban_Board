@@ -297,7 +297,7 @@ public class DocCont {
                 convertProductAndAmountToProductAndAmountAndStore(convertHasMapToList(productAndAmount))) {
             addProducts(DeliveryID,t);
         }
-
+        //theTransportBible.get(DeliveryID).setTruckWeightDep(0);
         setOrigin(DeliveryID, Transport_Facade.theOneStoreId);
 
         setDepartureTime(DeliveryID,date);
