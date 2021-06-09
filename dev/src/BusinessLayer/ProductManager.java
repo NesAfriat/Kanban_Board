@@ -158,6 +158,8 @@ public class ProductManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product does not exist!");
         }
+
+        get_product(product_id);
         return products.get(product_id).addItems(quantity, location, supplied_date, expiration_date);
     }
 
@@ -172,6 +174,7 @@ public class ProductManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesn't exist");
         }
+        get_product(product_id);
         products.get(product_id).setItem_location(item_id, new_location);
     }
 
@@ -257,8 +260,8 @@ public class ProductManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist!");
         }
-        GeneralProduct gp= get_product(product_id);
-        gp.removeItem(item_id);
+        get_product(product_id);
+        products.get(product_id).removeItem(item_id);
 
     }
 
@@ -267,6 +270,7 @@ public class ProductManager {
             throw new Exception("product doesnt exist");
         }
         check_valid_amount(min_amount);
+        get_product(product_id);
         products.get(product_id).setMin_amount(min_amount);
     }
 
@@ -361,6 +365,7 @@ public class ProductManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist!");
         }
+        get_product(product_id);
         products.get(product_id).setSelling_price(price);
     }
 
@@ -368,6 +373,7 @@ public class ProductManager {
         if (!isProduct_in_Products(product_id)) {
             throw new Exception("product doesnt exist!");
         }
+        get_product(product_id);
         return products.get(product_id).get_items();
     }
 
