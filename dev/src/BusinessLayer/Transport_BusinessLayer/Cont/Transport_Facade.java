@@ -19,6 +19,7 @@ public class Transport_Facade {
     static int theOneStoreId=1;
     private DriversController driversController;
     private DocCont docCont;
+    private Workers_Integration wk;
     //private ControllerShops controllerShops;
 
     public Transport_Facade() {
@@ -28,6 +29,7 @@ public class Transport_Facade {
         // init data base
     }
     public void addWorkersInterface(Workers_Integration wk ){
+        this.wk=wk;
         driversController.addWorkersInterface(wk);
 
     }
@@ -276,7 +278,7 @@ public class Transport_Facade {
     public void ApproveDoc(int doc) throws Exception {
         docCont.approved(doc,true);
     }
-    public String addTranportFromSupplierConstant(int supplierId, HashMap<Integer,Integer> productAndAmount) throws Exception {
+    public String addTranportFromSupplierConstant(int orderID,int supplierId, HashMap<Integer,Integer> productAndAmount) throws Exception {
         Date date = Calendar.getInstance().getTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -285,7 +287,7 @@ public class Transport_Facade {
         date = cal.getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = dateFormat.format(date);
-        return addTranportFromSupplier(supplierId,productAndAmount,strDate);
+        return addTranportFromSupplier(orderID,supplierId,productAndAmount,strDate);
 
     }
 
@@ -293,7 +295,7 @@ public class Transport_Facade {
 
 
 
-    public String addTranportFromSupplier(int supplierId, HashMap<Integer,Integer> productAndAmount, String date) throws Exception {
+    public String addTranportFromSupplier(int orderID, int supplierId, HashMap<Integer,Integer> productAndAmount, String date) throws Exception {
         List<License> a = new LinkedList();
         a.add(License.typeA);
         a.add(License.typeB);
@@ -301,6 +303,9 @@ public class Transport_Facade {
         driversController.getDrivers(date, 0,a);
         Tuple<String, List<Driver>> dateWithDriverList = driversController.getDateWithDriver(date);
         if(dateWithDriverList==null){
+            //tell workers to add a driver + storekeeper;
+            //todo delete comment after workers add the function
+           // wk.addRequest(orderID,date);
             return null;
         }
 
