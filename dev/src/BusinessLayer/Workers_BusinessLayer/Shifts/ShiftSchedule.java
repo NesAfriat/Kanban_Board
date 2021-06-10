@@ -151,16 +151,23 @@ public class ShiftSchedule {
     }
 
     public void  addRequest(int OrderID, String date) throws InnerLogicException {
+        boolean canAdd = true;
         for (Pair pair: requestList) {
             if((Integer)pair.getKey() == OrderID){
-                if(WorkersUtils.dateDifferenceGreaterThen7((String)pair.getValue(), date)){
-                    requestList.add(new Pair<>(OrderID, date));
-                    //TODO add to DB
+                if(!WorkersUtils.dateDifferenceGreaterThen7((String)pair.getValue(), date)){
+                    canAdd = false;
                 }
-                else{
-                    throw new InnerLogicException("this Request is already in the system");
+                if(!WorkersUtils.dateDifferenceGreaterThen7(date, (String)pair.getValue())){
+                    canAdd = false;
                 }
             }
+        }
+        if(canAdd){
+            requestList.add(new Pair<>(OrderID, date));
+            //TODO add to DB
+        }
+        else{
+            throw new InnerLogicException("this Request is already in the system");
         }
     }
 
@@ -173,10 +180,19 @@ public class ShiftSchedule {
                 break;
             }
         }
-        requestList.remove(toRemove);
-        //TODO remove from DB
+        if(toRemove != null){
+            requestList.remove(toRemove);
+            //TODO remove from DB
+        }
+        else{
+            throw new InnerLogicException("this Request is not in the system");
+        }
+
     }
 
+    public List<Pair<Integer, String>>  getRequests() throws InnerLogicException {
+           return new LinkedList<>(requestList);
+    }
 
     private class DefaultWorkDayHolder{
 
@@ -228,7 +244,6 @@ public class ShiftSchedule {
                 }
             }
         }
-
 
         private void setDefaultJobInShift(int dayOfTheWeek, ShiftType shiftType, Job job, int amount) throws InnerLogicException {
             if (job == Job.Shift_Manager){
