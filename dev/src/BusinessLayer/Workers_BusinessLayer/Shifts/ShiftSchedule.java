@@ -184,7 +184,7 @@ public class ShiftSchedule {
         static final int saturdayEvening = 5;
         static final int DEFAULT_SHIFT_MANAGER_AMOUNT = 1;
 
-
+        private WorkerDataController workerDataController = new WorkerDataController();
         private final Map<Job, int[]> defaultShiftSetup;
         private final boolean[][] defaultWorkDaySetup;
         private DefaultWorkDayHolder(){
