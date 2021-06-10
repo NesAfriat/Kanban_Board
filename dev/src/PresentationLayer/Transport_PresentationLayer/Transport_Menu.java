@@ -31,16 +31,16 @@ public class Transport_Menu {
             loadData();
         boolean run = true;
         while(run){
-           /* HashMap<Integer,Integer>hm = new HashMap<>();
+            HashMap<Integer,Integer>hm = new HashMap<>();
             hm.put(1,3);
             hm.put(2,1);
             hm.put(3,2);
             try {
-                bc.addTranportFromSupplier(1, hm, "10/05/2021");
+                bc.addTranportFromSupplier(2,2, hm, "10/05/2021");
             }catch (Exception e)
             {
                 System.out.println(e.toString());
-            }*/
+            }
 
             bc.sendTransportToStock();
             run = runProgram();
@@ -220,7 +220,11 @@ public class Transport_Menu {
             case 15:
                 print("please enter the doc ID you would like to save, it will only save if all fields are full\n");
                 a = sc.nextInt();
-                bc.saveDoc(a);
+                try {
+                    bc.saveDoc(a);
+                } catch (Exception e) {
+                    print(e.toString()+"\n");
+                }
                 break;
             case 16:
                 return false;

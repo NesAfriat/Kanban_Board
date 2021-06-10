@@ -32,18 +32,21 @@ public class DocCont {
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String today = dateFormat.format(date);
-        while(iter.hasNext()){
-            Map.Entry pair = (Map.Entry)iter.next();
+        while (iter.hasNext()) {
+            Map.Entry pair = (Map.Entry) iter.next();
             TransportDoc td = (TransportDoc) pair.getValue();
             String tdDate = td.getTransDate();
 
             // turn triple into hash map, the supplier is with id 1 in the hashmap.
-            if(today.equals(tdDate)) {
-               // pm.recieveShipment(tripleToHashMap(td.getProductList()), td.getDestinationSupplier().get(1));
+            if (today.equals(tdDate)) {
+                for (Triple<Integer, Integer, Integer> item : theTransportBible.get(td).getProductList()) {
+                    //pm.recieveShipment(item.getFirst(), td.getDestinationSupplier().get(1),item.getSecond());
+                }
             }
         }
-
     }
+
+
 
     public HashMap<Integer, Integer> tripleToHashMap(List<Triple<Integer,Integer,Integer>> lt) {
         HashMap <Integer,Integer> ret= new HashMap<>();
@@ -275,8 +278,13 @@ public class DocCont {
     }
 
 
-    public void save(int DocId){
-        DALController con=DALController.getInstance();
+    public void save(int DocId) throws Exception {
+        TransportDoc t= getDoc(DocId);
+            if(! t.isApproved()){
+                throw new Exception("the doc have to be aproved before save");
+            }
+
+                DALController con=DALController.getInstance();
         con.tra.saveDoc(theTransportBible.get(DocId));
     }
     public void load() throws Exception {

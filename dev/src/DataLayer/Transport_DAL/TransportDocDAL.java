@@ -170,15 +170,15 @@ public class TransportDocDAL {
                 Iterator itStore=doc.getDestinationStore().entrySet().iterator();
                 while(itStore.hasNext()) {
                     Map.Entry pair =(Map.Entry)itStore.next();
-                    String insert2 = "INSERT INTO TransportStopStores " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + ((Store)pair.getValue()).getId()  +
+                    String insert2 = "INSERT INTO TransportStopStores " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + (int)pair.getValue()  +
                             "," + doc.getVersion() + ");";
                     st.executeUpdate(insert2);
                 }
 
-                Iterator itSupplier=doc.getDestinationStore().entrySet().iterator();
+                Iterator itSupplier=doc.getDestinationSupplier().entrySet().iterator();
                 while(itSupplier.hasNext()) {
                     Map.Entry pair =(Map.Entry)itSupplier.next();
-                    String insert2 = "INSERT INTO TransportStopSupplier " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + ((Store)pair.getValue()).getId()  +
+                    String insert2 = "INSERT INTO TransportStopSupplier " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + (int)pair.getValue()  +
                             "," + doc.getVersion() + ");";
                     st.executeUpdate(insert2);
                 }

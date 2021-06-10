@@ -33,7 +33,7 @@ public class Transport_Facade {
         driversController.addWorkersInterface(wk);
 
     }
-    public void saveDoc(int docId){
+    public void saveDoc(int docId) throws Exception {
         docCont.save(docId);
     }
     public Transport_Facade(DriversController driversController, DocCont docCont, ControllerShops controllerShops) {
