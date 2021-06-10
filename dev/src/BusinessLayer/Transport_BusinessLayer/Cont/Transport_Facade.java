@@ -7,6 +7,7 @@ import BusinessLayer.Transport_BusinessLayer.Drives.License;
 import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
 import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
 import BusinessLayer.Transport_BusinessLayer.Shops.*;
+import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
 import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
 import BusinessLayer.Workers_Integration;
 
@@ -15,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Transport_Facade {
+public class Transport_Facade implements Transport_Integration {
     static int theOneStoreId=1;
     private DriversController driversController;
     private DocCont docCont;
@@ -278,7 +279,8 @@ public class Transport_Facade {
     public void ApproveDoc(int doc) throws Exception {
         docCont.approved(doc,true);
     }
-    public String addTranportFromSupplierConstant(int orderID,int supplierId, HashMap<Integer,Integer> productAndAmount) throws Exception {
+    public String addTransportFromSupplierConstant(int orderID,int supplierId, HashMap<Integer,Integer> productAndAmount) throws Exception {
+
         Date date = Calendar.getInstance().getTime();
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
@@ -287,7 +289,7 @@ public class Transport_Facade {
         date = cal.getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         String strDate = dateFormat.format(date);
-        return addTranportFromSupplier(orderID,supplierId,productAndAmount,strDate);
+        return addTransportFromSupplier(orderID,supplierId,productAndAmount,strDate);
 
     }
 
@@ -295,7 +297,7 @@ public class Transport_Facade {
 
 
 
-    public String addTranportFromSupplier(int orderID, int supplierId, HashMap<Integer,Integer> productAndAmount, String date) throws Exception {
+    public String   addTransportFromSupplier(int orderID, int supplierId, HashMap<Integer,Integer> productAndAmount, String date) throws Exception {
         List<License> a = new LinkedList();
         a.add(License.typeA);
         a.add(License.typeB);
