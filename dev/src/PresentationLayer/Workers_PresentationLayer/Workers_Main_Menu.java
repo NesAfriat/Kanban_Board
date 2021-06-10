@@ -28,6 +28,7 @@ public class Workers_Main_Menu {
     protected static final Scanner scanner = new Scanner(System.in);
     protected Workers_Facade facade;
 
+    /*
     public void testingDataUpload(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -209,6 +210,7 @@ public class Workers_Main_Menu {
         facade.addConstraint(LocalDate.now().plusDays(17).format(formatter),"Evening", "Cant");
         facade.logout();
     }
+    */
 
     public void start() {
         boolean run = true;
