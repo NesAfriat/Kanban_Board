@@ -5,19 +5,20 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 import DataLayer.Workers_DAL.WorkerDataController;
+import javafx.util.Pair;
+
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ShiftSchedule {
     private Map<String, WorkDay> workDays;
     private DefaultWorkDayHolder defaultWorkDayHolder;
+    private List<Pair<Integer, String>> requestList;
 
     public ShiftSchedule(){
         workDays = new HashMap<>();
         defaultWorkDayHolder = new DefaultWorkDayHolder();
+        requestList = new LinkedList<>(); //TODO init this when loading...
     }
 
     /*public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
@@ -147,6 +148,33 @@ public class ShiftSchedule {
         workDays.put(date,workDay);
         workerDataController.addWorkDay(workDay);
         return workDay;
+    }
+
+    public void  addRequest(int OrderID, String date) throws InnerLogicException {
+        for (Pair pair: requestList) {
+            if((Integer)pair.getKey() == OrderID){
+                if(WorkersUtils.dateDifferenceGreaterThen7((String)pair.getValue(), date)){
+                    requestList.add(new Pair<>(OrderID, date));
+                    //TODO add to DB
+                }
+                else{
+                    throw new InnerLogicException("this Request is already in the system");
+                }
+            }
+        }
+    }
+
+    public void  deleteRequest(int OrderID, String date) throws InnerLogicException {
+        WorkersUtils.dateValidation(date);
+        Pair<Integer, String> toRemove = null;
+        for (Pair pair: requestList) {
+            if((Integer)pair.getKey() == OrderID && pair.getValue().equals(date)){
+                toRemove = pair;
+                break;
+            }
+        }
+        requestList.remove(toRemove);
+        //TODO remove from DB
     }
 
 

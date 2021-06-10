@@ -221,7 +221,14 @@ public class ShiftController {
         return calendar.getDefaultWorkDaySkeleton(day);
     }
 
-    private void throwIfNotAdmin() throws InnerLogicException {
+    public void  addRequest(int OrderID, String date) throws InnerLogicException {
+        WorkersUtils.dateValidation(date);
+        //Todo
+    }
+
+
+
+        private void throwIfNotAdmin() throws InnerLogicException {
         if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");
     }
     private void throwIfCurrentWorkDayIsNotChangeable() throws InnerLogicException {

@@ -78,6 +78,15 @@ public class WorkersUtils {
         return now.getYear() == localDate.getYear() && now.getMonthValue() > localDate.getMonthValue();
     }
 
+    public static boolean dateDifferenceGreaterThen7(String oldDate, String newDate) throws InnerLogicException {
+        dateValidation(oldDate);
+        dateValidation(newDate);
+        LocalDate localDate1 = LocalDate.parse(oldDate, formatter);
+        LocalDate localDate2 = LocalDate.parse(oldDate, formatter);
+        return localDate1.plusDays(7).isBefore(localDate2);//maybe 6
+    }
+
+
     public static ShiftType parseShiftType(String shiftType) throws InnerLogicException {
         if ("Morning".equals(shiftType)) return ShiftType.Morning;
         else if ("Evening".equals(shiftType)) return ShiftType.Evening;
