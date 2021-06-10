@@ -14,26 +14,19 @@ public class ShiftSchedule {
     private Map<String, WorkDay> workDays;
     private DefaultWorkDayHolder defaultWorkDayHolder;
     private List<Pair<Integer, String>> requestList;
+    private WorkerDataController workerDataController;
 
     public ShiftSchedule(){
         workDays = new HashMap<>();
         defaultWorkDayHolder = new DefaultWorkDayHolder();
-        requestList = new LinkedList<>(); //TODO init this when loading...
+        workerDataController = new WorkerDataController();
+        requestList = workerDataController.getAllRequests();
     }
 
-    /*public WorkDay addWorkDay(boolean hasMorningShift, boolean hasEveningShift, String date) throws InnerLogicException {
-        if (workDays.get(date) != null){
-            throw new InnerLogicException("There's already a WorkDay at date "+ date);
-        }
-        WorkDay workDay = new WorkDay(hasMorningShift,hasEveningShift,date);
-        workDays.put(date,workDay);
-        return  workDay;
-    }*/
 
     public WorkDay getWorkDay(String date) throws InnerLogicException {
         WorkDay workDay = workDays.get(date);
         if (workDay == null){
-            WorkerDataController workerDataController = new WorkerDataController();
             workDay = workerDataController.getWorkDay(date);
             if(workDay != null) workDays.put(date,workDay);
         }
@@ -41,17 +34,7 @@ public class ShiftSchedule {
     }
 
     public List<WorkDay> getWorkDaysFrom(String date) {
-        List<WorkDay> futureDays = new LinkedList<>();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        /*workDays.forEach((key, workDay) -> {
-            LocalDate inputDate = LocalDate.parse(date, formatter);
-            LocalDate keyDate = LocalDate.parse(key, formatter);
-            if (keyDate.isAfter(inputDate)){
-                futureDays.add(workDay);
-            }
-        });*/
-        WorkerDataController workerDataController = new WorkerDataController();
-        futureDays = workerDataController.getWorkDaysFromDate(date);
+        List<WorkDay> futureDays = workerDataController.getWorkDaysFromDate(date);
         for (WorkDay workDay: futureDays) {
             if(!workDays.containsValue(workDay)){
                 workDays.put(workDay.getDate(),workDay);
@@ -94,7 +77,6 @@ public class ShiftSchedule {
     }
 
     public WorkDay addDefaultShift(String date, ShiftType shiftType) throws InnerLogicException {
-        //WorkDay workDay = workDays.get(date);
         WorkDay workDay = getWorkDay(date);
         if (workDay != null && workDay.getShift(shiftType) != null){
             throw new InnerLogicException("Tried to add shift to a workday that already has the shift");
@@ -106,7 +88,6 @@ public class ShiftSchedule {
             boolean hasEvening = shiftType.equals(ShiftType.Evening);
             workDay = new WorkDay(hasMorning, hasEvening, date);
             workDays.put(date, workDay);
-            WorkerDataController workerDataController = new WorkerDataController();
             workerDataController.addWorkDay(workDay);
             shift = workDay.getShift(shiftType);
         }
@@ -122,7 +103,6 @@ public class ShiftSchedule {
     }
 
     public WorkDay addDefaultWorkDay(String date) throws InnerLogicException {
-        WorkerDataController workerDataController = new WorkerDataController();
         if (workDays.containsKey(date) || workerDataController.getWorkDay(date) != null){
             throw new InnerLogicException("Workday at date: " + date + " is already exist");
         }
@@ -152,19 +132,19 @@ public class ShiftSchedule {
 
     public void  addRequest(int OrderID, String date) throws InnerLogicException {
         boolean canAdd = true;
-        for (Pair pair: requestList) {
-            if((Integer)pair.getKey() == OrderID){
-                if(!WorkersUtils.dateDifferenceGreaterThen7((String)pair.getValue(), date)){
+        for (Pair<Integer, String> pair: requestList) {
+            if(pair.getKey() == OrderID){
+                if(!WorkersUtils.dateDifferenceGreaterThen7(pair.getValue(), date)){
                     canAdd = false;
                 }
-                if(!WorkersUtils.dateDifferenceGreaterThen7(date, (String)pair.getValue())){
+                if(!WorkersUtils.dateDifferenceGreaterThen7(date, pair.getValue())){
                     canAdd = false;
                 }
             }
         }
         if(canAdd){
             requestList.add(new Pair<>(OrderID, date));
-            //TODO add to DB
+            workerDataController.addRequest(OrderID, date);
         }
         else{
             throw new InnerLogicException("this Request is already in the system");
@@ -174,15 +154,15 @@ public class ShiftSchedule {
     public void  deleteRequest(int OrderID, String date) throws InnerLogicException {
         WorkersUtils.dateValidation(date);
         Pair<Integer, String> toRemove = null;
-        for (Pair pair: requestList) {
-            if((Integer)pair.getKey() == OrderID && pair.getValue().equals(date)){
+        for (Pair<Integer, String> pair: requestList) {
+            if(pair.getKey() == OrderID && pair.getValue().equals(date)){
                 toRemove = pair;
                 break;
             }
         }
         if(toRemove != null){
             requestList.remove(toRemove);
-            //TODO remove from DB
+            workerDataController.removeRequest(OrderID, date);
         }
         else{
             throw new InnerLogicException("this Request is not in the system");
@@ -208,7 +188,6 @@ public class ShiftSchedule {
         private final Map<Job, int[]> defaultShiftSetup;
         private final boolean[][] defaultWorkDaySetup;
         private DefaultWorkDayHolder(){
-            WorkerDataController workerDataController = new WorkerDataController();
             defaultShiftSetup = new HashMap<>();
             List<Job> jobs = WorkersUtils.getShiftWorkers();
             for (Job job: jobs) {
@@ -257,7 +236,6 @@ public class ShiftSchedule {
                 throw new InnerLogicException("There's no a default number workers for job: " + job);
             }
             defaults[shiftKind] = amount;
-            WorkerDataController workerDataController = new WorkerDataController();
             workerDataController.setDefaultAmountRequired(dayOfTheWeek, shiftType.name(), job.name(), amount);
         }
 
@@ -277,7 +255,6 @@ public class ShiftSchedule {
             int numShiftType = 0;
             if(shiftType == ShiftType.Evening) numShiftType = 1;
             defaultWorkDaySetup[dayOfTheWeek-1][numShiftType] = changeTo;
-            WorkerDataController workerDataController = new WorkerDataController();
             workerDataController.setDefaultWorkDayShifts(dayOfTheWeek, shiftType.name(), changeTo);
         }
 
