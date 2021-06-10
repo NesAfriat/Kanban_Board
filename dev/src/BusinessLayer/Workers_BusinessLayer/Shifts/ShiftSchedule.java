@@ -134,10 +134,7 @@ public class ShiftSchedule {
         boolean canAdd = true;
         for (Pair<Integer, String> pair: requestList) {
             if(pair.getKey() == OrderID){
-                if(!WorkersUtils.dateDifferenceGreaterThen7(pair.getValue(), date)){
-                    canAdd = false;
-                }
-                if(!WorkersUtils.dateDifferenceGreaterThen7(date, pair.getValue())){
+                if(!WorkersUtils.dateDifferenceGreaterThen7(pair.getValue(), date) && !WorkersUtils.dateDifferenceGreaterThen7(date, pair.getValue())){
                     canAdd = false;
                 }
             }
