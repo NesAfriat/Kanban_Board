@@ -171,7 +171,7 @@ public class ShiftSchedule {
         }
     }
 
-    public void  deleteRequest(int OrderID, String date) throws InnerLogicException {
+    public void  removeRequest(int OrderID, String date) throws InnerLogicException {
         WorkersUtils.dateValidation(date);
         Pair<Integer, String> toRemove = null;
         for (Pair pair: requestList) {
@@ -190,7 +190,7 @@ public class ShiftSchedule {
 
     }
 
-    public List<Pair<Integer, String>>  getRequests() throws InnerLogicException {
+    public List<Pair<Integer, String>>  getRequests() {
            return new LinkedList<>(requestList);
     }
 

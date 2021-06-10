@@ -10,6 +10,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_Integration;
 import DataLayer.Workers_DAL.WorkerDataController;
+import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -335,6 +336,19 @@ public class Workers_Facade implements Workers_Integration, LogIn_Integration {
         }catch (InnerLogicException e){
             return new Response(e.getMessage());
         }
+    }
+
+    public Response removeRequest(int OrderID, String date) {
+        try{
+            shiftController.removeRequest(OrderID, date);
+            return new Response();
+        }catch (InnerLogicException e){
+            return new Response(e.getMessage());
+        }
+    }
+
+    public ResponseT<List<Pair<Integer, String>>> getRequests() {
+            return new ResponseT(shiftController.getRequests());
     }
 
     @Override
