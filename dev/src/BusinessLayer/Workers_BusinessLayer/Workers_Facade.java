@@ -328,7 +328,13 @@ public class Workers_Facade implements Workers_Integration, LogIn_Integration {
 
     @Override
     public Response addRequest(int OrderID, String date) {
-        return null;
+        try{
+            shiftController.addRequest(OrderID, date);
+            return new Response();
+
+        }catch (InnerLogicException e){
+            return new Response(e.getMessage());
+        }
     }
 
     @Override
