@@ -19,8 +19,8 @@ class IdentityMap {
     }
 
 
-    private final Map<String, Worker> workerMap;
-    private final Map<String, WorkDay> workDayMap;
+    private final Map<String, Worker> workerMap; // maps id to workers
+    private final Map<String, WorkDay> workDayMap; // maps dates to workdays
 
     private IdentityMap(){
         this.workDayMap = new HashMap<>();

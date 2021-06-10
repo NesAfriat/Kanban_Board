@@ -8,6 +8,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
+import javafx.util.Pair;
 import org.sqlite.SQLiteConfig;
 
 import java.io.File;
@@ -92,6 +93,12 @@ public class WorkerDataController {
                     "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON UPDATE CASCADE ON DELETE CASCADE\n" +
                     "); ";
 
+            String transportRequestsTable = "CREATE TABLE IF NOT EXISTS TransportRequests (\n" +
+                    "\tOrderID\tINTEGER NOT NULL,\n" +
+                    "\tDate\tTEXT NOT NULL,\n" +
+                    "\tPRIMARY KEY(OrderID, Date)\n" +
+                    "); ";
+
             String sql = workerTable + shiftTable;
             try (Connection conn = connect();
                  Statement stmt = conn.createStatement()) {
@@ -103,6 +110,7 @@ public class WorkerDataController {
                 stmt.execute(defaultWorkDayShift);
                 stmt.execute(shiftTable);
                 stmt.execute(workersInShiftsTable);
+                stmt.execute(transportRequestsTable);
                 LoadPreData();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -110,6 +118,7 @@ public class WorkerDataController {
         }
     }
 
+    // load some data to the db so we'll be able to test functionality
     private void LoadPreData() {
         // add all insert queries here
         initDefaultWorkDayShiftData();
@@ -119,6 +128,7 @@ public class WorkerDataController {
         initConstraintData();
         initOccupationData();
         initWorkersInShifts();
+        //initTransportRequests();
     }
 
     private Connection connect() {
@@ -807,6 +817,48 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+
+    public List<Pair<Integer,String>> getAllRequests(){
+        List<Pair<Integer,String>> output = new LinkedList<>();
+        String sql = "SELECT * FROM TransportRequests";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)){
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                output.add(new Pair<>(rs.getInt("OrderID"), rs.getString("Date")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return output;
+    }
+
+    public void addRequest(int orderID, String date){
+        String statement = "INSERT INTO TransportRequests (OrderID, Date) VALUES (?,?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
+            pstmt.setInt(1, orderID);
+            pstmt.setString(2, date);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void removeRequest(int orderID, String date){
+        String statement = "DELETE FROM TransportRequests WHERE OrderID = ? AND Date = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
+            pstmt.setInt(1, orderID);
+            pstmt.setString(2, date);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 
     private void initDefaultWorkDayShiftData(){
         String statement = "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES " +

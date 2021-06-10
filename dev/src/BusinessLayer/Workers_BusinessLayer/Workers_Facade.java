@@ -333,6 +333,12 @@ public class Workers_Facade implements Workers_Integration, LogIn_Integration {
 
     @Override
     public ResponseT<List<Job>> getWorkerOccupations(String WorkerId) {
-        return null;
+        try{
+            Worker worker = workerController.getWorker(WorkerId);
+            List<Job> occupations = worker.getOccupations();
+            return new ResponseT<>(occupations);
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
     }
 }
