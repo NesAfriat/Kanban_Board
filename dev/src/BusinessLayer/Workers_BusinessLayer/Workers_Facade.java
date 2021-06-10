@@ -6,6 +6,7 @@ import BusinessLayer.Workers_BusinessLayer.Responses.*;
 import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
+import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_Integration;
 import DataLayer.Workers_DAL.WorkerDataController;
@@ -13,7 +14,7 @@ import DataLayer.Workers_DAL.WorkerDataController;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Workers_Facade implements Workers_Integration {
+public class Workers_Facade implements Workers_Integration, LogIn_Integration {
     private WorkerController workerController;
     private ShiftController shiftController;
 
@@ -323,5 +324,15 @@ public class Workers_Facade implements Workers_Integration {
         }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }
+    }
+
+    @Override
+    public Response addRequest(int OrderID, String date) {
+        return null;
+    }
+
+    @Override
+    public ResponseT<List<Job>> getWorkerOccupations(String WorkerId) {
+        return null;
     }
 }
