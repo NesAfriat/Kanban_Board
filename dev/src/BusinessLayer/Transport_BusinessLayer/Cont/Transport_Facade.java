@@ -7,10 +7,9 @@ import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
 import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
 import BusinessLayer.Transport_BusinessLayer.Shops.*;
 import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
-import BusinessLayer.Workers_Integration;
+import BusinessLayer.WorkersToTransport_Integration;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +26,7 @@ public class Transport_Facade {
         this.controllerShops = new ControllerShops();
         // init data base
     }
-    public void addWorkersInterface(Workers_Integration wk ){
+    public void addWorkersInterface(WorkersToTransport_Integration wk ){
         driversController.addWorkersInterface(wk);
 
     }

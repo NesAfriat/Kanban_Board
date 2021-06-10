@@ -6,7 +6,7 @@ import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
 
 import java.util.List;
 
-public interface Workers_Integration {
+public interface WorkersToTransport_Integration {
     // date format: "DD/MM/YYYY"
     // shiftType format: "Morning" / "Evening"
     // job format: "DriverA" / "DriverB" / "DriverC" / "Storekeeper"

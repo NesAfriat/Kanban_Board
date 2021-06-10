@@ -1,10 +1,8 @@
 package PresentationLayer.Transport_PresentationLayer;
 import BusinessLayer.Transport_BusinessLayer.Cont.Transport_Facade;
 import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
-import BusinessLayer.Workers_Integration;
+import BusinessLayer.WorkersToTransport_Integration;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 
 public class Transport_Menu {
@@ -15,7 +13,7 @@ public class Transport_Menu {
     boolean firstRun;
 
 
-    public void addWorkersIntegration (Workers_Integration wk){
+    public void addWorkersIntegration (WorkersToTransport_Integration wk){
         bc.addWorkersInterface(wk);
     }
     public Transport_Menu(Transport_Facade facade)

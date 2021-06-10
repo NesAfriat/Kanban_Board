@@ -5,12 +5,10 @@ import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
 import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
 import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
-import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
-import BusinessLayer.Workers_Integration;
+import BusinessLayer.WorkersToTransport_Integration;
 import DataLayer.Transport_DAL.DALController;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -212,7 +210,7 @@ public class DriversController {
 
     }
 
-    public void addWorkersInterface(Workers_Integration wk) {
+    public void addWorkersInterface(WorkersToTransport_Integration wk) {
         DriversFac = new DriversFactory(wk);
     }
 }

@@ -6,29 +6,26 @@ import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 
-import javax.lang.model.UnknownEntityException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DriversFactory {
-    public DriversFactory (Workers_Integration workers_integration) {
-        this.workers_integration = workers_integration;
+    public DriversFactory (WorkersToTransport_Integration workers_ToTransport_integration) {
+        this.workers_ToTransport_integration = workers_ToTransport_integration;
     }
 
-    private Workers_Integration workers_integration;
+    private WorkersToTransport_Integration workers_ToTransport_integration;
 
 //todo license properly
     public List<Driver> getDriversPerJob(String date,int shift,License license){
         //todo parse shift properly
         ResponseT<List<WorkerResponse>> responseT;
         if (shift ==1)
-            responseT= workers_integration.getWorkersInShiftByJob(date, "Morning", LicenseToString(license));
+            responseT= workers_ToTransport_integration.getWorkersInShiftByJob(date, "Morning", LicenseToString(license));
         else
-            responseT= workers_integration.getWorkersInShiftByJob(date, "Evening", LicenseToString(license));
+            responseT= workers_ToTransport_integration.getWorkersInShiftByJob(date, "Evening", LicenseToString(license));
 
         List<Driver> driverList=responseT.value.stream().map(res->
                 new Driver(res.getName(), Integer.parseInt(res.getId()), getLicenseFromWorker(res.getOccupations()))
@@ -116,8 +113,8 @@ public class DriversFactory {
 
     public boolean isStoreKeeper(String date) {
         ResponseT<List<WorkerResponse>> responseT,responseT1;
-        responseT= workers_integration.getWorkersInShiftByJob(date, "Morning", "Storekeeper");
-        responseT1 = workers_integration.getWorkersInShiftByJob(date, "Evening", "Storekeeper");
+        responseT= workers_ToTransport_integration.getWorkersInShiftByJob(date, "Morning", "Storekeeper");
+        responseT1 = workers_ToTransport_integration.getWorkersInShiftByJob(date, "Evening", "Storekeeper");
         if(responseT.value.isEmpty() || responseT1.value.isEmpty())
             return false;
         return true;

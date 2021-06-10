@@ -1,5 +1,6 @@
 package BusinessLayer.Workers_BusinessLayer;
 
+import BusinessLayer.GetOccupations_Integration;
 import BusinessLayer.Workers_BusinessLayer.Controllers.ShiftController;
 import BusinessLayer.Workers_BusinessLayer.Controllers.WorkerController;
 import BusinessLayer.Workers_BusinessLayer.Responses.*;
@@ -8,14 +9,13 @@ import BusinessLayer.Workers_BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
-import BusinessLayer.Workers_Integration;
-import DataLayer.Workers_DAL.WorkerDataController;
+import BusinessLayer.WorkersToTransport_Integration;
 import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Workers_Facade implements Workers_Integration, LogIn_Integration {
+public class Workers_Facade implements WorkersToTransport_Integration, GetOccupations_Integration {
     private WorkerController workerController;
     private ShiftController shiftController;
 

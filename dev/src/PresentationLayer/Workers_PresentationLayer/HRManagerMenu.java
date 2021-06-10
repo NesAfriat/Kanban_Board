@@ -85,27 +85,12 @@ class HRManagerMenu extends Workers_Main_Menu {
                     break;
                 case 9:
                     super.exit();
-                case 10:
-                    addRequest();
-                    break;
                 default:
                     printPrettyError("No such option");
             }
         }
     }
 
-    private void addRequest() {
-        System.out.println("Enter Order ID: ");
-        int orderID = getInputInt();
-        String date = getInputDate();
-        Response result = facade.addRequest(orderID, date);
-        if (result.ErrorOccurred()){
-            printPrettyError(result.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm("Request added successfully");
-        }
-    }
 
     private void deleteRequest() {
         System.out.println("Enter Order ID: ");
