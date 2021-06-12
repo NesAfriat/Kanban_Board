@@ -28,6 +28,13 @@ public class Stock_Controller {
         return st_C;
     }
 
+    public Stock getStock()
+    {
+        if(st_C!=null)
+        return stock;
+        else
+            return null;
+    }
     private void check_valid_number(Number[] arr) throws Exception {
         for (Number number : arr) {
             if (number.doubleValue() < 0) {

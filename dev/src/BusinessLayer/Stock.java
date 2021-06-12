@@ -200,7 +200,10 @@ public class Stock {
                 defects.add(item);
         }
     }
-
+    public ProductManager getPM()
+    {
+        return  this.productManager;
+    }
     private void clearDefects() {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();
