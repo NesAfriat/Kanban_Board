@@ -4,6 +4,7 @@ import BusinessLayer.FacedeModel.Objects.Response;
 import BusinessLayer.FacedeModel.Objects.ResponseT;
 import BusinessLayer.FacedeModel.Objects.orderResponse;
 import BusinessLayer.FacedeModel.facade;
+import BusinessLayer.GetOccupations_Integration;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -15,7 +16,7 @@ public class OrderFunctionality {
     public OrderFunctionality(facade facade){
         this.facade=facade;
     }
-    public void OrderFunctionalityMenu() {
+    public void OrderFunctionalityMenu(GetOccupations_Integration getOccupations_integration) {
         System.out.printf("  ____          _           ______                _   _                   _ _ _         \n" +
                 " / __ \\        | |         |  ____|              | | (_)                 | (_) |        \n" +
                 "| |  | |_ __ __| | ___ _ __| |__ _   _ _ __   ___| |_ _  ___  _ __   __ _| |_| |_ _   _ \n" +

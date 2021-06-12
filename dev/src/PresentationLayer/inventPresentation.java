@@ -2,6 +2,8 @@ package PresentationLayer;
 
 import BusinessLayer.FacedeModel.Objects.Response;
 import BusinessLayer.FacedeModel.facade;
+import BusinessLayer.GetOccupations_Integration;
+import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,13 +19,13 @@ public class inventPresentation {
         int inputi;
         String inputs;
 
-        public inventPresentation() {
-            Facade = facade.getInstance();
+        public inventPresentation(Transport_Integration transport_integration) {
+            Facade = facade.getInstance(transport_integration);
             reader = new BufferedReader(new InputStreamReader(System.in));
 
         }
 
-        public void main_window() throws IOException {
+        public void main_window(GetOccupations_Integration getOccupations_integration) throws IOException {
             System.out.println("Hello, and welcome to the 'Super-Li's Stock' interface");
             boolean flag = true;
             while (flag) {

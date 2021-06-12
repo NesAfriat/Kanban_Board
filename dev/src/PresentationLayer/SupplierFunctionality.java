@@ -3,6 +3,7 @@ package PresentationLayer;
 import BusinessLayer.DeliveryMode;
 import BusinessLayer.FacedeModel.Objects.*;
 import BusinessLayer.FacedeModel.facade;
+import BusinessLayer.GetOccupations_Integration;
 import BusinessLayer.paymentMethods;
 
 import java.util.HashMap;
@@ -18,7 +19,7 @@ public class SupplierFunctionality {
     //        String[] SupplierFunctionality=new String[]{"Print All Supplier cards","print specific Supplier card","Add new Supplier","add New Product To Supplier",
 //        "remove Product From Supplier","add New Discount By Quantity To Product","Remove Supplier","set Extra Discount To Supplier","add New Contact Member",
 //        "print supplier agreement","set Product Price","set Supplier Payment","Remove Discount by Quantity of Product","Remove Contact","Set Delivery Mode","go back"};
-    public void SupplierFunctionalityMenu(){
+    public void SupplierFunctionalityMenu(GetOccupations_Integration getOccupations_integration){
         String[] SupplierFunctionality=new String[]{"Add new Supplier","Remove Supplier","print specific Supplier card","Print All Supplier cards","add New Product To Supplier","remove Product From Supplier","add New Discount By Quantity To Product","Remove Discount by Quantity of Product","add New Contact Member","Remove Contact","set Product Price","set Supplier Payment","Set Delivery Mode","set Extra Discount To Supplier","print supplier agreement","go back"};
         System.out.println("\n" +
                 " __                   _ _               ___                 _   _                   _ _ _         \n" +

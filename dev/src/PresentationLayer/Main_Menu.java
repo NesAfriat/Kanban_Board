@@ -1,5 +1,7 @@
 package PresentationLayer;
 
+import BusinessLayer.FacedeModel.facade;
+import BusinessLayer.GetOccupations_Integration;
 import BusinessLayer.Transport_BusinessLayer.Cont.Transport_Facade;
 import BusinessLayer.Transport_BusinessLayer.Document.TransportDoc;
 import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
@@ -10,12 +12,14 @@ import BusinessLayer.Transport_BusinessLayer.Shops.Area;
 import BusinessLayer.Transport_BusinessLayer.Shops.Product;
 import BusinessLayer.Transport_BusinessLayer.Shops.Store;
 import BusinessLayer.Transport_BusinessLayer.Shops.Supplier;
+import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
 import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_Integration;
 import DataLayer.Transport_DAL.TransportDocDAL;
 import PresentationLayer.Transport_PresentationLayer.Transport_Menu;
 import PresentationLayer.Workers_PresentationLayer.Workers_Main_Menu;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -25,14 +29,45 @@ public class Main_Menu {
     private static final Workers_Facade workers_facade = new Workers_Facade();
     private static final Transport_Facade transport_facade = new Transport_Facade();
     private boolean firstRun;
+    GetOccupations_Integration getOccupations_integration;
+
+
+    //------------------------------------------------------
+    private SupplierFunctionality supplierFunctionality;
+    private  OrderFunctionality orderFunctionality;
+    private  inventPresentation InventPresentation;
+    private  Workers_Main_Menu workers_menu;
+    private  Transport_Menu transport_menu;
+
+
+    facade Facade;
+
+    //------------------------------------------------------
+
     public Main_Menu(){
+        //-------------------------------
+        Transport_Integration transport_integration=transport_facade;
+        InventPresentation=new inventPresentation(transport_integration);
+
+        Facade=facade.getInstance(transport_integration);
+         workers_menu = new Workers_Main_Menu(workers_facade);
+         transport_menu = new Transport_Menu(transport_facade);
+        Workers_Integration wk = workers_facade;
+         getOccupations_integration= workers_facade;
+
+        transport_menu.addWorkersIntegration(wk);
+
+        transport_menu.addWorkersIntegration(wk);
+        //-------------------------------
+
+        supplierFunctionality=new SupplierFunctionality(Facade);
+        orderFunctionality=new OrderFunctionality(Facade);
+
+
+
         firstRun = true;
     }
-    public void start() {
-        Workers_Main_Menu workers_menu = new Workers_Main_Menu(workers_facade);
-        Transport_Menu transport_menu = new Transport_Menu(transport_facade);
-        Workers_Integration wk = workers_facade;
-        transport_menu.addWorkersIntegration(wk);
+    public void start() throws IOException {
         System.out.println('\n' + "----------------------------------------------------------");
         System.out.println('\n' +
                 "0000  0  0  0000  0000  0000              0    0000  0000" + '\n' +
@@ -46,7 +81,10 @@ public class Main_Menu {
         while (run) {
             System.out.println("1) Enter workers manage system");
             System.out.println("2) Enter transport manage system");
-            System.out.println("3) Exit");
+            System.out.println("3) Enter Supplier manage system");
+            System.out.println("4) Enter Order manage system");
+            System.out.println("5) Enter Invent manage system");
+            System.out.println("6) Exit");
             System.out.print("Option: ");
             int option = getInputInt();
             switch (option) {
@@ -56,7 +94,13 @@ public class Main_Menu {
                 case 2:
                     transport_menu.mainMenu();
                     break;
-                case 3:
+                case  3:
+                    supplierFunctionality.SupplierFunctionalityMenu(getOccupations_integration);
+                case 4:
+                    orderFunctionality.OrderFunctionalityMenu(getOccupations_integration);
+                case 5:
+                    InventPresentation.main_window(getOccupations_integration);
+                case 6:
                     run = false;
                     System.out.println("Goodbye!");
                     break;
