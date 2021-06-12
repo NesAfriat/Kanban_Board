@@ -35,7 +35,7 @@ public class ReportStock implements Report {
 
     @Override
     public void createReport() throws Exception {
-        Stock_Controller st_c = Stock_Controller.getInstance(null);
+        Stock_Controller st_c = Stock_Controller.getInstance();
         List<GeneralProduct> existProducts;
         for (String cat : this.categories) {
             existProducts = st_c.get_category_products(cat);

@@ -9,11 +9,11 @@ import java.util.Date;
 
 public class main {
     public static void main(String[] args) throws Exception {
-        //IO io=IO.getInstance();
-        //io.Start_Menu();
+        IO io=IO.getInstance();
+        io.Start_Menu();
 
-        Main_Menu mn = new Main_Menu();
-        mn.start();
+//        Main_Menu mn = new Main_Menu();
+//        mn.start();
 
 
         }

@@ -1,5 +1,6 @@
 package BusinessLayer;
 
+import BusinessLayer.Controlls.Stock_Controller;
 import DataLayer.DataController;
 
 import java.util.HashMap;
@@ -11,12 +12,11 @@ public class AgreementManager {
     private ProductManager productManager;
     private  boolean isLoadAllAgreement=false;
 
-    public AgreementManager(ProductManager productManager) {
+    public AgreementManager() {
         // ProductsInTheSystem=new LinkedList<>();
         SupplierAgreement = new HashMap<>();
         idProductCounter = getBixestpiDGp()+1;
-        this.productManager=productManager;
-
+        this.productManager= Stock_Controller.getInstance().getStock().getPM();
     }
 
     public void AddNewAgreement(IAgreement agreement) {
