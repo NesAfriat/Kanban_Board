@@ -14,21 +14,21 @@ public class TransportDoc {
     String LeftOrigin=null;
     Truck truck=null;
     Driver driver=null;
-
+    boolean approved= false;
     public int getVersion() {
         return version;
     }
 
     int version;
 
-    Store origin=null;
+    int origin=-2147483648;
     // store,int
-    HashMap<Integer, Store> destinationStore;
-    HashMap<Integer, Supplier> destinationSupplier;
+    HashMap<Integer, Integer/*Store*/> destinationStore;
+    HashMap<Integer, Integer/*Supplier*/> destinationSupplier;
     ArrayList<Integer> allStops = new ArrayList<>();
-    Area area=null;
+    Area area=Area.A;
     double truckWeightDep=-1;
-    List<Triple<Product, Integer, Store>> productList;
+    List<Triple<Integer/*Product*/, Integer/*amount*/, Integer/*Store*/>> productList;
     public TransportDoc upDates=null;
     public TransportDoc(int id) {
         this.id = id;
@@ -42,7 +42,12 @@ public class TransportDoc {
         return id;
     }
 
-    public TransportDoc(int id, String transDate, String leftOrigin, Truck truck, Driver driver, Store origin, HashMap<Integer, Store> destinationStore, HashMap<Integer, Supplier> destinationSupplier, Area area, double truckWeightDep, List<Triple<Product, Integer, Store>> productList,ArrayList<Integer >allStops,int version) {
+
+
+    public TransportDoc(int id, String transDate, String leftOrigin, Truck truck, Driver driver,
+                        int origin, HashMap<Integer, Integer> destinationStore, HashMap<Integer,
+                        Integer> destinationSupplier, Area area, double truckWeightDep,
+                        List<Triple<Integer, Integer, Integer>> productList, ArrayList<Integer >allStops, int version) {
         this.id = id;
         TransDate = transDate;
         LeftOrigin = leftOrigin;
@@ -61,8 +66,20 @@ public class TransportDoc {
     public String toString(){
         String acc="";
         acc = "id "+ id  +(TransDate!=null? ", Trasnport Date "+ TransDate.toString():"") + (LeftOrigin!=null? ", Time Left Origin "+ LeftOrigin.toString():"") + (truck!=null?", Truck: "+ truck.getName():"")
-                +"\n" + (driver!=null?"Driver "+ driver.getName():"") + (origin!=null?", Origin "+ origin.getName():"") + (area!=null?", Area "+ area:"") + (truckWeightDep!=-1?", Truck weight "+ truckWeightDep:"" )+"\n ";
+                +"\n" + (driver!=null?"Driver "+ driver.getName():"") + (origin!=-2147483648?", Origin "+ origin:"") + (area!=null?", Area "+ area:"") + (truckWeightDep!=-1?", Truck weight "+ truckWeightDep:"" )+"\n ";
         return acc;
+    }
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) throws Exception {
+        if (truck!=null&&driver!=null&&origin!=-2147483648&&TransDate!=null&&LeftOrigin!=null) {
+            this.approved = approved;
+        }
+        else{
+            throw new Exception("all fileds must be filled before the doc is approved");
+        }
     }
     public String destinationsString(){
         String acc="";
@@ -71,17 +88,17 @@ public class TransportDoc {
         for (Integer i : allStops)
         {
             if(destinationStore.containsKey(i))
-                 acc=acc+ "Stop<"+i+"> "+"id: "+ destinationStore.get(i).getId()+ " name: "+ destinationStore.get(i).getName() +"\n"  ;
+                 acc=acc+ "Stop<"+i+"> "+"id: "+ destinationStore.get(i).toString()+ " name: "+ destinationStore.get(i).toString() +"\n"  ;
             else
-                acc=acc+ "Stop<"+i+"> "+"id: "+ destinationSupplier.get(i).getId()+ " name: "+ destinationSupplier.get(i).getName()+"\n" ;
+                acc=acc+ "Stop<"+i+"> "+"id: "+ destinationSupplier.get(i).toString()+ " name: "+ destinationSupplier.get(i).toString()+"\n" ;
         }
         return acc+"\n";
     }
     public String productsString(){
         String acc="";
-        for (Triple<Product, Integer, Store>  trip : productList)
+        for (Triple<Integer/*Product*/, Integer, Integer/*Store*/>  trip : productList)
         {
-            acc=acc+ "Product: " + trip.getFirst().getName() + ", Amount: " +trip.getSecond() + ", To Store:" + trip.getThird().getName() +"\n";
+            acc=acc+ "Product: " + trip.getFirst().toString() + ", Amount: " +trip.getSecond() + ", To Store:" + trip.getThird().toString() +"\n";
         }
         return acc;
     }
@@ -105,23 +122,14 @@ public class TransportDoc {
         this.version++;
     }
 
-    public Store getOrigin() {
+    public int getOrigin() {
         return origin;
     }
 
-    public void setOrigin(Store origin) throws Exception {
-        if (this.origin == null) {
-            this.origin=origin;
-            this.area = origin.getArea();
-        } else {
-            if (this.area == origin.getArea())
-                this.origin=origin;
-            else
-                throw new Exception("wrong area\n");
-        }
-
+    public void setOrigin(int origin) throws Exception {
+        if (this.origin != -2147483648)
+            throw new Exception("cant set origin twice\n");
         this.origin = origin;
-
     }
 
     public String getTransDate() {
@@ -142,66 +150,66 @@ public class TransportDoc {
 
 
 
-    public List<Store> getStores() {
-        List<Store> storeLinked = new LinkedList<>();
+    public List<Integer> getStores() {
+        List<Integer> storeLinked = new LinkedList<>();
         Iterator StoreIterator = destinationStore.entrySet().iterator();
         while (StoreIterator.hasNext()) {
             Map.Entry mapElement = (Map.Entry) StoreIterator.next();
-            storeLinked.add((Store) mapElement.getValue());
+            storeLinked.add((Integer) mapElement.getValue());
 
         }
         return storeLinked;
     }
 
-    public void addStore(Store st, int place) throws Exception {
+    public void addStore(int store, int place) throws Exception {
         if (destinationStore.isEmpty()) {
-            destinationStore.put(place, st);
-            this.area = st.getArea();
-        } else {
-            if (this.area == st.getArea())
-                if(!destinationStore.containsKey(place)) {
-                    destinationStore.put(place, st);
-                }
-                else{
-                    throw new Exception("someone already in this place ");
-                }
+            destinationStore.put(place, store);
 
-            else
-                throw new Exception("wrong area\n");
+        } else {
+
+                if(!destinationStore.containsKey(place)) {
+                    destinationStore.put(place, store);
+                }
+                else
+                    throw new Exception("someone already in this place ");
+
         }
         allStops.add(place);
 
     }
 
-    public void addSupplier(Supplier st, int place) throws Exception {
+    public void addSupplier(Integer supplier, int place) throws Exception {
         if (destinationSupplier.isEmpty()) {
-            destinationSupplier.put(place, st);
-            this.area = st.getArea();
+            destinationSupplier.put(place, supplier);
+            //this.area = supplier.getArea();
         } else {
-            if (this.area == st.getArea())
+            //if (this.area == supplier.getArea())
                 if(!destinationSupplier.containsKey(place)) {
-                    destinationSupplier.put(place, st);
+                    destinationSupplier.put(place, supplier);
                 }
             else{
                 throw new Exception("someone already in this place ");
                 }
-            else
-                throw new Exception("wrong area\n");
+            //else
+            //    throw new Exception("wrong area\n");
         }
         allStops.add(place);
     }
+    public void setVersion(int version) {
+        this.version = version;
+    }
 
-    public void addProduct(Triple<Product, Integer, Store> trip) {
+    public void addProduct(Triple<Integer, Integer, Integer> trip) {
         productList.add(trip);
     }
 
-    public Tuple<List<Product>, Area> retAvaliableSupp() {
-        List<Product> pd = new LinkedList<>();
-        for (Triple<Product, Integer, Store> t : productList) {
+    public Tuple<List<Integer>, Area> retAvaliableSupp() {
+        List<Integer> pd = new LinkedList<>();
+        for (Triple<Integer, Integer, Integer> t : productList) {
             if (!pd.contains(t.getFirst()))
                 pd.add(t.getFirst());
         }
-        Tuple<List<Product>, Area> tuple = new Tuple<>(pd, area);
+        Tuple<List<Integer>, Area> tuple = new Tuple<>(pd, area);
         return tuple;
     }
 
@@ -260,9 +268,9 @@ public class TransportDoc {
     public void removeProduct(int prod,int store) throws Exception {
         boolean removed =false;
 
-        for (Triple<Product,Integer,Store> trip: productList)
+        for (Triple<Integer,Integer,Integer> trip: productList)
         {
-            if(trip.getFirst().getId()==prod && trip.getThird().getId()==store)
+            if(trip.getFirst()==prod && trip.getThird()==store)
             {
                 productList.remove(trip);
                 removed=true;
@@ -273,14 +281,14 @@ public class TransportDoc {
     }
     public TransportDoc copyDeep(){
 
-        HashMap<Integer, Store> destinationStoreCopy = new HashMap<>();
-        HashMap<Integer, Supplier> destinationSupplierCopy = new HashMap<>();
+        HashMap<Integer, Integer> destinationStoreCopy = new HashMap<>();
+        HashMap<Integer, Integer> destinationSupplierCopy = new HashMap<>();
         destinationStoreCopy.putAll(destinationStore);
         destinationSupplierCopy.putAll(destinationSupplier);
-        List<Triple<Product, Integer, Store>> productListCopy = new LinkedList<>();
-        for(Triple<Product,Integer,Store> trip : productList)
+        List<Triple<Integer, Integer, Integer>> productListCopy = new LinkedList<>();
+        for(Triple<Integer,Integer,Integer> trip : productList)
         {
-            Triple<Product,Integer,Store> tr = new Triple<Product,Integer, Store>(trip.getFirst(),trip.getSecond(),trip.getThird());
+            Triple<Integer,Integer,Integer> tr = new Triple<Integer, Integer, Integer>(trip.getFirst(),trip.getSecond(),trip.getThird());
             productListCopy.add(tr);
 
         }
@@ -289,15 +297,15 @@ public class TransportDoc {
         return new TransportDoc(id,TransDate,LeftOrigin,truck,driver,origin,destinationStoreCopy,destinationSupplierCopy,area,truckWeightDep,productListCopy,stopL,version);
     }
 
-    public HashMap<Integer, Store> getDestinationStore() {
+    public HashMap<Integer, Integer> getDestinationStore() {
         return destinationStore;
     }
 
-    public HashMap<Integer, Supplier> getDestinationSupplier() {
+    public HashMap<Integer, Integer> getDestinationSupplier() {
         return destinationSupplier;
     }
 
-    public List<Triple<Product, Integer, Store>> getProductList() {
+    public List<Triple<Integer, Integer, Integer>> getProductList() {
         return productList;
     }
 

@@ -5,6 +5,7 @@ import BusinessLayer.Workers_Integration;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Transport_Menu {
@@ -25,11 +26,23 @@ public class Transport_Menu {
         firstRun=false;
     }
 
-    public void mainMenu(){
+    public void mainMenu() {
         if(!firstRun)
             loadData();
         boolean run = true;
         while(run){
+            HashMap<Integer,Integer>hm = new HashMap<>();
+            hm.put(1,3);
+            hm.put(2,1);
+            hm.put(3,2);
+            try {
+                bc.addTranportFromSupplier(2,2, hm, "10/05/2021");
+            }catch (Exception e)
+            {
+                System.out.println(e.toString());
+            }
+
+            bc.sendTransportToStock();
             run = runProgram();
         }
     }
@@ -38,25 +51,23 @@ public class Transport_Menu {
 
         print("Please choose an option:\n\n");
 
-        print ("1) New document\n");
-        print ("2) Display all Store List \n");
-        print ("3) Display all Product List \n");
-        print ("4) Display Stores in Doc Area \n");
-        print ("5) Display Supplier List for chosen products \n");
-        print ("6) Display Truck List \n");
-        print ("7) Display Driver List \n");
-        print ("8) Add Store to Transport \n");
-        print ("9) Add Product to Transport \n");
-        print ("10) Add Supplier to Transport \n");
-        print ("11) Add Truck to Transport \n");
-        print ("12) Add Driver to Transport \n");
-        print ("13) Add Origin to Transport \n");
-        print ("14) Add Transport Date to Transport \n");
-        print ("15) Add Departure time to Transport \n");
-        print ("16) Make changes \n");
-        print ("17) Print document \n");
-        print ("18) SaveDoc \n");
-        print ("19) Exit \n");
+
+        print ("1) Display Truck List \n");
+        print ("2) Display Driver List \n");
+        print ("3) Edit Truck \n");
+        print ("4) Edit Driver \n");
+        print ("5) Edit Truck and Driver \n");
+        print ("6) Edit Truck Weight on Departure \n");
+        print ("7) Remove Destination \n");
+        print ("8) Remove Product By Store \n");
+        print ("9) Print Basic Info \n");
+        print ("10) Print Stops \n");
+        print ("11) Print Products \n");
+        print ("12) Show all unapproved transports \n");
+        print ("13) Approve all transports \n");
+        print ("14) Approve a single transport \n");
+        print ("15) SaveDoc \n");
+        print ("16) Exit \n");
 
 
 
@@ -75,33 +86,11 @@ public class Transport_Menu {
         int a, b, c, d;
         String str;
         switch (displayMenu()) {
-            // case 0:
-            // loadData();
-            // print("Your data has been loaded!\n");
-            // break;
+
             case 1:
-                print("Your Delivery Document ID is " + bc.createNewDelivery() + ". It is important, keep it!\n");
-                break;
-            case 2:
-                print(bc.getAllStores());
-                break;
-            case 3:
-                print(bc.getAllProducts());
-                break;
-            case 4:
-                print("please enter your doc ID\n");
-                a = sc.nextInt();
-                print(bc.getAvaliableStoresString(a));
-                break;
-            case 5:
-                print("please enter your doc ID\n");
-                a = sc.nextInt();
-                print(bc.returnAvaliableSupplierString(a));
-                break;
-            case 6:
                 print(bc.getTrucksString());
                 break;
-            case 7:
+            case 2:
                 print("will only display drivers in shift, please enter date in format DD/MM/YYYY, 1 for morning shift - 2 for evening shift\n" +
                         "and the truck license plate\n");
                 str = sc.nextLine();
@@ -114,134 +103,8 @@ public class Transport_Menu {
                     print(e.getMessage()+"\n");
                 }
                 break;
-            case 8:
-                print("please enter your doc ID, the store id and the stop the store will be in the Transport\n");
-                try {
-                    a = sc.nextInt();
-                    b = sc.nextInt();
-                    c = sc.nextInt();
-                    bc.addStore(a, b, c);
-                } catch (Exception e) {
-                    print(e.getMessage() + "\n");
-                }
-                break;
 
-            case 9:
-                print("please enter your doc ID, the Product ID, The amount of items and the Store ID\n");
-                try {
-                    a = sc.nextInt();
-                    b = sc.nextInt();
-                    c = sc.nextInt();
-                    d = sc.nextInt();
-                    bc.addProductsToDoc(a, new Tuple<>(b, c), d);
-                } catch (Exception e) {
-                    print(e.getMessage() + "\n");
-                }
-                break;
-
-
-            case 10:
-                print("please enter your doc ID, the supplier id and the stop the supplier will be in the Transport\n");
-                try {
-                    a = sc.nextInt();
-                    b = sc.nextInt();
-                    c = sc.nextInt();
-                    bc.addSupplier(a, b, c);
-                } catch (Exception e) {
-                    print(e.getMessage() + "\n");
-                }
-                break;
-            case 11:
-                print("please enter your doc ID  and truck License plate\n");
-                try {
-                    a = sc.nextInt();
-                    b = sc.nextInt();
-                    bc.addTruck(a, b);
-                } catch (Exception e) {
-                    print(e.getMessage() + "\n");
-                }
-                break;
-            case 12:
-                print("please enter your doc ID  and driver ID\n");
-                try {
-                    a = sc.nextInt();
-                    b = sc.nextInt();
-                    bc.addDriver(a, b);
-                } catch (Exception e) {
-                    print(e.getMessage() + "\n");
-                }
-                break;
-
-            case 13:
-                print("please enter your doc ID  and Store ID\n");
-                a = sc.nextInt();
-                b = sc.nextInt();
-                try {
-                    bc.setOrigin(a, b);
-                } catch (Exception e) {
-                    print(e.getMessage() + "\n");
-                }
-                break;
-            case 14:
-                print("please enter your doc ID, the day, the month and the year of Transport (DD/MM/YYYY) \n");
-
-                a = sc.nextInt();
-                str = sc.nextLine();
-                str = sc.nextLine();
-                try {
-                    bc.setTransportDate(a, str);
-                } catch (Exception e) {
-                    print(e.getMessage() + "\n");
-                }
-                break;
-            case 15:
-                print("please enter your doc ID and the Departure time in this format (hh:mm:ss) \n");
-                a = sc.nextInt();
-                str = sc.nextLine();
-                str = sc.nextLine();
-                try {
-                    bc.setDepartureTime(a, str);
-                } catch (Exception e) {
-                    print(e.getMessage() + "\n");
-                }
-                break;
-            case 16:
-                makeChanges();
-                break;
-            case 17:
-                printDoc();
-                break;
-            case 18:
-                print("please enter the doc ID you would like to save, it will only save if all fields are full\n");
-                a = sc.nextInt();
-                bc.saveDoc(a);
-                break;
-            case 19:
-                return false;
-
-
-
-        }
-        return true;
-    }
-
-    private void makeChanges() {
-        int a,b,c;
-        print("Please choose an option:\n\n");
-        print ("1) return \n");
-        print ("2) Edit Truck \n");
-        print ("3) Edit Driver \n");
-        print ("4) Edit Truck and Driver \n");
-        print ("5) Edit Truck Weight on Departure \n");
-        print ("6) Remove Destination \n");
-        print ("7) Remove Product By Store \n");
-
-
-        switch (sc.nextInt()) {
-
-            case 1:
-                break;
-            case 2:
+            case 3:
                 print("please enter your doc ID and new truck License Plate \n");
                 a= sc.nextInt();
                 b= sc.nextInt();
@@ -251,7 +114,7 @@ public class Transport_Menu {
                     print(e.getMessage()+"\n");
                 }
                 break;
-            case 3:
+            case 4:
                 print("please enter your doc ID  and new truck Driver ID \n");
                 a= sc.nextInt();
                 b=sc.nextInt();
@@ -261,7 +124,7 @@ public class Transport_Menu {
                     print(e.getMessage()+"\n");
                 }
                 break;
-            case 4:
+            case 5:
                 print("please enter your doc ID, new truck License Plate and new Driver ID \n");
                 a= sc.nextInt();
                 b=sc.nextInt();
@@ -273,7 +136,7 @@ public class Transport_Menu {
                     print(e.getMessage()+"\n");
                 }
                 break;
-            case 5:
+            case 6:
                 print("please enter your doc ID, new truck weight on departure \n");
                 a= sc.nextInt();
                 b=sc.nextInt();
@@ -284,7 +147,7 @@ public class Transport_Menu {
                 }
                 break;
 
-            case 6:
+            case 7:
                 print("please enter your doc ID, and stop number\n");
                 a= sc.nextInt();
                 b=sc.nextInt();
@@ -294,7 +157,7 @@ public class Transport_Menu {
                     print(e.getMessage()+"\n");
                 }
                 break;
-            case 7:
+            case 8:
                 print("please enter your doc ID, product ID and store ID\n");
                 a= sc.nextInt();
                 b= sc.nextInt();
@@ -306,25 +169,7 @@ public class Transport_Menu {
                 }
                 break;
 
-
-
-
-        }
-
-
-
-    }
-    private void printDoc() {
-        int a,b;
-        print("Please choose an option:\n\n");
-        print ("1) Print Basic Info \n");
-        print ("2) Print Stops \n");
-        print ("3) Print Products \n");
-
-        switch (sc.nextInt()) {
-
-
-            case 1:
+            case 9:
                 print("please enter your doc ID, will only print initialised variables \n");
                 a= sc.nextInt();
                 try {
@@ -335,23 +180,66 @@ public class Transport_Menu {
                     print(e.getMessage()+"\n");
                 }
                 break;
-            case 2:
+            case 10:
                 print("please enter your doc ID\n");
                 a= sc.nextInt();
                 print(bc.docDestinations(a));
                 break;
-            case 3:
+            case 11:
                 print("please enter your doc ID\n");
                 a= sc.nextInt();
                 print(bc.docProducts(a));
                 break;
+            case 12:
+                print("Unapproved Transports:\n");
+                print(bc.getUnapprovedDocs());
+
+                break;
+            case 13:
+
+                try {
+                    bc.approveAllTransports();
+                    print("great success\n");
+                } catch (Exception e) {
+                    print("At least one transport isn't full, action failed\n");
+                }
+
+                break;
+            case 14:
+                print("please enter the Transport ID you would like to approve\n");
+                a= sc.nextInt();
+
+                try {
+                    bc.approveSingleTransports(a);
+                    print("great success\n");
+                } catch (Exception e) {
+                    print("the transport isn't full, action failed\n");
+                }
+                break;
+
+            case 15:
+                print("please enter the doc ID you would like to save, it will only save if all fields are full\n");
+                a = sc.nextInt();
+                try {
+                    bc.saveDoc(a);
+                } catch (Exception e) {
+                    print(e.toString()+"\n");
+                }
+                break;
+            case 16:
+                return false;
+
 
 
         }
-
-
-
+        return true;
     }
+
+
+
+
+
+
 
 
 

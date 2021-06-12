@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class StoreDAL {
-
+/*
     public static Store findStore(int storeID) {
 
         Connection conn = null;
@@ -140,6 +140,6 @@ public class StoreDAL {
             }
         }
     }
-
+*/
 }
 

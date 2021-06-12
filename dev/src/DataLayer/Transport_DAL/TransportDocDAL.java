@@ -5,6 +5,7 @@ import BusinessLayer.Transport_BusinessLayer.Document.TransportDoc;
 import BusinessLayer.Transport_BusinessLayer.Document.Triple;
 import BusinessLayer.Transport_BusinessLayer.Drives.License;
 import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
+import BusinessLayer.Transport_BusinessLayer.Shops.Area;
 import BusinessLayer.Transport_BusinessLayer.Shops.Product;
 import BusinessLayer.Transport_BusinessLayer.Shops.Store;
 import BusinessLayer.Transport_BusinessLayer.Shops.Supplier;
@@ -59,7 +60,6 @@ public class TransportDocDAL {
 
                   //transport doc objects
                   Truck trk = TruckDAL.findTruck(truckID);
-                  Store str = StoreDAL.findStore(originStoreID);
                   License lcs =null;
                   switch(driverLicense){
                       case "typeA":
@@ -78,7 +78,7 @@ public class TransportDocDAL {
                   BusinessLayer.Transport_BusinessLayer.Drives.Driver drv = new BusinessLayer.Transport_BusinessLayer.Drives.Driver(driverName,driverID,lcs);
 
                     //store and supplier hashmap
-                  HashMap<Integer, Store> destinationStore = new HashMap<>();
+                  HashMap<Integer, Integer> destinationStore = new HashMap<>();
                   ResultSet resultsHash = st1.executeQuery("SELECT * FROM TransportStopStores where version = " + index+ " and id = "+ id);
                   while (resultsHash.next()) {
                       int stopNumber, storeIDHash;
@@ -86,24 +86,22 @@ public class TransportDocDAL {
                       stopNumber = resultsHash.getInt(2) ;
                       storeIDHash = resultsHash.getInt(3);
                       allStops.add(stopNumber);
-                      Store stor = StoreDAL.findStore(storeIDHash);
-                      destinationStore.put(stopNumber,stor);
+                      destinationStore.put(stopNumber,storeIDHash);
                   }
-                  HashMap<Integer, Supplier> destinationSupplier = new HashMap<>();
+                  HashMap<Integer, Integer> destinationSupplier = new HashMap<>();
                   ResultSet resultsHash2 = st1.executeQuery("SELECT * FROM TransportStopSupplier where version = " + index+ " and ID = "+ id);
                   while (resultsHash2.next()) {
                       int stopNumber, supplierIDHash;
                       stopNumber = resultsHash2.getInt(2) ;
                       supplierIDHash = resultsHash2.getInt(3);
                       allStops.add(stopNumber);
-                      Supplier spr = SupplierDAL.findSupplier(supplierIDHash);
-                      destinationSupplier.put(stopNumber,spr);
+                      destinationSupplier.put(stopNumber,supplierIDHash);
                   }
 
 
                   // create triple list of store product and amount
-                   resultsHash = st1.executeQuery("SELECT * FROM TransportDocStoreProduct where Version = " + index+ " and DocumentID = "+ id);
-                  List<Triple<Product, Integer, Store>> productList = new LinkedList<>();
+                  resultsHash = st1.executeQuery("SELECT * FROM TransportDocStoreProduct where Version = " + index+ " and DocumentID = "+ id);
+                  List<Triple<Integer, Integer, Integer>> productList = new LinkedList<>();
                   while(resultsHash.next()) {
                         int prodID, StoreID, Amount;
                         prodID = resultsHash.getInt(1);
@@ -111,15 +109,13 @@ public class TransportDocDAL {
                         Amount = resultsHash.getInt(4);
 
 
-                        Product prd = ProductDAL.findProduct(prodID);
-                        Store strD = StoreDAL.findStore(StoreID);
-                        Triple<Product, Integer, Store> trp = new Triple<>(prd,Amount,strD);
+
+                        Triple<Integer, Integer, Integer> trp = new Triple<>(prodID,Amount,StoreID);
                         productList.add(trp);
-
                     }
-                            Collections.sort(allStops);
-                          TransportDoc td = new TransportDoc(id,TransDate, LeftOrigin,trk,drv,str,destinationStore,destinationSupplier,str.getArea(),truckWeightDep,productList, allStops,index);
-
+                           Collections.sort(allStops);
+                          TransportDoc td = new TransportDoc(id,TransDate, LeftOrigin,trk,drv,originStoreID,destinationStore,destinationSupplier, Area.A,truckWeightDep,productList, allStops,index);
+                          td.setVersion(index);
                           if(index==0)
                               theTransportBible.put(td.getId(),td);
 
@@ -168,28 +164,28 @@ public class TransportDocDAL {
                 //now save to all tables for id
                 String insert1 = "INSERT INTO TransportDocument " + "VALUES ("+ doc.getId() + "," + doc.getVersion() + ",'" + doc.getTransDate() +
                         "','" + doc.getLeftOrigin() + "','" + doc.getDriver().getName() + "'," + doc.getDriver().getId() + ",'" + LicenseToString(doc.getDriver().getLicense()) +
-                        "'," + doc.getTruck().getLicensePlate() + "," + doc.getOrigin().getId() + ",'" + doc.getArea().toString() + "'," + doc.getTruckWeightDep() + ");";
+                        "'," + doc.getTruck().getLicensePlate() + "," + doc.getOrigin() + ",'" + doc.getArea().toString() + "'," + doc.getTruckWeightDep() + ");";
                 st.executeUpdate(insert1);
 
                 Iterator itStore=doc.getDestinationStore().entrySet().iterator();
                 while(itStore.hasNext()) {
                     Map.Entry pair =(Map.Entry)itStore.next();
-                    String insert2 = "INSERT INTO TransportStopStores " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + ((Store)pair.getValue()).getId()  +
+                    String insert2 = "INSERT INTO TransportStopStores " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + (int)pair.getValue()  +
                             "," + doc.getVersion() + ");";
                     st.executeUpdate(insert2);
                 }
 
-                Iterator itSupplier=doc.getDestinationStore().entrySet().iterator();
+                Iterator itSupplier=doc.getDestinationSupplier().entrySet().iterator();
                 while(itSupplier.hasNext()) {
                     Map.Entry pair =(Map.Entry)itSupplier.next();
-                    String insert2 = "INSERT INTO TransportStopSupplier " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + ((Store)pair.getValue()).getId()  +
+                    String insert2 = "INSERT INTO TransportStopSupplier " + "VALUES (" + doc.getId() + "," + pair.getKey()+ "," + (int)pair.getValue()  +
                             "," + doc.getVersion() + ");";
                     st.executeUpdate(insert2);
                 }
 
-                List<Triple<Product, Integer, Store>> l=doc.getProductList();
-                for (Triple<Product,Integer,Store> t: l) {
-                    String insert2 = "INSERT INTO TransportDocStoreProduct " + "VALUES (" + t.getFirst().getId() + "," + t.getThird().getId()+ "," + doc.getId()  +
+                List<Triple<Integer/*Product*/, Integer,Integer/* Store*/>> l=doc.getProductList();
+                for (Triple<Integer,Integer,Integer> t: l) {
+                    String insert2 = "INSERT INTO TransportDocStoreProduct " + "VALUES (" + t.getFirst() + "," + t.getThird()+ "," + doc.getId()  +
                             "," + t.getSecond() +  "," + doc.getVersion() +" );";
                     st.executeUpdate(insert2);
                 }
