@@ -96,10 +96,13 @@ public class Main_Menu {
                     break;
                 case  3:
                     supplierFunctionality.SupplierFunctionalityMenu(getOccupations_integration);
+                    break;
                 case 4:
                     orderFunctionality.OrderFunctionalityMenu(getOccupations_integration);
+                    break;
                 case 5:
                     InventPresentation.main_window(getOccupations_integration);
+                    break;
                 case 6:
                     run = false;
                     System.out.println("Goodbye!");
