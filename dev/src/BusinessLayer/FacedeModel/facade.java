@@ -4,30 +4,33 @@ import BusinessLayer.*;
 import BusinessLayer.Controlls.Sales_Controller;
 import BusinessLayer.Controlls.Stock_Controller;
 import BusinessLayer.FacedeModel.Objects.*;
+import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class facade {
-    private static facade single_instance = null;
-    private inventModel inventModel;
-    private SupModel supModel;
-    private BusinessLayer.ProductManager ProductManager;
-//    private Stock_Controller stock_controller;
+        private static facade single_instance = null;
+        private inventModel inventModel;
+        private SupModel supModel;
+        private BusinessLayer.ProductManager ProductManager;
+        //    private Stock_Controller stock_controller;
 //    private Sales_Controller sales_controller;
 //    private Reports_Controller reports_controller;
 //for invent
-private facade(){
+
+private facade(Transport_Integration transport_integration){
     inventModel=new inventModel();
     ProductManager=Stock_Controller.getInstance().getStock().getPM();
-    supModel= new SupModel();
+    supModel= new SupModel(transport_integration);
+
 
 }
-    public static facade getInstance()
+    public static facade getInstance(Transport_Integration transport_integration)
     {
         if (single_instance == null)
-            single_instance = new facade();
+            single_instance = new facade(transport_integration);
         return single_instance;
     }
 

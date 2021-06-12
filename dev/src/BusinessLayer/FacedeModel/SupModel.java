@@ -7,6 +7,7 @@ import BusinessLayer.OrderBuissness.OrderControler;
 import BusinessLayer.SupplierBuissness.Contact;
 import BusinessLayer.SupplierBuissness.ISupplier;
 import BusinessLayer.SupplierBuissness.SuppliersControler;
+import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,16 +19,20 @@ public class SupModel implements supModelI{
     private static SupModel single_instance = null;
     private SuppliersControler suppliersControler;
     private OrderControler orderControler;
-    SupModel(){
+    private Transport_Integration transport_integration;
+
+    SupModel(Transport_Integration transport_integration){
         AgreementManager agreementManager=new AgreementManager();
         suppliersControler = new SuppliersControler(agreementManager);
         orderControler = new OrderControler(agreementManager);
+        this.transport_integration=transport_integration;
+
     }
 
-    public static SupModel getInstance(ProductManager productManager)
+    public static SupModel getInstance(Transport_Integration transport_integration)
     {
         if (single_instance == null)
-            single_instance = new SupModel();
+            single_instance = new SupModel(transport_integration);
         return single_instance;
     }
 
@@ -39,7 +44,7 @@ public class SupModel implements supModelI{
     {
         try {
 
-            orderControler.create_order_Due_to_lack(suppliersControler.get_cheapest_supplier(lackMap),constantorderdayfromdelivery);
+            orderControler.create_order_Due_to_lack(suppliersControler.get_cheapest_supplier(lackMap),constantorderdayfromdelivery,transport_integration);
 
             return new Response();
         }
@@ -288,7 +293,7 @@ public class SupModel implements supModelI{
     @Override
     public Response addNewOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant,Integer constantorderdayfromdelivery) {
         try {
-            orderControler.AddOrder(SupId,productQuantity,isConstant,constantorderdayfromdelivery);
+            orderControler.AddOrder(SupId,productQuantity,isConstant,constantorderdayfromdelivery,transport_integration);
             return new Response();
         }
         catch (Exception e){
