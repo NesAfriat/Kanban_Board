@@ -23,7 +23,6 @@ public class DefectsItemsMapper extends Mapper{
                                 "\tiID INTEGER,\n" +
                                 "\tlocation TEXT,\n" +
                                 "\tsupplied_date TEXT,\n" +
-                                "\tcreation_date TEXT,\n" +
                                 "\texpiration_date TEXT,\n" +
                                 "\tPRIMARY KEY (gpID, iID),\n" +
                                 "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)\n" +
@@ -114,8 +113,8 @@ public class DefectsItemsMapper extends Mapper{
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
-            String statement = "INSERT OR IGNORE INTO DefectsItems (gpID, iID, location, supplied_date, creation_date, expiration_date) " +
-                    "VALUES (?,?,?,?,?,?)";
+            String statement = "INSERT OR IGNORE INTO DefectsItems (gpID, iID, location, supplied_date,expiration_date) " +
+                    "VALUES (?,?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, item.getProduct_id());
