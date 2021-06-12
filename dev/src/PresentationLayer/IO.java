@@ -20,10 +20,10 @@ public class IO {
     facade Facade;
 
     private IO(){
-        Facade=facade.getInstance();
+        Transport_Integration transport_integration=transport_facade;
+        Facade=facade.getInstance(transport_integration);
         Workers_Main_Menu workers_menu = new Workers_Main_Menu(workers_facade);
         Transport_Menu transport_menu = new Transport_Menu(transport_facade);
-        Transport_Integration transport_integration=transport_facade;
         Workers_Integration wk = workers_facade;
         transport_menu.addWorkersIntegration(wk);
 

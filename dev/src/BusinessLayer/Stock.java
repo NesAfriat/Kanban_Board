@@ -13,9 +13,9 @@ public class Stock {
     private ProductManager productManager;
     private boolean loadDefected;
 
-    public Stock(ProductManager productManager) {
+    public Stock() {
         this.defects = new LinkedList<>();
-        this.productManager = productManager;
+        this.productManager = new ProductManager();
         loadDefected = false;
     }
 

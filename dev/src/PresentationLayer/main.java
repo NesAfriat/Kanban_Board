@@ -13,8 +13,8 @@ public class main {
         IO io=IO.getInstance();
         io.Start_Menu();
 
-        Main_Menu mn = new Main_Menu();
-        mn.start();
+//        Main_Menu mn = new Main_Menu();
+//        mn.start();
 
 
         }

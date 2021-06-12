@@ -20,10 +20,12 @@ public class SupModel implements supModelI{
     private SuppliersControler suppliersControler;
     private OrderControler orderControler;
     private Transport_Integration transport_integration;
+
     SupModel(Transport_Integration transport_integration){
-        AgreementManager agreementManager=new AgreementManager(productManager);
+        AgreementManager agreementManager=new AgreementManager();
         suppliersControler = new SuppliersControler(agreementManager);
         orderControler = new OrderControler(agreementManager);
+        this.transport_integration=transport_integration;
 
     }
 
