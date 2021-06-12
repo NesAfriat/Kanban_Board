@@ -16,18 +16,25 @@ public class Stock_Controller {
     private Stock stock;      //holds all stock ever created
     private static Stock_Controller st_C = null;
 
-    private Stock_Controller(ProductManager productManager) {
-        this.stock = new Stock(productManager);
+    private Stock_Controller() {
+        this.stock = new Stock();
     }
 
 
 
-    public static Stock_Controller getInstance(ProductManager productManager) {
+    public static Stock_Controller getInstance() {
         if (st_C == null)
-            st_C = new Stock_Controller(productManager);
+            st_C = new Stock_Controller();
         return st_C;
     }
 
+    public Stock getStock()
+    {
+        if(st_C!=null)
+        return stock;
+        else
+            return null;
+    }
     private void check_valid_number(Number[] arr) throws Exception {
         for (Number number : arr) {
             if (number.doubleValue() < 0) {

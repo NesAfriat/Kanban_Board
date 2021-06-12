@@ -19,9 +19,9 @@ public class facade {
 //    private Reports_Controller reports_controller;
 //for invent
 private facade(){
-    ProductManager=new ProductManager();
-    inventModel=new inventModel(ProductManager);
-    supModel= new SupModel(ProductManager);
+    inventModel=new inventModel();
+    ProductManager=Stock_Controller.getInstance().getStock().getPM();
+    supModel= new SupModel();
 
 }
     public static facade getInstance()

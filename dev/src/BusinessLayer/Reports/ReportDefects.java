@@ -36,7 +36,7 @@ public class ReportDefects implements Report {
 
     @Override
     public void createReport() throws Exception {
-        Stock_Controller st_c = Stock_Controller.getInstance(null);
+        Stock_Controller st_c = Stock_Controller.getInstance();
         List<Item> items = st_c.get_defected_items();
         List<GeneralProduct> products;
         for (Item item : items) {

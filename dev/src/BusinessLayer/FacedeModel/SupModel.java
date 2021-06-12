@@ -18,8 +18,8 @@ public class SupModel implements supModelI{
     private static SupModel single_instance = null;
     private SuppliersControler suppliersControler;
     private OrderControler orderControler;
-    SupModel(ProductManager productManager){
-        AgreementManager agreementManager=new AgreementManager(productManager);
+    SupModel(){
+        AgreementManager agreementManager=new AgreementManager();
         suppliersControler = new SuppliersControler(agreementManager);
         orderControler = new OrderControler(agreementManager);
     }
@@ -27,7 +27,7 @@ public class SupModel implements supModelI{
     public static SupModel getInstance(ProductManager productManager)
     {
         if (single_instance == null)
-            single_instance = new SupModel(productManager);
+            single_instance = new SupModel();
         return single_instance;
     }
 

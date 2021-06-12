@@ -13,9 +13,9 @@ public class Stock {
     private ProductManager productManager;
     private boolean loadDefected;
 
-    public Stock(ProductManager productManager) {
+    public Stock() {
         this.defects = new LinkedList<>();
-        this.productManager = productManager;
+        this.productManager = new ProductManager();
         loadDefected = false;
     }
 
@@ -200,7 +200,10 @@ public class Stock {
                 defects.add(item);
         }
     }
-
+    public ProductManager getPM()
+    {
+        return  this.productManager;
+    }
     private void clearDefects() {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();

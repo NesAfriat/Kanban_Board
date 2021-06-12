@@ -21,8 +21,8 @@ public class inventModel {
     private Sales_Controller sales_controller;
     private Reports_Controller reports_controller;
 
-    public inventModel(ProductManager pm) {
-        this.stock_controller = Stock_Controller.getInstance(pm);
+    public inventModel() {
+        this.stock_controller = Stock_Controller.getInstance();
         this.sales_controller = Sales_Controller.getInstance();
         this.reports_controller = Reports_Controller.getInstance();
     }
