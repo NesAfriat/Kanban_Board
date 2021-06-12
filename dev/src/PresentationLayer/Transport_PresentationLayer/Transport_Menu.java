@@ -36,7 +36,7 @@ public class Transport_Menu {
             hm.put(2,1);
             hm.put(3,2);
             try {
-                bc.addTranportFromSupplier(2,2, hm, "10/05/2021");
+                bc.addTransportFromSupplier(2,2, hm, "10/05/2021");
             }catch (Exception e)
             {
                 System.out.println(e.toString());
