@@ -10,6 +10,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.Workers.WorkersList;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 import DataLayer.Workers_DAL.WorkerDataController;
+import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -220,6 +221,22 @@ public class ShiftController {
         throwIfNotAdmin();
         return calendar.getDefaultWorkDaySkeleton(day);
     }
+
+    public void  addRequest(int OrderID, String date) throws InnerLogicException {
+        WorkersUtils.dateValidation(date);
+        calendar.addRequest(OrderID, date);
+    }
+
+    public void  removeRequest(int OrderID, String date) throws InnerLogicException {
+        WorkersUtils.dateValidation(date);
+        calendar.removeRequest(OrderID, date);
+    }
+
+    public List<Pair<Integer, String>>  getRequests(){
+        return calendar.getRequests();
+    }
+
+
 
     private void throwIfNotAdmin() throws InnerLogicException {
         if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");

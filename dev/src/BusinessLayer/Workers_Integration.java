@@ -27,6 +27,5 @@ public interface Workers_Integration {
      */
     public ResponseT<List<WorkerResponse>> getWorkersInShiftByJob(String date, String shiftType, String Job);
 
-    //todo uncomment after workers add function
-    //public Response addRequest (int OrderID, String date);
+    public Response addRequest(int OrderID, String date);
 }

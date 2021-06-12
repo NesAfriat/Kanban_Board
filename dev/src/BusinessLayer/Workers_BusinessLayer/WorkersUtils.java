@@ -78,6 +78,20 @@ public class WorkersUtils {
         return now.getYear() == localDate.getYear() && now.getMonthValue() > localDate.getMonthValue();
     }
 
+    // returns true if date 1 and date 2 is at least 1 week from each other
+    public static boolean dateDifferenceGreaterThen7(String date1, String date2) throws InnerLogicException {
+        dateValidation(date1);
+        dateValidation(date2);
+        LocalDate localDate1 = LocalDate.parse(date1, formatter);
+        LocalDate localDate2 = LocalDate.parse(date2, formatter);
+        if (localDate1.isBefore(localDate2)){
+            return localDate1.plusDays(6).isBefore(localDate2);
+        }
+        else
+            return localDate2.plusDays(6).isBefore(localDate1);
+    }
+
+
     public static ShiftType parseShiftType(String shiftType) throws InnerLogicException {
         if ("Morning".equals(shiftType)) return ShiftType.Morning;
         else if ("Evening".equals(shiftType)) return ShiftType.Evening;

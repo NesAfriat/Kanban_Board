@@ -28,6 +28,7 @@ public class Workers_Main_Menu {
     protected static final Scanner scanner = new Scanner(System.in);
     protected Workers_Facade facade;
 
+    /*
     public void testingDataUpload(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
@@ -37,7 +38,7 @@ public class Workers_Main_Menu {
         facade.setDefaultJobsInShift(1 ,"Morning", "Usher", 3);
         facade.setDefaultJobsInShift(1 ,"Evening", "Usher", 0);
         facade.setDefaultJobsInShift(6 ,"Morning", "Usher", 0);
-        
+
         facade.addWorker( "dan", "000000001", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker( "avi", "000000002", "1", 1, "1", 1, 1 , "01/01/2018");
         facade.addWorker( "kobi", "000000003", "1", 1, "1", 1, 1 , "01/01/2021");
@@ -209,6 +210,7 @@ public class Workers_Main_Menu {
         facade.addConstraint(LocalDate.now().plusDays(17).format(formatter),"Evening", "Cant");
         facade.logout();
     }
+    */
 
     public void start() {
         boolean run = true;

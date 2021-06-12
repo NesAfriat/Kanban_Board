@@ -1,19 +1,21 @@
 package BusinessLayer.Workers_BusinessLayer;
 
+import BusinessLayer.GetOccupations_Integration;
 import BusinessLayer.Workers_BusinessLayer.Controllers.ShiftController;
 import BusinessLayer.Workers_BusinessLayer.Controllers.WorkerController;
 import BusinessLayer.Workers_BusinessLayer.Responses.*;
 import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Shifts.WorkDay;
 import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
+import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_Integration;
-import DataLayer.Workers_DAL.WorkerDataController;
+import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class Workers_Facade implements Workers_Integration {
+public class Workers_Facade implements Workers_Integration, GetOccupations_Integration {
     private WorkerController workerController;
     private ShiftController shiftController;
 
@@ -80,7 +82,7 @@ public class Workers_Facade implements Workers_Integration {
     }
 
     public ResponseT<WorkerResponse> addWorker(String name, String id, String bankAccount, double salary, String educationFund,
-                            int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate){
+                                               int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate){
         try{
             Worker newWorker = workerController.addWorker(name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                     sickDaysPerMonth, startWorkingDate);
@@ -320,6 +322,41 @@ public class Workers_Facade implements Workers_Integration {
                 workersResponse.add(new WorkerResponse(worker));
             }
             return new ResponseT<>(workersResponse);
+        }catch (InnerLogicException e){
+            return new ResponseT<>(e.getMessage());
+        }
+    }
+
+    @Override
+    public Response addRequest(int OrderID, String date) {
+        try{
+            shiftController.addRequest(OrderID, date);
+            return new Response();
+
+        }catch (InnerLogicException e){
+            return new Response(e.getMessage());
+        }
+    }
+
+    public Response removeRequest(int OrderID, String date) {
+        try{
+            shiftController.removeRequest(OrderID, date);
+            return new Response();
+        }catch (InnerLogicException e){
+            return new Response(e.getMessage());
+        }
+    }
+
+    public ResponseT<List<Pair<Integer, String>>> getRequests() {
+        return new ResponseT(shiftController.getRequests());
+    }
+
+    @Override
+    public ResponseT<List<Job>> getWorkerOccupations(String WorkerId) {
+        try{
+            Worker worker = workerController.getWorker(WorkerId);
+            List<Job> occupations = worker.getOccupations();
+            return new ResponseT<>(occupations);
         }catch (InnerLogicException e){
             return new ResponseT<>(e.getMessage());
         }

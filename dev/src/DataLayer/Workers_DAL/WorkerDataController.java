@@ -8,6 +8,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
+import javafx.util.Pair;
 import org.sqlite.SQLiteConfig;
 
 import java.io.File;
@@ -92,6 +93,12 @@ public class WorkerDataController {
                     "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON UPDATE CASCADE ON DELETE CASCADE\n" +
                     "); ";
 
+            String transportRequestsTable = "CREATE TABLE IF NOT EXISTS TransportRequests (\n" +
+                    "\tOrderID\tINTEGER NOT NULL,\n" +
+                    "\tDate\tTEXT NOT NULL,\n" +
+                    "\tPRIMARY KEY(OrderID, Date)\n" +
+                    "); ";
+
             String sql = workerTable + shiftTable;
             try (Connection conn = connect();
                  Statement stmt = conn.createStatement()) {
@@ -103,6 +110,7 @@ public class WorkerDataController {
                 stmt.execute(defaultWorkDayShift);
                 stmt.execute(shiftTable);
                 stmt.execute(workersInShiftsTable);
+                stmt.execute(transportRequestsTable);
                 LoadPreData();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -110,6 +118,7 @@ public class WorkerDataController {
         }
     }
 
+    // load some data to the db so we'll be able to test functionality
     private void LoadPreData() {
         // add all insert queries here
         initDefaultWorkDayShiftData();
@@ -119,6 +128,7 @@ public class WorkerDataController {
         initConstraintData();
         initOccupationData();
         initWorkersInShifts();
+        //initTransportRequests();
     }
 
     private Connection connect() {
@@ -600,7 +610,7 @@ public class WorkerDataController {
                     }else{
                         workDayMorning.addRequiredJob(job, 1);
                     }
-                        List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Morning", job.name());
+                    List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Morning", job.name());
                     for (Worker worker : workersToInsert) {
                         try {
                             workDayMorning.addWorker(job, worker);
@@ -668,8 +678,8 @@ public class WorkerDataController {
                 outputShift = new Shift();
                 for (Job job: WorkersUtils.getShiftWorkers()) {
                     if(job != Job.Shift_Manager){
-                    String jobAmountColumn = job.name() + "_Amount";
-                    outputShift.setAmountRequired(job, rs.getInt(jobAmountColumn));
+                        String jobAmountColumn = job.name() + "_Amount";
+                        outputShift.setAmountRequired(job, rs.getInt(jobAmountColumn));
                     }else{
                         outputShift.addRequiredJob(job, 1);
                     }
@@ -762,7 +772,7 @@ public class WorkerDataController {
             pstmt.setString(3, job);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-               amount = rs.getInt("Amount");
+                amount = rs.getInt("Amount");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -778,7 +788,7 @@ public class WorkerDataController {
         if (day == 6) day = 6;
         if (day == 7) day = 7;
         try (Connection conn = this.connect();
-                PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement);) {
             pstmt.setInt(1, amount);
             pstmt.setInt(2, day);
             pstmt.setString(3, ShiftType);
@@ -807,6 +817,48 @@ public class WorkerDataController {
             e.printStackTrace();
         }
     }
+
+    public List<Pair<Integer,String>> getAllRequests(){
+        List<Pair<Integer,String>> output = new LinkedList<>();
+        String sql = "SELECT * FROM TransportRequests";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)){
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                output.add(new Pair<>(rs.getInt("OrderID"), rs.getString("Date")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return output;
+    }
+
+    public void addRequest(int orderID, String date){
+        String statement = "INSERT INTO TransportRequests (OrderID, Date) VALUES (?,?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
+            pstmt.setInt(1, orderID);
+            pstmt.setString(2, date);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void removeRequest(int orderID, String date){
+        String statement = "DELETE FROM TransportRequests WHERE OrderID = ? AND Date = ?";
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
+            pstmt.setInt(1, orderID);
+            pstmt.setString(2, date);
+            pstmt.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+
 
     private void initDefaultWorkDayShiftData(){
         String statement = "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES " +
@@ -900,47 +952,47 @@ public class WorkerDataController {
 
     private void initDefaultWorkDayAssignData(){
         String statement = "INSERT INTO DefaultWorkDayAssign (Day,ShiftType,Job,Amount) VALUES (7,'Morning','Cashier',2), " +
-        " (7,'Evening','Cashier',2), " +
-        "(7,'Morning','Storekeeper',2)," +
-        "(7,'Evening','Storekeeper',2), " +
-        "(7,'Morning','Usher',3), " +
-        "(7,'Evening','Usher',3), " +
-        "(7,'Morning','Guard',1), " +
-        "(7,'Evening','Guard',1), "+
-        "(7,'Morning','DriverA',0), "+
-        "(7,'Evening','DriverA',0), "+
-        "(7,'Morning','DriverB',0), "+
-        "(7,'Evening','DriverB',0), "+
-        "(7,'Morning','DriverC',0), "+
-        "(7,'Evening','DriverC',0), "+
-        "(6,'Morning','Cashier',4), "+
-        "(6,'Evening','Cashier',3), "+
-        "(6,'Morning','Storekeeper',2), "+
-        "(6,'Evening','Storekeeper',2), "+
-        "(6,'Morning','Usher',3), "+
-        "(6,'Evening','Usher',3), "+
-        "(6,'Morning','Guard',1), "+
-        "(6,'Evening','Guard',1), "+
-        "(6,'Morning','DriverA',1), "+
-        "(6,'Evening','DriverA',0), "+
-        "(6,'Morning','DriverB',1), "+
-        "(6,'Evening','DriverB',0), "+
-        "(6,'Morning','DriverC',1), "+
-        "(6,'Evening','DriverC',0), "+
-        "(1,'Morning','Cashier',5), "+
-        "(1,'Evening','Cashier',6), "+
-        "(1,'Morning','Storekeeper',3), "+
-        "(1,'Evening','Storekeeper',3), "+
-        "(1,'Morning','Usher',4), "+
-        "(1,'Evening','Usher',4), "+
-        "(1,'Morning','Guard',2), "+
-        "(1,'Evening','Guard',2), "+
-        "(1,'Morning','DriverA',3), "+
-        "(1,'Evening','DriverA',2), "+
-        "(1,'Morning','DriverB',3), "+
-        "(1,'Evening','DriverB',2), "+
-        "(1,'Morning','DriverC',3), "+
-        "(1,'Evening','DriverC',1);";
+                " (7,'Evening','Cashier',2), " +
+                "(7,'Morning','Storekeeper',2)," +
+                "(7,'Evening','Storekeeper',2), " +
+                "(7,'Morning','Usher',3), " +
+                "(7,'Evening','Usher',3), " +
+                "(7,'Morning','Guard',1), " +
+                "(7,'Evening','Guard',1), "+
+                "(7,'Morning','DriverA',0), "+
+                "(7,'Evening','DriverA',0), "+
+                "(7,'Morning','DriverB',0), "+
+                "(7,'Evening','DriverB',0), "+
+                "(7,'Morning','DriverC',0), "+
+                "(7,'Evening','DriverC',0), "+
+                "(6,'Morning','Cashier',4), "+
+                "(6,'Evening','Cashier',3), "+
+                "(6,'Morning','Storekeeper',2), "+
+                "(6,'Evening','Storekeeper',2), "+
+                "(6,'Morning','Usher',3), "+
+                "(6,'Evening','Usher',3), "+
+                "(6,'Morning','Guard',1), "+
+                "(6,'Evening','Guard',1), "+
+                "(6,'Morning','DriverA',1), "+
+                "(6,'Evening','DriverA',0), "+
+                "(6,'Morning','DriverB',1), "+
+                "(6,'Evening','DriverB',0), "+
+                "(6,'Morning','DriverC',1), "+
+                "(6,'Evening','DriverC',0), "+
+                "(1,'Morning','Cashier',5), "+
+                "(1,'Evening','Cashier',6), "+
+                "(1,'Morning','Storekeeper',3), "+
+                "(1,'Evening','Storekeeper',3), "+
+                "(1,'Morning','Usher',4), "+
+                "(1,'Evening','Usher',4), "+
+                "(1,'Morning','Guard',2), "+
+                "(1,'Evening','Guard',2), "+
+                "(1,'Morning','DriverA',3), "+
+                "(1,'Evening','DriverA',2), "+
+                "(1,'Morning','DriverB',3), "+
+                "(1,'Evening','DriverB',2), "+
+                "(1,'Morning','DriverC',3), "+
+                "(1,'Evening','DriverC',1);";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
@@ -952,30 +1004,30 @@ public class WorkerDataController {
 
     private void initOccupationData(){
         String statement = "INSERT INTO Occupation (Worker_ID,Job) VALUES "+
-        "('100000009','Cashier'), " +
-        "('100000009','Storekeeper'), " +
-        "('100000009','Usher'), " +
-        "('100000008','Cashier'), " +
-        "('100000008','Storekeeper'), " +
-        "('100000003','Shift_Manager'), " +
-        "('100000014','Guard'), " +
-        "('100000002','Shift_Manager'), " +
-        "('100000013','Guard'), " +
-        "('100000001','HR_Manager'), " +
-        "('100000012','Guard'), " +
-        "('100000012','Usher'), " +
-        "('100000011','Storekeeper'), " +
-        "('100000011','Usher'), " +
-        "('100000007','Cashier'), " +
-        "('100000006','Cashier')," +
-        " ('100000005','Shift_Manager'), " +
-        "('100000004','Shift_Manager'), " +
-        "('100000010','Cashier')," +
-        " ('100000010','Storekeeper'), " +
-        "('100000010','Usher'), " +
-        "('100000010','DriverA'), " +
-        "('100000011','DriverB'), " +
-        "('100000012','DriverC');";
+                "('100000009','Cashier'), " +
+                "('100000009','Storekeeper'), " +
+                "('100000009','Usher'), " +
+                "('100000008','Cashier'), " +
+                "('100000008','Storekeeper'), " +
+                "('100000003','Shift_Manager'), " +
+                "('100000014','Guard'), " +
+                "('100000002','Shift_Manager'), " +
+                "('100000013','Guard'), " +
+                "('100000001','HR_Manager'), " +
+                "('100000012','Guard'), " +
+                "('100000012','Usher'), " +
+                "('100000011','Storekeeper'), " +
+                "('100000011','Usher'), " +
+                "('100000007','Cashier'), " +
+                "('100000006','Cashier')," +
+                " ('100000005','Shift_Manager'), " +
+                "('100000004','Shift_Manager'), " +
+                "('100000010','Cashier')," +
+                " ('100000010','Storekeeper'), " +
+                "('100000010','Usher'), " +
+                "('100000010','DriverA'), " +
+                "('100000011','DriverB'), " +
+                "('100000012','DriverC');";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
