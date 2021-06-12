@@ -1,5 +1,6 @@
 package BusinessLayer.Transport_BusinessLayer.Cont;
 
+import BusinessLayer.Controlls.Stock_Controller;
 import BusinessLayer.ProductManager;
 import BusinessLayer.Transport_BusinessLayer.Document.TransportDoc;
 import BusinessLayer.Transport_BusinessLayer.Document.Triple;
@@ -40,7 +41,8 @@ public class DocCont {
             // turn triple into hash map, the supplier is with id 1 in the hashmap.
             if (today.equals(tdDate)) {
                 for (Triple<Integer, Integer, Integer> item : theTransportBible.get(td).getProductList()) {
-                    //pm.recieveShipment(item.getFirst(), td.getDestinationSupplier().get(1),item.getSecond());
+                    pm = Stock_Controller.getInstance().getStock().getPM();
+                    pm.receiveShipment(item.getFirst(), td.getDestinationSupplier().get(1),item.getSecond());
                 }
             }
         }

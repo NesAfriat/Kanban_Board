@@ -2,6 +2,7 @@ package PresentationLayer.Transport_PresentationLayer;
 import BusinessLayer.Transport_BusinessLayer.Cont.Transport_Facade;
 import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
 import BusinessLayer.Workers_Integration;
+import DataLayer.Transport_DAL.Connect;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -21,15 +22,26 @@ public class Transport_Menu {
     }
     public Transport_Menu(Transport_Facade facade)
     {
+
         bc = facade;
         sc = new Scanner(System.in);
-        firstRun=false;
+
+        try {
+            Connect.createTablesAndLoadData();
+            loadData();
+        }catch (Exception e)
+        {
+
+        }
     }
 
     public void mainMenu() {
-        if(!firstRun)
-            loadData();
-        boolean run = true;
+
+        print("Please enter your ID\n");
+        String str = sc.nextLine();
+        boolean run = bc.canUserEnter(str);
+        if(run == false)
+            System.out.println("User can not enter\n");
         while(run){
             HashMap<Integer,Integer>hm = new HashMap<>();
             hm.put(1,3);

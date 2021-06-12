@@ -9,6 +9,8 @@ import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
 import BusinessLayer.Transport_BusinessLayer.Shops.*;
 import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
 import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
+import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
+import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_Integration;
 
 import java.text.DateFormat;
@@ -42,7 +44,20 @@ public class Transport_Facade implements Transport_Integration {
         this.docCont = docCont;
        // this.controllerShops = controllerShops;
     }
+    public boolean canUserEnter(String str) {
+        ResponseT<List<Job>> ans=  wk.getWorkerOccupations(str);
 
+        if(ans.ErrorOccurred()){
+            System.out.println(ans.getErrorMessage());
+            return false;
+        }
+        for (Job b : ans.value)
+        {
+            if(b==Job.Transport_Manager)
+                return true;
+        }
+        return false;
+    }
 
 
     public String getUnapprovedDocs(){
@@ -460,6 +475,7 @@ try {
 
 }
     }
+
 
 
 }
