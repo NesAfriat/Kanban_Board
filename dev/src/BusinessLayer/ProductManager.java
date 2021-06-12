@@ -5,6 +5,8 @@ import DataLayer.DataController;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -412,18 +414,21 @@ public class ProductManager {
     }
     //=========================================
     //Transport-integration
-    public void receiveShipment(int catalogID,int supID, int quantity,Date exp_date) {
+    public void receiveShipment(int catalogID,int supID, int quantity) {
         int gpID = getProductIdFromDB(catalogID, supID);
         GeneralProduct gp=null;
         int badItems=0;
         String location="";
+        Date exp_date = null;
         try {
             gp= get_product(gpID);
-            System.out.println("Please enter the defected items amount of the product's quantity");
+            System.out.println("gpID: "+gpID+"\tsupplierID: "+supID +"\tcatalogID: "+catalogID);
+            System.out.println("Please enter the defected items amount - of the product's quantity");
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             badItems = Integer.parseInt(bf.readLine());
             System.out.println("please type the location which the items are stored (<storage>\\<store_number_letter>): ");
             location = bf.readLine().trim().toLowerCase();
+            exp_date= getExpirationDate(bf);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -432,9 +437,20 @@ public class ProductManager {
         gp.addItems(quantity-badItems,location,new Date(),exp_date);
     }
 
-
-
-
+    private Date getExpirationDate(BufferedReader bf) throws IOException, ParseException {
+        String expirtion="";
+        System.out.println("please type the expiration date (YYYY-MM-DD)");
+        expirtion = bf.readLine().trim().toLowerCase();
+        Date exp= getDate(expirtion);
+        if(exp.before(new Date()));
+            System.out.println("By the expiration date the items are defected");
+        return exp;
+    }
+    private Date getDate(String date) throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.parse(date);
+    }
 
     //=================================
     //Data Fucntions

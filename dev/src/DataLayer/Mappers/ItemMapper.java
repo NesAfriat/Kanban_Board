@@ -114,7 +114,7 @@ public class ItemMapper extends Mapper {
         try (Connection conn = connect()) {
             boolean inserted = false;
             String statement = "INSERT OR IGNORE INTO Items (gpID, iID, location, supplied_date, expiration_date) " +
-                    "VALUES (?,?,?,?,?,?)";
+                    "VALUES (?,?,?,?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, item.getProduct_id());
