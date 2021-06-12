@@ -4,9 +4,11 @@ import BusinessLayer.AgreementManager;
 import BusinessLayer.IAgreement;
 import BusinessLayer.IdentityMap;
 import BusinessLayer.ProductSupplier;
+import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
 import DataLayer.DataController;
 
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +35,7 @@ public class OrderControler {
         idOrderCounter=dc.getOrderBigestId()+1;
     }
 
-    public void AddOrder(int SupId,HashMap<Integer,Integer> productQuantity,boolean isConstant,Integer constantorderdayfromdelivery){
+    public void AddOrder(int SupId, HashMap<Integer,Integer> productQuantity, boolean isConstant, Integer constantorderdayfromdelivery, Transport_Integration transport_integration) throws Exception {
         if(!CheckIfSupplierExist(SupId)){
             throw new IllegalArgumentException("the supplier is not exist in system");
         }
@@ -46,19 +48,36 @@ public class OrderControler {
             Orders.put(idOrderCounter, order);
             add_Order_to_the_data(order);
             idOrderCounter++;
+
+            String date= transport_integration.addTransportFromSupplierConstant(order.GetId(),SupId,productQuantity);
+            if (date==null) {
+                removeOrderFromTheData(order);
+                System.out.println("There is no driver available to transport this order, please try again later");
+            }
         }
         else {
             Order order = new Order(idOrderCounter, SupId, productQuantity, agreementManager.GetAgreement(SupId),false,constantorderdayfromdelivery);
             Orders.put(idOrderCounter, order);
             add_Order_to_the_data(order);
-
             idOrderCounter++;
+
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LL yyyy");
+            String formattedString = order.getDateTime().format(formatter);
+            String date_string_format=(formattedString.substring(0,2)+"/"+formattedString.substring(3,5)+"/"+formattedString.substring(6,10));
+            String date= transport_integration.addTransportFromSupplier(order.GetId(),SupId,productQuantity,date_string_format);
+            if (date==null) {
+                removeOrderFromTheData(order);
+                System.out.println("There is no driver available to transport order id: "+idOrderCounter+", please try again later");
+            }
         }
 
     }
-    public void create_order_Due_to_lack( HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity,Integer constantorderdayfromdelivery){
+
+
+    public void create_order_Due_to_lack( HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity,Integer constantorderdayfromdelivery,Transport_Integration transport_integration) throws Exception {
         for (Integer SupId : cheapest_supplier_products_by_quantity.keySet()) {
-            AddOrder(SupId,cheapest_supplier_products_by_quantity.get(SupId),false,constantorderdayfromdelivery);
+            AddOrder(SupId,cheapest_supplier_products_by_quantity.get(SupId),false,constantorderdayfromdelivery,transport_integration);
         }
     }
 

@@ -10,18 +10,18 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class facade {
-    private static facade single_instance = null;
-    private inventModel inventModel;
-    private SupModel supModel;
-    private BusinessLayer.ProductManager ProductManager;
-//    private Stock_Controller stock_controller;
+        private static facade single_instance = null;
+        private inventModel inventModel;
+        private SupModel supModel;
+        private BusinessLayer.ProductManager ProductManager;
+        //    private Stock_Controller stock_controller;
 //    private Sales_Controller sales_controller;
 //    private Reports_Controller reports_controller;
 //for invent
-private facade(){
-    ProductManager=new ProductManager();
-    inventModel=new inventModel(ProductManager);
-    supModel= new SupModel(ProductManager);
+        private facade(){
+            ProductManager=new ProductManager();
+            inventModel=new inventModel(ProductManager);
+            supModel= new SupModel(ProductManager);
 
 }
     public static facade getInstance()
