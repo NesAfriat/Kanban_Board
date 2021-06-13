@@ -13,7 +13,6 @@ import java.util.*;
 
 public class facade {
     private static facade single_instance = null;
-    private Workers_Integration workersIntegration;
     private inventModel inventModel;
     private SupModel supModel;
     private BusinessLayer.ProductManager ProductManager;
@@ -295,9 +294,4 @@ public class facade {
         return supModel.getAllOrders();
     }
 
-
-    public BusinessLayer.Workers_BusinessLayer.Responses.ResponseT<List<Job>> getWorkerOccupations(String id) {
-        return workersIntegration.getWorkerOccupations(id);
-
-    }
 }
