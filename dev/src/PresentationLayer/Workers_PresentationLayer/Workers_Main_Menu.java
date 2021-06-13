@@ -39,6 +39,7 @@ public class Workers_Main_Menu {
                 }
                 else {
                     printPrettyConfirm("Hello, " + worker.value.getName() + "!");
+                    run = false;
                     if (worker.value.getIsAdmin()) {
                         new HRManagerMenu(facade).run();
                     } else {
