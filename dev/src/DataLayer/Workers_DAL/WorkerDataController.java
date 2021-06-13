@@ -30,7 +30,7 @@ public class WorkerDataController {
 
     public void InitDatabase(){
         File f = new File(db_name);
-        if(!f.exists() && !f.isDirectory()) {
+        //if(!f.exists() && !f.isDirectory()) {
             String workerTable = "CREATE TABLE IF NOT EXISTS Worker (" +
                     "\tID\tTEXT NOT NULL," +
                     "\tName\tTEXT NOT NULL," +
@@ -115,7 +115,7 @@ public class WorkerDataController {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
+       // }
     }
 
     // load some data to the db so we'll be able to test functionality
@@ -861,7 +861,7 @@ public class WorkerDataController {
 
 
     private void initDefaultWorkDayShiftData(){
-        String statement = "INSERT INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES " +
+        String statement = "INSERT OR IGNORE INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES " +
                 "(1,1,1), (2,1,1), (3,0,1), (4,1,0), (5,1,1), (6,1,0), (7,0,1);";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
@@ -873,7 +873,7 @@ public class WorkerDataController {
 
     private void initWorkersInShifts() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String statement = "INSERT INTO Workers_In_Shift (Worker_ID,Date,ShiftType,Job) VALUES" +
+        String statement = "INSERT OR IGNORE INTO Workers_In_Shift (Worker_ID,Date,ShiftType,Job) VALUES" +
                 " ('100000006',?,'Morning','Cashier'), " +
                 "('100000007',?,'Morning','Cashier'), " +
                 "('100000008',?,'Morning','Storekeeper'), " +
@@ -926,7 +926,7 @@ public class WorkerDataController {
 
     private void initShiftsData(){
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String statement = "INSERT INTO Shift (Date,ShiftType,Approved,Cashier_Amount,Storekeeper_Amount,Usher_Amount,Guard_Amount,DriverA_Amount,DriverB_Amount,DriverC_Amount) VALUES " +
+        String statement = "INSERT OR IGNORE INTO Shift (Date,ShiftType,Approved,Cashier_Amount,Storekeeper_Amount,Usher_Amount,Guard_Amount,DriverA_Amount,DriverB_Amount,DriverC_Amount) VALUES " +
                 "(? ,'Morning',1,2,1,3,1,1,1,1), " +
                 "(? ,'Evening',0,2,1,3,1,1,1,1), " +
                 "(? ,'Morning',0,2,1,1,1,1,1,1), " +
@@ -951,7 +951,7 @@ public class WorkerDataController {
     }
 
     private void initDefaultWorkDayAssignData(){
-        String statement = "INSERT INTO DefaultWorkDayAssign (Day,ShiftType,Job,Amount) VALUES (7,'Morning','Cashier',2), " +
+        String statement = "INSERT OR IGNORE INTO DefaultWorkDayAssign (Day,ShiftType,Job,Amount) VALUES (7,'Morning','Cashier',2), " +
                 " (7,'Evening','Cashier',2), " +
                 "(7,'Morning','Storekeeper',2)," +
                 "(7,'Evening','Storekeeper',2), " +
@@ -1003,13 +1003,18 @@ public class WorkerDataController {
     }
 
     private void initOccupationData(){
-        String statement = "INSERT INTO Occupation (Worker_ID,Job) VALUES "+
+        String statement = "INSERT OR IGNORE INTO Occupation (Worker_ID,Job) VALUES "+
                 "('100000009','Cashier'), " +
                 "('100000009','Storekeeper'), " +
                 "('100000009','Usher'), " +
                 "('100000008','Cashier'), " +
                 "('100000008','Storekeeper'), " +
+                "('100000003','Transport_Manager'), " +
                 "('100000003','Shift_Manager'), " +
+                "('100000003','Store_Manager'), " +
+                "('100000002','Transport_Manager'), " +
+                "('100000002','Shift_Manager'), " +
+                "('100000002','Store_Manager'), " +
                 "('100000014','Guard'), " +
                 "('100000002','Shift_Manager'), " +
                 "('100000013','Guard'), " +
@@ -1038,7 +1043,7 @@ public class WorkerDataController {
     }
 
     private void initConstraintData(){
-        String statement = "INSERT INTO Constraints (Worker_ID,Date,ShiftType,ConstraintType) VALUES" +
+        String statement = "INSERT OR IGNORE INTO Constraints (Worker_ID,Date,ShiftType,ConstraintType) VALUES" +
                 " ('100000002','21/09/2021','Morning','Cant')," +
                 " ('100000002','21/09/2021','Evening','Cant')," +
                 " ('100000002','22/09/2021','Morning','Cant')," +
@@ -1054,7 +1059,7 @@ public class WorkerDataController {
     }
 
     private void initWorkerData(){
-        String statement = "INSERT INTO Worker (ID,Name,BankAccount,Salary,EducationFund,vacationDaysPerMonth,sickDaysPerMonth,startWorkingDate,endWorkingDate)" +
+        String statement = "INSERT OR IGNORE INTO Worker (ID,Name,BankAccount,Salary,EducationFund,vacationDaysPerMonth,sickDaysPerMonth,startWorkingDate,endWorkingDate)" +
                 " VALUES " +
                 "('100000009','ronen','1',1.0,'1',1,1,'01/01/2018',NULL), " +
                 "('100000008','ronen','1',1.0,'1',1,1,'01/01/2018',NULL), " +
