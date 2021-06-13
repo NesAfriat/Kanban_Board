@@ -18,7 +18,6 @@ public class Main_Menu {
     private static final Scanner scanner = new Scanner(System.in);
     private static final Workers_Facade workers_facade = new Workers_Facade();
     private static final Transport_Facade transport_facade = new Transport_Facade();
-    private boolean firstRun;
     GetOccupations_Integration getOccupations_integration;
 
 
@@ -53,9 +52,6 @@ public class Main_Menu {
         supplierFunctionality=new SupplierFunctionality(Facade);
         orderFunctionality=new OrderFunctionality(Facade);
 
-
-
-        firstRun = true;
     }
     public void start() throws IOException {
         System.out.println('\n' + "----------------------------------------------------------");

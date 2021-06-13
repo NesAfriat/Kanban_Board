@@ -21,7 +21,8 @@ public class WorkersUtils {
         put("Guard",Job.Guard);
         put("Shift_Manager",Job.Shift_Manager);
         put("HR_Manager",Job.HR_Manager);
-        put("Branch_Manager",Job.Branch_Manager);
+        put("Store_Manager",Job.Store_Manager);
+        put("Transport_Manager",Job.Transport_Manager);
         put("Assistant_Branch_Manager",Job.Assistant_Branch_Manager);
         put("DriverA",Job.DriverA);
         put("DriverB",Job.DriverB);

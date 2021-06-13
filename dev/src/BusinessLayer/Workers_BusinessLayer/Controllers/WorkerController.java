@@ -56,7 +56,7 @@ public class WorkerController {
     }
 
     public Worker getWorker(String id) throws InnerLogicException {
-       if(!loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to get details of another worker");
+       if(loggedIn != null && !loggedIn.getIsAdmin()) throw new InnerLogicException("non admin worker tried to get details of another worker");
        return workersList.getWorker(id);
     }
 
