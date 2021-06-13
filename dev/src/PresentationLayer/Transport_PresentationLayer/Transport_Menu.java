@@ -53,10 +53,8 @@ public class Transport_Menu {
             {
                 System.out.println(e.toString());
             }
-
-
+            bc.sendTransportToStock(); //TODO <- bug when adding a new Order from suppliers
             run = runProgram();
-//            bc.sendTransportToStock(); //TODO look here
         }
     }
 
