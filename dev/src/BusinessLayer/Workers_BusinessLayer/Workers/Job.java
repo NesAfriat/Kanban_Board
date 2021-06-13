@@ -7,7 +7,7 @@ public enum Job {
     Guard,
     Shift_Manager,
     HR_Manager,
-    Branch_Manager,
+    Store_Manager,
     Assistant_Branch_Manager,
     Transport_Manager,
     DriverA,

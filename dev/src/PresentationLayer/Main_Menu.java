@@ -3,25 +3,15 @@ package PresentationLayer;
 import BusinessLayer.FacedeModel.facade;
 import BusinessLayer.GetOccupations_Integration;
 import BusinessLayer.Transport_BusinessLayer.Cont.Transport_Facade;
-import BusinessLayer.Transport_BusinessLayer.Document.TransportDoc;
-import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
-import BusinessLayer.Transport_BusinessLayer.Drives.License;
-import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
-import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
-import BusinessLayer.Transport_BusinessLayer.Shops.Area;
-import BusinessLayer.Transport_BusinessLayer.Shops.Product;
-import BusinessLayer.Transport_BusinessLayer.Shops.Store;
-import BusinessLayer.Transport_BusinessLayer.Shops.Supplier;
 import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
 import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_Integration;
-import DataLayer.Transport_DAL.TransportDocDAL;
+import PresentationLayer.Stock_PresentationLayer.Stock_Main_Menu;
+import PresentationLayer.Stock_PresentationLayer.inventPresentation;
 import PresentationLayer.Transport_PresentationLayer.Transport_Menu;
 import PresentationLayer.Workers_PresentationLayer.Workers_Main_Menu;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Main_Menu {
@@ -35,7 +25,7 @@ public class Main_Menu {
     //------------------------------------------------------
     private SupplierFunctionality supplierFunctionality;
     private  OrderFunctionality orderFunctionality;
-    private  inventPresentation InventPresentation;
+    private Stock_Main_Menu InventPresentation;
     private  Workers_Main_Menu workers_menu;
     private  Transport_Menu transport_menu;
 
@@ -47,7 +37,7 @@ public class Main_Menu {
     public Main_Menu(){
         //-------------------------------
         Transport_Integration transport_integration=transport_facade;
-        InventPresentation=new inventPresentation(transport_integration);
+        InventPresentation=new Stock_Main_Menu(transport_integration);
 
         Facade=facade.getInstance(transport_integration);
          workers_menu = new Workers_Main_Menu(workers_facade);
@@ -101,7 +91,7 @@ public class Main_Menu {
                     orderFunctionality.OrderFunctionalityMenu(getOccupations_integration);
                     break;
                 case 5:
-                    InventPresentation.main_window(getOccupations_integration);
+                    InventPresentation.start(getOccupations_integration);
                     break;
                 case 6:
                     run = false;

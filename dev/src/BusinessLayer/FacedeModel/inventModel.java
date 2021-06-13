@@ -9,12 +9,14 @@ import BusinessLayer.Item;
 import BusinessLayer.Reports.Report;
 import BusinessLayer.Sales.Sale;
 import BusinessLayer.ProductManager;
+import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 public class inventModel {
     private Stock_Controller stock_controller;
@@ -176,7 +178,6 @@ public class inventModel {
      * @param quantity
      * @param location
      * @param supplied_date
-     * @param creation_date
      * @param expiration_date
      * @return
      */
