@@ -321,8 +321,8 @@ public class Transport_Facade implements Transport_Integration {
         Tuple<String, List<Driver>> dateWithDriverList = driversController.getDateWithDriver(date);
         if(dateWithDriverList==null){
             //tell workers to add a driver + storekeeper;
-            //todo delete comment after workers add the function
-           // wk.addRequest(orderID,date);
+           
+            wk.addRequest(orderID,date);
             return null;
         }
 

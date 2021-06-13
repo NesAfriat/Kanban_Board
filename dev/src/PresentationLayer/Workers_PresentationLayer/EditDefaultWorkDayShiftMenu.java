@@ -16,7 +16,7 @@ class EditDefaultWorkDayShiftMenu extends HRManagerMenu {
             System.out.println("3) Get workday default settings");
             System.out.println("4) Edit workday default");
             System.out.println("5) Previous");
-            System.out.println("6) Exit");
+           // System.out.println("6) Exit");
             System.out.print("Option: ");
             int option = getInputInt();
             switch (option) {
@@ -35,8 +35,8 @@ class EditDefaultWorkDayShiftMenu extends HRManagerMenu {
                 case 5:
                     prev = true;
                     break;
-                case 6:
-                    super.exit();
+//                case 6:
+//                    super.exit();
                 default:
                     System.out.println("No such option");
             }

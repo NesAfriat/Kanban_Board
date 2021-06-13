@@ -17,7 +17,7 @@ class HRManagerMenu extends Workers_Main_Menu {
             System.out.println("1) Manage Workers");
             System.out.println("2) Manage Shifts");
             System.out.println("3) Logout");
-            System.out.println("4) Exit");
+            //System.out.println("4) Exit");
             System.out.print("Option: ");
             int option = getInputInt();
             switch (option) {
@@ -31,8 +31,8 @@ class HRManagerMenu extends Workers_Main_Menu {
                     LogOut();
                     prev = true;
                     break;
-                case 4:
-                    super.exit();
+//                case 4:
+//                    super.exit();
                 default:
                     printPrettyError("No such option");
                     run();

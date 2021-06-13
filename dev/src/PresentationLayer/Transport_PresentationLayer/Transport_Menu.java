@@ -83,13 +83,6 @@ public class Transport_Menu {
 
 
 
-
-
-
-
-
-
-
         input = sc.nextInt();
         return input;
     }

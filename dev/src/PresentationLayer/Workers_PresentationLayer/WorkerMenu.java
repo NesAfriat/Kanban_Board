@@ -21,7 +21,7 @@ class WorkerMenu extends Workers_Main_Menu {
              System.out.println("3) Add constraint");
              System.out.println("4) Remove constraint");
              System.out.println("5) Logout");
-             System.out.println("6) Exit");
+             //System.out.println("6) Exit");
              System.out.print("Option: ");
              int option = getInputInt();
              switch (option) {
@@ -41,8 +41,8 @@ class WorkerMenu extends Workers_Main_Menu {
                      LogOut();
                      prev = true;
                      break;
-                 case 6:
-                     super.exit();
+//                 case 6:
+//                     super.exit();
                  default:
                      printPrettyError("No such option");
              }
