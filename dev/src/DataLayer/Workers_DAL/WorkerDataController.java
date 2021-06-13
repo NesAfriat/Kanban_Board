@@ -20,16 +20,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WorkerDataController {
-    private final static String db_name = "WorkersDB.db";
+    //private final static String db_name = "database.db";
     private final IdentityMap identityMap;
-    private final static String connectionPath = "jdbc:sqlite:WorkersDB.db";
+    private final static String connectionPath = "jdbc:sqlite:database.db";
 
     public WorkerDataController() {
         this.identityMap = IdentityMap.getInstance();
     }
 
     public void InitDatabase(){
-        File f = new File(db_name);
+        //File f = new File(db_name);
         //if(!f.exists() && !f.isDirectory()) {
             String workerTable = "CREATE TABLE IF NOT EXISTS Worker (" +
                     "\tID\tTEXT NOT NULL," +

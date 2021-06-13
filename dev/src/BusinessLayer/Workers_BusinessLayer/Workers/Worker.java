@@ -3,8 +3,6 @@ package BusinessLayer.Workers_BusinessLayer.Workers;
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Shifts.*;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
-import DataLayer.Workers_DAL.WorkerDataController;
-
 import java.util.LinkedList;
 import java.util.List;
 
@@ -114,7 +112,7 @@ public class Worker {
     }
 
     public boolean getIsAdmin(){
-        return occupations.contains(Job.HR_Manager);
+        return occupations.contains(Job.HR_Manager) || occupations.contains(Job.Shift_Manager) ;
     }
 
     public String getName() {
