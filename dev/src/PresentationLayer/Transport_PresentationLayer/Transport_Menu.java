@@ -54,8 +54,9 @@ public class Transport_Menu {
                 System.out.println(e.toString());
             }
 
-            bc.sendTransportToStock();
+
             run = runProgram();
+//            bc.sendTransportToStock(); //TODO look here
         }
     }
 
