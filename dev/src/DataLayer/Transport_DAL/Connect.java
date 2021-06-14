@@ -58,6 +58,7 @@ public class Connect {
                 "\t\"OriginStoreID\"\tINTEGER,\n" +
                 "\t\"Area\"\tTEXT,\n" +
                 "\t\"truckWeightDep\"\tINTEGER,\n" +
+                "\t\"approved\"\tINTEGER,\n" +
                 "\tPRIMARY KEY(\"Id\",\"Version\")\n" +
                 ");\n" +
                 "CREATE TABLE IF NOT EXISTS \"TransportDocStoreProduct\" (\n" +
@@ -93,7 +94,7 @@ public class Connect {
                 "\t\"Name\"\tTEXT,\n" +
                 "\tPRIMARY KEY(\"Name\")\n" +
                 ");\n" +
-                "INSERT INTO \"TransportDocument\" (\"Id\",\"Version\",\"TransDate\",\"LeftOrigin\",\"DriverName\",\"DriverID\",\"DriverLicense\",\"TruckID\",\"OriginStoreID\",\"Area\",\"truckWeightDep\") VALUES (0,0,'03/11/1998','08:32:24','Dan',209889510,'typeA',1223199,2,'A',1000);\n" +
+                "INSERT INTO \"TransportDocument\" (\"Id\",\"Version\",\"TransDate\",\"LeftOrigin\",\"DriverName\",\"DriverID\",\"DriverLicense\",\"TruckID\",\"OriginStoreID\",\"Area\",\"truckWeightDep\",\"approved\") VALUES (0,0,'03/11/1998','08:32:24','Dan',209889510,'typeA',1223199,2,'A',1000,0);\n" +
                 "INSERT INTO \"Truck\" (\"Name\",\"LicensePlate\",\"TruckType\") VALUES ('CyberTruck',1223123,'Lamborghini'),\n" +
                 " ('Mad Max',1223199,'Ferrari'),\n" +
                 " ('Rolling',1223211,'Mercedes'),\n" +

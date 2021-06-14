@@ -42,6 +42,7 @@ public class Transport_Menu {
         print("Please enter your ID\n");
         String str = sc.nextLine();
         boolean run = bc.canUserEnter(str);
+
         if(run == false)
             System.out.println("User can not enter\n");
         while(run){
@@ -55,7 +56,8 @@ public class Transport_Menu {
             {
                 System.out.println(e.toString());
             }*/
-            bc.sendTransportToStock(); //TODO <- bug when adding a new Order from suppliers
+            bc.sendTransportToStock();
+
             run = runProgram();
         }
     }
