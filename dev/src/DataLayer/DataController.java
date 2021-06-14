@@ -34,6 +34,7 @@ public class DataController {
     private SuppliersMapper suppliersMapper;
     private SuppliersContactsMapper suppliersContactsMapper;
     private SuppliersProductsMapper suppliersProductsMapper;
+    private ArrivedShipmentMapper arrivedShipmentMapper;
 
 
     public static Date getDate(String date) throws ParseException {
@@ -73,6 +74,7 @@ public class DataController {
         suppliersProductsMapper = new SuppliersProductsMapper(); //needs supplier+gp
         apdMapper = new AgreementProductDiscMapper(); //needs supplier+supProd
         orderProductsMapper = new OrderProductsMapper(); //needs order+supProd
+        arrivedShipmentMapper = new ArrivedShipmentMapper();
 
         reportsMapper.setRCM(rcMapper);
         salesMapper.setAcm(acMapper);
@@ -522,4 +524,7 @@ public class DataController {
     }
 
 
+    public void insertArrivedShipment(int gpID, int quantity) {
+
+    }
 }

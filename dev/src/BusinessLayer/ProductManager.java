@@ -418,6 +418,12 @@ public class ProductManager {
         int gpID = getProductIdFromDB(catalogID, supID);
         addShipment(gpID,quantity);
     }
+
+    private void addShipment(int gpID, int quantity) {
+        DataController dc = DataController.getInstance();
+        dc.insertArrivedShipment(gpID, quantity);
+    }
+
     public void receiveLastShipment()
     {
         GeneralProduct gp=null;
