@@ -294,4 +294,7 @@ public class facade {
         return supModel.getAllOrders();
     }
 
+    public Response receiveLastShipment() {
+        return inventModel.receiveLastShipment();
+    }
 }
