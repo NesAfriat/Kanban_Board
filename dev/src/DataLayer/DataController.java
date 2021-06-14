@@ -11,6 +11,7 @@ import DataLayer.Mappers.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -521,5 +522,11 @@ public class DataController {
         return order;
     }
 
+    //stock-shipment functions
 
+
+    public HashMap<Integer, Integer> getLastShipment() {
+        HashMap<Integer,Integer> supply= ArrivedShipmentMapper.getLastShippment();
+
+    }
 }

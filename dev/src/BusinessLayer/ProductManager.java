@@ -418,6 +418,7 @@ public class ProductManager {
         int gpID = getProductIdFromDB(catalogID, supID);
         addShipment(gpID,quantity);
     }
+
     public void receiveLastShipment()
     {
         GeneralProduct gp=null;
@@ -446,7 +447,8 @@ public class ProductManager {
         }
 
     }
-    
+
+
     /*
         String location="";
         Date exp_date = null;
@@ -701,4 +703,16 @@ public class ProductManager {
             System.out.println("failed getting gpID by supplier with supdID="+supID+"catalogID="+catalogID);
              return gpId;
     }
+
+    private void addShipment(int gpID, int quantity) {
+        DataController dc = DataController.getInstance();
+        dc.addShipment(gpID,quantity);
+    }
+
+
+    private HashMap<Integer, Integer> getLastShipment() {
+        DataController dc = DataController.getInstance();
+        return dc.getLastShipment();
+    }
+
 }
