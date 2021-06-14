@@ -54,12 +54,12 @@ public class Stock_Main_Menu {
                         }
                     }
                     run=false;
-                    System.out.println("Exited workers manage system");
+                    System.out.println("Exited Stock manage system");
                 }
             }
             else if (inputi == 2){
                 run = false;
-                System.out.println("Exited workers manage system");
+                System.out.println("Exited Stock manage system");
             }
             else {
                 System.out.println("There's no such option");

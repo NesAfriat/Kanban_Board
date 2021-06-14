@@ -157,8 +157,8 @@ public class GeneralProduct {
     public LinkedList<Integer> addItems(Integer quantity, String location, Date supplied_date, Date expiration_date) {
         LinkedList<Integer> itemsAdded = new LinkedList<>();
         for (int i = 0; i < quantity; i++) {
-            Item item = new Item(item_id, product_id, location, supplied_date, expiration_date);
             item_id++;
+            Item item = new Item(item_id, product_id, location, supplied_date, expiration_date);
             addItemToGP(item);
             items.add(item);
             itemsAdded.add(item.getItem_id());
