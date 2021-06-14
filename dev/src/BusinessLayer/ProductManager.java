@@ -417,25 +417,26 @@ public class ProductManager {
     public void receiveShipment(int catalogID,int supID, int quantity) {
         int gpID = getProductIdFromDB(catalogID, supID);
         GeneralProduct gp=null;
-        int badItems=0;
+        try {
+            gp = get_product(gpID);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        addShipment(gpID,quantity);
+    }
+
+    
+    /*               int badItems=0;
         String location="";
         Date exp_date = null;
-        try {
-            gp= get_product(gpID);
-            System.out.println("gpID: "+gpID+"\tsupplierID: "+supID +"\tcatalogID: "+catalogID);
+     System.out.println("gpID: "+gpID+"\tsupplierID: "+supID +"\tcatalogID: "+catalogID);
             System.out.println("Please enter the defected items amount - of the product's quantity");
             BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
             badItems = Integer.parseInt(bf.readLine());
             System.out.println("please type the location which the items are stored (<storage>\\<store_number_letter>): ");
             location = bf.readLine().trim().toLowerCase();
             exp_date= getExpirationDate(bf);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        gp.addItems(quantity-badItems,location,new Date(),exp_date);
-    }
+                    gp.addItems(quantity-badItems,location,new Date(),exp_date);*/
 
     private Date getExpirationDate(BufferedReader bf) throws IOException, ParseException {
         String expirtion="";
