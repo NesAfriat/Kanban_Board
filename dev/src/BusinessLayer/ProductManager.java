@@ -419,11 +419,6 @@ public class ProductManager {
         addShipment(gpID,quantity);
     }
 
-    private void addShipment(int gpID, int quantity) {
-        DataController dc = DataController.getInstance();
-        dc.insertArrivedShipment(gpID, quantity);
-    }
-
     public void receiveLastShipment()
     {
         GeneralProduct gp=null;
@@ -452,18 +447,7 @@ public class ProductManager {
         }
 
     }
-    
-    /*
-        String location="";
-        Date exp_date = null;
-     System.out.println("gpID: "+gpID+"\tsupplierID: "+supID +"\tcatalogID: "+catalogID);
-            System.out.println("Please enter the defected items amount - of the product's quantity");
-            BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-            badItems = Integer.parseInt(bf.readLine());
-            System.out.println("please type the location which the items are stored (<storage>\\<store_number_letter>): ");
-            location = bf.readLine().trim().toLowerCase();
-            exp_date= getExpirationDate(bf);
-                    gp.addItems(quantity-badItems,location,new Date(),exp_date);*/
+
 
     private Date getExpirationDate(BufferedReader bf) throws IOException, ParseException {
         String expirtion="";
@@ -707,4 +691,14 @@ public class ProductManager {
             System.out.println("failed getting gpID by supplier with supdID="+supID+"catalogID="+catalogID);
              return gpId;
     }
+
+    private void addShipment(int gpID, int quantity) {
+        DataController dc = DataController.getInstance();
+        dc.insertArrivedShipment(gpID, quantity);
+    }
+    private HashMap<Integer, Integer> getLastShipment() {
+        DataController dc = DataController.getInstance();
+        return dc.getLastShipment();
+    }
+
 }
