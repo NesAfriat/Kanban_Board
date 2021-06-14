@@ -8,6 +8,7 @@ import BusinessLayer.SupplierBuissness.Contact;
 import BusinessLayer.SupplierBuissness.Supplier;
 import DataLayer.Mappers.*;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -525,6 +526,10 @@ public class DataController {
 
 
     public void insertArrivedShipment(int gpID, int quantity) {
-
+        try{
+            arrivedShipmentMapper.insert(gpID, quantity);
+        }catch(SQLException e){
+            arrivedShipmentMapper.addQuantity(gpID,quantity);
+        }
     }
 }
