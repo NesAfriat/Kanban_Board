@@ -211,4 +211,7 @@ public class Stock {
         dc.removeAllDefects();
     }
 
+    public void receiveLastShipment() {
+        productManager.receiveLastShipment();
+    }
 }
