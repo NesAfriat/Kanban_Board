@@ -82,6 +82,7 @@ public class StorekeeperMenu {
             System.out.println("13. show product items info");
             System.out.println("14. update item location");
             System.out.println("15. set item defected");
+            System.out.println("16. Receive lst shipment");
 
             inputs = reader.readLine().trim();
             if(inputs.equals("")) {
@@ -228,6 +229,11 @@ public class StorekeeperMenu {
                     System.out.println("please type the item id: ");
                     int item_id = Integer.parseInt(reader.readLine());
                     res = Facade.set_item_defected(product_id, item_id);
+                    check_action(res);
+                    break;
+                }
+                case 16: {
+                    res = Facade.receiveLastShipment();
                     check_action(res);
                     break;
                 }

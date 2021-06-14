@@ -416,26 +416,38 @@ public class ProductManager {
     //Transport-integration
     public void receiveShipment(int catalogID,int supID, int quantity) {
         int gpID = getProductIdFromDB(catalogID, supID);
+        addShipment(gpID,quantity);
+    }
+
+    public void receiveLastShipment()
+    {
         GeneralProduct gp=null;
-        int badItems=0;
         String location="";
         Date exp_date = null;
-        try {
-            gp= get_product(gpID);
-            System.out.println("gpID: "+gpID+"\tsupplierID: "+supID +"\tcatalogID: "+catalogID);
-            System.out.println("Please enter the defected items amount - of the product's quantity");
-            BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
-            badItems = Integer.parseInt(bf.readLine());
-            System.out.println("please type the location which the items are stored (<storage>\\<store_number_letter>): ");
-            location = bf.readLine().trim().toLowerCase();
-            exp_date= getExpirationDate(bf);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        int badItems=0;
+        BufferedReader bf = new BufferedReader(new InputStreamReader(System.in));
+        HashMap<Integer,Integer> supply= getLastShipment();
+        for(int gpID: supply.keySet())
+        {
+            try {
+                System.out.println("gpID: "+gpID);
+                System.out.println("Please enter the defected items amount - of the product's quantity");
+                badItems = Integer.parseInt(bf.readLine());
+                System.out.println("please type the location which the items are stored (<storage>\\<store_number_letter>): ");
+                location = bf.readLine().trim().toLowerCase();
+                exp_date= getExpirationDate(bf);
+                gp = get_product(gpID);
+                gp.addItems(supply.get(gpID)-badItems,location,new Date(),exp_date); //TODO add Hanaha - defected items does not received in the system
+            } catch (IOException | ParseException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
-        gp.addItems(quantity-badItems,location,new Date(),exp_date);
+
     }
+
 
     private Date getExpirationDate(BufferedReader bf) throws IOException, ParseException {
         String expirtion="";
@@ -679,4 +691,14 @@ public class ProductManager {
             System.out.println("failed getting gpID by supplier with supdID="+supID+"catalogID="+catalogID);
              return gpId;
     }
+
+    private void addShipment(int gpID, int quantity) {
+        DataController dc = DataController.getInstance();
+        dc.insertArrivedShipment(gpID, quantity);
+    }
+    private HashMap<Integer, Integer> getLastShipment() {
+        DataController dc = DataController.getInstance();
+        return dc.getLastShipment();
+    }
+
 }

@@ -22,8 +22,8 @@ public class Stock_Main_Menu {
     int inputi;
     String inputs;
 
-    public Stock_Main_Menu(Transport_Integration transport_integration) {
-        Facade = facade.getInstance(transport_integration);
+    public Stock_Main_Menu(Transport_Integration transport_integration,GetOccupations_Integration getOccupations_integration) {
+        Facade = facade.getInstance(transport_integration,getOccupations_integration);
         reader = new BufferedReader(new InputStreamReader(System.in));
 
     }
@@ -54,12 +54,12 @@ public class Stock_Main_Menu {
                         }
                     }
                     run=false;
-                    System.out.println("Exited workers manage system");
+                    System.out.println("Exited Stock manage system");
                 }
             }
             else if (inputi == 2){
                 run = false;
-                System.out.println("Exited workers manage system");
+                System.out.println("Exited Stock manage system");
             }
             else {
                 System.out.println("There's no such option");

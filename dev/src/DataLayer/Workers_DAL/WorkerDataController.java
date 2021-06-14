@@ -20,7 +20,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class WorkerDataController {
-    //private final static String db_name = "database.db";
+//    private final static String db_name = "database.db";
+
     private final IdentityMap identityMap;
     private final static String connectionPath = "jdbc:sqlite:database.db";
 
@@ -28,94 +29,94 @@ public class WorkerDataController {
         this.identityMap = IdentityMap.getInstance();
     }
 
-    public void InitDatabase(){
-        //File f = new File(db_name);
+    public void InitDatabase() {
+//        File f = new File(db_name);
         //if(!f.exists() && !f.isDirectory()) {
-            String workerTable = "CREATE TABLE IF NOT EXISTS Worker (" +
-                    "\tID\tTEXT NOT NULL," +
-                    "\tName\tTEXT NOT NULL," +
-                    "\tBankAccount\tTEXT NOT NULL," +
-                    "\tSalary\tREAL NOT NULL," +
-                    "\tEducationFund\tTEXT NOT NULL," +
-                    "\tvacationDaysPerMonth\tINTEGER NOT NULL," +
-                    "\tsickDaysPerMonth\tINTEGER NOT NULL,\n" +
-                    "\tstartWorkingDate\tTEXT NOT NULL,\n" +
-                    "\tendWorkingDate\tTEXT,\n" +
-                    "\tPRIMARY KEY(\"ID\")); ";
+        String workerTable = "CREATE TABLE IF NOT EXISTS Worker (" +
+                "\tID\tTEXT NOT NULL," +
+                "\tName\tTEXT NOT NULL," +
+                "\tBankAccount\tTEXT NOT NULL," +
+                "\tSalary\tREAL NOT NULL," +
+                "\tEducationFund\tTEXT NOT NULL," +
+                "\tvacationDaysPerMonth\tINTEGER NOT NULL," +
+                "\tsickDaysPerMonth\tINTEGER NOT NULL,\n" +
+                "\tstartWorkingDate\tTEXT NOT NULL,\n" +
+                "\tendWorkingDate\tTEXT,\n" +
+                "\tPRIMARY KEY(\"ID\")); ";
 
-            String shiftTable = "CREATE TABLE IF NOT EXISTS Shift (" +
-                    "\tDate\tTEXT NOT NULL," +
-                    "\tShiftType\tTEXT NOT NULL," +
-                    "\tApproved\tINTEGER NOT NULL,\n" +
-                    "\tCashier_Amount\tINTEGER NOT NULL," +
-                    "\tStorekeeper_Amount\tINTEGER NOT NULL,\n" +
-                    "\tUsher_Amount\tINTEGER NOT NULL,\n" +
-                    "\tGuard_Amount\tINTEGER NOT NULL,\n" +
-                    "\tDriverA_Amount\tINTEGER NOT NULL,\n" +
-                    "\tDriverB_Amount\tINTEGER NOT NULL,\n" +
-                    "\tDriverC_Amount\tINTEGER NOT NULL,\n" +
-                    "\tPRIMARY KEY(Date,ShiftType)); ";
+        String shiftTable = "CREATE TABLE IF NOT EXISTS Shift (" +
+                "\tDate\tTEXT NOT NULL," +
+                "\tShiftType\tTEXT NOT NULL," +
+                "\tApproved\tINTEGER NOT NULL,\n" +
+                "\tCashier_Amount\tINTEGER NOT NULL," +
+                "\tStorekeeper_Amount\tINTEGER NOT NULL,\n" +
+                "\tUsher_Amount\tINTEGER NOT NULL,\n" +
+                "\tGuard_Amount\tINTEGER NOT NULL,\n" +
+                "\tDriverA_Amount\tINTEGER NOT NULL,\n" +
+                "\tDriverB_Amount\tINTEGER NOT NULL,\n" +
+                "\tDriverC_Amount\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(Date,ShiftType)); ";
 
-            String occupationTable = "CREATE TABLE IF NOT EXISTS Occupation (\n" +
-                    "\tWorker_ID\tTEXT NOT NULL,\n" +
-                    "\tJob\tTEXT NOT NULL,\n" +
-                    "\tPRIMARY KEY(Worker_ID,Job),\n" +
-                    "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON DELETE CASCADE ON UPDATE CASCADE); ";
+        String occupationTable = "CREATE TABLE IF NOT EXISTS Occupation (\n" +
+                "\tWorker_ID\tTEXT NOT NULL,\n" +
+                "\tJob\tTEXT NOT NULL,\n" +
+                "\tPRIMARY KEY(Worker_ID,Job),\n" +
+                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON DELETE CASCADE ON UPDATE CASCADE); ";
 
-            String defaultWorkDayAssignTable = "CREATE TABLE IF NOT EXISTS DefaultWorkDayAssign (\n" +
-                    "\tDay\tINTEGER NOT NULL CHECK(0<Day<=7),\n" +
-                    "\tShiftType\tTEXT NOT NULL,\n" +
-                    "\tJob\tTEXT NOT NULL,\n" +
-                    "\tAmount\tINTEGER NOT NULL,\n" +
-                    "\tPRIMARY KEY(Day,Day,ShiftType,Job)); ";
+        String defaultWorkDayAssignTable = "CREATE TABLE IF NOT EXISTS DefaultWorkDayAssign (\n" +
+                "\tDay\tINTEGER NOT NULL CHECK(0<Day<=7),\n" +
+                "\tShiftType\tTEXT NOT NULL,\n" +
+                "\tJob\tTEXT NOT NULL,\n" +
+                "\tAmount\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(Day,Day,ShiftType,Job)); ";
 
-            String defaultWorkDayShift = "CREATE TABLE IF NOT EXISTS DefaultWorkDayShift (\n" +
-                    "\tDay\tINTEGER NOT NULL,\n" +
-                    "\thasMorning\tINTEGER NOT NULL,\n" +
-                    "\thasEvening\tINTEGER NOT NULL,\n" +
-                    "\tPRIMARY KEY(Day)); ";
+        String defaultWorkDayShift = "CREATE TABLE IF NOT EXISTS DefaultWorkDayShift (\n" +
+                "\tDay\tINTEGER NOT NULL,\n" +
+                "\thasMorning\tINTEGER NOT NULL,\n" +
+                "\thasEvening\tINTEGER NOT NULL,\n" +
+                "\tPRIMARY KEY(Day)); ";
 
-            String constraintTable = "CREATE TABLE IF NOT EXISTS Constraints (\n" +
-                    "\tWorker_ID\tTEXT NOT NULL,\n" +
-                    "\tDate\tTEXT NOT NULL,\n" +
-                    "\tShiftType\tTEXT NOT NULL,\n" +
-                    "\tConstraintType\tTEXT NOT NULL,\n" +
-                    "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
-                    "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID)); ";
+        String constraintTable = "CREATE TABLE IF NOT EXISTS Constraints (\n" +
+                "\tWorker_ID\tTEXT NOT NULL,\n" +
+                "\tDate\tTEXT NOT NULL,\n" +
+                "\tShiftType\tTEXT NOT NULL,\n" +
+                "\tConstraintType\tTEXT NOT NULL,\n" +
+                "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
+                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID)); ";
 
-            String workersInShiftsTable = "CREATE TABLE IF NOT EXISTS Workers_In_Shift (\n" +
-                    "\tWorker_ID\tTEXT NOT NULL,\n" +
-                    "\tDate\tTEXT NOT NULL,\n" +
-                    "\tShiftType\tTEXT NOT NULL,\n" +
-                    "\tJob\tTEXT NOT NULL,\n" +
-                    "\tCONSTRAINT fk_shift FOREIGN KEY(Date,ShiftType) REFERENCES Shift(Date,ShiftType) ON UPDATE CASCADE ON DELETE CASCADE,\n" +
-                    "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
-                    "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON UPDATE CASCADE ON DELETE CASCADE\n" +
-                    "); ";
+        String workersInShiftsTable = "CREATE TABLE IF NOT EXISTS Workers_In_Shift (\n" +
+                "\tWorker_ID\tTEXT NOT NULL,\n" +
+                "\tDate\tTEXT NOT NULL,\n" +
+                "\tShiftType\tTEXT NOT NULL,\n" +
+                "\tJob\tTEXT NOT NULL,\n" +
+                "\tCONSTRAINT fk_shift FOREIGN KEY(Date,ShiftType) REFERENCES Shift(Date,ShiftType) ON UPDATE CASCADE ON DELETE CASCADE,\n" +
+                "\tPRIMARY KEY(Worker_ID,Date,ShiftType),\n" +
+                "\tFOREIGN KEY(Worker_ID) REFERENCES Worker(ID) ON UPDATE CASCADE ON DELETE CASCADE\n" +
+                "); ";
 
-            String transportRequestsTable = "CREATE TABLE IF NOT EXISTS TransportRequests (\n" +
-                    "\tOrderID\tINTEGER NOT NULL,\n" +
-                    "\tDate\tTEXT NOT NULL,\n" +
-                    "\tPRIMARY KEY(OrderID, Date)\n" +
-                    "); ";
+        String transportRequestsTable = "CREATE TABLE IF NOT EXISTS TransportRequests (\n" +
+                "\tOrderID\tINTEGER NOT NULL,\n" +
+                "\tDate\tTEXT NOT NULL,\n" +
+                "\tPRIMARY KEY(OrderID, Date)\n" +
+                "); ";
 
-            String sql = workerTable + shiftTable;
-            try (Connection conn = connect();
-                 Statement stmt = conn.createStatement()) {
-                // create a new tables
-                stmt.execute(workerTable);
-                stmt.execute(occupationTable);
-                stmt.execute(constraintTable);
-                stmt.execute(defaultWorkDayAssignTable);
-                stmt.execute(defaultWorkDayShift);
-                stmt.execute(shiftTable);
-                stmt.execute(workersInShiftsTable);
-                stmt.execute(transportRequestsTable);
-                LoadPreData();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-       // }
+        String sql = workerTable + shiftTable;
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement()) {
+            // create a new tables
+            stmt.execute(workerTable);
+            stmt.execute(occupationTable);
+            stmt.execute(constraintTable);
+            stmt.execute(defaultWorkDayAssignTable);
+            stmt.execute(defaultWorkDayShift);
+            stmt.execute(shiftTable);
+            stmt.execute(workersInShiftsTable);
+            stmt.execute(transportRequestsTable);
+            LoadPreData();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        // }
     }
 
     // load some data to the db so we'll be able to test functionality
@@ -143,14 +144,14 @@ public class WorkerDataController {
         return conn;
     }
 
-    public void SaveData(){
+    public void SaveData() {
         Collection<Worker> workers = identityMap.getAllWorkers();
-        for (Worker worker : workers){
+        for (Worker worker : workers) {
             saveWorker(worker);
         }
 
         Collection<WorkDay> workDays = identityMap.getAllWorkDays();
-        for (WorkDay workDay : workDays){
+        for (WorkDay workDay : workDays) {
             saveWorkDay(workDay);
         }
     }
@@ -163,8 +164,8 @@ public class WorkerDataController {
         String sql = "SELECT * FROM Worker WHERE ID = ?";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql);){
-            pstmt.setString(1,id);
+             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+            pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
                 String ID = rs.getString(1);
@@ -195,8 +196,8 @@ public class WorkerDataController {
         String sql = "SELECT * FROM Constraints WHERE Worker_ID = ?;";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql);){
-            pstmt.setString(1,id);
+             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+            pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String Date = rs.getString(2);
@@ -216,8 +217,8 @@ public class WorkerDataController {
         String sql = "SELECT * FROM Occupation WHERE Worker_ID = ?";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql);){
-            pstmt.setString(1,id);
+             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+            pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 String job = rs.getString(2);
@@ -229,7 +230,7 @@ public class WorkerDataController {
         return occupations;
     }
 
-    public void addWorker(Worker worker){
+    public void addWorker(Worker worker) {
         IdentityMap.getInstance().addWorker(worker);
     }
 
@@ -279,7 +280,7 @@ public class WorkerDataController {
         }
     }
 
-    public void removeOccupation(String Worker_ID, Job occupation){
+    public void removeOccupation(String Worker_ID, Job occupation) {
         String sql = "DELETE FROM Occupation WHERE Worker_ID = ? AND Job = ?";
 
         try (Connection conn = this.connect();
@@ -295,7 +296,7 @@ public class WorkerDataController {
         }
     }
 
-    private void insertOrIgnoreConstraint(String Worker_ID, Constraint constraint, Connection conn){
+    private void insertOrIgnoreConstraint(String Worker_ID, Constraint constraint, Connection conn) {
         String statement = "INSERT OR IGNORE INTO Constraints (Worker_ID, Date, ShiftType, ConstraintType) VALUES (?,?,?,?)";
         try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.setString(1, Worker_ID);
@@ -308,7 +309,7 @@ public class WorkerDataController {
         }
     }
 
-    public void removeConstraint(String Worker_ID, String Date, ShiftType ShiftType){
+    public void removeConstraint(String Worker_ID, String Date, ShiftType ShiftType) {
         String sql = "DELETE FROM Constraints WHERE Worker_ID = ? AND Date = ? AND ShiftType = ?";
 
         try (Connection conn = this.connect();
@@ -325,7 +326,7 @@ public class WorkerDataController {
         }
     }
 
-    private void updateWorker(Worker worker, Connection conn){
+    private void updateWorker(Worker worker, Connection conn) {
         String statement = "UPDATE Worker SET ID = ? , "
                 + "Name = ?, "
                 + "BankAccount = ?, "
@@ -540,9 +541,9 @@ public class WorkerDataController {
         }
     }
 
-    public Worker getWorker(String ID){
+    public Worker getWorker(String ID) {
         Worker worker = identityMap.getWorker(ID);
-        if (worker == null){
+        if (worker == null) {
             worker = selectWorker(ID);
             if (worker != null)
                 identityMap.addWorker(worker);
@@ -550,64 +551,64 @@ public class WorkerDataController {
         return worker;
     }
 
-    public List<Worker> getAllWorkers(){
+    public List<Worker> getAllWorkers() {
         return selectAllWorkers();
     }
 
-    public WorkDay getWorkDay(String date){
+    public WorkDay getWorkDay(String date) {
         WorkDay workDay = identityMap.getWorkDay(date);
-        if(workDay == null){
+        if (workDay == null) {
             workDay = buildWorkDay(date);
-            if(workDay != null){
+            if (workDay != null) {
                 identityMap.addWorkDay(workDay);
             }
         }
         return workDay;
     }
 
-    public List<WorkDay> getWorkDaysFromDate(String date){
+    public List<WorkDay> getWorkDaysFromDate(String date) {
         List<String> dates = selectDateOfFromDate(date);
         List<WorkDay> workDays = new LinkedList<>();
-        for (String d: dates) {
+        for (String d : dates) {
             workDays.add(getWorkDay(d));
         }
         return workDays;
     }
 
-    private List<String> selectDateOfFromDate(String date){
+    private List<String> selectDateOfFromDate(String date) {
         List<String> dates = new LinkedList<>();
         String sql = "SELECT Date FROM Shift WHERE Date >= ?";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1,date);
-            ResultSet rs  = pstmt.executeQuery();
+            pstmt.setString(1, date);
+            ResultSet rs = pstmt.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
                 dates.add(rs.getString("Date"));
             }
-        }catch (SQLException  e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return dates;
     }
 
-    private WorkDay buildWorkDay(String date){
+    private WorkDay buildWorkDay(String date) {
         Shift DBmorning = selectShift(date, "Morning");
         Shift DBevening = selectShift(date, "Evening");
 
         boolean hasMorning = DBmorning != null;
         boolean hasEvening = DBevening != null;
-        if(!(hasEvening || hasMorning)) return null;
+        if (!(hasEvening || hasMorning)) return null;
         WorkDay workDay = new WorkDay(hasMorning, hasEvening, date);
-        if(hasMorning) {
+        if (hasMorning) {
             Shift workDayMorning = workDay.getShift(ShiftType.Morning);
-            for (Job job: WorkersUtils.getShiftWorkers()) {
+            for (Job job : WorkersUtils.getShiftWorkers()) {
                 try {
-                    if(job != Job.Shift_Manager) {
+                    if (job != Job.Shift_Manager) {
                         workDayMorning.setAmountRequired(job, DBmorning.getAmountRequired(job));
-                    }else{
+                    } else {
                         workDayMorning.addRequiredJob(job, 1);
                     }
                     List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Morning", job.name());
@@ -622,7 +623,7 @@ public class WorkerDataController {
                     e.printStackTrace();
                 }
             }
-            if(DBmorning.isApproved()) {
+            if (DBmorning.isApproved()) {
                 try {
                     workDayMorning.approveShift();
                 } catch (InnerLogicException e) {
@@ -630,13 +631,13 @@ public class WorkerDataController {
                 }
             }
         }
-        if(hasEvening) {
+        if (hasEvening) {
             Shift workDayEvening = workDay.getShift(ShiftType.Evening);
-            for (Job job: WorkersUtils.getShiftWorkers()) {
+            for (Job job : WorkersUtils.getShiftWorkers()) {
                 try {
-                    if(job != Job.Shift_Manager) {
+                    if (job != Job.Shift_Manager) {
                         workDayEvening.setAmountRequired(job, DBevening.getAmountRequired(job));
-                    }else{
+                    } else {
                         workDayEvening.addRequiredJob(job, 1);
                     }
                     List<Worker> workersToInsert = selectWorkersInShiftByJob(date, "Evening", job.name());
@@ -650,7 +651,7 @@ public class WorkerDataController {
                 } catch (InnerLogicException e) {
                     e.printStackTrace();
                 }
-                if(DBevening.isApproved()) {
+                if (DBevening.isApproved()) {
                     try {
                         workDayEvening.approveShift();
                     } catch (InnerLogicException e) {
@@ -663,24 +664,24 @@ public class WorkerDataController {
 
     }
 
-    private Shift selectShift(String date,String shiftType){
+    private Shift selectShift(String date, String shiftType) {
         Shift outputShift = null;
         String sql = "SELECT * FROM Shift WHERE Date = ? AND ShiftType = ?";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            pstmt.setString(1,date);
-            pstmt.setString(2,shiftType);
-            ResultSet rs  = pstmt.executeQuery();
+            pstmt.setString(1, date);
+            pstmt.setString(2, shiftType);
+            ResultSet rs = pstmt.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 outputShift = new Shift();
-                for (Job job: WorkersUtils.getShiftWorkers()) {
-                    if(job != Job.Shift_Manager){
+                for (Job job : WorkersUtils.getShiftWorkers()) {
+                    if (job != Job.Shift_Manager) {
                         String jobAmountColumn = job.name() + "_Amount";
                         outputShift.setAmountRequired(job, rs.getInt(jobAmountColumn));
-                    }else{
+                    } else {
                         outputShift.addRequiredJob(job, 1);
                     }
                     List<Worker> workersToInsert = selectWorkersInShiftByJob(date, shiftType, job.name());
@@ -692,28 +693,28 @@ public class WorkerDataController {
                         }
                     }
                 }
-                if(rs.getBoolean("Approved")) outputShift.approveShift();
+                if (rs.getBoolean("Approved")) outputShift.approveShift();
             }
-        }catch (SQLException | InnerLogicException e) {
+        } catch (SQLException | InnerLogicException e) {
             e.printStackTrace();
         }
         return outputShift;
     }
 
-    private List<Worker> selectWorkersInShiftByJob(String date, String shiftType, String job){
+    private List<Worker> selectWorkersInShiftByJob(String date, String shiftType, String job) {
         List<Worker> outputWorkers = new LinkedList<>();
         String sql = "SELECT Worker_ID "
                 + "FROM Workers_In_Shift WHERE Date = ? AND ShiftType = ? AND Job = ?";
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             // set the value
-            pstmt.setString(1,date);
-            pstmt.setString(2,shiftType);
-            pstmt.setString(3,job);
+            pstmt.setString(1, date);
+            pstmt.setString(2, shiftType);
+            pstmt.setString(3, job);
 
             //
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
 
             // loop through the result set
             while (rs.next()) {
@@ -725,13 +726,14 @@ public class WorkerDataController {
         }
         return outputWorkers;
     }
-    private List<Worker> selectAllWorkers(){
-        List<Worker> outputWorkers= new LinkedList<>();
+
+    private List<Worker> selectAllWorkers() {
+        List<Worker> outputWorkers = new LinkedList<>();
         String sql = "SELECT ID FROM Worker";
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
-            ResultSet rs  = pstmt.executeQuery();
+            ResultSet rs = pstmt.executeQuery();
 
             // loop through the result set
             while (rs.next()) {
@@ -744,11 +746,11 @@ public class WorkerDataController {
         return outputWorkers;
     }
 
-    public boolean[] getDefaultWorkDayShifts(int day){
+    public boolean[] getDefaultWorkDayShifts(int day) {
         String sql = "SELECT * FROM DefaultWorkDayShift WHERE Day = ?";
         boolean[] hasShift = new boolean[2];
         try (Connection conn = this.connect();
-             PreparedStatement pstmt  = conn.prepareStatement(sql);){
+             PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setInt(1, day);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -762,11 +764,11 @@ public class WorkerDataController {
         return null;
     }
 
-    public int getDefaultAmountRequired(int day, String ShiftType, String job){
+    public int getDefaultAmountRequired(int day, String ShiftType, String job) {
         String sql = "SELECT * FROM DefaultWorkDayAssign WHERE Day = ? AND ShiftType = ? AND Job = ?";
         int amount = 0;
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, day);
             pstmt.setString(2, ShiftType);
             pstmt.setString(3, job);
@@ -780,7 +782,7 @@ public class WorkerDataController {
         return amount;
     }
 
-    public void setDefaultAmountRequired(int day, String ShiftType, String job, int amount){
+    public void setDefaultAmountRequired(int day, String ShiftType, String job, int amount) {
         String statement = "UPDATE DefaultWorkDayAssign SET Amount = ? "
                 + "WHERE Day = ? AND ShiftType = ? AND Job = ? ";
         if (day >= 1 && day <= 5)
@@ -806,7 +808,7 @@ public class WorkerDataController {
         else if (ShiftType.equals("Evening"))
             columnName = "hasEvening";
 
-        String statement = "UPDATE DefaultWorkDayShift SET "+columnName+" = ? "
+        String statement = "UPDATE DefaultWorkDayShift SET " + columnName + " = ? "
                 + "WHERE Day = ?";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
@@ -818,11 +820,11 @@ public class WorkerDataController {
         }
     }
 
-    public List<Pair<Integer,String>> getAllRequests(){
-        List<Pair<Integer,String>> output = new LinkedList<>();
+    public List<Pair<Integer, String>> getAllRequests() {
+        List<Pair<Integer, String>> output = new LinkedList<>();
         String sql = "SELECT * FROM TransportRequests";
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)){
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 output.add(new Pair<>(rs.getInt("OrderID"), rs.getString("Date")));
@@ -833,7 +835,7 @@ public class WorkerDataController {
         return output;
     }
 
-    public void addRequest(int orderID, String date){
+    public void addRequest(int orderID, String date) {
         String statement = "INSERT INTO TransportRequests (OrderID, Date) VALUES (?,?)";
 
         try (Connection conn = this.connect();
@@ -846,7 +848,7 @@ public class WorkerDataController {
         }
     }
 
-    public void removeRequest(int orderID, String date){
+    public void removeRequest(int orderID, String date) {
         String statement = "DELETE FROM TransportRequests WHERE OrderID = ? AND Date = ?";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement)) {
@@ -859,8 +861,7 @@ public class WorkerDataController {
     }
 
 
-
-    private void initDefaultWorkDayShiftData(){
+    private void initDefaultWorkDayShiftData() {
         String statement = "INSERT OR IGNORE INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES " +
                 "(1,1,1), (2,1,1), (3,0,1), (4,1,0), (5,1,1), (6,1,0), (7,0,1);";
         try (Connection conn = this.connect();
@@ -890,7 +891,7 @@ public class WorkerDataController {
                 "('100000010',?,'Morning','DriverA'), " +
                 "('100000011',?,'Morning','DriverB'), " +
                 "('100000012',?,'Morning','DriverC'), " +
-                "('100000009',?,'Evening','Storekeeper'), "  +
+                "('100000009',?,'Evening','Storekeeper'), " +
                 "('100000005',?,'Evening','Shift_Manager')," +
                 "('100000009',?,'Evening','Storekeeper'), " +
                 "('100000003',?,'Evening','Shift_Manager')";
@@ -924,7 +925,7 @@ public class WorkerDataController {
 
     }
 
-    private void initShiftsData(){
+    private void initShiftsData() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String statement = "INSERT OR IGNORE INTO Shift (Date,ShiftType,Approved,Cashier_Amount,Storekeeper_Amount,Usher_Amount,Guard_Amount,DriverA_Amount,DriverB_Amount,DriverC_Amount) VALUES " +
                 "(? ,'Morning',1,2,1,3,1,1,1,1), " +
@@ -950,7 +951,7 @@ public class WorkerDataController {
         }
     }
 
-    private void initDefaultWorkDayAssignData(){
+    private void initDefaultWorkDayAssignData() {
         String statement = "INSERT OR IGNORE INTO DefaultWorkDayAssign (Day,ShiftType,Job,Amount) VALUES (7,'Morning','Cashier',2), " +
                 " (7,'Evening','Cashier',2), " +
                 "(7,'Morning','Storekeeper',2)," +
@@ -958,40 +959,40 @@ public class WorkerDataController {
                 "(7,'Morning','Usher',3), " +
                 "(7,'Evening','Usher',3), " +
                 "(7,'Morning','Guard',1), " +
-                "(7,'Evening','Guard',1), "+
-                "(7,'Morning','DriverA',0), "+
-                "(7,'Evening','DriverA',0), "+
-                "(7,'Morning','DriverB',0), "+
-                "(7,'Evening','DriverB',0), "+
-                "(7,'Morning','DriverC',0), "+
-                "(7,'Evening','DriverC',0), "+
-                "(6,'Morning','Cashier',4), "+
-                "(6,'Evening','Cashier',3), "+
-                "(6,'Morning','Storekeeper',2), "+
-                "(6,'Evening','Storekeeper',2), "+
-                "(6,'Morning','Usher',3), "+
-                "(6,'Evening','Usher',3), "+
-                "(6,'Morning','Guard',1), "+
-                "(6,'Evening','Guard',1), "+
-                "(6,'Morning','DriverA',1), "+
-                "(6,'Evening','DriverA',0), "+
-                "(6,'Morning','DriverB',1), "+
-                "(6,'Evening','DriverB',0), "+
-                "(6,'Morning','DriverC',1), "+
-                "(6,'Evening','DriverC',0), "+
-                "(1,'Morning','Cashier',5), "+
-                "(1,'Evening','Cashier',6), "+
-                "(1,'Morning','Storekeeper',3), "+
-                "(1,'Evening','Storekeeper',3), "+
-                "(1,'Morning','Usher',4), "+
-                "(1,'Evening','Usher',4), "+
-                "(1,'Morning','Guard',2), "+
-                "(1,'Evening','Guard',2), "+
-                "(1,'Morning','DriverA',3), "+
-                "(1,'Evening','DriverA',2), "+
-                "(1,'Morning','DriverB',3), "+
-                "(1,'Evening','DriverB',2), "+
-                "(1,'Morning','DriverC',3), "+
+                "(7,'Evening','Guard',1), " +
+                "(7,'Morning','DriverA',0), " +
+                "(7,'Evening','DriverA',0), " +
+                "(7,'Morning','DriverB',0), " +
+                "(7,'Evening','DriverB',0), " +
+                "(7,'Morning','DriverC',0), " +
+                "(7,'Evening','DriverC',0), " +
+                "(6,'Morning','Cashier',4), " +
+                "(6,'Evening','Cashier',3), " +
+                "(6,'Morning','Storekeeper',2), " +
+                "(6,'Evening','Storekeeper',2), " +
+                "(6,'Morning','Usher',3), " +
+                "(6,'Evening','Usher',3), " +
+                "(6,'Morning','Guard',1), " +
+                "(6,'Evening','Guard',1), " +
+                "(6,'Morning','DriverA',1), " +
+                "(6,'Evening','DriverA',0), " +
+                "(6,'Morning','DriverB',1), " +
+                "(6,'Evening','DriverB',0), " +
+                "(6,'Morning','DriverC',1), " +
+                "(6,'Evening','DriverC',0), " +
+                "(1,'Morning','Cashier',5), " +
+                "(1,'Evening','Cashier',6), " +
+                "(1,'Morning','Storekeeper',3), " +
+                "(1,'Evening','Storekeeper',3), " +
+                "(1,'Morning','Usher',4), " +
+                "(1,'Evening','Usher',4), " +
+                "(1,'Morning','Guard',2), " +
+                "(1,'Evening','Guard',2), " +
+                "(1,'Morning','DriverA',3), " +
+                "(1,'Evening','DriverA',2), " +
+                "(1,'Morning','DriverB',3), " +
+                "(1,'Evening','DriverB',2), " +
+                "(1,'Morning','DriverC',3), " +
                 "(1,'Evening','DriverC',1);";
 
         try (Connection conn = this.connect();
@@ -1002,8 +1003,8 @@ public class WorkerDataController {
         }
     }
 
-    private void initOccupationData(){
-        String statement = "INSERT OR IGNORE INTO Occupation (Worker_ID,Job) VALUES "+
+    private void initOccupationData() {
+        String statement = "INSERT OR IGNORE INTO Occupation (Worker_ID,Job) VALUES " +
                 "('100000009','Cashier'), " +
                 "('100000009','Storekeeper'), " +
                 "('100000009','Usher'), " +
@@ -1042,7 +1043,7 @@ public class WorkerDataController {
         }
     }
 
-    private void initConstraintData(){
+    private void initConstraintData() {
         String statement = "INSERT OR IGNORE INTO Constraints (Worker_ID,Date,ShiftType,ConstraintType) VALUES" +
                 " ('100000002','21/09/2021','Morning','Cant')," +
                 " ('100000002','21/09/2021','Evening','Cant')," +
@@ -1058,7 +1059,7 @@ public class WorkerDataController {
         }
     }
 
-    private void initWorkerData(){
+    private void initWorkerData() {
         String statement = "INSERT OR IGNORE INTO Worker (ID,Name,BankAccount,Salary,EducationFund,vacationDaysPerMonth,sickDaysPerMonth,startWorkingDate,endWorkingDate)" +
                 " VALUES " +
                 "('100000009','ronen','1',1.0,'1',1,1,'01/01/2018',NULL), " +

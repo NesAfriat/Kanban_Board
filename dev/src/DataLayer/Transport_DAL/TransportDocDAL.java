@@ -41,7 +41,8 @@ public class TransportDocDAL {
                   ArrayList<Integer > allStops = new ArrayList<>();
                   atLeastOne=true;
                   String driverName, area,driverLicense;
-                  int id, version, driverID, truckID, originStoreID;
+                  int id, version, driverID, truckID, originStoreID,approve;
+                  boolean approvedOrder;
                   double truckWeightDep;
                   String TransDate, LeftOrigin;
 
@@ -57,6 +58,7 @@ public class TransportDocDAL {
                   originStoreID = results.getInt(9);
                   area = results.getString(10);
                   truckWeightDep = results.getDouble(11);
+                  approvedOrder = (1== results.getInt(12));
 
                   //transport doc objects
                   Truck trk = TruckDAL.findTruck(truckID);
@@ -115,6 +117,9 @@ public class TransportDocDAL {
                     }
                            Collections.sort(allStops);
                           TransportDoc td = new TransportDoc(id,TransDate, LeftOrigin,trk,drv,originStoreID,destinationStore,destinationSupplier, Area.A,truckWeightDep,productList, allStops,index);
+
+                          td.setApproved(approvedOrder);
+
                           td.setVersion(index);
                           if(index==0)
                               theTransportBible.put(td.getId(),td);
@@ -128,8 +133,7 @@ public class TransportDocDAL {
               index++;
           }
 
-        } catch (
-                SQLException e) {
+        } catch(Exception e) {
 
             e.printStackTrace();
         } finally {
@@ -161,10 +165,13 @@ public class TransportDocDAL {
                 String delete4 = "DELETE FROM TransportStopSupplier WHERE Id='" + doc.getId() + "' AND Version='" + doc.getVersion() + "'";
                 st.executeUpdate(delete4);
 
+
+
+
                 //now save to all tables for id
                 String insert1 = "INSERT INTO TransportDocument " + "VALUES ("+ doc.getId() + "," + doc.getVersion() + ",'" + doc.getTransDate() +
                         "','" + doc.getLeftOrigin() + "','" + doc.getDriver().getName() + "'," + doc.getDriver().getId() + ",'" + LicenseToString(doc.getDriver().getLicense()) +
-                        "'," + doc.getTruck().getLicensePlate() + "," + doc.getOrigin() + ",'" + doc.getArea().toString() + "'," + doc.getTruckWeightDep() + ");";
+                        "'," + doc.getTruck().getLicensePlate() + "," + doc.getOrigin() + ",'" + doc.getArea().toString() + "'," + doc.getTruckWeightDep() + "," + (doc.isApproved()?1:0)+");";
                 st.executeUpdate(insert1);
 
                 Iterator itStore=doc.getDestinationStore().entrySet().iterator();

@@ -35,18 +35,20 @@ public class Main_Menu {
 
     public Main_Menu(){
         //-------------------------------
-        Transport_Integration transport_integration=transport_facade;
-        InventPresentation=new Stock_Main_Menu(transport_integration);
+        Workers_Integration wk = workers_facade;
+        getOccupations_integration= workers_facade;
 
-        Facade=facade.getInstance(transport_integration);
+        Transport_Integration transport_integration=transport_facade;
+        InventPresentation=new Stock_Main_Menu(transport_integration,getOccupations_integration);
+
          workers_menu = new Workers_Main_Menu(workers_facade);
          transport_menu = new Transport_Menu(transport_facade);
-        Workers_Integration wk = workers_facade;
-         getOccupations_integration= workers_facade;
 
         transport_menu.addWorkersIntegration(wk);
 
         transport_menu.addWorkersIntegration(wk);
+        Facade=facade.getInstance(transport_integration,getOccupations_integration);
+
         //-------------------------------
 
         supplierFunctionality=new SupplierFunctionality(Facade);

@@ -16,22 +16,24 @@ public class facade {
     private inventModel inventModel;
     private SupModel supModel;
     private BusinessLayer.ProductManager ProductManager;
+    private Transport_Integration transport_integration;
     //    private Stock_Controller stock_controller;
 //    private Sales_Controller sales_controller;
 //    private Reports_Controller reports_controller;
 //for invent
-
-    private facade(Transport_Integration transport_integration) {
+    GetOccupations_Integration getOccupations_integration;
+    private facade(Transport_Integration transport_integration,GetOccupations_Integration getOccupations_integration) {
         inventModel = new inventModel();
         ProductManager = Stock_Controller.getInstance().getStock().getPM();
         supModel = new SupModel(transport_integration);
-
-
+        this.transport_integration=transport_integration;
+        this.getOccupations_integration=getOccupations_integration;
     }
 
-    public static facade getInstance(Transport_Integration transport_integration) {
+
+    public static facade getInstance(Transport_Integration transport_integration,GetOccupations_Integration getOccupations_integration) {
         if (single_instance == null)
-            single_instance = new facade(transport_integration);
+            single_instance = new facade(transport_integration,getOccupations_integration);
         return single_instance;
     }
 
@@ -40,7 +42,13 @@ public class facade {
         return supModel.create_order_Due_to_lack((inventModel.getStockC()).get_missing_General_products_with_amounts(), li);
 
     }
+    public Transport_Integration gettransport_integration(){
+        return transport_integration;
+    }
 
+    public GetOccupations_Integration getOccupations_integration(){
+        return getOccupations_integration;
+    }
     ////////////////////////////////////////
     public Stock_Controller getStockC() {
         return inventModel.getStockC();
@@ -294,4 +302,7 @@ public class facade {
         return supModel.getAllOrders();
     }
 
+    public Response receiveLastShipment() {
+        return inventModel.receiveLastShipment();
+    }
 }

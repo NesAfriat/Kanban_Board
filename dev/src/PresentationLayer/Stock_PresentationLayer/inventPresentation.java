@@ -19,8 +19,8 @@ public class inventPresentation {
         int inputi;
         String inputs;
 
-        public inventPresentation(Transport_Integration transport_integration) {
-            Facade = facade.getInstance(transport_integration);
+        public inventPresentation(Transport_Integration transport_integration,GetOccupations_Integration getOccupations_integration) {
+            Facade = facade.getInstance(transport_integration,getOccupations_integration);
             reader = new BufferedReader(new InputStreamReader(System.in));
 
         }

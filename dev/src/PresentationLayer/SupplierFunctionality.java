@@ -1,9 +1,12 @@
 package PresentationLayer;
 
 import BusinessLayer.DeliveryMode;
+import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
+
 import BusinessLayer.FacedeModel.Objects.*;
 import BusinessLayer.FacedeModel.facade;
 import BusinessLayer.GetOccupations_Integration;
+import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.paymentMethods;
 
 import java.util.HashMap;
@@ -32,6 +35,21 @@ public class SupplierFunctionality {
                 "\n");
 
         while(true){
+            Scanner myObj1 = new Scanner(System.in);
+            System.out.println("please type your id");
+            String id=myObj1.nextLine();
+            ResponseT< List<Job> > jobs =facade.getOccupations_integration().getWorkerOccupations(id);
+            if(jobs.ErrorOccurred()){
+                System.out.println(jobs.getErrorMessage());
+                return;
+            }
+            else{
+                if (!jobs.value.contains(Job.Storekeeper)||!jobs.value.contains(Job.Store_Manager)) {
+                    System.out.println("Only a storekeeper or Branch_Manager is allowed to manage Supplier");
+                    return;
+                }
+            }
+
             System.out.println("please choose one option : ");
             System.out.println("\n");
             for(int i=0;i<SupplierFunctionality.length;i++){
@@ -430,7 +448,7 @@ public class SupplierFunctionality {
 
         System.out.println("please type the supplier id : ");
         int id=NumberType();
-        ResponseT<SupplierResponse> responseT=facade.getSupplier(id);
+        BusinessLayer.FacedeModel.Objects.ResponseT<SupplierResponse> responseT=facade.getSupplier(id);
         if(responseT.getErrorOccurred()){
             System.out.println((responseT.getErrorMsg()));
         }
@@ -449,7 +467,7 @@ public class SupplierFunctionality {
     public void printAllSuppliers() {
         System.out.println("\n");
 
-        ResponseT<List<SupplierResponse>> responseT=facade.getAllSuppliers();
+        BusinessLayer.FacedeModel.Objects.ResponseT<List<SupplierResponse>> responseT=facade.getAllSuppliers();
         if(responseT.getErrorOccurred()){
             System.out.println((responseT.getErrorMsg()));
         }
@@ -480,7 +498,7 @@ public class SupplierFunctionality {
 
         System.out.println("please type the supplier id : ");
         int id=NumberType();
-        ResponseT<AgreementResponse> responseT=facade.getAgreement(id);
+        BusinessLayer.FacedeModel.Objects.ResponseT<AgreementResponse> responseT=facade.getAgreement(id);
         if(responseT.getErrorOccurred()){
             System.out.println((responseT.getErrorMsg()));
         }
