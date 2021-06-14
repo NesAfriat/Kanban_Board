@@ -436,8 +436,8 @@ public class ProductManager {
                 System.out.println("please type the location which the items are stored (<storage>\\<store_number_letter>): ");
                 location = bf.readLine().trim().toLowerCase();
                 exp_date= getExpirationDate(bf);
-                gp = get_product(supply.get(gpID));
-                gp.addItems(supply.get(gpID)-badItems,location,new Date(),exp_date);
+                gp = get_product(gpID);
+                gp.addItems(supply.get(gpID)-badItems,location,new Date(),exp_date); //TODO add Hanaha - defected items does not received in the system
             } catch (IOException | ParseException e) {
                 e.printStackTrace();
             } catch (Exception e) {
