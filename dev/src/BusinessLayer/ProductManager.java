@@ -425,8 +425,10 @@ public class ProductManager {
         addShipment(gpID,quantity);
     }
 
-    
-    /*               int badItems=0;
+
+
+    /*
+    int badItems=0;
         String location="";
         Date exp_date = null;
      System.out.println("gpID: "+gpID+"\tsupplierID: "+supID +"\tcatalogID: "+catalogID);
@@ -680,4 +682,8 @@ public class ProductManager {
             System.out.println("failed getting gpID by supplier with supdID="+supID+"catalogID="+catalogID);
              return gpId;
     }
+
+    private void addShipment(int gpID, int quantity) {
+    }
+
 }
