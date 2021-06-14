@@ -22,8 +22,8 @@ public class Stock_Main_Menu {
     int inputi;
     String inputs;
 
-    public Stock_Main_Menu(Transport_Integration transport_integration) {
-        Facade = facade.getInstance(transport_integration);
+    public Stock_Main_Menu(Transport_Integration transport_integration,GetOccupations_Integration getOccupations_integration) {
+        Facade = facade.getInstance(transport_integration,getOccupations_integration);
         reader = new BufferedReader(new InputStreamReader(System.in));
 
     }

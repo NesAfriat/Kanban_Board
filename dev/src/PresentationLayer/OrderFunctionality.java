@@ -5,6 +5,7 @@ import BusinessLayer.FacedeModel.Objects.ResponseT;
 import BusinessLayer.FacedeModel.Objects.orderResponse;
 import BusinessLayer.FacedeModel.facade;
 import BusinessLayer.GetOccupations_Integration;
+import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -71,6 +72,23 @@ public class OrderFunctionality {
     //this function remove an order from the system
     //public Response removeOrder(int SupId)
     public void removeOrder () {
+
+        Scanner myObj1 = new Scanner(System.in);
+        System.out.println("please type your id");
+        String id=myObj1.nextLine();
+        BusinessLayer.Workers_BusinessLayer.Responses.ResponseT< List<Job> > jobs =facade.getOccupations_integration().getWorkerOccupations(id);
+        if(jobs.ErrorOccurred()){
+            System.out.println(jobs.getErrorMessage());
+            return;
+        }
+        else{
+            if (!jobs.value.contains(Job.Storekeeper)||!jobs.value.contains(Job.HR_Manager)||!jobs.value.contains(Job.Store_Manager)) {
+                System.out.println("Only a Store_Manager or hr manager or storkeeper is allowed to manage Order");
+                return;
+            }
+        }
+
+
         System.out.println("please type the order id");
         int orderId = NumberType();
         System.out.println("please type the sup id");
@@ -82,6 +100,21 @@ public class OrderFunctionality {
     }
 
     public void create_order_Due_to_lack () {
+        Scanner myObj1 = new Scanner(System.in);
+        System.out.println("please type your id");
+        String id=myObj1.nextLine();
+        BusinessLayer.Workers_BusinessLayer.Responses.ResponseT< List<Job> > jobs =facade.getOccupations_integration().getWorkerOccupations(id);
+        if(jobs.ErrorOccurred()){
+            System.out.println(jobs.getErrorMessage());
+            return;
+        }
+        else{
+            if (!jobs.value.contains(Job.Store_Manager)) {
+                System.out.println("Only a Store_Manager is allowed to manage Order");
+                return;
+            }
+        }
+
 
         Response r = facade.create_order_Due_to_lack();
         if (r.getErrorOccurred()) {
@@ -93,6 +126,22 @@ public class OrderFunctionality {
 
     //public Response addProductToOrder(int SupId,int OrderId, int CatalogID, int quantity);
     public void addProductToOrder(){
+        Scanner myObj1 = new Scanner(System.in);
+        System.out.println("please type your id");
+        String id=myObj1.nextLine();
+        BusinessLayer.Workers_BusinessLayer.Responses.ResponseT< List<Job> > jobs =facade.getOccupations_integration().getWorkerOccupations(id);
+        if(jobs.ErrorOccurred()){
+            System.out.println(jobs.getErrorMessage());
+            return;
+        }
+        else{
+            if (!jobs.value.contains(Job.Store_Manager)) {
+                System.out.println("Only a Store_Manager is allowed to manage Order");
+                return;
+            }
+        }
+
+
         System.out.println("please type the supplier id");
         int Supid=NumberType();
         System.out.println("please type the Order id");
@@ -109,6 +158,22 @@ public class OrderFunctionality {
 
     }
     public void changeProductQuantityFromOrder(){
+        Scanner myObj1 = new Scanner(System.in);
+        System.out.println("please type your id");
+        String id=myObj1.nextLine();
+        BusinessLayer.Workers_BusinessLayer.Responses.ResponseT< List<Job> > jobs =facade.getOccupations_integration().getWorkerOccupations(id);
+        if(jobs.ErrorOccurred()){
+            System.out.println(jobs.getErrorMessage());
+            return;
+        }
+        else{
+            if (!jobs.value.contains(Job.Store_Manager)) {
+                System.out.println("Only a Store_Manager is allowed to manage Order");
+                return;
+            }
+        }
+
+
         System.out.println("please type the supplier id");
         int Supid=NumberType();
         System.out.println("please type the Order id");
@@ -127,6 +192,22 @@ public class OrderFunctionality {
     //int id, int supplierid, LocalDate date, HashMap<Integer, Integer> quantity, double totalPayment,boolean isConstant
     //this function return a response of specific order
     public void PrintSpecificOrder(){
+        Scanner myObj1 = new Scanner(System.in);
+        System.out.println("please type your id");
+        String id_=myObj1.nextLine();
+        BusinessLayer.Workers_BusinessLayer.Responses.ResponseT< List<Job> > jobs =facade.getOccupations_integration().getWorkerOccupations(id_);
+        if(jobs.ErrorOccurred()){
+            System.out.println(jobs.getErrorMessage());
+            return;
+        }
+        else{
+            if (!jobs.value.contains(Job.Store_Manager)) {
+                System.out.println("Only a Store_Manager is allowed to manage Order");
+                return;
+            }
+        }
+
+
         System.out.println("please type the Order id");
         int OrderId=NumberType();
         System.out.println("please type the sup id");
@@ -160,6 +241,22 @@ public class OrderFunctionality {
     //this function return a response of all the orders in the system
     //public ResponseT getAllOrders();
     public void printAllOrders(){
+        Scanner myObj1 = new Scanner(System.in);
+        System.out.println("please type your id");
+        String id_=myObj1.nextLine();
+        BusinessLayer.Workers_BusinessLayer.Responses.ResponseT< List<Job> > jobs =facade.getOccupations_integration().getWorkerOccupations(id_);
+        if(jobs.ErrorOccurred()){
+            System.out.println(jobs.getErrorMessage());
+            return;
+        }
+        else{
+            if (!jobs.value.contains(Job.Store_Manager)) {
+                System.out.println("Only a Store_Manager is allowed to manage Order");
+                return;
+            }
+        }
+
+
         ResponseT<List<orderResponse>> response=facade.getAllOrders();
         if(response.getErrorOccurred()){
             System.out.print(response.getErrorMsg());
@@ -189,6 +286,23 @@ public class OrderFunctionality {
 
     //    public Response addNewOrder(int SupId,HashMap<Integer,Integer> productQuantity);
     public void addNewOrder(){
+        Scanner myObj1 = new Scanner(System.in);
+        System.out.println("please type your id");
+        String id_=myObj1.nextLine();
+        BusinessLayer.Workers_BusinessLayer.Responses.ResponseT< List<Job> > jobs =facade.getOccupations_integration().getWorkerOccupations(id_);
+        if(jobs.ErrorOccurred()){
+            System.out.println(jobs.getErrorMessage());
+            return;
+        }
+        else{
+            if (!jobs.value.contains(Job.Store_Manager)) {
+                System.out.println("Only a Store_Manager is allowed to manage Order");
+                return;
+            }
+        }
+
+
+
         Scanner myObj = new Scanner(System.in);  // Create a Scanner object
         System.out.println("please type the supplier id");
         int id=NumberType();
