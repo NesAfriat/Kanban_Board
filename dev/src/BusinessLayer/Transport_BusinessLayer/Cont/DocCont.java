@@ -29,6 +29,7 @@ public class DocCont {
 
 
     public void sendTransportToStock() {
+        pm = Stock_Controller.getInstance().getStock().getPM();
         Iterator iter = theTransportBible.entrySet().iterator();
         Date date = Calendar.getInstance().getTime();
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -39,9 +40,8 @@ public class DocCont {
             String tdDate = td.getTransDate();
 
             // turn triple into hash map, the supplier is with id 1 in the hashmap.
-            if (today.equals(tdDate)) {
+            if (today.equals(tdDate) && td.isApproved()) {
                 for (Triple<Integer, Integer, Integer> item : theTransportBible.get(td.getId()).getProductList()) {
-                    pm = Stock_Controller.getInstance().getStock().getPM();
                     pm.receiveShipment(item.getFirst(), td.getDestinationSupplier().get(1),item.getSecond());
                 }
             }
@@ -75,10 +75,13 @@ public class DocCont {
         List<TransportDoc> unapproved =getUnapprovedDocs();
         for (TransportDoc td: unapproved){
             td.setApproved(true);
+            save(td.getId());
         }
     }
     public void approveSingleTranposrt(int id) throws Exception {
         theTransportBible.get(id).setApproved(true);
+        save(id);
+
     }
 
 
@@ -282,11 +285,7 @@ public class DocCont {
 
     public void save(int DocId) throws Exception {
         TransportDoc t= getDoc(DocId);
-            if(! t.isApproved()){
-                throw new Exception("the doc have to be aproved before save");
-            }
-
-                DALController con=DALController.getInstance();
+        DALController con=DALController.getInstance();
         con.tra.saveDoc(theTransportBible.get(DocId));
     }
     public void load() throws Exception {

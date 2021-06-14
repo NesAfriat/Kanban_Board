@@ -317,7 +317,6 @@ public class Transport_Facade implements Transport_Integration {
         a.add(License.typeA);
         a.add(License.typeB);
         a.add(License.typeC);
-        driversController.getDrivers(date, 0,a);
         Tuple<String, List<Driver>> dateWithDriverList = driversController.getDateWithDriver(date);
         if(dateWithDriverList==null){
             //tell workers to add a driver + storekeeper;
@@ -336,6 +335,7 @@ public class Transport_Facade implements Transport_Integration {
                 break;
             }
         }
+        saveDoc(docId);
 
 
 
