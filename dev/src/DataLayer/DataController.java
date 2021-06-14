@@ -8,9 +8,11 @@ import BusinessLayer.SupplierBuissness.Contact;
 import BusinessLayer.SupplierBuissness.Supplier;
 import DataLayer.Mappers.*;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,6 +36,7 @@ public class DataController {
     private SuppliersMapper suppliersMapper;
     private SuppliersContactsMapper suppliersContactsMapper;
     private SuppliersProductsMapper suppliersProductsMapper;
+    private ArrivedShipmentMapper arrivedShipmentMapper;
 
 
     public static Date getDate(String date) throws ParseException {
@@ -73,6 +76,7 @@ public class DataController {
         suppliersProductsMapper = new SuppliersProductsMapper(); //needs supplier+gp
         apdMapper = new AgreementProductDiscMapper(); //needs supplier+supProd
         orderProductsMapper = new OrderProductsMapper(); //needs order+supProd
+        arrivedShipmentMapper = new ArrivedShipmentMapper();
 
         reportsMapper.setRCM(rcMapper);
         salesMapper.setAcm(acMapper);
@@ -521,5 +525,19 @@ public class DataController {
         return order;
     }
 
+    //stock-shipment functions
 
+
+    public HashMap<Integer, Integer> getLastShipment() {
+        HashMap<Integer, Integer> supply = arrivedShipmentMapper.getLastShipment();
+        arrivedShipmentMapper.cleanShipment();
+        return supply;
+    }
+    public void insertArrivedShipment(int gpID, int quantity) {
+        try{
+            arrivedShipmentMapper.insert(gpID, quantity);
+        }catch(SQLException e){
+            arrivedShipmentMapper.addQuantity(gpID,quantity);
+        }
+    }
 }

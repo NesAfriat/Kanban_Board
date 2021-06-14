@@ -28,11 +28,13 @@ public class Transport_Menu {
 
         try {
             Connect.createTablesAndLoadData();
-            loadData();
+
         }catch (Exception e)
         {
 
         }
+        loadData();
+
     }
 
     public void mainMenu() {
@@ -40,10 +42,11 @@ public class Transport_Menu {
         print("Please enter your ID\n");
         String str = sc.nextLine();
         boolean run = bc.canUserEnter(str);
+
         if(run == false)
             System.out.println("User can not enter\n");
         while(run){
-            HashMap<Integer,Integer>hm = new HashMap<>();
+            /*HashMap<Integer,Integer>hm = new HashMap<>();
             hm.put(1,3);
             hm.put(2,1);
             hm.put(3,2);
@@ -52,8 +55,9 @@ public class Transport_Menu {
             }catch (Exception e)
             {
                 System.out.println(e.toString());
-            }
-            bc.sendTransportToStock(); //TODO <- bug when adding a new Order from suppliers
+            }*/
+            bc.sendTransportToStock();
+
             run = runProgram();
         }
     }
