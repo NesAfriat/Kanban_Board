@@ -66,7 +66,7 @@ public class TransportDoc {
     public String toString(){
         String acc="";
         acc = "id "+ id  +(TransDate!=null? ", Trasnport Date "+ TransDate.toString():"") + (LeftOrigin!=null? ", Time Left Origin "+ LeftOrigin.toString():"") + (truck!=null?", Truck: "+ truck.getName():"")
-                +"\n" + (driver!=null?"Driver "+ driver.getName():"") + (origin!=-2147483648?", Origin "+ origin:"") + (area!=null?", Area "+ area:"") + (truckWeightDep!=-1?", Truck weight "+ truckWeightDep:"" )+"\n ";
+                +"\n" + (driver!=null?"Driver "+ driver.getName():"") + (origin!=-2147483648?", Origin "+ origin:"") + (area!=null?", Area "+ area:"") + (truckWeightDep!=-1?", Truck weight "+ truckWeightDep:" " )+ ", Approved: "+ approved+ "\n ";
         return acc;
     }
     public boolean isApproved() {
