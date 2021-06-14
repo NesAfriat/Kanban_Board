@@ -40,7 +40,7 @@ public class ArrivedShipmentMapper extends Mapper{
         boolean output = false;
         try (Connection conn = connect()) {
             boolean inserted = false;
-            String statement = "INSERT OR IGNORE INTO ArrivedShipment(gpID, quantity) " +
+            String statement = "INSERT INTO ArrivedShipment(gpID, quantity) " +
                     "VALUES (?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
@@ -63,6 +63,7 @@ public class ArrivedShipmentMapper extends Mapper{
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1,gpID);
                 pstmt.setInt(2, quantity);
+                pstmt.setInt(3,gpID);
 
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
