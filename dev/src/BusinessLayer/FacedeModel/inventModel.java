@@ -572,6 +572,17 @@ public class inventModel {
     private HashMap<Integer, Integer> get_missing_products_for_order() throws Exception {
         return stock_controller.get_missing_product_with_amount();
     }
+
+    public Response receiveLastShipment() {
+        Response res;
+        try {
+            stock_controller.receiveLastShipment();
+            res = new Response();
+        } catch (Exception e) {
+            res = new Response(e.getMessage());
+        }
+        return res;
+    }
 }
 
 
