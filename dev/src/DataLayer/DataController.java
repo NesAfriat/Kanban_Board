@@ -528,7 +528,9 @@ public class DataController {
 
 
     public HashMap<Integer, Integer> getLastShipment() {
-        HashMap<Integer, Integer> supply = ArrivedShipmentMapper.getLastShippment();
+        HashMap<Integer, Integer> supply = arrivedShipmentMapper.getLastShipment();
+        arrivedShipmentMapper.cleanShipment();
+        return supply;
     }
     public void insertArrivedShipment(int gpID, int quantity) {
 
