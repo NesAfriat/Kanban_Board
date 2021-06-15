@@ -112,7 +112,7 @@ public class WorkerDataController {
             stmt.execute(shiftTable);
             stmt.execute(workersInShiftsTable);
             stmt.execute(transportRequestsTable);
-            LoadPreData();
+//            LoadPreData();
         } catch (SQLException e) {
             e.printStackTrace();
         }
