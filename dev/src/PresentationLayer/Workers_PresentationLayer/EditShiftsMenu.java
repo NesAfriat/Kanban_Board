@@ -1,17 +1,18 @@
 package PresentationLayer.Workers_PresentationLayer;
 
-import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.Response;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.ShiftResponse;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 
 import java.util.List;
 
 class EditShiftsMenu extends HRManagerMenu {
-    EditShiftsMenu(Workers_Facade facade){
+    EditShiftsMenu(Workers_Facade facade) {
         super(facade);
     }
+
     void run() {
         boolean prev = false;
         while (!prev) {
@@ -60,10 +61,9 @@ class EditShiftsMenu extends HRManagerMenu {
 
     private void viewCurrentArrangement() {
         ResponseT<ShiftResponse> shiftResponse = facade.viewCurrentArrangement();
-        if (shiftResponse.ErrorOccurred()){
+        if (shiftResponse.ErrorOccurred()) {
             printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm(shiftResponse.value.toString());
         }
     }
@@ -72,10 +72,9 @@ class EditShiftsMenu extends HRManagerMenu {
         String ID = getInputWorkerID();
         String role = getInputJob();
         ResponseT<ShiftResponse> shiftResponse = facade.addWorkerToCurrentShift(ID, role);
-        if (shiftResponse.ErrorOccurred()){
+        if (shiftResponse.ErrorOccurred()) {
             printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm("Worker added successfully");
         }
     }
@@ -84,10 +83,9 @@ class EditShiftsMenu extends HRManagerMenu {
         String ID = getInputWorkerID();
         String role = getInputJob();
         ResponseT<ShiftResponse> shiftResponse = facade.removeWorkerFromCurrentShift(ID, role);
-        if (shiftResponse.ErrorOccurred()){
+        if (shiftResponse.ErrorOccurred()) {
             printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm("Worker removed successfully from the shift.");
         }
     }
@@ -97,11 +95,10 @@ class EditShiftsMenu extends HRManagerMenu {
         System.out.print("Amount required: ");
         int required = getInputInt();
         ResponseT<ShiftResponse> shiftResponse = facade.addRequiredJob(role, required);
-        if (shiftResponse.ErrorOccurred()){
+        if (shiftResponse.ErrorOccurred()) {
             printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm("Job "+ role + " added successfully to the shift.");
+        } else {
+            printPrettyConfirm("Job " + role + " added successfully to the shift.");
         }
     }
 
@@ -110,25 +107,22 @@ class EditShiftsMenu extends HRManagerMenu {
         System.out.print("Amount required: ");
         int required = getInputInt();
         ResponseT<ShiftResponse> shiftResponse = facade.setAmountRequired(role, required);
-        if (shiftResponse.ErrorOccurred()){
+        if (shiftResponse.ErrorOccurred()) {
             printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
-            printPrettyConfirm("The amount of workers required for role " + role + " has updated successfully to "+ required);
+        } else {
+            printPrettyConfirm("The amount of workers required for role " + role + " has updated successfully to " + required);
         }
     }
 
     private void GetAvailableWorkers() {
         String role = getInputJob();
         ResponseT<List<WorkerResponse>> availableWorkers = facade.getAvailableWorkers(role);
-        if (availableWorkers.ErrorOccurred()){
+        if (availableWorkers.ErrorOccurred()) {
             printPrettyError(availableWorkers.getErrorMessage());
-        }
-        else {
-            if (availableWorkers.value.isEmpty()){
-                printPrettyConfirm("No available workers to work as " + role +" at current shift.");
-            }
-            else {
+        } else {
+            if (availableWorkers.value.isEmpty()) {
+                printPrettyConfirm("No available workers to work as " + role + " at current shift.");
+            } else {
                 for (WorkerResponse workerRes : availableWorkers.value) {
                     printPrettyConfirm(workerRes.getNameID());
                 }
@@ -138,13 +132,12 @@ class EditShiftsMenu extends HRManagerMenu {
 
     private void ApproveShift() {
         ResponseT<ShiftResponse> shiftResponse = facade.approveShift();
-        if (shiftResponse.ErrorOccurred()){
+        if (shiftResponse.ErrorOccurred()) {
             printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else{
+        } else {
             if (shiftResponse.value.isFullyOccupied())
                 printPrettyConfirm("Shift approved successfully");
-            else{
+            else {
                 printPrettyConfirm("Shift approved successfully.");
                 printPrettyError("BEWARE: Not all roles are fully occupied.");
             }

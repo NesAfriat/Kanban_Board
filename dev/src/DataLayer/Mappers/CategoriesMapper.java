@@ -29,7 +29,7 @@ public class CategoriesMapper extends Mapper {
     }
 
     public Category getCategory(String cat_name) {
-        Category category =null;
+        Category category = null;
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Categories WHERE catName=? ";
 
@@ -39,7 +39,7 @@ public class CategoriesMapper extends Mapper {
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
                     String catName = rs.getString(1);
-                    String father_Category= rs.getString(2);
+                    String father_Category = rs.getString(2);
                     category = new Category(cat_name);
                 }
             } catch (SQLException e) {
@@ -52,7 +52,7 @@ public class CategoriesMapper extends Mapper {
     }
 
     public String getFatherCategory(Category cat) {
-        String father =null;
+        String father = null;
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Categories WHERE catName=? ";
 
@@ -61,7 +61,7 @@ public class CategoriesMapper extends Mapper {
 
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
-                    father= rs.getString(2);
+                    father = rs.getString(2);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -73,7 +73,7 @@ public class CategoriesMapper extends Mapper {
     }
 
     public LinkedList<String> getChildrenCategories(Category cat) {
-        LinkedList<String> children= new LinkedList<>();
+        LinkedList<String> children = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Categories WHERE father_Category=? ";
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
@@ -81,7 +81,7 @@ public class CategoriesMapper extends Mapper {
 
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
-                    String child= rs.getString(1);
+                    String child = rs.getString(1);
                     children.add(child);
                 }
             } catch (SQLException e) {
@@ -100,12 +100,11 @@ public class CategoriesMapper extends Mapper {
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setString(1, obj.getCategory_name());
-                Category father_Cat= obj.getFather_Category();
-                if(father_Cat!=null) {
+                Category father_Cat = obj.getFather_Category();
+                if (father_Cat != null) {
                     pstmt.setString(2, father_Cat.getCategory_name());
                     update(father_Cat);
-                }
-                else
+                } else
                     pstmt.setString(2, null);
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
@@ -143,8 +142,8 @@ public class CategoriesMapper extends Mapper {
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setString(1, category.getCategory_name());
-                if(category.getFather_Category()!=null)
-                pstmt.setString(2, category.getFather_Category().getCategory_name());
+                if (category.getFather_Category() != null)
+                    pstmt.setString(2, category.getFather_Category().getCategory_name());
                 else
                     pstmt.setString(2, null);
                 output = pstmt.executeUpdate() != 0;
@@ -157,7 +156,7 @@ public class CategoriesMapper extends Mapper {
         return output;
     }
 
-    public boolean setFather(Category cat,Category father_cat) {
+    public boolean setFather(Category cat, Category father_cat) {
         boolean updated = false;
         try (Connection conn = connect()) {
             String statement = "UPDATE Categories SET father_Category=? WHERE catName=? ";
@@ -176,15 +175,15 @@ public class CategoriesMapper extends Mapper {
     }
 
     public LinkedList<Category> loadAllCategories() {
-        LinkedList<Category> categories=new LinkedList<>();
+        LinkedList<Category> categories = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Categories  ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 ResultSet rs = pstmt.executeQuery();
-                while (rs.next())  {
+                while (rs.next()) {
                     String catName = rs.getString(1);
-                    Category newCat= new Category(catName);
+                    Category newCat = new Category(catName);
                     categories.add(newCat);
                 }
             } catch (SQLException e) {
@@ -196,6 +195,7 @@ public class CategoriesMapper extends Mapper {
         setFathers(categories);
         return categories;
     }
+
     private void setFathers(LinkedList<Category> categories) {
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Categories WHERE catName=? ";
@@ -204,19 +204,18 @@ public class CategoriesMapper extends Mapper {
                     ResultSet rs = pstmt.executeQuery();
                     if (rs.next()) {
                         String fathersCatString = rs.getString(2);
-                        for(Category fc: categories)
-                        if(fc.getCategory_name().equals(fathersCatString))
-                        category.setFather_Category(fc);
+                        for (Category fc : categories)
+                            if (fc.getCategory_name().equals(fathersCatString))
+                                category.setFather_Category(fc);
                     }
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
-             catch(SQLException throwables){
-                throwables.printStackTrace();
-            }
-        }
+    }
 
-        }
+}
 

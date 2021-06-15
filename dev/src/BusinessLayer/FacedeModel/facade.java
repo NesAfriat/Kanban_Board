@@ -1,57 +1,47 @@
 package BusinessLayer.FacedeModel;
 
-import BusinessLayer.*;
 import BusinessLayer.Controlls.Sales_Controller;
 import BusinessLayer.Controlls.Stock_Controller;
-import BusinessLayer.FacedeModel.Objects.*;
+import BusinessLayer.DeliveryMode;
+import BusinessLayer.FacedeModel.Objects.Response;
+import BusinessLayer.FacedeModel.Objects.ResponseT;
+import BusinessLayer.GetOccupations_Integration;
+import BusinessLayer.ProductSupplier;
 import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
-import BusinessLayer.Workers_BusinessLayer.Workers.Job;
+import BusinessLayer.paymentMethods;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class facade {
     private static facade single_instance = null;
-    private inventModel inventModel;
-    private SupModel supModel;
-    private BusinessLayer.ProductManager ProductManager;
-    private Transport_Integration transport_integration;
     //    private Stock_Controller stock_controller;
 //    private Sales_Controller sales_controller;
 //    private Reports_Controller reports_controller;
 //for invent
     GetOccupations_Integration getOccupations_integration;
-    private facade(Transport_Integration transport_integration,GetOccupations_Integration getOccupations_integration) {
+    private final inventModel inventModel;
+    private final SupModel supModel;
+    private final BusinessLayer.ProductManager ProductManager;
+    private final Transport_Integration transport_integration;
+
+    private facade(Transport_Integration transport_integration, GetOccupations_Integration getOccupations_integration) {
         inventModel = new inventModel();
         ProductManager = Stock_Controller.getInstance().getStock().getPM();
         supModel = new SupModel(transport_integration);
-        this.transport_integration=transport_integration;
-        this.getOccupations_integration=getOccupations_integration;
+        this.transport_integration = transport_integration;
+        this.getOccupations_integration = getOccupations_integration;
     }
 
 
-    public static facade getInstance(Transport_Integration transport_integration,GetOccupations_Integration getOccupations_integration) {
+    public static facade getInstance(Transport_Integration transport_integration, GetOccupations_Integration getOccupations_integration) {
         if (single_instance == null)
-            single_instance = new facade(transport_integration,getOccupations_integration);
+            single_instance = new facade(transport_integration, getOccupations_integration);
         return single_instance;
-    }
-
-    public Response create_order_Due_to_lack() {
-        Integer li = 0;
-        return supModel.create_order_Due_to_lack((inventModel.getStockC()).get_missing_General_products_with_amounts(), li);
-
-    }
-    public Transport_Integration gettransport_integration(){
-        return transport_integration;
-    }
-
-    public GetOccupations_Integration getOccupations_integration(){
-        return getOccupations_integration;
-    }
-    ////////////////////////////////////////
-    public Stock_Controller getStockC() {
-        return inventModel.getStockC();
     }
 
     public static Date getDate(String date) throws ParseException {
@@ -64,6 +54,25 @@ public class facade {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);
+    }
+
+    public Response create_order_Due_to_lack() {
+        Integer li = 0;
+        return supModel.create_order_Due_to_lack((inventModel.getStockC()).get_missing_General_products_with_amounts(), li);
+
+    }
+
+    public Transport_Integration gettransport_integration() {
+        return transport_integration;
+    }
+
+    public GetOccupations_Integration getOccupations_integration() {
+        return getOccupations_integration;
+    }
+
+    ////////////////////////////////////////
+    public Stock_Controller getStockC() {
+        return inventModel.getStockC();
     }
 
     ////////////////////////////////

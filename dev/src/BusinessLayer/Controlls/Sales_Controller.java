@@ -12,15 +12,14 @@ import java.util.LinkedList;
 
 public class Sales_Controller {
     private static Sales_Controller sale_C = null;
-    private HashMap<Integer, Sale> sales;           //holds all sales ever created
+    private final HashMap<Integer, Sale> sales;           //holds all sales ever created
     private Integer sales_id;
     private boolean loadedAllSales = false;
 
     private Sales_Controller() {
         this.sales = new HashMap<>();
-        sales_id = getMaxID()+1;
+        sales_id = getMaxID() + 1;
     }
-
 
 
     public static Sales_Controller getInstance() {
@@ -102,6 +101,7 @@ public class Sales_Controller {
                 removeSale(s.getSale_id());
         }
     }
+
     public void removeSale(int sales_id) throws Exception {
         Sale toRemove = null;
         if (sales.containsKey(sales_id))
@@ -109,10 +109,10 @@ public class Sales_Controller {
         if (toRemove == null) {
             IdentityMap im = IdentityMap.getInstance();
             toRemove = im.getSale(sales_id);
-            if(toRemove==null){
+            if (toRemove == null) {
                 DataController dc = DataController.getInstance();
                 toRemove = dc.getSaleByID(sales_id);
-                if(toRemove == null){
+                if (toRemove == null) {
                     throw new Exception("sale does not exist!");
                 }
             }
@@ -272,10 +272,12 @@ public class Sales_Controller {
             }
         }
     }
+
     private Integer getMaxID() {
         DataController dc = DataController.getInstance();
         return dc.getMaxSalesID();
     }
+
     private void removeSaleData(Sale toRemove) {
         DataController dc = DataController.getInstance();
         dc.delete(toRemove);

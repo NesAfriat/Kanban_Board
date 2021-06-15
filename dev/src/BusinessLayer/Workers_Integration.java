@@ -26,12 +26,11 @@ public interface Workers_Integration {
             }
         }
      */
-    public ResponseT<List<WorkerResponse>> getWorkersInShiftByJob(String date, String shiftType, String Job);
+    ResponseT<List<WorkerResponse>> getWorkersInShiftByJob(String date, String shiftType, String Job);
 
-    public Response addRequest(int OrderID, String date);
+    Response addRequest(int OrderID, String date);
 
-    public ResponseT<List<Job>> getWorkerOccupations(String WorkerId);
-
+    ResponseT<List<Job>> getWorkerOccupations(String WorkerId);
 
 
 }

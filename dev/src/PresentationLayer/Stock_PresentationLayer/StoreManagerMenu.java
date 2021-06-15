@@ -2,19 +2,19 @@ package PresentationLayer.Stock_PresentationLayer;
 
 import BusinessLayer.FacedeModel.Objects.Response;
 import BusinessLayer.FacedeModel.facade;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.LinkedList;
 
 public class StoreManagerMenu {
-    private facade Facade;
-    private BufferedReader reader;
-    private Response res;
-
     int inputi;
     String inputs;
+    private final facade Facade;
+    private final BufferedReader reader;
+    private Response res;
 
-    public StoreManagerMenu(facade Facade, BufferedReader reader){
+    public StoreManagerMenu(facade Facade, BufferedReader reader) {
         this.Facade = Facade;
         this.reader = reader;
     }
@@ -26,9 +26,9 @@ public class StoreManagerMenu {
             System.out.println("Please choose an action:");
             System.out.println("0. Exit\n1. Reports \n ");
             inputs = reader.readLine().trim();
-            if(inputs.equals("")) {
+            if (inputs.equals("")) {
                 inputi = -1;
-            }else inputi=Integer.parseInt(inputs);
+            } else inputi = Integer.parseInt(inputs);
             switch (inputi) {
                 case 0: {
                     flag = false;
@@ -66,9 +66,9 @@ public class StoreManagerMenu {
             System.out.println("3. get report by subject and date");
             System.out.println("4. show all reports");
             inputs = reader.readLine().trim();
-            if(inputs.equals("")) {
+            if (inputs.equals("")) {
                 inputi = -1;
-            }else inputi=Integer.parseInt(inputs);
+            } else inputi = Integer.parseInt(inputs);
             switch (inputi) {
                 case 0: {
                     flag = false;

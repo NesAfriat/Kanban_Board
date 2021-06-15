@@ -4,14 +4,14 @@ import BusinessLayer.Agreement;
 
 import java.sql.*;
 
-public class AgreementDeliveryDaysMapper extends Mapper{
+public class AgreementDeliveryDaysMapper extends Mapper {
     public AgreementDeliveryDaysMapper() {
         super();
         create_table();
     }
 
 
-    public boolean addAgreementDeliveryDaysAgreement (int SupID,int Day) {
+    public boolean addAgreementDeliveryDaysAgreement(int SupID, int Day) {
         boolean output = false;
         try (Connection conn = connect()) {//String statement = "UPDATE OrderProducts SET oID=?, catalogID=?, quantity=?";
             boolean inserted = false;
@@ -33,7 +33,7 @@ public class AgreementDeliveryDaysMapper extends Mapper{
 
     }
 
-    public boolean RemoveAgreementDeliveryDays(int SupId,int Day) {
+    public boolean RemoveAgreementDeliveryDays(int SupId, int Day) {
 
 
         boolean deleted = false;
@@ -50,17 +50,17 @@ public class AgreementDeliveryDaysMapper extends Mapper{
             throwables.printStackTrace();
         }
         return deleted;
-  }
+    }
 
 
     @Override
     void create_table() {
         String Table = "CREATE TABLE IF NOT EXISTS AgreementDeliveryDays(\n" +
-                        "\tdeliveryDay INTEGER,\n" +
-                        "\tsupID INTEGER,\n" +
-                        "\tPRIMARY KEY(deliveryDay, supID),\n" +
-                        "\tFOREIGN KEY(supID) REFERENCES Agreement(supID)\n" +
-                        ");";
+                "\tdeliveryDay INTEGER,\n" +
+                "\tsupID INTEGER,\n" +
+                "\tPRIMARY KEY(deliveryDay, supID),\n" +
+                "\tFOREIGN KEY(supID) REFERENCES Agreement(supID)\n" +
+                ");";
         //        String sql = "BEGIN TRANSACTION;" + itemTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
@@ -76,7 +76,7 @@ public class AgreementDeliveryDaysMapper extends Mapper{
         }
     }
 
-    public void addDaysDelivery(Agreement agr){
+    public void addDaysDelivery(Agreement agr) {
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM AgreementDeliveryDays WHERE supID=? ";
 
@@ -84,7 +84,7 @@ public class AgreementDeliveryDaysMapper extends Mapper{
                 pstmt.setInt(1, agr.getSupplierID());
 
                 ResultSet rs = pstmt.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
                     String day = rs.getString(1);
 
                     agr.addDeliveryDay(Integer.parseInt(day));

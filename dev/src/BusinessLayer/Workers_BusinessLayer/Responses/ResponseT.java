@@ -2,6 +2,7 @@ package BusinessLayer.Workers_BusinessLayer.Responses;
 
 public class ResponseT<T> extends Response {
     public T value;
+
     public ResponseT(String errorMessage) {
         super(errorMessage);
     }

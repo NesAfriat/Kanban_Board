@@ -8,33 +8,22 @@ import BusinessLayer.GeneralProduct;
 import BusinessLayer.Item;
 import BusinessLayer.Reports.Report;
 import BusinessLayer.Sales.Sale;
-import BusinessLayer.ProductManager;
-import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 public class inventModel {
-    private Stock_Controller stock_controller;
-    private Sales_Controller sales_controller;
-    private Reports_Controller reports_controller;
+    private final Stock_Controller stock_controller;
+    private final Sales_Controller sales_controller;
+    private final Reports_Controller reports_controller;
 
     public inventModel() {
         this.stock_controller = Stock_Controller.getInstance();
         this.sales_controller = Sales_Controller.getInstance();
         this.reports_controller = Reports_Controller.getInstance();
-    }
-
-    public Stock_Controller getStockC() {
-        return stock_controller;
-    }
-
-    public Sales_Controller getSalesC() {
-        return sales_controller;
     }
 
     public static Date getDate(String date) throws ParseException {
@@ -47,6 +36,14 @@ public class inventModel {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date);
+    }
+
+    public Stock_Controller getStockC() {
+        return stock_controller;
+    }
+
+    public Sales_Controller getSalesC() {
+        return sales_controller;
     }
 
 //=============================================STOCK=================================================
@@ -116,7 +113,7 @@ public class inventModel {
             ProductRes productRes;
             GeneralProduct product = stock_controller.get_product_info(product_id);
             double max_disc = get_Max_disc_for_product(product);
-            productRes = new ProductRes(product, max_disc/100);
+            productRes = new ProductRes(product, max_disc / 100);
             res = new ResponseT<>(productRes);
         } catch (Exception e) {
             res = new ResponseT<>(e.getMessage());
@@ -127,6 +124,7 @@ public class inventModel {
     /**
      * for inside use
      * return the max discount for a produce between sales on his categories and his product sale
+     *
      * @param product
      * @return
      * @throws Exception
@@ -150,7 +148,6 @@ public class inventModel {
         }
         return res;
     }
-
 
 
     /**
@@ -295,6 +292,7 @@ public class inventModel {
         }
         return res;
     }
+
     public Response get_product_items(Integer product_id) {
         ResponseT<LinkedList<ItemRes>> res;
         try {
@@ -551,19 +549,18 @@ public class inventModel {
      * @return
      */
     public Response show_all_reports() {
-        LinkedList<ReportRes> repRes= new LinkedList<>();
+        LinkedList<ReportRes> repRes = new LinkedList<>();
         ResponseT<LinkedList<ReportRes>> res;
         try {
             LinkedList<Report> reports = reports_controller.get_all_reports();
-            for(Report r: reports)
-                 repRes.add(new ReportRes(r));
+            for (Report r : reports)
+                repRes.add(new ReportRes(r));
             res = new ResponseT<>(repRes);
         } catch (Exception e) {
             res = new ResponseT<>(e.getMessage());
         }
         return res;
     }
-
 
 
     //=============================================INTEGRATION=================================================

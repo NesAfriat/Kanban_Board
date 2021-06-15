@@ -15,12 +15,12 @@ public class AgreementsMapper extends Mapper {
     @Override
     void create_table() {
         String AgreementsTable = "CREATE TABLE IF NOT EXISTS Agreements(\n" +
-                                "\tsupID INTEGER PRIMARY KEY,\n" +
-                                "\textraDisc REAL,\n" +
-                                "\tdeliveryMods TEXT,\n" +
-                                "\tdaysFromOrder INTEGER,\n" +
-                                "\tFOREIGN KEY (supID) REFERENCES Suppliers(supID)\n" +
-                                ");";
+                "\tsupID INTEGER PRIMARY KEY,\n" +
+                "\textraDisc REAL,\n" +
+                "\tdeliveryMods TEXT,\n" +
+                "\tdaysFromOrder INTEGER,\n" +
+                "\tFOREIGN KEY (supID) REFERENCES Suppliers(supID)\n" +
+                ");";
 //        String sql = "BEGIN TRANSACTION;" + GeneralProductTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
@@ -63,9 +63,9 @@ public class AgreementsMapper extends Mapper {
         return obj;
     }
 
-// get all agrements in the data
+    // get all agrements in the data
     public List<Agreement> getAllAgreement() {
-       List<Agreement> obj = new LinkedList<>();
+        List<Agreement> obj = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Agreements  ";
 
@@ -76,7 +76,7 @@ public class AgreementsMapper extends Mapper {
                     double xDisc = rs.getDouble(2);
                     String mod = rs.getString(3);
                     int daysFromOrder = rs.getInt(4);//todo - need to be list of int - like days '(1 ,3) //sunday, tuesday
-                    obj.add( new Agreement(supID, xDisc, mod, daysFromOrder));
+                    obj.add(new Agreement(supID, xDisc, mod, daysFromOrder));
                 }
 
             } catch (SQLException e) {

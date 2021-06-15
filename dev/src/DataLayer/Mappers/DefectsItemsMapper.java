@@ -9,7 +9,7 @@ import java.util.LinkedList;
 
 import static DataLayer.DataController.getDate;
 
-public class DefectsItemsMapper extends Mapper{
+public class DefectsItemsMapper extends Mapper {
     public DefectsItemsMapper() {
         super();
         create_table();
@@ -19,15 +19,15 @@ public class DefectsItemsMapper extends Mapper{
     @Override
     void create_table() {
         String DefItemTable = "CREATE TABLE IF NOT EXISTS DefectsItems(\n" +
-                                "\tgpID INTEGER,\n" +
-                                "\tiID INTEGER,\n" +
-                                "\tlocation TEXT,\n" +
-                                "\tsupplied_date TEXT,\n" +
-                                "\texpiration_date TEXT,\n" +
-                                "\tPRIMARY KEY (gpID, iID),\n" +
-                                "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)\n" +
-                                "\n" +
-                                ");";
+                "\tgpID INTEGER,\n" +
+                "\tiID INTEGER,\n" +
+                "\tlocation TEXT,\n" +
+                "\tsupplied_date TEXT,\n" +
+                "\texpiration_date TEXT,\n" +
+                "\tPRIMARY KEY (gpID, iID),\n" +
+                "\tFOREIGN KEY (gpID) REFERENCES GeneralProducts (gpID)\n" +
+                "\n" +
+                ");";
         //        String sql = "BEGIN TRANSACTION;" + itemTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
@@ -56,7 +56,7 @@ public class DefectsItemsMapper extends Mapper{
                     String location = rs.getString(3);
                     String sup_date = rs.getString(4);
                     String exp_date = rs.getString(5);
-                   obj = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(exp_date));
+                    obj = new Item(iID, gpID, location, DataController.getDate(sup_date), DataController.getDate(exp_date));
                 }
             } catch (SQLException | ParseException e) {
                 e.printStackTrace();

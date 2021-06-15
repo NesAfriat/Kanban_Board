@@ -1,8 +1,8 @@
 package BusinessLayer.Transport_BusinessLayer.Shops;
 
 public class ProductArea {
-    private Product p;
-    private Area a;
+    private final Product p;
+    private final Area a;
 
     public ProductArea(Product p, Area a) {
         this.p = p;

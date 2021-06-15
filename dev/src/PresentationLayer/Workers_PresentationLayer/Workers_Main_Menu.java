@@ -1,43 +1,38 @@
 package PresentationLayer.Workers_PresentationLayer;
-import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
-import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
+
 import BusinessLayer.Workers_BusinessLayer.Responses.*;
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 
 public class Workers_Main_Menu {
+    public static final String ANSI_PURPLE = "\u001B[35m";
+    protected static final Scanner scanner = new Scanner(System.in);
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_PURPLE = "\u001B[35m";
-
-    protected static final Scanner scanner = new Scanner(System.in);
     protected Workers_Facade facade;
 
-    public Workers_Main_Menu(Workers_Facade facade){
+    public Workers_Main_Menu(Workers_Facade facade) {
         this.facade = facade;
     }
 
 
     public void start() {
         boolean run = true;
-        while (run){
+        while (run) {
             System.out.println("1) Enter ID number for login");
             System.out.println("2) Previous");
             System.out.print("Option: ");
             int option = getInputInt();
-            if (option == 1){
+            if (option == 1) {
                 System.out.println("ID: ");
                 String ID = getInputString();
                 ResponseT<WorkerResponse> worker = facade.login(ID);
                 if (worker.ErrorOccurred()) {
                     System.out.println(ANSI_RED + worker.getErrorMessage() + ANSI_RESET);
-                }
-                else {
+                } else {
                     printPrettyConfirm("Hello, " + worker.value.getName() + "!");
                     run = false;
                     if (worker.value.getIsAdmin()) {
@@ -46,20 +41,16 @@ public class Workers_Main_Menu {
                         new WorkerMenu(facade).run();
                     }
                 }
-            }
-            else if (option == 2){
+            } else if (option == 2) {
                 run = false;
                 printPrettyConfirm("Exited workers manage system");
-            }
-            else {
+            } else {
                 printPrettyError("There's no such option");
             }
 
         }
 
     }
-
-
 
 
     protected void LogOut() {
@@ -75,23 +66,21 @@ public class Workers_Main_Menu {
     protected void getDefaultWorkDay() {
         int day = getInputDay();
         ResponseT<WorkDayResponse> workDayResponse = facade.getDefaultShiftInDay(day);
-        if (workDayResponse.ErrorOccurred()){
+        if (workDayResponse.ErrorOccurred()) {
             printPrettyError(workDayResponse.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm(workDayResponse.value.Settings());
         }
     }
 
 
-    protected void getDefaultShift(){
+    protected void getDefaultShift() {
         int day = getInputDayType();
         String shiftType = getInputShiftType();
         ResponseT<ShiftResponse> response = facade.getDefaultJobsInShift(day, shiftType);
-        if (response.ErrorOccurred()){
+        if (response.ErrorOccurred()) {
             printPrettyError(response.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm(response.value.Settings());
         }
     }
@@ -101,20 +90,22 @@ public class Workers_Main_Menu {
     protected void printPrettyHeadline(String s) {
         System.out.println(s);
     }
+
     protected void printPrettyConfirm(String message) {
         System.out.println(message);
     }
+
     protected void printPrettyError(String errorMessage) {
         System.out.println(errorMessage);
     }
 
 
-    protected String getInputDate(){
+    protected String getInputDate() {
         System.out.println("Enter Date <DD/MM/YYYY>: ");
         return getInputString();
     }
 
-    protected String getInputShiftType(){
+    protected String getInputShiftType() {
         System.out.println("Choose shift:");
         System.out.println("1) Morning");
         System.out.println("2) Evening");
@@ -135,7 +126,7 @@ public class Workers_Main_Menu {
     }
 
 
-    protected String getInputWorkerID(){
+    protected String getInputWorkerID() {
         System.out.print("Enter worker id: ");
         return getInputString();
     }
@@ -149,12 +140,13 @@ public class Workers_Main_Menu {
         int day = getInputInt();
         if (day == 2) day = 6;
         else if (day == 3) day = 7;
-        else if (day != 1){
+        else if (day != 1) {
             printPrettyError("There's no such option");
             return getInputDayType();
         }
         return day;
     }
+
     protected int getInputDay() {
         System.out.println("Choose day:");
         System.out.println("1) Sunday");
@@ -165,7 +157,7 @@ public class Workers_Main_Menu {
         System.out.println("6) Friday");
         System.out.println("7) Saturday");
         int day = getInputInt();
-        if (day < 1 | day > 7){
+        if (day < 1 | day > 7) {
             printPrettyError("There's no such option");
             return getInputDay();
         }
@@ -181,14 +173,14 @@ public class Workers_Main_Menu {
             return true;
         else if (option == 2)
             return false;
-        else{
+        else {
             printPrettyError("There's no such option");
             return getInputYesNo();
         }
     }
 
     protected int getInputInt() {
-        while (!scanner.hasNextInt()){
+        while (!scanner.hasNextInt()) {
             printPrettyError("Please enter a number");
             scanner.next();
         }
@@ -196,7 +188,7 @@ public class Workers_Main_Menu {
     }
 
     protected double getInputDouble() {
-        while (!scanner.hasNextDouble()){
+        while (!scanner.hasNextDouble()) {
             printPrettyError("Please enter a number");
             scanner.next();
         }

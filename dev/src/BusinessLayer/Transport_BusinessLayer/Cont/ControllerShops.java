@@ -1,13 +1,5 @@
 package BusinessLayer.Transport_BusinessLayer.Cont;
 
-import BusinessLayer.Transport_BusinessLayer.Shops.*;
-import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
-import DataLayer.Transport_DAL.DALController;
-
-import java.sql.SQLException;
-import java.util.*;
-import java.util.stream.Collectors;
-
 public class ControllerShops {
  /*   private List<Product> productList;
     private List<Store> storeList;

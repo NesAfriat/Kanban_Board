@@ -7,11 +7,16 @@ import java.util.HashMap;
 
 public interface IOrder {
 
-    public int GetTotalPayment();
-    public LocalDate GetDateTime();
-    public int GetId();
-    public HashMap<Integer, ProductSupplier> getProducts();
-    public HashMap<Integer, Integer> getProductQuantity();
-    public int getSupplierID();
+    int GetTotalPayment();
+
+    LocalDate GetDateTime();
+
+    int GetId();
+
+    HashMap<Integer, ProductSupplier> getProducts();
+
+    HashMap<Integer, Integer> getProductQuantity();
+
+    int getSupplierID();
 
 }

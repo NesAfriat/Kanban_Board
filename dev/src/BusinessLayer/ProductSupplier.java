@@ -7,18 +7,21 @@ public class ProductSupplier {
     private double Price;
     private int CatalogID;
     private int id;
-    private String name;
-    private int SuplierID;
+    private final String name;
+    private final int SuplierID;
 
 
-    public ProductSupplier(double Price, int CatalogID, int id,String name,int SupId){
-        this.Price=Price;
-        this.CatalogID=CatalogID;
-        this.id=id;
-        this.name=name;
-        this.SuplierID=SupId;
+    public ProductSupplier(double Price, int CatalogID, int id, String name, int SupId) {
+        this.Price = Price;
+        this.CatalogID = CatalogID;
+        this.id = id;
+        this.name = name;
+        this.SuplierID = SupId;
     }
-    public String getName(){return name;}
+
+    public String getName() {
+        return name;
+    }
 
     public double getPrice() {
         return Price;
@@ -47,7 +50,7 @@ public class ProductSupplier {
 
     }
 
-    public int getSuplierID(){
+    public int getSuplierID() {
         return SuplierID;
     }
 
@@ -59,11 +62,10 @@ public class ProductSupplier {
     private void update(ProductSupplier productSupplier) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.updateProductSupplier(productSupplier,SuplierID)) {
+        if (!dc.updateProductSupplier(productSupplier, SuplierID)) {
             System.out.println("failed to update ProductSupplier to the database");
         }
     }
-
 
 
 }

@@ -1,36 +1,28 @@
 package BusinessLayer;
 
 
-import BusinessLayer.Reports.Report;
 import BusinessLayer.OrderBuissness.Order;
+import BusinessLayer.Reports.Report;
 import BusinessLayer.Sales.Sale;
 import BusinessLayer.SupplierBuissness.Contact;
 import BusinessLayer.SupplierBuissness.Supplier;
-
 
 import java.util.LinkedList;
 
 public class IdentityMap {
     private static IdentityMap instance = null;
-    private LinkedList<Item> itemList;
+    private final LinkedList<Item> itemList;
     private LinkedList<Item> defctedItemsList;
-    private LinkedList<GeneralProduct> generalProductList;
-    private LinkedList<Category> categoryList;
-    private LinkedList<Supplier> suppliersList;
-    private LinkedList<Report> reportsList;
-    private LinkedList<Contact> contactsList;
-    private LinkedList<ProductSupplier> productSuppliersList;
-    private LinkedList<Order> ordersList;
-    private LinkedList<Agreement> agreementsList;
-    private LinkedList<Sale> salesList;
+    private final LinkedList<GeneralProduct> generalProductList;
+    private final LinkedList<Category> categoryList;
+    private final LinkedList<Supplier> suppliersList;
+    private final LinkedList<Report> reportsList;
+    private final LinkedList<Contact> contactsList;
+    private final LinkedList<ProductSupplier> productSuppliersList;
+    private final LinkedList<Order> ordersList;
+    private final LinkedList<Agreement> agreementsList;
+    private final LinkedList<Sale> salesList;
 
-
-    public static IdentityMap getInstance() {
-        if (instance == null) {
-            instance = new IdentityMap();
-        }
-        return instance;
-    }
 
     private IdentityMap() {
         itemList = new LinkedList<>();
@@ -44,6 +36,13 @@ public class IdentityMap {
         agreementsList = new LinkedList<>();
         defctedItemsList = new LinkedList<>();
         salesList = new LinkedList<>();
+    }
+
+    public static IdentityMap getInstance() {
+        if (instance == null) {
+            instance = new IdentityMap();
+        }
+        return instance;
     }
 
     //================================================================================
@@ -173,10 +172,10 @@ public class IdentityMap {
     /////Reports//////
     public void addReport(Report report) {
         boolean isIN = false;
-        for (Report r : reportsList)
-        { if (r.getReportID() == report.getReportID())
+        for (Report r : reportsList) {
+            if (r.getReportID() == report.getReportID())
                 isIN = true;
-       }
+        }
         if (!isIN)
             reportsList.add(report);
     }
@@ -263,6 +262,7 @@ public class IdentityMap {
     public void addPS(ProductSupplier ps) {
         productSuppliersList.add(ps);
     }
+
     //================================================================================
     //add an Order to the identityMap
     public void addOrder(Order o) {

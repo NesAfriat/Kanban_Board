@@ -1,8 +1,8 @@
 package BusinessLayer.FacedeModel.Objects;
 
 public class Response {
-     String errorMsg;
-     Boolean errorOccurred;
+    String errorMsg;
+    Boolean errorOccurred;
 
     public Response() {
         errorOccurred = false;

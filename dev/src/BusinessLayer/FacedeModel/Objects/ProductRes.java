@@ -36,6 +36,6 @@ public class ProductRes {
                 ", min amount=" + min_amount +
                 ", selling price= " + selling_price +
                 ", items=" + items +
-                '}'+'\n';
+                '}' + '\n';
     }
 }

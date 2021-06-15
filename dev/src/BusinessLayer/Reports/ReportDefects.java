@@ -4,7 +4,6 @@ import BusinessLayer.Controlls.Stock_Controller;
 import BusinessLayer.GeneralProduct;
 import BusinessLayer.Item;
 
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
@@ -13,9 +12,9 @@ import java.util.List;
 public class ReportDefects implements Report {
     private final String subject = "defects";
     private final Date creationDate;
-    private int reportID;
-    private LinkedList<String> categories;
-    private String timeRange;
+    private final int reportID;
+    private final LinkedList<String> categories;
+    private final String timeRange;
     private String report_data;
 
     public ReportDefects(Integer reportId, String time, LinkedList<String> categories) {

@@ -5,24 +5,41 @@ import java.util.List;
 
 public interface IAgreement {
 
-    public ProductSupplier AddPrudact(double Price, int CatalogID, int idProductCounter, String name);
-    public void RemovePrudact(int CatalogID);
-    public void AddDiscountByProduct(int CatalogID, int quantity, double newPrice);
-    public void SetExtraDiscount(int ExtarDiscount);
-    public void setProductPrice(int CatalogId, double ExtraDiscount);
-    public ProductSupplier GetPrudact(int CatalogID);
-    public HashMap<Integer, ProductSupplier> getProducts();
-    public int getNumOfDaysFromOrder();
-    public List<Integer> getDaysOfDelivery();
-    public DeliveryMode getDeliveryMode();
-    public int getSupplierID();
-    public double getExtraDiscount();
-    public HashMap<Integer, HashMap<Integer, Double>> getDiscountByProductQuantity();
-    public boolean isProductExist(int CatalogId);
-    public void removeDiscountQuantity(int CatalogId, int Quantiti);
-    public void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery, int numOfDaysFromOrder);
-    public double Calculate_cost(ProductSupplier productSupplier, int quantity);
-    public void RemovAllProducts();
+    ProductSupplier AddPrudact(double Price, int CatalogID, int idProductCounter, String name);
+
+    void RemovePrudact(int CatalogID);
+
+    void AddDiscountByProduct(int CatalogID, int quantity, double newPrice);
+
+    void SetExtraDiscount(int ExtarDiscount);
+
+    void setProductPrice(int CatalogId, double ExtraDiscount);
+
+    ProductSupplier GetPrudact(int CatalogID);
+
+    HashMap<Integer, ProductSupplier> getProducts();
+
+    int getNumOfDaysFromOrder();
+
+    List<Integer> getDaysOfDelivery();
+
+    DeliveryMode getDeliveryMode();
+
+    int getSupplierID();
+
+    double getExtraDiscount();
+
+    HashMap<Integer, HashMap<Integer, Double>> getDiscountByProductQuantity();
+
+    boolean isProductExist(int CatalogId);
+
+    void removeDiscountQuantity(int CatalogId, int Quantiti);
+
+    void SetDeliveryMode(DeliveryMode deliveryMods, List<Integer> daysOfDelivery, int numOfDaysFromOrder);
+
+    double Calculate_cost(ProductSupplier productSupplier, int quantity);
+
+    void RemovAllProducts();
 
 
 }

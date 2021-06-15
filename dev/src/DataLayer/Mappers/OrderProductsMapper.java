@@ -15,15 +15,15 @@ public class OrderProductsMapper extends Mapper {
     @Override
     void create_table() {
         String OrderProductsTable = "CREATE TABLE IF NOT EXISTS OrderProducts(\n" +
-                                    "\toID INTEGER,\n" +
-                                    "\tcatalogID INTEGER,\n" +
-                                    "\tquantity INTEGER,\n" +
+                "\toID INTEGER,\n" +
+                "\tcatalogID INTEGER,\n" +
+                "\tquantity INTEGER,\n" +
 
-                                    "\tPRIMARY KEY (oID, catalogID),\n" +
-                                    "\tFOREIGN KEY (oID) REFERENCES Orders(oID),\n" +
-                                    "\tFOREIGN KEY (catalogID) REFERENCES SuppliersProducts(catalogID)\n" +
-                                    "\t\n" +
-                                    ");";
+                "\tPRIMARY KEY (oID, catalogID),\n" +
+                "\tFOREIGN KEY (oID) REFERENCES Orders(oID),\n" +
+                "\tFOREIGN KEY (catalogID) REFERENCES SuppliersProducts(catalogID)\n" +
+                "\t\n" +
+                ");";
         //        String sql = "BEGIN TRANSACTION;" + itemTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
@@ -38,7 +38,8 @@ public class OrderProductsMapper extends Mapper {
             e.printStackTrace();
         }
     }
-    public boolean update(int orderId,int catalogID,int quantity) {
+
+    public boolean update(int orderId, int catalogID, int quantity) {
         boolean updated = false;
         try (Connection conn = connect()) {
             String statement = "UPDATE OrderProducts SET quantity=? where oID=? AND catalogID=?";
@@ -57,8 +58,9 @@ public class OrderProductsMapper extends Mapper {
         }
         return updated;
     }
+
     //removeProduct
-    public boolean delete(int orderId,int catalogID) {
+    public boolean delete(int orderId, int catalogID) {
         boolean deleted = false;
         try (Connection conn = connect()) {
             String statement = "DELETE FROM OrderProducts WHERE oID=?  AND catalogID=?";
@@ -76,7 +78,7 @@ public class OrderProductsMapper extends Mapper {
         return deleted;
     }
 
-    public boolean insetProduct(int orderId,int catalogID,int quantity) {
+    public boolean insetProduct(int orderId, int catalogID, int quantity) {
         boolean output = false;
         try (Connection conn = connect()) {//String statement = "UPDATE OrderProducts SET oID=?, catalogID=?, quantity=?";
             boolean inserted = false;
@@ -99,7 +101,7 @@ public class OrderProductsMapper extends Mapper {
     }
 
 
-    public void addProductsToOrder(Order order){
+    public void addProductsToOrder(Order order) {
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM OrderProducts WHERE oID=? ";
 
@@ -107,10 +109,10 @@ public class OrderProductsMapper extends Mapper {
                 pstmt.setInt(1, order.GetId());
 
                 ResultSet rs = pstmt.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
                     int catalogID = rs.getInt(2);
-                    int quantity=rs.getInt(3);
-                    order.insertProductToOrderForDal(catalogID,quantity);
+                    int quantity = rs.getInt(3);
+                    order.insertProductToOrderForDal(catalogID, quantity);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -120,8 +122,8 @@ public class OrderProductsMapper extends Mapper {
         }
     }
 
-    public int getOrderIdCounterBigest(){
-        int out=0;
+    public int getOrderIdCounterBigest() {
+        int out = 0;
 
         try (Connection conn = connect()) {
             String statement = "SELECT MAX (oID) FROM OrderProducts ";
@@ -130,8 +132,8 @@ public class OrderProductsMapper extends Mapper {
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
 
                 ResultSet rs = pstmt.executeQuery();
-                if(rs.next()) {
-                    out= rs.getInt(1);
+                if (rs.next()) {
+                    out = rs.getInt(1);
                 }
 
             } catch (SQLException e) {
@@ -143,10 +145,6 @@ public class OrderProductsMapper extends Mapper {
         return out;
 
     }
-
-
-
-
 
 
 }

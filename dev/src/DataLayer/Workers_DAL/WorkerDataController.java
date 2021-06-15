@@ -9,7 +9,6 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
-
 import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
@@ -22,8 +21,8 @@ import java.util.List;
 public class WorkerDataController {
 //    private final static String db_name = "database.db";
 
-    private final IdentityMap identityMap;
     private final static String connectionPath = "jdbc:sqlite:database.db";
+    private final IdentityMap identityMap;
 
     public WorkerDataController() {
         this.identityMap = IdentityMap.getInstance();
@@ -174,7 +173,7 @@ public class WorkerDataController {
         String sql = "SELECT * FROM Worker WHERE ID = ?";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -206,7 +205,7 @@ public class WorkerDataController {
         String sql = "SELECT * FROM Constraints WHERE Worker_ID = ?;";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -227,7 +226,7 @@ public class WorkerDataController {
         String sql = "SELECT * FROM Occupation WHERE Worker_ID = ?";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, id);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
@@ -760,7 +759,7 @@ public class WorkerDataController {
         String sql = "SELECT * FROM DefaultWorkDayShift WHERE Day = ?";
         boolean[] hasShift = new boolean[2];
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql);) {
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, day);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
@@ -800,7 +799,7 @@ public class WorkerDataController {
         if (day == 6) day = 6;
         if (day == 7) day = 7;
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.setInt(1, amount);
             pstmt.setInt(2, day);
             pstmt.setString(3, ShiftType);
@@ -821,7 +820,7 @@ public class WorkerDataController {
         String statement = "UPDATE DefaultWorkDayShift SET " + columnName + " = ? "
                 + "WHERE Day = ?";
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.setBoolean(1, changeTo);
             pstmt.setInt(2, day);
             pstmt.executeUpdate();
@@ -875,7 +874,7 @@ public class WorkerDataController {
         String statement = "INSERT OR IGNORE INTO DefaultWorkDayShift (Day,hasMorning,hasEvening) VALUES " +
                 "(1,1,1), (2,1,1), (3,0,1), (4,1,0), (5,1,1), (6,1,0), (7,0,1);";
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -893,7 +892,7 @@ public class WorkerDataController {
                 "('100000011',?,'Evening','DriverB'); ";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.setString(1, date);
             pstmt.setString(2, date);
             pstmt.setString(3, date);
@@ -933,7 +932,7 @@ public class WorkerDataController {
                 "(? ,'Morning',0,2,1,3,1,1,1,1);";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.setString(1, LocalDate.now().format(formatter));
             pstmt.setString(2, LocalDate.now().format(formatter));
             pstmt.setString(3, LocalDate.now().plusDays(1).format(formatter));
@@ -992,7 +991,7 @@ public class WorkerDataController {
                 "(1,'Evening','DriverC',1);";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1032,7 +1031,7 @@ public class WorkerDataController {
                 "('100000012','DriverC');";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1048,7 +1047,7 @@ public class WorkerDataController {
                 " ('100000003','22/09/2021','Morning','Cant');";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -1073,7 +1072,7 @@ public class WorkerDataController {
                 "('100000004','moshe','1',1.0,'1',1,1,'01/01/2018',NULL), " +
                 "('100000010','moshe','1',1.0,'1',1,1,'01/01/2018',NULL);";
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(statement);) {
+             PreparedStatement pstmt = conn.prepareStatement(statement)) {
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

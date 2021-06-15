@@ -1,7 +1,7 @@
 package BusinessLayer.FacedeModel.Objects;
 
 public class ResponseT<T> extends Response {
-     T value;
+    T value;
 
     public ResponseT(String errorMsg) {
         super(errorMsg);
@@ -16,7 +16,8 @@ public class ResponseT<T> extends Response {
         super(errorMsg);
         this.value = value;
     }
-    public T getValue(){
+
+    public T getValue() {
         return value;
     }
 

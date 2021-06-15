@@ -2,6 +2,7 @@ package BusinessLayer.Workers_BusinessLayer.Responses;
 
 public class Response {
     private final String ErrorMessage;
+
     public Response(String errorMessage) {
         ErrorMessage = errorMessage;
     }
@@ -10,7 +11,7 @@ public class Response {
         ErrorMessage = null;
     }
 
-    public boolean ErrorOccurred(){
+    public boolean ErrorOccurred() {
         return ErrorMessage != null;
     }
 

@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class TruckType {
-    private String Name;
-    private int maxWeight;
-    private int freeWeight;
-    private List<License> licensesForTruck;
+    private final String Name;
+    private final int maxWeight;
+    private final int freeWeight;
+    private final List<License> licensesForTruck;
 
     public TruckType(String name, int maxWeight, int freeWeight, List<License> licensesForTruck) {
         Name = name;
@@ -22,7 +22,8 @@ public class TruckType {
         this.freeWeight = freeWeight;
         this.licensesForTruck = new LinkedList<>();
     }
-    public void AddLicense(License lic){
+
+    public void AddLicense(License lic) {
         licensesForTruck.add(lic);
     }
 
@@ -41,10 +42,11 @@ public class TruckType {
     public List<License> getLicensesForTruck() {
         return licensesForTruck;
     }
-    public List<License> CopyOfLicenses(){//return copy list with final objects
-        final List<License> finalCopy=new LinkedList<>();
-        for (License el:licensesForTruck) {
-            final License clel=el;
+
+    public List<License> CopyOfLicenses() {//return copy list with final objects
+        final List<License> finalCopy = new LinkedList<>();
+        for (License el : licensesForTruck) {
+            final License clel = el;
             finalCopy.add(clel);
         }
         return finalCopy;

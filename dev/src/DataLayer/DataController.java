@@ -1,8 +1,8 @@
 package DataLayer;
 
 import BusinessLayer.*;
-import BusinessLayer.Reports.Report;
 import BusinessLayer.OrderBuissness.Order;
+import BusinessLayer.Reports.Report;
 import BusinessLayer.Sales.Sale;
 import BusinessLayer.SupplierBuissness.Contact;
 import BusinessLayer.SupplierBuissness.Supplier;
@@ -19,44 +19,25 @@ import java.util.List;
 
 public class DataController {
     private static DataController instance = null;
-    private AffectedProductsMapper apMapper;
-    private AffectedCategoriesMapper acMapper;
-    private AgreementDeliveryDaysMapper addMapper;
-    private AgreementProductDiscMapper apdMapper;
-    private AgreementsMapper agreementsMapper;
-    private CategoriesMapper categoriesMapper;
-    private DefectsItemsMapper defectsItemsMapper;
-    private GeneralProductMapper generalProductMapper;
-    private ItemMapper itemMapper;
-    private OrderProductsMapper orderProductsMapper;
-    private OrdersMapper ordersMapper;
-    private Reports_CategoriesMapper rcMapper;
-    private ReportsMapper reportsMapper;
-    private SalesMapper salesMapper;
-    private SuppliersMapper suppliersMapper;
-    private SuppliersContactsMapper suppliersContactsMapper;
-    private SuppliersProductsMapper suppliersProductsMapper;
-    private ArrivedShipmentMapper arrivedShipmentMapper;
+    private final AffectedProductsMapper apMapper;
+    private final AffectedCategoriesMapper acMapper;
+    private final AgreementDeliveryDaysMapper addMapper;
+    private final AgreementProductDiscMapper apdMapper;
+    private final AgreementsMapper agreementsMapper;
+    private final CategoriesMapper categoriesMapper;
+    private final DefectsItemsMapper defectsItemsMapper;
+    private final GeneralProductMapper generalProductMapper;
+    private final ItemMapper itemMapper;
+    private final OrderProductsMapper orderProductsMapper;
+    private final OrdersMapper ordersMapper;
+    private final Reports_CategoriesMapper rcMapper;
+    private final ReportsMapper reportsMapper;
+    private final SalesMapper salesMapper;
+    private final SuppliersMapper suppliersMapper;
+    private final SuppliersContactsMapper suppliersContactsMapper;
+    private final SuppliersProductsMapper suppliersProductsMapper;
+    private final ArrivedShipmentMapper arrivedShipmentMapper;
 
-
-    public static Date getDate(String date) throws ParseException {
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.parse(date);
-    }
-
-    public static String getDate(Date date) {
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        return simpleDateFormat.format(date);
-    }
-
-    public static DataController getInstance() {
-        if (instance == null) {
-            instance = new DataController();
-        }
-        return instance;
-    }
 
     private DataController() {
         generalProductMapper = new GeneralProductMapper();
@@ -81,6 +62,25 @@ public class DataController {
         reportsMapper.setRCM(rcMapper);
         salesMapper.setAcm(acMapper);
         salesMapper.setApm(apMapper);
+    }
+
+    public static Date getDate(String date) throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.parse(date);
+    }
+
+    public static String getDate(Date date) {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(date);
+    }
+
+    public static DataController getInstance() {
+        if (instance == null) {
+            instance = new DataController();
+        }
+        return instance;
     }
 
     //================================================================================
@@ -240,9 +240,9 @@ public class DataController {
     //If we want to retrive an suplpier which was not in the business
     public Supplier getSupplier(int supplier_id) {
         Supplier sup = suppliersMapper.getSupplier(supplier_id);
-        if(sup!=null){
+        if (sup != null) {
             suppliersContactsMapper.addAllContactsToSupplier(sup);
-            sup.setContactIdCounter(suppliersContactsMapper.getBigestId(supplier_id)+1);
+            sup.setContactIdCounter(suppliersContactsMapper.getBigestId(supplier_id) + 1);
         }
         return sup;
     }
@@ -342,12 +342,12 @@ public class DataController {
     }
 
     public boolean deleteOrder(Order o) {
-        boolean b= ordersMapper.delete(o);
-        if(b){
-            for (int catalogId:o.getProductQuantity().keySet()
+        boolean b = ordersMapper.delete(o);
+        if (b) {
+            for (int catalogId : o.getProductQuantity().keySet()
             ) {
-                boolean t=orderProductsMapper.delete(o.GetId(),catalogId);
-                if(!t) return false;
+                boolean t = orderProductsMapper.delete(o.GetId(), catalogId);
+                if (!t) return false;
             }
             return true;
         }
@@ -399,9 +399,11 @@ public class DataController {
         }
         return agreementList;
     }
+
     public int get_gpId_from_Suppliers(int catalogID, int supID) {
         return suppliersProductsMapper.get_gpId(catalogID, supID); //SupplierProducts
     }
+
     //If we want to make entire new record of an item
     public boolean insertAgreement(Agreement a) {
         return agreementsMapper.insertAgreement(a);
@@ -509,19 +511,21 @@ public class DataController {
     public Integer getMaxSalesID() {
         return salesMapper.getMaxSaleID();
     }
-    public int getmaxgpid(){
+
+    public int getmaxgpid() {
         return suppliersProductsMapper.getMaxPGcounterNumber();
     }
 
     public int getMaxGPID() {
         return generalProductMapper.getMaxGPID();
     }
-    public int getTheBigestIDforTheCounterinContacts(int Supid){
+
+    public int getTheBigestIDforTheCounterinContacts(int Supid) {
         return suppliersContactsMapper.getBigestId(Supid);
     }
 
-    public int getOrderBigestId(){
-        int order=orderProductsMapper.getOrderIdCounterBigest();
+    public int getOrderBigestId() {
+        int order = orderProductsMapper.getOrderIdCounterBigest();
         return order;
     }
 
@@ -533,11 +537,12 @@ public class DataController {
         arrivedShipmentMapper.cleanShipment();
         return supply;
     }
+
     public void insertArrivedShipment(int gpID, int quantity) {
-        try{
+        try {
             arrivedShipmentMapper.insert(gpID, quantity);
-        }catch(SQLException e){
-            arrivedShipmentMapper.addQuantity(gpID,quantity);
+        } catch (SQLException e) {
+            arrivedShipmentMapper.addQuantity(gpID, quantity);
         }
     }
 }

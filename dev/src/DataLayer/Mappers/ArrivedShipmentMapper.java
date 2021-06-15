@@ -1,24 +1,15 @@
 package DataLayer.Mappers;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import BusinessLayer.Item;
-import DataLayer.DataController;
-
 import java.sql.*;
-import java.text.ParseException;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 
-public class ArrivedShipmentMapper extends Mapper{
-    public ArrivedShipmentMapper(){
+public class ArrivedShipmentMapper extends Mapper {
+    public ArrivedShipmentMapper() {
         super();
         create_table();
     }
+
     @Override
     void create_table() {
         String ArrivedShippmentTable = "CREATE TABLE IF NOT EXISTS ArrivedShipment(\n" +
@@ -44,7 +35,7 @@ public class ArrivedShipmentMapper extends Mapper{
                     "VALUES (?,?)";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1,gpID);
+                pstmt.setInt(1, gpID);
                 pstmt.setInt(2, quantity);
 
                 output = pstmt.executeUpdate() != 0;
@@ -55,15 +46,16 @@ public class ArrivedShipmentMapper extends Mapper{
             throw new SQLException();
         }
     }
-    public void addQuantity(int gpID, int quantity){
+
+    public void addQuantity(int gpID, int quantity) {
         boolean updated = false;
         try (Connection conn = connect()) {
             String statement = "UPDATE ArrivedShipment SET gpID=?, quantity=?+quantity WHERE gpID=? ";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                pstmt.setInt(1,gpID);
+                pstmt.setInt(1, gpID);
                 pstmt.setInt(2, quantity);
-                pstmt.setInt(3,gpID);
+                pstmt.setInt(3, gpID);
 
                 updated = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
@@ -75,7 +67,7 @@ public class ArrivedShipmentMapper extends Mapper{
     }
 
     public HashMap<Integer, Integer> getLastShipment() {
-        HashMap<Integer,Integer> supply = new HashMap<>();
+        HashMap<Integer, Integer> supply = new HashMap<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM ArrivedShipment ";
 
@@ -94,8 +86,7 @@ public class ArrivedShipmentMapper extends Mapper{
         return supply;
     }
 
-    public void cleanShipment()
-    {
+    public void cleanShipment() {
         try (Connection conn = connect()) {
             String statement = "DELETE FROM ArrivedShipment";
 

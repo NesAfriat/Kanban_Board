@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 public class SuppliersControler implements ISupplierControler {
-    private static SuppliersControler single_instance = null;
-    private HashMap<Integer, ISupplier> Suppliers;
-    private AgreementManager agreementManager;
-    private int SupplierIdCounter;
+    private static final SuppliersControler single_instance = null;
     boolean isLoadAllSuppliers = false;
+    private final HashMap<Integer, ISupplier> Suppliers;
+    private final AgreementManager agreementManager;
+    private int SupplierIdCounter;
 
 
     public SuppliersControler(AgreementManager agreementManager) {
@@ -25,18 +25,28 @@ public class SuppliersControler implements ISupplierControler {
     //private void AddNewAgreement(IAgreement agreement) {
     //   agreementManager.AddNewAgreement(agreement);
 
+    public static boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
+                "[a-zA-Z0-9_+&*-]+)*@" +
+                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
+                "A-Z]{2,7}$";
+
+        Pattern pat = Pattern.compile(emailRegex);
+        if (email == null)
+            return false;
+        return pat.matcher(email).matches();
+    }
+
     // }
     //HashMap<Integer, HashMap<Integer, Integer>> cheapest_supplier_products_by_quantity;// hashMap<SupllierID:int, hashMap<CatalogID :int , quantitiy:int>>
     public HashMap<Integer, HashMap<Integer, Integer>> get_cheapest_supplier(HashMap<GeneralProduct, Integer> lackMap) {
         return agreementManager.get_cheapest_supplier2(lackMap);
     }
 
-
     private void AddNewAgreement(int id, DeliveryMode deliveryMode, List<Integer> daysOfDelivery, int NumOfDaysFromDelivery) {
         agreementManager.AddNewAgreement(id, deliveryMode, daysOfDelivery, NumOfDaysFromDelivery);
 
     }
-
 
     public void removeProductFromSupplier(int CatalogId, int SupID) throws Exception {
 
@@ -73,7 +83,7 @@ public class SuppliersControler implements ISupplierControler {
         }
         ISupplier supplier = Suppliers.get(SupplierId);
         supplier.setPayment(paymentMethods);
-        updateSupplierFromTheData((Supplier)getSupplier(SupplierId));
+        updateSupplierFromTheData((Supplier) getSupplier(SupplierId));
 
     }
 
@@ -90,7 +100,6 @@ public class SuppliersControler implements ISupplierControler {
         }
         agreementManager.AddProduct(SupplierId, Price, CatalogID, name, manfucator, category, pid, isexist);
     }
-
 
     @Override
     public void addNewSupplier(int id, String name, String bankAccount, paymentMethods paymentMethods, DeliveryMode deliveryMode, List<Integer> daysOfDelivery, int NumOfDaysFromDelivery, String contactName, String contactEmail, String phoneNumber) {
@@ -122,7 +131,7 @@ public class SuppliersControler implements ISupplierControler {
         if (!isSupplierExist(SupId)) {
             throw new IllegalArgumentException("the supplier does not exist");
         }
-        Supplier supplier=(Supplier)getSupplier(SupId);
+        Supplier supplier = (Supplier) getSupplier(SupId);
         agreementManager.GetAgreement(SupId).RemovAllProducts();
         agreementManager.RemoveAgreement(SupId);
         supplier.removeAllContacts();
@@ -130,7 +139,6 @@ public class SuppliersControler implements ISupplierControler {
         Suppliers.remove(supplier.getId());
 
     }
-
 
     @Override
     public ISupplier getSupplier(int SupId) {
@@ -158,7 +166,7 @@ public class SuppliersControler implements ISupplierControler {
             throw new IllegalArgumentException("the supplier does not exist");
         }
         Suppliers.get(SupId).setBankAccount(BankAccount);
-        updateSupplierFromTheData((Supplier)getSupplier(SupId));
+        updateSupplierFromTheData((Supplier) getSupplier(SupId));
     }
 
     @Override
@@ -206,46 +214,28 @@ public class SuppliersControler implements ISupplierControler {
 
     // return true if the supplier exist in the suppliers hash map
     public boolean isSupplierExist(int supplierId) {
-      if(Suppliers.containsKey(supplierId)){
-          return true;
-      }
-      else {
-          Supplier s=getSupplierFromData(supplierId);
-          if (s==null){
-              return false;
-          }
+        if (Suppliers.containsKey(supplierId)) {
+            return true;
+        } else {
+            Supplier s = getSupplierFromData(supplierId);
+            if (s == null) {
+                return false;
+            }
 
-          Suppliers.put(supplierId,s);
-          return true;
-      }
-    }
-
-
-    public static boolean isValidEmail(String email) {
-        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\." +
-                "[a-zA-Z0-9_+&*-]+)*@" +
-                "(?:[a-zA-Z0-9-]+\\.)+[a-z" +
-                "A-Z]{2,7}$";
-
-        Pattern pat = Pattern.compile(emailRegex);
-        if (email == null)
-            return false;
-        return pat.matcher(email).matches();
+            Suppliers.put(supplierId, s);
+            return true;
+        }
     }
 
     private boolean validatePhoneNumber(String phoneNumber) {
         if (phoneNumber.matches("\\d{10}"))
             return true;
-        else if (phoneNumber.matches("\\d{9}")) {
-            return true;
-        }
-        return false;
+        else return phoneNumber.matches("\\d{9}");
     }
 
     private boolean isValidUsername(String name) {
         return name.matches("(?i)(^[a-z])((?![ .,'-]$)[a-z .,'-]){0,24}$");
     }
-
 
 
 //===============================================dal=================================
@@ -258,8 +248,8 @@ public class SuppliersControler implements ISupplierControler {
             return supplier;
         }
         supplier = dc.getSupplier(SupId);
-        if (supplier != null)
-        {  im.addSupplier(supplier);
+        if (supplier != null) {
+            im.addSupplier(supplier);
             return supplier;
         }
         return null;

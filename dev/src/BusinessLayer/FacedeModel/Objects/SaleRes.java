@@ -27,11 +27,11 @@ public class SaleRes {
     public String toString() {
         return "{" +
                 "sale id=" + sale_id +
-                ", discount percent=" + discount_percent+"%" +
-                ", sale description= " +'"'+ sale_description+'"' +
+                ", discount percent=" + discount_percent + "%" +
+                ", sale description= " + '"' + sale_description + '"' +
                 ", start date=" + start_date +
                 ", end date=" + end_date +
                 ", affected=" + affected +
-                '}'+'\n';
+                '}' + '\n';
     }
 }

@@ -3,29 +3,24 @@ package BusinessLayer.Workers_BusinessLayer.Responses;
 import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
+
 import java.util.LinkedList;
 import java.util.List;
 
 public class WorkerResponse {
-    private boolean isAdmin;
-
-    public List<Job> getOccupations() {
-        return occupations;
-    }
-
-    private List<Job> occupations;
-    private List<ConstraintResponse> constraints;
-    private String name;
-    private String id;
-    private String bankAccount;
-    private double salary;
-    private String educationFund;
-    private int vacationDaysPerMonth;
-    private int sickDaysPerMonth;
-    private String startWorkingDate;
-    private String endWorkingDate;
-
-    public WorkerResponse(Worker worker){
+    private final boolean isAdmin;
+    private final List<Job> occupations;
+    private final List<ConstraintResponse> constraints;
+    private final String name;
+    private final String id;
+    private final String bankAccount;
+    private final double salary;
+    private final String educationFund;
+    private final int vacationDaysPerMonth;
+    private final int sickDaysPerMonth;
+    private final String startWorkingDate;
+    private final String endWorkingDate;
+    public WorkerResponse(Worker worker) {
         this.isAdmin = worker.getIsAdmin();
         this.name = worker.getName();
         this.id = worker.getId();
@@ -41,8 +36,12 @@ public class WorkerResponse {
         copyConstraints(worker.getConstraints());
     }
 
-    private void copyConstraints(List<Constraint> otherConstraints){
-        for (Constraint constraint: otherConstraints) {
+    public List<Job> getOccupations() {
+        return occupations;
+    }
+
+    private void copyConstraints(List<Constraint> otherConstraints) {
+        for (Constraint constraint : otherConstraints) {
             this.constraints.add(new ConstraintResponse(constraint));
         }
     }
@@ -51,7 +50,7 @@ public class WorkerResponse {
         return id;
     }
 
-    public boolean getIsAdmin(){
+    public boolean getIsAdmin() {
         return isAdmin;
     }
 
@@ -59,39 +58,39 @@ public class WorkerResponse {
         return this.name;
     }
 
-    public String getBankAccount(){
+    public String getBankAccount() {
         return this.bankAccount;
     }
 
-    public double getSalary(){
+    public double getSalary() {
         return this.salary;
     }
 
-    public String getEducationFund(){
+    public String getEducationFund() {
         return this.educationFund;
     }
 
-    public int getVacationDaysPerMonth(){
+    public int getVacationDaysPerMonth() {
         return this.vacationDaysPerMonth;
     }
 
-    public int getSickDaysPerMonth(){
+    public int getSickDaysPerMonth() {
         return this.sickDaysPerMonth;
     }
 
-    public String getStartWorkingDate(){
+    public String getStartWorkingDate() {
         return this.startWorkingDate;
     }
 
-    public String getEndWorkingDate(){
+    public String getEndWorkingDate() {
         return this.endWorkingDate;
     }
 
-    public List<ConstraintResponse> getConstraints(){
+    public List<ConstraintResponse> getConstraints() {
         return this.constraints;
     }
 
-    public String toString(){
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Name: ").append(name).append("\n");
         stringBuilder.append("ID: ").append(id).append("\n");
@@ -107,15 +106,15 @@ public class WorkerResponse {
         if (occupations.isEmpty())
             stringBuilder.append("none.\n");
         else {
-            for (Job job: occupations) {
+            for (Job job : occupations) {
                 stringBuilder.append(job).append(", ");
             }
-            stringBuilder.replace(stringBuilder.length()-2,stringBuilder.length(),".\n");
+            stringBuilder.replace(stringBuilder.length() - 2, stringBuilder.length(), ".\n");
         }
         return stringBuilder.toString();
     }
 
-    public String getNameID(){
+    public String getNameID() {
         return name + " (ID: " + id + ")";
     }
 }

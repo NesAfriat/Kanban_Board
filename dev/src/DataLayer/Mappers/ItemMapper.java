@@ -8,8 +8,6 @@ import java.sql.*;
 import java.text.ParseException;
 import java.util.LinkedList;
 
-import static DataLayer.DataController.getDate;
-
 public class ItemMapper extends Mapper {
 
     public ItemMapper() {
@@ -132,7 +130,7 @@ public class ItemMapper extends Mapper {
         return output;
     }
 
-    public LinkedList<Item> addItemToProduct(GeneralProduct gp){
+    public LinkedList<Item> addItemToProduct(GeneralProduct gp) {
         LinkedList<Item> output = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Items WHERE gpID=? ";

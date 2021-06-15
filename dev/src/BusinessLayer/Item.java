@@ -7,8 +7,8 @@ import java.util.Date;
 public class Item {
     private final Integer item_id;             //item id
     private final Integer product_id;          //product id
-    private String location;                   //item location in store
     private final Date supplied_date;          //the date which the item was supplied
+    private String location;                   //item location in store
     private Date expiration_date;               //item expiration date and time of defected date
 //    private Double selling_price;               //item price tag in store
 
@@ -70,8 +70,8 @@ public class Item {
     private void update(Item item) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if(!dc.update(this)){
-            System.out.println("failed to update new Item to the database with the keys: gpID= "+item.getProduct_id()+" iID= "+item.getItem_id());
+        if (!dc.update(this)) {
+            System.out.println("failed to update new Item to the database with the keys: gpID= " + item.getProduct_id() + " iID= " + item.getItem_id());
         }
     }
 }

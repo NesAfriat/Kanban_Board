@@ -7,19 +7,20 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SuppliersMapper extends Mapper{
+public class SuppliersMapper extends Mapper {
     public SuppliersMapper() {
         super();
         create_table();
     }
+
     @Override
     void create_table() {
         String SuppliersTable = "CREATE TABLE IF NOT EXISTS Suppliers(\n" +
-                                "\tsupID INTEGER PRIMARY KEY,\n" +
-                                "\tsupName TEXT,\n" +
-                                "\tbankAccount TEXT,\n" +
-                                "\tpaymentMethod TEXT\n" +
-                                ");";
+                "\tsupID INTEGER PRIMARY KEY,\n" +
+                "\tsupName TEXT,\n" +
+                "\tbankAccount TEXT,\n" +
+                "\tpaymentMethod TEXT\n" +
+                ");";
 //        String sql = "BEGIN TRANSACTION;" + GeneralProductTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
@@ -50,17 +51,17 @@ public class SuppliersMapper extends Mapper{
                     String bank = rs.getString(3);
                     String payment = rs.getString(4);
 
-                    if(payment.equals(paymentMethods.Cash.toString())){
-                        obj=new Supplier(supID,supName, BusinessLayer.paymentMethods.creditcard , bank);
+                    if (payment.equals(paymentMethods.Cash.toString())) {
+                        obj = new Supplier(supID, supName, BusinessLayer.paymentMethods.creditcard, bank);
 
-                    }else if(payment.equals(paymentMethods.paypal.toString())){
-                        obj=new Supplier(supID,supName, paymentMethods.paypal , bank);
+                    } else if (payment.equals(paymentMethods.paypal.toString())) {
+                        obj = new Supplier(supID, supName, paymentMethods.paypal, bank);
 
-                    }else if(payment.equals(paymentMethods.creditcard.toString())){
-                        obj=new Supplier(supID,supName, paymentMethods.paypal , bank);
+                    } else if (payment.equals(paymentMethods.creditcard.toString())) {
+                        obj = new Supplier(supID, supName, paymentMethods.paypal, bank);
 
-                    }else {
-                        obj=new Supplier(supID,supName, BusinessLayer.paymentMethods.BankTransfers , bank);
+                    } else {
+                        obj = new Supplier(supID, supName, BusinessLayer.paymentMethods.BankTransfers, bank);
 
                     }
 
@@ -150,17 +151,17 @@ public class SuppliersMapper extends Mapper{
                     String bank = rs.getString(3);
                     String payment = rs.getString(4);
 
-                    if(payment.equals(paymentMethods.Cash.toString())){
-                        obj.add(new Supplier(supID,supName, BusinessLayer.paymentMethods.creditcard , bank));
+                    if (payment.equals(paymentMethods.Cash.toString())) {
+                        obj.add(new Supplier(supID, supName, BusinessLayer.paymentMethods.creditcard, bank));
 
-                    }else if(payment.equals( paymentMethods.paypal.toString())){
-                        obj.add(new Supplier(supID,supName, BusinessLayer.paymentMethods.Cash , bank));
+                    } else if (payment.equals(paymentMethods.paypal.toString())) {
+                        obj.add(new Supplier(supID, supName, BusinessLayer.paymentMethods.Cash, bank));
 
-                    }else if(payment.equals(paymentMethods.creditcard.toString())){
-                        obj.add(new Supplier(supID,supName, paymentMethods.paypal , bank));
+                    } else if (payment.equals(paymentMethods.creditcard.toString())) {
+                        obj.add(new Supplier(supID, supName, paymentMethods.paypal, bank));
 
-                    }else {
-                        obj.add(new Supplier(supID,supName, BusinessLayer.paymentMethods.BankTransfers , bank));
+                    } else {
+                        obj.add(new Supplier(supID, supName, BusinessLayer.paymentMethods.BankTransfers, bank));
                     }
                 }
             } catch (SQLException e) {

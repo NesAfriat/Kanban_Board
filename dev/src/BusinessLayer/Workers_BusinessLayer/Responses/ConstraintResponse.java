@@ -6,11 +6,11 @@ import BusinessLayer.Workers_BusinessLayer.Workers.ConstraintType;
 
 public class ConstraintResponse {
 
-    private String date;
-    private ShiftType shiftType;
-    private ConstraintType constraintType;
+    private final String date;
+    private final ShiftType shiftType;
+    private final ConstraintType constraintType;
 
-    public ConstraintResponse(Constraint constraint){
+    public ConstraintResponse(Constraint constraint) {
         this.date = constraint.getDate();
         this.shiftType = constraint.getShiftType();
         this.constraintType = constraint.getConstraintType();
@@ -28,7 +28,7 @@ public class ConstraintResponse {
         return shiftType;
     }
 
-    public String toString(){
+    public String toString() {
         return "Date: " + date + " || Shift: " + shiftType + " || Constraint: " + constraintType;
     }
 }

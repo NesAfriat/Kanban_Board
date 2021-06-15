@@ -30,6 +30,6 @@ public class ItemRes {
                 ", supplied date=" + supplied_date +
                 ", creation date=" + creation_date +
                 ", expiration date=" + expiration_date +
-                '}'+'\n';
+                '}' + '\n';
     }
 }

@@ -1,15 +1,15 @@
 package PresentationLayer.Workers_PresentationLayer;
 
-import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkDayResponse;
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 
 class AddShiftsMenu extends HRManagerMenu {
-    AddShiftsMenu(Workers_Facade facade){
+    AddShiftsMenu(Workers_Facade facade) {
         super(facade);
     }
 
-    void run(){
+    void run() {
         boolean prev = false;
         while (!prev) {
             printPrettyHeadline("\n\nAdd Shifts Menu");
@@ -18,7 +18,7 @@ class AddShiftsMenu extends HRManagerMenu {
             System.out.println("3) View default shift settings");
             System.out.println("4) View default workday settings");
             System.out.println("5) Previous");
-           // System.out.println("6) Exit");
+            // System.out.println("6) Exit");
             System.out.print("Option: ");
             int option = getInputInt();
             switch (option) {
@@ -49,10 +49,9 @@ class AddShiftsMenu extends HRManagerMenu {
         String date = getInputDate();
         String shiftType = getInputShiftType();
         ResponseT<WorkDayResponse> workDayResponse = facade.addDefaultShift(date, shiftType);
-        if (workDayResponse.ErrorOccurred()){
+        if (workDayResponse.ErrorOccurred()) {
             printPrettyError(workDayResponse.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm(shiftType + " shift added successfully to workday at " + workDayResponse.value.getDate());
         }
     }
@@ -61,10 +60,9 @@ class AddShiftsMenu extends HRManagerMenu {
     private void addDefaultWorkDay() {
         String date = getInputDate();
         ResponseT<WorkDayResponse> workDayResponse = facade.addDefaultWorkDay(date);
-        if (workDayResponse.ErrorOccurred()){
+        if (workDayResponse.ErrorOccurred()) {
             printPrettyError(workDayResponse.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm("A workday added successfully at " + workDayResponse.value.getDate());
         }
     }

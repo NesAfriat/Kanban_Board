@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
-public class OrdersMapper extends Mapper{
+public class OrdersMapper extends Mapper {
     public OrdersMapper() {
         super();
         create_table();
@@ -22,10 +22,10 @@ public class OrdersMapper extends Mapper{
                 "\tdatetime TEXT,\n" +
                 "\ttotalPayment REAL,\n" +
                 "\tconstant INTEGER,\n" +
-                "\tdyOfOrder INTEGER, \n"+
+                "\tdyOfOrder INTEGER, \n" +
                 "\tPRIMARY KEY (supID, oID),\n" +
                 "\tFOREIGN KEY (supID) REFERENCES Suppliers (supID)\n" +
-                 ");";
+                ");";
 //        String sql = "BEGIN TRANSACTION;" + GeneralProductTable + "COMMIT;";
         try (Connection conn = connect();
              Statement stmt = conn.createStatement()) {
@@ -44,12 +44,12 @@ public class OrdersMapper extends Mapper{
 
     public List<Order> getAllOrders() {
         Order obj = null;
-        List<Order> list=new LinkedList<>();
+        List<Order> list = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Orders";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
-                int dayoforder=-1;
+                int dayoforder = -1;
                 ResultSet rs = pstmt.executeQuery();
                 while (rs.next()) {
                     int sup = rs.getInt(1);
@@ -57,10 +57,10 @@ public class OrdersMapper extends Mapper{
                     String date = rs.getString(3);
                     double pay = rs.getDouble(4);
                     int con = rs.getInt(5);
-                    if(con==1) {
+                    if (con == 1) {
                         dayoforder = rs.getInt(6);
                     }
-                    obj = new Order(orderID,sup,date,pay,con,dayoforder);
+                    obj = new Order(orderID, sup, date, pay, con, dayoforder);
                     list.add(obj);
                 }
             } catch (SQLException e) {
@@ -73,7 +73,6 @@ public class OrdersMapper extends Mapper{
     }
 
 
-
     public Order getOrder(int sup_id, int oID) {
         Order obj = null;
         try (Connection conn = connect()) {
@@ -82,7 +81,7 @@ public class OrdersMapper extends Mapper{
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, sup_id);
                 pstmt.setInt(2, oID);
-                int dayoforder=-1;
+                int dayoforder = -1;
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
                     int sup = rs.getInt(1);
@@ -90,11 +89,11 @@ public class OrdersMapper extends Mapper{
                     String date = rs.getString(3);
                     double pay = rs.getDouble(4);
                     int con = rs.getInt(5);
-                    int dayOfOrder=rs.getInt(6);
-                    if(con==1) {
+                    int dayOfOrder = rs.getInt(6);
+                    if (con == 1) {
                         dayoforder = rs.getInt(6);
                     }
-                    obj = new Order(orderID,sup,date,pay,con,dayoforder);
+                    obj = new Order(orderID, sup, date, pay, con, dayoforder);
 
                 }
             } catch (SQLException e) {
@@ -139,7 +138,7 @@ public class OrdersMapper extends Mapper{
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setInt(1, o.getSupplierID());
-                pstmt.setInt(2 ,o.GetId());
+                pstmt.setInt(2, o.GetId());
                 deleted = pstmt.executeUpdate() != 0;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -175,7 +174,6 @@ public class OrdersMapper extends Mapper{
         }
         return output;
     }
-
 
 
 }

@@ -6,12 +6,12 @@ import BusinessLayer.Reports.Report;
 import java.util.LinkedList;
 
 public class ReportRes {
-    private String subject;
-    private String date;
-    private int reportID;
-    private LinkedList<String> categories;
-    private String timeRange;
-    private String report_data;
+    private final String subject;
+    private final String date;
+    private final int reportID;
+    private final LinkedList<String> categories;
+    private final String timeRange;
+    private final String report_data;
 
     public ReportRes(Report r) {
         this.subject = r.getSubject();
@@ -26,10 +26,10 @@ public class ReportRes {
     public String toString() {
         return
                 "subject=" + subject + '\n' +
-                "date=" + date + '\n' +
-                "reportID=" + reportID + '\n'+
-                "categories=" + categories + '\n'+
-                "timeRange=" + timeRange + '\n' +
-                "report_data:" + report_data+ '\n';
+                        "date=" + date + '\n' +
+                        "reportID=" + reportID + '\n' +
+                        "categories=" + categories + '\n' +
+                        "timeRange=" + timeRange + '\n' +
+                        "report_data:" + report_data + '\n';
     }
 }

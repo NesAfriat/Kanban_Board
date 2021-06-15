@@ -1,4 +1,5 @@
 package BusinessLayer.Workers_BusinessLayer.Workers;
+
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
 
 
@@ -9,7 +10,7 @@ public class Constraint {
 
     public Constraint(String date, ShiftType shiftType, ConstraintType constraintType) {
         this.date = date;
-        this.shiftType =shiftType;
+        this.shiftType = shiftType;
         this.constraintType = constraintType;
     }
 
@@ -19,7 +20,7 @@ public class Constraint {
         this.constraintType = toCopy.constraintType;
     }
 
-    public boolean compareShift(String date, ShiftType shiftType){
+    public boolean compareShift(String date, ShiftType shiftType) {
         return (this.date.equals(date) && this.shiftType == shiftType);
     }
 

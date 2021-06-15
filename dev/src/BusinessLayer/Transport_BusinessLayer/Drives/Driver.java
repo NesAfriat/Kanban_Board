@@ -1,9 +1,9 @@
 package BusinessLayer.Transport_BusinessLayer.Drives;
 
 public class Driver {
-    private String name;
-    private int id;
-    private License license;
+    private final String name;
+    private final int id;
+    private final License license;
 
     public Driver(String name, int id, License license) {
         this.name = name;
@@ -14,6 +14,7 @@ public class Driver {
     public String toString() {
         return "Driver id: " + id + ", " + name + ", " + license.name() + "\n ";
     }
+
     public String getName() {
         return name;
     }

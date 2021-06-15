@@ -1,25 +1,21 @@
 package BusinessLayer.Controlls;
 
 
-
-
 import BusinessLayer.GeneralProduct;
 import BusinessLayer.Item;
 import BusinessLayer.Stock;
-import BusinessLayer.ProductManager;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class Stock_Controller {
-    private Stock stock;      //holds all stock ever created
     private static Stock_Controller st_C = null;
+    private final Stock stock;      //holds all stock ever created
 
     private Stock_Controller() {
         this.stock = new Stock();
     }
-
 
 
     public static Stock_Controller getInstance() {
@@ -28,13 +24,13 @@ public class Stock_Controller {
         return st_C;
     }
 
-    public Stock getStock()
-    {
-        if(st_C!=null)
-        return stock;
+    public Stock getStock() {
+        if (st_C != null)
+            return stock;
         else
             return null;
     }
+
     private void check_valid_number(Number[] arr) throws Exception {
         for (Number number : arr) {
             if (number.doubleValue() < 0) {
@@ -87,7 +83,6 @@ public class Stock_Controller {
     }
 
 
-
     public LinkedList<Integer> addItems(Integer product_id, Integer quantity, String location, Date
             supplied_date, Date expiration_date) throws Exception {
         check_valid_string(new String[]{location});
@@ -134,7 +129,6 @@ public class Stock_Controller {
     }
 
 
-
     public void removeItems(Integer product_id, Integer item_id) throws Exception {
         check_valid_number(new Number[]{product_id, item_id});
         stock.removeItem(product_id, item_id);
@@ -155,8 +149,9 @@ public class Stock_Controller {
     }
 
     public HashMap<GeneralProduct, Integer> get_missing_General_products_with_amounts() {
-    return stock.get_missing_General_products_with_amounts();
-}
+        return stock.get_missing_General_products_with_amounts();
+    }
+
     //for inside use
     public LinkedList<GeneralProduct> get_category_products(String cat_name) throws Exception {
         return stock.get_category_products(cat_name);
@@ -198,20 +193,20 @@ public class Stock_Controller {
     }
 
     public void check_categories_exist(LinkedList<String> affected_category) throws Exception {
-        boolean flag=false;
-        for(String cat_name: affected_category)
+        boolean flag = false;
+        for (String cat_name : affected_category)
             flag = flag | stock.check_category_exist(cat_name);
 
-        if(!flag)
+        if (!flag)
             throw new Exception("category does not exist");
     }
 
 
     public void check_product_exist(LinkedList<String> affected_products) throws Exception {
-        boolean flag=false;
-        for(String prod_name: affected_products)
+        boolean flag = false;
+        for (String prod_name : affected_products)
             flag = flag | stock.check_product_exist(prod_name);
-        if(!flag)
+        if (!flag)
             throw new Exception("product does not exist");
     }
 
