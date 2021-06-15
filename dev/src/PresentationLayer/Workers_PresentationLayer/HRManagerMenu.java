@@ -1,9 +1,8 @@
 package PresentationLayer.Workers_PresentationLayer;
 
+import BusinessLayer.Workers_BusinessLayer.Pair;
 import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.*;
-import javafx.util.Pair;
-
 import java.util.List;
 
 class HRManagerMenu extends Workers_Main_Menu {
@@ -31,8 +30,6 @@ class HRManagerMenu extends Workers_Main_Menu {
                     LogOut();
                     prev = true;
                     break;
-//                case 4:
-//                    super.exit();
                 default:
                     printPrettyError("No such option");
                     run();
@@ -106,7 +103,7 @@ class HRManagerMenu extends Workers_Main_Menu {
     }
 
     private void viewAllRequests() {
-        ResponseT<List<Pair<Integer,String>>> requests = facade.getRequests();
+        ResponseT<List<Pair>> requests = facade.getRequests();
         if (requests.ErrorOccurred()){
             printPrettyError(requests.getErrorMessage());
         }
@@ -115,7 +112,7 @@ class HRManagerMenu extends Workers_Main_Menu {
             if (requests.value.isEmpty()){
                 printPrettyConfirm("Woohoo! There's no requests at the moment.");
             }
-            for (Pair<Integer,String> request : requests.value){
+            for (Pair request : requests.value){
                 printPrettyConfirm(i + ")" + " Order ID: " + request.getKey() + "\tDate: " + request.getValue());
                 i++;
             }
