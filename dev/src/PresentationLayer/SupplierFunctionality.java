@@ -44,7 +44,7 @@ public class SupplierFunctionality {
                 return;
             }
             else{
-                if (!jobs.value.contains(Job.Storekeeper)||!jobs.value.contains(Job.Store_Manager)) {
+                if (!jobs.value.contains(Job.Storekeeper) && !jobs.value.contains(Job.Store_Manager)) {
                     System.out.println("Only a storekeeper or Branch_Manager is allowed to manage Supplier");
                     return;
                 }

@@ -49,6 +49,7 @@ public class DocCont {
                     catch (Exception e) {
                         System.out.println(e.toString());
                     }
+                    System.out.println("Transported to Stock, delivery ID "+td.getId() +"\n");
                     pm.receiveShipment(item.getFirst(), td.getDestinationSupplier().get(1),item.getSecond());
                 }
             }
