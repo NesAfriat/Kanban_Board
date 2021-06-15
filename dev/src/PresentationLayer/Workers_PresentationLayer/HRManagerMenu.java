@@ -56,7 +56,6 @@ class HRManagerMenu extends Workers_Main_Menu {
             System.out.println("7) Delete request");
             System.out.println("8) Previous");
             System.out.println("9) Exit");
-            System.out.println("10) add request test");
             System.out.print("Option: ");
             int option = getInputInt();
             switch (option) {

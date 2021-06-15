@@ -109,7 +109,7 @@ public class Worker {
     }
 
     public boolean getIsAdmin() {
-        return occupations.contains(Job.HR_Manager) || occupations.contains(Job.Shift_Manager);
+        return occupations.contains(Job.HR_Manager) || occupations.contains(Job.Store_Manager);
     }
 
     public String getName() {
