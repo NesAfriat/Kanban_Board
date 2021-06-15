@@ -82,7 +82,7 @@ public class OrderFunctionality {
             return;
         }
         else{
-            if (!jobs.value.contains(Job.Storekeeper)||!jobs.value.contains(Job.HR_Manager)||!jobs.value.contains(Job.Store_Manager)) {
+            if (!jobs.value.contains(Job.Storekeeper)&&!jobs.value.contains(Job.HR_Manager)&&!jobs.value.contains(Job.Store_Manager)) {
                 System.out.println("Only a Store_Manager or hr manager or storkeeper is allowed to manage Order");
                 return;
             }
