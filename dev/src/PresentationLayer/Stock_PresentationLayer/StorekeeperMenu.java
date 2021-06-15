@@ -265,7 +265,6 @@ public class StorekeeperMenu {
             }else inputi=Integer.parseInt(inputs);
             switch (inputi) {
                 case 0: {
-                    System.out.println("0. Exit\n1. Stocks \n2. Sales \n3. Reports \n4. Load Data \n");
                     flag = false;
                     break;
                 }
@@ -279,7 +278,7 @@ public class StorekeeperMenu {
                     String start_date = reader.readLine().trim().toLowerCase();
                     System.out.println("please type the end date: (YYYY-MM-DD)");
                     String end_date = reader.readLine().trim().toLowerCase();
-                    System.out.println("please type the names of the categories affected by the sale: (type q for exit");
+                    System.out.println("please type the names of the categories affected by the sale: (type q for exit)");
                     inputs = reader.readLine().trim().toLowerCase();
                     LinkedList<String> cat = new LinkedList<>();
                     while (!inputs.equals("q")) {
@@ -300,7 +299,7 @@ public class StorekeeperMenu {
                     String start_date = reader.readLine().trim().toLowerCase();
                     System.out.println("please type the end date: (YYYY-MM-DD)");
                     String end_date = reader.readLine().trim().toLowerCase();
-                    System.out.println("please type the names of the products affected by the sale: (type q for exit");
+                    System.out.println("please type the names of the products affected by the sale: (type q for exit)");
                     inputs = reader.readLine().trim().toLowerCase();
                     LinkedList<String> prod = new LinkedList<>();
                     while (!inputs.equals("q")) {
