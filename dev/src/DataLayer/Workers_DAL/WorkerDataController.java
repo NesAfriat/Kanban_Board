@@ -112,7 +112,7 @@ public class WorkerDataController {
             stmt.execute(shiftTable);
             stmt.execute(workersInShiftsTable);
             stmt.execute(transportRequestsTable);
-//            LoadPreData();
+            LoadPreData();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -122,13 +122,23 @@ public class WorkerDataController {
     // load some data to the db so we'll be able to test functionality
     private void LoadPreData() {
         // add all insert queries here
-        initDefaultWorkDayShiftData();
-        initDefaultWorkDayAssignData();
-        initWorkerData();
-        initShiftsData();
-        initConstraintData();
-        initOccupationData();
-        initWorkersInShifts();
+//        initDefaultWorkDayShiftData();
+//        initDefaultWorkDayAssignData();
+//        initWorkerData();
+//        initShiftsData();
+//        initConstraintData();
+//        initOccupationData();
+//        initWorkersInShifts("20/06/2021");
+//        initWorkersInShifts("21/06/2021");
+//        initWorkersInShifts("27/06/2021");
+//        initWorkersInShifts("28/06/2021");
+//        initWorkersInShifts("04/07/2021");
+//        initWorkersInShifts("05/07/2021");
+//        initWorkersInShifts("11/07/2021");
+//        initWorkersInShifts("12/07/2021");
+//        initWorkersInShifts("18/07/2021");
+//        initWorkersInShifts("19/07/2021");
+
         //initTransportRequests();
     }
 
@@ -872,52 +882,38 @@ public class WorkerDataController {
         }
     }
 
-    private void initWorkersInShifts() {
+    private void initWorkersInShifts(String date) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         String statement = "INSERT OR IGNORE INTO Workers_In_Shift (Worker_ID,Date,ShiftType,Job) VALUES" +
-                " ('100000006',?,'Morning','Cashier'), " +
+                "('100000002',?,'Morning','Shift_Manager'), " +
                 "('100000007',?,'Morning','Cashier'), " +
-                "('100000008',?,'Morning','Storekeeper'), " +
-                "('100000014',?,'Morning','Guard'), " +
-                "('100000004',?,'Morning','Shift_Manager'), " +
                 "('100000010',?,'Morning','DriverA'), " +
-                "('100000011',?,'Morning','DriverB'), " +
-                "('100000012',?,'Morning','DriverC'), " +
-                " ('100000006',?,'Morning','Cashier'), " +
-                "('100000007',?,'Morning','Cashier'), " +
-                "('100000008',?,'Morning','Storekeeper'), " +
-                "('100000014',?,'Morning','Guard'), " +
-                "('100000004',?,'Morning','Shift_Manager'), " +
-                "('100000010',?,'Morning','DriverA'), " +
-                "('100000011',?,'Morning','DriverB'), " +
-                "('100000012',?,'Morning','DriverC'), " +
-                "('100000009',?,'Evening','Storekeeper'), " +
-                "('100000005',?,'Evening','Shift_Manager')," +
-                "('100000009',?,'Evening','Storekeeper'), " +
-                "('100000003',?,'Evening','Shift_Manager')";
+                "('100000003',?,'Evening','Shift_Manager'), " +
+                "('100000009',?,'Evening','Cashier')," +
+                "('100000011',?,'Evening','DriverB'); ";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(statement);) {
-            pstmt.setString(1, LocalDate.now().format(formatter));
-            pstmt.setString(2, LocalDate.now().format(formatter));
-            pstmt.setString(3, LocalDate.now().format(formatter));
-            pstmt.setString(4, LocalDate.now().format(formatter));
-            pstmt.setString(5, LocalDate.now().format(formatter));
-            pstmt.setString(6, LocalDate.now().format(formatter));
-            pstmt.setString(7, LocalDate.now().format(formatter));
-            pstmt.setString(8, LocalDate.now().format(formatter));
-            pstmt.setString(9, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(10, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(11, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(12, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(13, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(14, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(15, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(16, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(17, LocalDate.now().format(formatter));
-            pstmt.setString(18, LocalDate.now().format(formatter));
-            pstmt.setString(19, LocalDate.now().plusDays(1).format(formatter));
-            pstmt.setString(20, LocalDate.now().plusDays(1).format(formatter));
+            pstmt.setString(1, date);
+            pstmt.setString(2, date);
+            pstmt.setString(3, date);
+            pstmt.setString(4, date);
+            pstmt.setString(5, date);
+            pstmt.setString(6, date);
+//            pstmt.setString(7, LocalDate.now().format(formatter));
+//            pstmt.setString(8, LocalDate.now().format(formatter));
+//            pstmt.setString(9, LocalDate.now().plusDays(1).format(formatter));
+//            pstmt.setString(10, LocalDate.now().plusDays(1).format(formatter));
+//            pstmt.setString(11, LocalDate.now().plusDays(1).format(formatter));
+//            pstmt.setString(12, LocalDate.now().plusDays(1).format(formatter));
+//            pstmt.setString(13, LocalDate.now().plusDays(1).format(formatter));
+//            pstmt.setString(14, LocalDate.now().plusDays(1).format(formatter));
+//            pstmt.setString(15, LocalDate.now().plusDays(1).format(formatter));
+//            pstmt.setString(16, LocalDate.now().plusDays(1).format(formatter));
+//            pstmt.setString(17, LocalDate.now().format(formatter));
+//            pstmt.setString(18, LocalDate.now().format(formatter));
+//            pstmt.setString(19, LocalDate.now().plusDays(1).format(formatter));
+//            pstmt.setString(20, LocalDate.now().plusDays(1).format(formatter));
             pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
