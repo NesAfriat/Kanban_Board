@@ -1,6 +1,7 @@
 package DataLayer.Workers_DAL;
 
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
+import BusinessLayer.Workers_BusinessLayer.Pair;
 import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Workers_BusinessLayer.Shifts.WorkDay;
@@ -8,10 +9,9 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
-import javafx.util.Pair;
+
 import org.sqlite.SQLiteConfig;
 
-import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -830,14 +830,14 @@ public class WorkerDataController {
         }
     }
 
-    public List<Pair<Integer, String>> getAllRequests() {
-        List<Pair<Integer, String>> output = new LinkedList<>();
+    public List<Pair> getAllRequests() {
+        List<Pair> output = new LinkedList<>();
         String sql = "SELECT * FROM TransportRequests";
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                output.add(new Pair<>(rs.getInt("OrderID"), rs.getString("Date")));
+                output.add(new Pair(rs.getInt("OrderID"), rs.getString("Date")));
             }
         } catch (SQLException e) {
             e.printStackTrace();

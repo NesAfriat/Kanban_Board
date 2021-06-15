@@ -1,6 +1,7 @@
 package BusinessLayer.Workers_BusinessLayer.Controllers;
 
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
+import BusinessLayer.Workers_BusinessLayer.Pair;
 import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftSchedule;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
@@ -10,7 +11,7 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.Workers.WorkersList;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 import DataLayer.Workers_DAL.WorkerDataController;
-import javafx.util.Pair;
+
 
 import java.util.LinkedList;
 import java.util.List;
@@ -232,7 +233,7 @@ public class ShiftController {
         calendar.removeRequest(OrderID, date);
     }
 
-    public List<Pair<Integer, String>>  getRequests(){
+    public List<Pair> getRequests(){
         return calendar.getRequests();
     }
 

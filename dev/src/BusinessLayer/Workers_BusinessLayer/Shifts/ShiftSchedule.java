@@ -1,19 +1,21 @@
 package BusinessLayer.Workers_BusinessLayer.Shifts;
 
 import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
+import BusinessLayer.Workers_BusinessLayer.Pair;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
-import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_BusinessLayer.WorkersUtils;
 import DataLayer.Workers_DAL.WorkerDataController;
-import javafx.util.Pair;
 
-import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 
 public class ShiftSchedule {
     private Map<String, WorkDay> workDays;
     private DefaultWorkDayHolder defaultWorkDayHolder;
-    private List<Pair<Integer, String>> requestList;
+    private List<Pair> requestList;
     private WorkerDataController workerDataController;
 
     public ShiftSchedule(){
@@ -132,7 +134,7 @@ public class ShiftSchedule {
 
     public void  addRequest(int OrderID, String date) throws InnerLogicException {
         boolean canAdd = true;
-        for (Pair<Integer, String> pair: requestList) {
+        for (Pair pair: requestList) {
             if(pair.getKey() == OrderID){
                 // cannot add request if same order id already in the system within less than a week range
                 if(!WorkersUtils.dateDifferenceGreaterThen7(pair.getValue(), date)){
@@ -141,7 +143,7 @@ public class ShiftSchedule {
             }
         }
         if(canAdd){
-            requestList.add(new Pair<>(OrderID, date));
+            requestList.add(new Pair(OrderID, date));
             workerDataController.addRequest(OrderID, date);
         }
         else{
@@ -151,8 +153,8 @@ public class ShiftSchedule {
 
     public void  removeRequest(int OrderID, String date) throws InnerLogicException {
         WorkersUtils.dateValidation(date);
-        Pair<Integer, String> toRemove = null;
-        for (Pair<Integer, String> pair: requestList) {
+        Pair toRemove = null;
+        for (Pair pair: requestList) {
             if(pair.getKey() == OrderID && pair.getValue().equals(date)){
                 toRemove = pair;
                 break;
@@ -168,7 +170,7 @@ public class ShiftSchedule {
 
     }
 
-    public List<Pair<Integer, String>>  getRequests() {
+    public List<Pair>  getRequests() {
         return new LinkedList<>(requestList);
     }
 

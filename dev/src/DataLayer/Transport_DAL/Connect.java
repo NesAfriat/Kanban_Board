@@ -1,7 +1,5 @@
 package DataLayer.Transport_DAL;
 
-import sun.rmi.transport.Transport;
-
 import java.io.File;
 import java.sql.*;
 
