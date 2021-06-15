@@ -1,13 +1,14 @@
 package PresentationLayer.Workers_PresentationLayer;
 
-import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
 import BusinessLayer.Workers_BusinessLayer.Responses.WorkerResponse;
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 
 class EditWorkerMenu extends WorkerMenu {
-    EditWorkerMenu(Workers_Facade facade){
+    EditWorkerMenu(Workers_Facade facade) {
         super(facade);
     }
+
     void run() {
         boolean prev = false;
         while (!prev) {
@@ -44,7 +45,7 @@ class EditWorkerMenu extends WorkerMenu {
         ResponseT<WorkerResponse> workerResponse = facade.setWorkerID(ID, newID);
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
-        else{
+        else {
             printPrettyConfirm("Edited ID successfully");
         }
     }
@@ -56,7 +57,7 @@ class EditWorkerMenu extends WorkerMenu {
         ResponseT<WorkerResponse> workerResponse = facade.setWorkerName(ID, name);
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
-        else{
+        else {
             printPrettyConfirm("Edited name successfully for worker " + workerResponse.value.getNameID());
         }
     }
@@ -68,7 +69,7 @@ class EditWorkerMenu extends WorkerMenu {
         ResponseT<WorkerResponse> workerResponse = facade.setWorkerSalary(ID, salary);
         if (workerResponse.ErrorOccurred())
             printPrettyError(workerResponse.getErrorMessage());
-        else{
+        else {
             printPrettyConfirm("Edited salary successfully for worker " + workerResponse.value.getNameID());
         }
     }

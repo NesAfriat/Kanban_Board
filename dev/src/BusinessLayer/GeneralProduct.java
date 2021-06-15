@@ -50,8 +50,6 @@ public class GeneralProduct {
     }
 
 
-
-
     public HashMap<Integer, ProductSupplier> getProductSuppliers() {
         return HashOfSupplierProducts;
     }
@@ -220,9 +218,9 @@ public class GeneralProduct {
         LinkedList<Item> toRemove = new LinkedList<>();
         toRemove.add(item);
         addDefectedItem(toRemove);
-        if(item.getLocation().equals("storage")){
+        if (item.getLocation().equals("storage")) {
             amount_storage--;
-        }else{
+        } else {
             amount_store--;
         }
         update(this); //update amounts
@@ -281,9 +279,9 @@ public class GeneralProduct {
         Item item = getItem(item_id);
         removeItemPersistence(item);
         items.remove(item);
-        if(item.getLocation().equals("storage")){
+        if (item.getLocation().equals("storage")) {
             amount_storage--;
-        }else{
+        } else {
             amount_store--;
         }
         update(this); //update amounts
@@ -311,16 +309,18 @@ public class GeneralProduct {
             System.out.println("failed to update new General Product to the database with the keys: gpID= " + prod.getProduct_id());
         }
     }
+
     private void addDefectedItem(LinkedList<Item> defects) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        for(Item item: defects){
+        for (Item item : defects) {
             dc.insertDefected(item);
             im.addDefectedItem(item);
         }
     }
+
     private void removeDefectedItem(LinkedList<Item> defects) {
-        for(Item item: defects){
+        for (Item item : defects) {
             removeItemPersistence(item);
         }
     }
@@ -335,10 +335,11 @@ public class GeneralProduct {
     //for Dal - load from DB
     public void addItem(Item toAdd) {
         items.add(toAdd);
-        if(item_id<toAdd.getItem_id()){
+        if (item_id < toAdd.getItem_id()) {
             item_id = toAdd.getItem_id();
         }
     }
+
     //for Dal - load from DB
     public void addSupplierProduct(ProductSupplier productSupplier) {
         HashOfSupplierProducts.put(productSupplier.getCatalogID(), productSupplier);
@@ -348,15 +349,16 @@ public class GeneralProduct {
     public void removeItems() {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        for(Item item: items) {
+        for (Item item : items) {
             im.removeItem(this.product_id, item.getItem_id());
             dc.delete(item);
         }
     }
+
     private void removeSPPersistence(ProductSupplier toRemove) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
         im.removerProductSupplier(toRemove);
-        dc.deleteProductSupplier(toRemove,toRemove.getSuplierID());
+        dc.deleteProductSupplier(toRemove, toRemove.getSuplierID());
     }
 }

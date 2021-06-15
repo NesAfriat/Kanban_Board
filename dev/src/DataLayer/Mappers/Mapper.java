@@ -1,8 +1,6 @@
 package DataLayer.Mappers;
 
 
-
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,7 +8,8 @@ import java.sql.SQLException;
 public abstract class Mapper {
     protected final String connectionPath = "jdbc:sqlite:database.db";
     protected final static String db_name = "database.db";
-    public Mapper(){
+
+    public Mapper() {
 
     }
 

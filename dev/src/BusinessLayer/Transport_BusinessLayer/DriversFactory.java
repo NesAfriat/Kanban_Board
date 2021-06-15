@@ -19,32 +19,32 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class DriversFactory {
-    public DriversFactory (Workers_Integration workers_integration) {
+    public DriversFactory(Workers_Integration workers_integration) {
         this.workers_integration = workers_integration;
     }
 
     private Workers_Integration workers_integration;
 
-//todo license properly
-    public List<Driver> getDriversPerJob(String date,int shift,License license){
+    //todo license properly
+    public List<Driver> getDriversPerJob(String date, int shift, License license) {
         //todo parse shift properly
         ResponseT<List<WorkerResponse>> responseT;
-        if (shift ==1)
-            responseT= workers_integration.getWorkersInShiftByJob(date, "Morning", LicenseToString(license));
+        if (shift == 1)
+            responseT = workers_integration.getWorkersInShiftByJob(date, "Morning", LicenseToString(license));
         else
-            responseT= workers_integration.getWorkersInShiftByJob(date, "Evening", LicenseToString(license));
+            responseT = workers_integration.getWorkersInShiftByJob(date, "Evening", LicenseToString(license));
 
-        List<Driver> driverList=responseT.value.stream().map(res->
+        List<Driver> driverList = responseT.value.stream().map(res ->
                 new Driver(res.getName(), Integer.parseInt(res.getId()), getLicenseFromWorker(res.getOccupations()))
         ).collect(Collectors.toList());
         return driverList;
 
     }
 
-    public Tuple<String,List<Driver>> getDriversWeekly(String date,List<License> license) throws ParseException {
+    public Tuple<String, List<Driver>> getDriversWeekly(String date, List<License> license) throws ParseException {
 
         //todo check what happens if get null response from
-        List<Driver> output=new LinkedList<>();
+        List<Driver> output = new LinkedList<>();
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -55,8 +55,8 @@ public class DriversFactory {
 
             output = Stream.concat(output.stream(), getDrivers(date, 0, license).stream()).collect(Collectors.toList());
             output = Stream.concat(output.stream(), getDrivers(date, 1, license).stream()).collect(Collectors.toList());
-            if(!(output.isEmpty())) {
-                Tuple<String,List<Driver>> tupleDateDrivers = new Tuple<>(date,output);
+            if (!(output.isEmpty())) {
+                Tuple<String, List<Driver>> tupleDateDrivers = new Tuple<>(date, output);
                 return tupleDateDrivers;
             }
             //move from sdf2 to sdf format
@@ -82,18 +82,17 @@ public class DriversFactory {
     }
 
 
-
-    public List<Driver> getDrivers(String date,int shift,List<License> license){
-        List<Driver> output=new LinkedList<>();
-        for (License l:license) {
-            output=Stream.concat(output.stream(), getDriversPerJob(date,shift,l).stream()).collect(Collectors.toList());
+    public List<Driver> getDrivers(String date, int shift, List<License> license) {
+        List<Driver> output = new LinkedList<>();
+        for (License l : license) {
+            output = Stream.concat(output.stream(), getDriversPerJob(date, shift, l).stream()).collect(Collectors.toList());
         }
         return output;
     }
 
-    public List<License> returnLicenseList(License lcs){
-        List<License> Licenses=new LinkedList<>();
-        switch(lcs) {
+    public List<License> returnLicenseList(License lcs) {
+        List<License> Licenses = new LinkedList<>();
+        switch (lcs) {
             case typeA:
                 Licenses.add(License.typeA);
                 return Licenses;
@@ -137,7 +136,8 @@ public class DriversFactory {
 
         return output;
     }
-    private License JobToLicense(Job license)  {
+
+    private License JobToLicense(Job license) {
         switch (license) {
             case DriverA:
                 return License.typeA;
@@ -153,17 +153,18 @@ public class DriversFactory {
 
         return null;
     }
-    private License getLicenseFromWorker(List<Job> l)  {
-        return JobToLicense(l.stream().filter(x->
-                (x==Job.DriverA)||(x==Job.DriverB)||(x==Job.DriverC)
+
+    private License getLicenseFromWorker(List<Job> l) {
+        return JobToLicense(l.stream().filter(x ->
+                (x == Job.DriverA) || (x == Job.DriverB) || (x == Job.DriverC)
         ).findFirst().get());
     }
 
     public boolean isStoreKeeper(String date) {
-        ResponseT<List<WorkerResponse>> responseT,responseT1;
-        responseT= workers_integration.getWorkersInShiftByJob(date, "Morning", "Storekeeper");
+        ResponseT<List<WorkerResponse>> responseT, responseT1;
+        responseT = workers_integration.getWorkersInShiftByJob(date, "Morning", "Storekeeper");
         responseT1 = workers_integration.getWorkersInShiftByJob(date, "Evening", "Storekeeper");
-        if(responseT.value.isEmpty() || responseT1.value.isEmpty())
+        if (responseT.value.isEmpty() || responseT1.value.isEmpty())
             return false;
         return true;
 

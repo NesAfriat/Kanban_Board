@@ -14,6 +14,7 @@ public class Driver {
     public String toString() {
         return "Driver id: " + id + ", " + name + ", " + license.name() + "\n ";
     }
+
     public String getName() {
         return name;
     }

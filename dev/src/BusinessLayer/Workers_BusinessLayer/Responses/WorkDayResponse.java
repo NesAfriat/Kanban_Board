@@ -9,28 +9,26 @@ public class WorkDayResponse {
     private ShiftResponse eveningShift;
     private String date;
 
-    public WorkDayResponse(WorkDay workDay){
+    public WorkDayResponse(WorkDay workDay) {
 
-        if (workDay.getShift(ShiftType.Morning) != null){
-             this.morningShift = new ShiftResponse(workDay.getShift(ShiftType.Morning));
-        }
-        else {
+        if (workDay.getShift(ShiftType.Morning) != null) {
+            this.morningShift = new ShiftResponse(workDay.getShift(ShiftType.Morning));
+        } else {
             morningShift = null;
         }
-        if (workDay.getShift(ShiftType.Evening) != null){
+        if (workDay.getShift(ShiftType.Evening) != null) {
             this.eveningShift = new ShiftResponse(workDay.getShift(ShiftType.Evening));
-        }
-        else {
+        } else {
             eveningShift = null;
         }
 
         this.date = workDay.getDate();
     }
 
-    public String toString(){
+    public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Date: ").append(date).append("\n");
-        if (morningShift == null && eveningShift == null){
+        if (morningShift == null && eveningShift == null) {
             stringBuilder.append("There's no shifts at this work day\n");
         }
         if (morningShift != null)
@@ -40,10 +38,10 @@ public class WorkDayResponse {
         return stringBuilder.toString();
     }
 
-    public String approvedToString(){
+    public String approvedToString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Date: ").append(date).append("\n");
-        if (morningShift == null && eveningShift == null){
+        if (morningShift == null && eveningShift == null) {
             stringBuilder.append("There's no shifts at this work day\n");
         }
         if (morningShift != null) {
@@ -52,8 +50,7 @@ public class WorkDayResponse {
             } else {
                 stringBuilder.append("Morning shift is not yet approved\n");
             }
-        }
-        else {
+        } else {
             stringBuilder.append("There's no morning shift in this day.\n");
         }
 
@@ -63,8 +60,7 @@ public class WorkDayResponse {
             } else {
                 stringBuilder.append("Evening shift is not yet approved\n");
             }
-        }
-        else {
+        } else {
             stringBuilder.append("There's no evening shift in this day.\n");
         }
         return stringBuilder.toString();

@@ -10,7 +10,7 @@ public class ConstraintResponse {
     private ShiftType shiftType;
     private ConstraintType constraintType;
 
-    public ConstraintResponse(Constraint constraint){
+    public ConstraintResponse(Constraint constraint) {
         this.date = constraint.getDate();
         this.shiftType = constraint.getShiftType();
         this.constraintType = constraint.getConstraintType();
@@ -28,7 +28,7 @@ public class ConstraintResponse {
         return shiftType;
     }
 
-    public String toString(){
+    public String toString() {
         return "Date: " + date + " || Shift: " + shiftType + " || Constraint: " + constraintType;
     }
 }

@@ -168,7 +168,7 @@ public class SuppliersProductsMapper extends Mapper {
 //        return output;
 //    }
 
-    public LinkedList<ProductSupplier> addPStoAgreement(Agreement agr){
+    public LinkedList<ProductSupplier> addPStoAgreement(Agreement agr) {
         LinkedList<ProductSupplier> output = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM SuppliersProducts WHERE supID=? ";
@@ -177,14 +177,14 @@ public class SuppliersProductsMapper extends Mapper {
                 pstmt.setInt(1, agr.getSupplierID());
 
                 ResultSet rs = pstmt.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
                     int supID = rs.getInt(1);
                     int catalogID = rs.getInt(2);
                     int gpID = rs.getInt(3);
                     String name = rs.getString(4);
                     double price = rs.getDouble(5);
 
-                    ProductSupplier ps = new ProductSupplier(price,catalogID,gpID,name,supID);
+                    ProductSupplier ps = new ProductSupplier(price, catalogID, gpID, name, supID);
                     agr.addSupplierProduct(ps);
                     output.add(ps);
                 }
@@ -197,15 +197,15 @@ public class SuppliersProductsMapper extends Mapper {
         return output;
     }
 
-    public int getMaxPGcounterNumber(){
+    public int getMaxPGcounterNumber() {
         int obj = 0;
         try (Connection conn = connect()) {
             String statement = "SELECT MAX (gpID) FROM SuppliersProducts";
 
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 ResultSet rs = pstmt.executeQuery();
-                if(rs.next()){
-                    obj=rs.getInt(1);
+                if (rs.next()) {
+                    obj = rs.getInt(1);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -218,8 +218,7 @@ public class SuppliersProductsMapper extends Mapper {
     }
 
     //written by stock
-    public int get_gpId(int catalogID, int supID)
-    {
+    public int get_gpId(int catalogID, int supID) {
         int gpID = -1;
         try (Connection conn = connect()) {
             String statement = "SELECT (gpID) FROM SuppliersProducts WHERE supID=? AND catalogID=?";
@@ -228,8 +227,8 @@ public class SuppliersProductsMapper extends Mapper {
                 pstmt.setInt(1, supID);
                 pstmt.setInt(2, catalogID);
                 ResultSet rs = pstmt.executeQuery();
-                if(rs.next()){
-                    gpID=rs.getInt(1);
+                if (rs.next()) {
+                    gpID = rs.getInt(1);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

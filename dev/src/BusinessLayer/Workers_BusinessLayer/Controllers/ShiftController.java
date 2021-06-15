@@ -22,7 +22,7 @@ public class ShiftController {
     private WorkersList workersList;
     private boolean isAdminAuthorized;
 
-    public ShiftController(WorkersList workers){
+    public ShiftController(WorkersList workers) {
         currentDay = null;
         currentShiftType = null;
         this.workersList = workers;
@@ -30,9 +30,9 @@ public class ShiftController {
         isAdminAuthorized = false;
     }
 
-    public  List<Worker> getWorkersInShiftByJob(String date, String shiftType, String job) throws InnerLogicException {
+    public List<Worker> getWorkersInShiftByJob(String date, String shiftType, String job) throws InnerLogicException {
         WorkDay workDay = calendar.getWorkDay(date);
-        if (workDay == null){
+        if (workDay == null) {
             return new LinkedList<>();
         }
         Shift shift = workDay.getShift(WorkersUtils.parseShiftType(shiftType));
@@ -41,7 +41,7 @@ public class ShiftController {
         return shift.getCurrentWorkers(WorkersUtils.parseJob(job));
     }
 
-    public void setAdminAuthorization(boolean isAdminAuthorized){
+    public void setAdminAuthorization(boolean isAdminAuthorized) {
         this.isAdminAuthorized = isAdminAuthorized;
     }
 
@@ -54,7 +54,7 @@ public class ShiftController {
     public WorkDay getWorkDay(String date) throws InnerLogicException {
         WorkersUtils.dateValidation(date);
         WorkDay workDay = calendar.getWorkDay(date);
-        if (workDay == null){
+        if (workDay == null) {
             throw new InnerLogicException("There's no WorkDay at date: " + date);
         }
         return workDay;
@@ -90,7 +90,7 @@ public class ShiftController {
 
     public Shift addWorkerToCurrentShift(String id, String job) throws InnerLogicException {
         throwIfNotAdmin();
-        if(currentDay == null || currentShiftType == null)
+        if (currentDay == null || currentShiftType == null)
             throw new InnerLogicException("tried to add worker to shift but no shift have been chosen");
         throwIfCurrentWorkDayIsNotChangeable();
         Worker workerToAdd = workersList.getWorker(id);
@@ -100,8 +100,8 @@ public class ShiftController {
     }
 
     private void VerifyActiveWorker(Worker worker) throws InnerLogicException {
-        if (worker.getEndWorkingDate() != null){
-            throw new InnerLogicException(worker.getName() + " (ID: " + worker.getId() +") is no longer working");
+        if (worker.getEndWorkingDate() != null) {
+            throw new InnerLogicException(worker.getName() + " (ID: " + worker.getId() + ") is no longer working");
         }
     }
 
@@ -139,7 +139,7 @@ public class ShiftController {
         throwIfNotAdmin();
         WorkersUtils.dateValidation(date);
         List<WorkDay> workDays = calendar.getWorkDaysFrom(date);
-        for (WorkDay workDay: workDays) {
+        for (WorkDay workDay : workDays) {
             workDay.removeFromFutureShifts(worker);
         }
         return worker;
@@ -148,10 +148,10 @@ public class ShiftController {
     public List<Worker> getAvailableWorkers(String job) throws InnerLogicException {
         throwIfNotAdmin();
         Job role = WorkersUtils.parseJob(job);
-        List<Worker> listOfWorkers= workersList.getWorkersByJob(role);
+        List<Worker> listOfWorkers = workersList.getWorkersByJob(role);
         List<Worker> relevantWorkers = new LinkedList<>();
-        for (Worker worker: listOfWorkers) {
-            if(worker.canWorkInShift(currentDay.getDate(), currentShiftType) && !currentDay.isWorking(worker))
+        for (Worker worker : listOfWorkers) {
+            if (worker.canWorkInShift(currentDay.getDate(), currentShiftType) && !currentDay.isWorking(worker))
                 relevantWorkers.add(worker);
         }
         return relevantWorkers;
@@ -167,14 +167,14 @@ public class ShiftController {
 
     public Shift getCurrentShift() throws InnerLogicException {
         throwIfNotAdmin();
-        if (currentDay == null){
+        if (currentDay == null) {
             throw new InnerLogicException("There's no current Day");
         }
-        if (currentShiftType == null){
+        if (currentShiftType == null) {
             throw new InnerLogicException("There's no current shift");
         }
         Shift currentShift = currentDay.getShift(currentShiftType);
-        if (currentShift == null){
+        if (currentShift == null) {
             throw new InnerLogicException("This workday does not have a " + currentShiftType + "shift");
         }
         return currentShift;
@@ -192,10 +192,10 @@ public class ShiftController {
         WorkersUtils.notPastDateValidation(date);
         ShiftType shiftType = WorkersUtils.parseShiftType(shift);
         WorkDay workDay = calendar.getWorkDay(date);
-        if (workDay == null){
+        if (workDay == null) {
             throw new InnerLogicException("There's no WorkDay at date: " + date);
         }
-        Shift output =workDay.removeShift(shiftType);
+        Shift output = workDay.removeShift(shiftType);
         WorkerDataController workerDataController = new WorkerDataController();
         workerDataController.removeShift(date, shift);
         return output;
@@ -222,26 +222,27 @@ public class ShiftController {
         return calendar.getDefaultWorkDaySkeleton(day);
     }
 
-    public void  addRequest(int OrderID, String date) throws InnerLogicException {
+    public void addRequest(int OrderID, String date) throws InnerLogicException {
         WorkersUtils.dateValidation(date);
         calendar.addRequest(OrderID, date);
     }
 
-    public void  removeRequest(int OrderID, String date) throws InnerLogicException {
+    public void removeRequest(int OrderID, String date) throws InnerLogicException {
         WorkersUtils.dateValidation(date);
         calendar.removeRequest(OrderID, date);
     }
 
-    public List<Pair<Integer, String>>  getRequests(){
+    public List<Pair<Integer, String>> getRequests() {
         return calendar.getRequests();
     }
 
 
-
     private void throwIfNotAdmin() throws InnerLogicException {
-        if(!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");
+        if (!isAdminAuthorized) throw new InnerLogicException("non admin worker tried to change shifts");
     }
+
     private void throwIfCurrentWorkDayIsNotChangeable() throws InnerLogicException {
-        if(WorkersUtils.isInPastMonth(currentDay.getDate())) throw new InnerLogicException("edit shift isn't possible after the month it has occurred");
+        if (WorkersUtils.isInPastMonth(currentDay.getDate()))
+            throw new InnerLogicException("edit shift isn't possible after the month it has occurred");
     }
 }

@@ -19,5 +19,4 @@ public interface IAgreementManager {
     public void AddProduct(int SupplierId, double Price, int CatalogID);
 
 
-
-    }
+}

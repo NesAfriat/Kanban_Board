@@ -10,27 +10,28 @@ import java.util.List;
 public class WorkersList {
     private List<Worker> workers;
 
-    public WorkersList(){
+    public WorkersList() {
         this.workers = new LinkedList<>();
         try { // default administrator worker
-            Worker worker = new Worker( "Administrator", "000000000", "0", 0, "0", 0, 0, "00/00/0000");
+            Worker worker = new Worker("Administrator", "000000000", "0", 0, "0", 0, 0, "00/00/0000");
             workers.add(worker);
             worker.addOccupation(Job.HR_Manager); // administrator is admin
-        } catch (InnerLogicException ignored) { }
+        } catch (InnerLogicException ignored) {
+        }
     }
 
-    public List<Worker> getWorkersByJob(Job job){
+    public List<Worker> getWorkersByJob(Job job) {
         LinkedList<Worker> output = new LinkedList<>();
         WorkerDataController workerDataController = new WorkerDataController();
-        for (Worker worker: workerDataController.getAllWorkers()) {
-            if(worker.canWorkInJob(job)) output.add(worker);
+        for (Worker worker : workerDataController.getAllWorkers()) {
+            if (worker.canWorkInJob(job)) output.add(worker);
         }
         return output;
     }
 
     public Worker getWorker(String id) throws InnerLogicException {
-        for (Worker worker: workers) {
-            if(worker.getId().equals(id)) return  worker;
+        for (Worker worker : workers) {
+            if (worker.getId().equals(id)) return worker;
         }
         //search in db
         WorkerDataController workerDataController = new WorkerDataController();
@@ -46,9 +47,10 @@ public class WorkersList {
     public Worker addWorker(String name, String id, String bankAccount, double salary, String educationFund,
                             int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) throws InnerLogicException {
         WorkerDataController workerDataController = new WorkerDataController();
-        if (contains(id) || workerDataController.getWorker(id) != null) throw new InnerLogicException("the system already have worker with the id: " + id);
+        if (contains(id) || workerDataController.getWorker(id) != null)
+            throw new InnerLogicException("the system already have worker with the id: " + id);
 
-        Worker newWorker = new Worker( name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
+        Worker newWorker = new Worker(name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                 sickDaysPerMonth, startWorkingDate);
 
         workerDataController.addWorker(newWorker);
@@ -62,9 +64,9 @@ public class WorkersList {
         return firedWorker;
     }
 
-    public boolean contains(String id){
-        for (Worker worker: workers) {
-            if(worker.getId().equals(id)) return true;
+    public boolean contains(String id) {
+        for (Worker worker : workers) {
+            if (worker.getId().equals(id)) return true;
         }
         return false;
     }

@@ -13,18 +13,16 @@ public class DALController {
 
 
     // private constructor restricted to this class itself
-    private DALController()
-    {
-         pro=new ProductDAL();
-         sto=new StoreDAL();
-         sup=new SupplierDAL();
-         tra=new TransportDocDAL();
-         tru=new TruckDAL();
+    private DALController() {
+        pro = new ProductDAL();
+        sto = new StoreDAL();
+        sup = new SupplierDAL();
+        tra = new TransportDocDAL();
+        tru = new TruckDAL();
     }
 
     // static method to create instance of Singleton class
-    public static DALController getInstance()
-    {
+    public static DALController getInstance() {
         if (Con_instance == null)
             Con_instance = new DALController();
 

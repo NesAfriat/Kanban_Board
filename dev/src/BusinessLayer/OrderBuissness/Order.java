@@ -22,25 +22,27 @@ public class Order {
     private Integer constsntordersDays;
 
     //constructor for DAL
-    public Order(int orderID, int sup, String date, double pay, int con,int dayOfOrder) {
-       //TODO: need to edit this constructor
+    public Order(int orderID, int sup, String date, double pay, int con, int dayOfOrder) {
+        //TODO: need to edit this constructor
         this.id = orderID;
-        productQuantity=new HashMap<>();
+        productQuantity = new HashMap<>();
         this.SupplierID = sup;
 //        this.productQuantity=products;
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.dateTime = LocalDate.parse(date, formatter);; //TODO need to take from inventModel the static function
+        this.dateTime = LocalDate.parse(date, formatter);
+        ; //TODO need to take from inventModel the static function
 //        this.TotalPayment=CalculateTotalPayment(products,agreement);
         this.TotalPayment = pay;
         this.Constant = con == 1;
-        constsntordersDays=dayOfOrder;
+        constsntordersDays = dayOfOrder;
 
 //        this.constsntordersDays=constsntordersDays;
     }
 
-public int getDayOfOrder(){
+    public int getDayOfOrder() {
         return constsntordersDays;
-}
+    }
+
     public boolean isConstant() {
         return Constant;
     }
@@ -54,15 +56,20 @@ public int getDayOfOrder(){
         this.TotalPayment = CalculateTotalPayment(products, agreement);
         this.Constant = constant;
         this.constsntordersDays = constsntordersDays;
-        for (int pr:products.keySet()
-             ) {
-            add_ProductToOrder(this.id, pr,products.get(pr));
+        for (int pr : products.keySet()
+        ) {
+            add_ProductToOrder(this.id, pr, products.get(pr));
         }
     }
-    public LocalDate getDateTime(){return dateTime; }
+
+    public LocalDate getDateTime() {
+        return dateTime;
+    }
+
     public int getSupplierID() {
         return SupplierID;
     }
+
     public double getTotalPayment() {
         return TotalPayment;
     }
@@ -83,7 +90,7 @@ public int getDayOfOrder(){
         }
         productQuantity.put(productCatalogID, quantity);
         this.TotalPayment = CalculateTotalPayment(this.productQuantity, agreement);
-        add_ProductToOrder(this.id, productCatalogID,quantity);// data
+        add_ProductToOrder(this.id, productCatalogID, quantity);// data
     }
 
 
@@ -119,8 +126,8 @@ public int getDayOfOrder(){
 
         }
         productQuantity.replace(CatalogID, quantity);
-        TotalPayment=CalculateTotalPayment(this.productQuantity, agreement);
-        updateProductQuantity(this.id, CatalogID,quantity);//data
+        TotalPayment = CalculateTotalPayment(this.productQuantity, agreement);
+        updateProductQuantity(this.id, CatalogID, quantity);//data
         update(this);
     }
 
@@ -206,7 +213,6 @@ public int getDayOfOrder(){
     }
 
 
-
 ////////////////////////////////DATA Functions////////////////////////////////
 
     private void add_to_data(Order order) {
@@ -227,38 +233,37 @@ public int getDayOfOrder(){
     }
 
 
-
-
-    private void updateProductQuantity(int orderId,int catalogID,int quantity) {
+    private void updateProductQuantity(int orderId, int catalogID, int quantity) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.updateProductInOrder(orderId,catalogID,quantity)) {
+        if (!dc.updateProductInOrder(orderId, catalogID, quantity)) {
             System.out.println("failed to update Product Order  to the database ");
         }
     }
 
     //        removeProduct(this.id, CatalogID);
-    private void removeProduct(int orderId,int catalogID) {
+    private void removeProduct(int orderId, int catalogID) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.removeProductFromORder(orderId,catalogID)) {
+        if (!dc.removeProductFromORder(orderId, catalogID)) {
             System.out.println("failed to remove Product Order  to the database ");
         }
 
     }
+
     //insertProduct
-    private void add_ProductToOrder(int orderId,int catalogID,int quantity) {
+    private void add_ProductToOrder(int orderId, int catalogID, int quantity) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if (!dc.insetProduct(orderId,catalogID,quantity)) {
+        if (!dc.insetProduct(orderId, catalogID, quantity)) {
             System.out.println("failed to insert product to the database with the keys");
         }
     }
 
     //forDAL WHEN WE DO GET
-    public void insertProductToOrderForDal(int CatalogId,int Quantity){
-        if(!productQuantity.containsKey(CatalogId)){
-            productQuantity.put(CatalogId,Quantity);
+    public void insertProductToOrderForDal(int CatalogId, int Quantity) {
+        if (!productQuantity.containsKey(CatalogId)) {
+            productQuantity.put(CatalogId, Quantity);
         }
 
     }

@@ -4,7 +4,10 @@ import BusinessLayer.Transport_BusinessLayer.Drives.License;
 import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
 import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +30,7 @@ public class TruckDAL {
         try {
             HashMap<String, TruckType> hmTruckType = new HashMap<String, TruckType>();
 
-            
+
             conn = Connect.getConnection();
             Statement st = conn.createStatement();
             ResultSet results = st.executeQuery("SELECT * FROM TruckType");
@@ -85,10 +88,7 @@ public class TruckDAL {
     }
 
 
-
-
-
-    public List<Truck> LoadTrucks () throws SQLException {
+    public List<Truck> LoadTrucks() throws SQLException {
         List<Truck> stList = null;
         Connection conn = null;
 
@@ -102,8 +102,8 @@ public class TruckDAL {
         licenseList3.add(License.typeC);
         List<License> licenseList1 = new LinkedList<License>();
         licenseList1.add(License.typeA);
-        try{
-            HashMap <String, TruckType> hmTruckType = new HashMap<String, TruckType>();
+        try {
+            HashMap<String, TruckType> hmTruckType = new HashMap<String, TruckType>();
             stList = new LinkedList<>();
 
             conn = Connect.getConnection();
@@ -113,18 +113,18 @@ public class TruckDAL {
             Statement st = conn.createStatement();
             ResultSet results = st.executeQuery("SELECT * FROM TruckType");
 
-            while(results.next()){
+            while (results.next()) {
 
                 String name;
-                int maxWeight,freeWeight,LicenseForTruck;
-                name= results.getString(1);
-                maxWeight= results.getInt(2);
-                freeWeight= results.getInt(3);
-                LicenseForTruck= results.getInt(4);
-                List<License> theTrueLicense =null;
-                switch(LicenseForTruck){
+                int maxWeight, freeWeight, LicenseForTruck;
+                name = results.getString(1);
+                maxWeight = results.getInt(2);
+                freeWeight = results.getInt(3);
+                LicenseForTruck = results.getInt(4);
+                List<License> theTrueLicense = null;
+                switch (LicenseForTruck) {
                     case 1:
-                        theTrueLicense=licenseList1;
+                        theTrueLicense = licenseList1;
                         break;
                     case 2:
                         theTrueLicense = licenseList2;
@@ -134,18 +134,18 @@ public class TruckDAL {
 
                 }
 
-                hmTruckType.put(name,new TruckType(name,maxWeight,freeWeight,theTrueLicense));
+                hmTruckType.put(name, new TruckType(name, maxWeight, freeWeight, theTrueLicense));
 
             }
             ResultSet results2 = st.executeQuery("SELECT * FROM Truck");
-            while(results2.next()) {
+            while (results2.next()) {
                 String name, truckType;
                 int licensePlate;
                 name = results.getString(1);
                 licensePlate = results.getInt(2);
                 truckType = results.getString(3);
 
-                stList.add(new Truck(name,licensePlate,hmTruckType.get(truckType) ));
+                stList.add(new Truck(name, licensePlate, hmTruckType.get(truckType)));
             }
 
 

@@ -173,10 +173,10 @@ public class IdentityMap {
     /////Reports//////
     public void addReport(Report report) {
         boolean isIN = false;
-        for (Report r : reportsList)
-        { if (r.getReportID() == report.getReportID())
+        for (Report r : reportsList) {
+            if (r.getReportID() == report.getReportID())
                 isIN = true;
-       }
+        }
         if (!isIN)
             reportsList.add(report);
     }
@@ -263,6 +263,7 @@ public class IdentityMap {
     public void addPS(ProductSupplier ps) {
         productSuppliersList.add(ps);
     }
+
     //================================================================================
     //add an Order to the identityMap
     public void addOrder(Order o) {

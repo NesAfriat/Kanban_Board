@@ -3,10 +3,7 @@ package BusinessLayer.Transport_BusinessLayer.Shops;
 public abstract class Site {
 
 
-
     protected int id;
-
-
 
 
     public Site(int id) {

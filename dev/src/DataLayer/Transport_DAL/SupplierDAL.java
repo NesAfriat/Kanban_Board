@@ -1,12 +1,5 @@
 package DataLayer.Transport_DAL;
 
-import BusinessLayer.Transport_BusinessLayer.Shops.Area;
-import BusinessLayer.Transport_BusinessLayer.Shops.Supplier;
-
-import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
-
 public class SupplierDAL {
 /*
     public static Supplier findSupplier(int supplierID) {

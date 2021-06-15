@@ -122,7 +122,7 @@ public class GeneralProductMapper extends Mapper {
             try (PreparedStatement pstmt = conn.prepareStatement(statement)) {
                 pstmt.setString(1, catName);
                 pstmt.setInt(2, gp.getProduct_id());
-                 pstmt.executeUpdate();
+                pstmt.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -131,6 +131,7 @@ public class GeneralProductMapper extends Mapper {
         }
         return;
     }
+
     public boolean delete(GeneralProduct gp) {
         boolean deleted = false;
         try (Connection conn = connect()) {
@@ -288,7 +289,7 @@ public class GeneralProductMapper extends Mapper {
     }
 
     public int getMaxGPID() {
-        int output=0;
+        int output = 0;
         try (Connection conn = connect()) {
             String statement = "SELECT max(gpID) FROM GeneralProducts";
 
@@ -297,7 +298,7 @@ public class GeneralProductMapper extends Mapper {
                 ResultSet rs = pstmt.executeQuery();
                 if (rs.next()) {
                     int gpID = rs.getInt(1);
-                    output=gpID;
+                    output = gpID;
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -307,6 +308,7 @@ public class GeneralProductMapper extends Mapper {
         }
         return output;
     }
+
     public void setGPCategory(GeneralProduct gp, String newCat) {
         try (Connection conn = connect()) {
             String statement = "UPDATE GeneralProducts SET gpID=?, gpName=?, gpManuName=?, amountStore=?, amountStorage=?, minAmount=?, sellingPrice=?, catName=? WHERE gpID=? ";

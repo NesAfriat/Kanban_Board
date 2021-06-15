@@ -70,8 +70,8 @@ public class Item {
     private void update(Item item) {
         IdentityMap im = IdentityMap.getInstance();
         DataController dc = DataController.getInstance();
-        if(!dc.update(this)){
-            System.out.println("failed to update new Item to the database with the keys: gpID= "+item.getProduct_id()+" iID= "+item.getItem_id());
+        if (!dc.update(this)) {
+            System.out.println("failed to update new Item to the database with the keys: gpID= " + item.getProduct_id() + " iID= " + item.getItem_id());
         }
     }
 }

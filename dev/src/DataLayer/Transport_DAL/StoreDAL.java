@@ -1,12 +1,5 @@
 package DataLayer.Transport_DAL;
 
-import BusinessLayer.Transport_BusinessLayer.Shops.Area;
-import BusinessLayer.Transport_BusinessLayer.Shops.Store;
-
-import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
-
 public class StoreDAL {
 /*
     public static Store findStore(int storeID) {

@@ -105,10 +105,6 @@ public class WorkDay {
         if (morningShift != null && morningShift.isWorking(worker)){
             return true;
         }
-        if (eveningShift != null && eveningShift.isWorking(worker)){
-            return true;
-        }
-
-        return false;
+        return eveningShift != null && eveningShift.isWorking(worker);
     }
 }

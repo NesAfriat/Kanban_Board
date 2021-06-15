@@ -1,6 +1,6 @@
 package BusinessLayer.Transport_BusinessLayer.Shops;
 
-public class Store extends Site{
+public class Store extends Site {
 
     public Store(int id) {
         super(id);
@@ -8,7 +8,7 @@ public class Store extends Site{
 
 
     public String toString() {
-        return "Store ID: " + id  + "\n";
+        return "Store ID: " + id + "\n";
     }
 
 }

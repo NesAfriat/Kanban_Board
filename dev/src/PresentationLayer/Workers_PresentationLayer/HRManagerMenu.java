@@ -1,15 +1,19 @@
 package PresentationLayer.Workers_PresentationLayer;
 
+import BusinessLayer.Workers_BusinessLayer.Responses.Response;
+import BusinessLayer.Workers_BusinessLayer.Responses.ResponseT;
+import BusinessLayer.Workers_BusinessLayer.Responses.ShiftResponse;
+import BusinessLayer.Workers_BusinessLayer.Responses.WorkDayResponse;
 import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
-import BusinessLayer.Workers_BusinessLayer.Responses.*;
 import javafx.util.Pair;
 
 import java.util.List;
 
 class HRManagerMenu extends Workers_Main_Menu {
-    HRManagerMenu(Workers_Facade facade){
+    HRManagerMenu(Workers_Facade facade) {
         super(facade);
     }
+
     void run() {
         boolean prev = false;
         while (!prev) {
@@ -39,7 +43,6 @@ class HRManagerMenu extends Workers_Main_Menu {
             }
         }
     }
-
 
 
     private void ShiftsManageMenu() {
@@ -97,25 +100,23 @@ class HRManagerMenu extends Workers_Main_Menu {
         int orderID = getInputInt();
         String date = getInputDate();
         Response result = facade.removeRequest(orderID, date);
-        if (result.ErrorOccurred()){
+        if (result.ErrorOccurred()) {
             printPrettyError(result.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm("Request removed successfully");
         }
     }
 
     private void viewAllRequests() {
-        ResponseT<List<Pair<Integer,String>>> requests = facade.getRequests();
-        if (requests.ErrorOccurred()){
+        ResponseT<List<Pair<Integer, String>>> requests = facade.getRequests();
+        if (requests.ErrorOccurred()) {
             printPrettyError(requests.getErrorMessage());
-        }
-        else {
+        } else {
             int i = 1;
-            if (requests.value.isEmpty()){
+            if (requests.value.isEmpty()) {
                 printPrettyConfirm("Woohoo! There's no requests at the moment.");
             }
-            for (Pair<Integer,String> request : requests.value){
+            for (Pair<Integer, String> request : requests.value) {
                 printPrettyConfirm(i + ")" + " Order ID: " + request.getKey() + "\tDate: " + request.getValue());
                 i++;
             }
@@ -127,10 +128,9 @@ class HRManagerMenu extends Workers_Main_Menu {
         String shiftType = getInputShiftType();
 
         ResponseT<ShiftResponse> shiftResponse = facade.chooseShift(date, shiftType);
-        if (shiftResponse.ErrorOccurred()){
+        if (shiftResponse.ErrorOccurred()) {
             printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm("Shift selected successfully");
             new EditShiftsMenu(facade).run();
         }
@@ -139,26 +139,23 @@ class HRManagerMenu extends Workers_Main_Menu {
     private void adminViewShiftArrangement() {
         String date = getInputDate();
         ResponseT<WorkDayResponse> workDay = facade.viewShiftArrangement(date);
-        if (workDay.ErrorOccurred()){
+        if (workDay.ErrorOccurred()) {
             printPrettyError(workDay.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm(workDay.value.toString());
         }
     }
 
-    private void RemoveShift(){
+    private void RemoveShift() {
         String date = getInputDate();
         String shiftType = getInputShiftType();
         ResponseT<ShiftResponse> shiftResponse = facade.removeShift(date, shiftType);
-        if (shiftResponse.ErrorOccurred()){
+        if (shiftResponse.ErrorOccurred()) {
             printPrettyError(shiftResponse.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm(shiftType + " Shift removed successfully at date: " + date);
         }
     }
-
 
 
 }

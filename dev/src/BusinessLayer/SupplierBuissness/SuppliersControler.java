@@ -73,7 +73,7 @@ public class SuppliersControler implements ISupplierControler {
         }
         ISupplier supplier = Suppliers.get(SupplierId);
         supplier.setPayment(paymentMethods);
-        updateSupplierFromTheData((Supplier)getSupplier(SupplierId));
+        updateSupplierFromTheData((Supplier) getSupplier(SupplierId));
 
     }
 
@@ -122,7 +122,7 @@ public class SuppliersControler implements ISupplierControler {
         if (!isSupplierExist(SupId)) {
             throw new IllegalArgumentException("the supplier does not exist");
         }
-        Supplier supplier=(Supplier)getSupplier(SupId);
+        Supplier supplier = (Supplier) getSupplier(SupId);
         agreementManager.GetAgreement(SupId).RemovAllProducts();
         agreementManager.RemoveAgreement(SupId);
         supplier.removeAllContacts();
@@ -158,7 +158,7 @@ public class SuppliersControler implements ISupplierControler {
             throw new IllegalArgumentException("the supplier does not exist");
         }
         Suppliers.get(SupId).setBankAccount(BankAccount);
-        updateSupplierFromTheData((Supplier)getSupplier(SupId));
+        updateSupplierFromTheData((Supplier) getSupplier(SupId));
     }
 
     @Override
@@ -206,18 +206,17 @@ public class SuppliersControler implements ISupplierControler {
 
     // return true if the supplier exist in the suppliers hash map
     public boolean isSupplierExist(int supplierId) {
-      if(Suppliers.containsKey(supplierId)){
-          return true;
-      }
-      else {
-          Supplier s=getSupplierFromData(supplierId);
-          if (s==null){
-              return false;
-          }
+        if (Suppliers.containsKey(supplierId)) {
+            return true;
+        } else {
+            Supplier s = getSupplierFromData(supplierId);
+            if (s == null) {
+                return false;
+            }
 
-          Suppliers.put(supplierId,s);
-          return true;
-      }
+            Suppliers.put(supplierId, s);
+            return true;
+        }
     }
 
 
@@ -247,7 +246,6 @@ public class SuppliersControler implements ISupplierControler {
     }
 
 
-
 //===============================================dal=================================
 
     public Supplier getSupplierFromData(int SupId) {
@@ -258,8 +256,8 @@ public class SuppliersControler implements ISupplierControler {
             return supplier;
         }
         supplier = dc.getSupplier(SupId);
-        if (supplier != null)
-        {  im.addSupplier(supplier);
+        if (supplier != null) {
+            im.addSupplier(supplier);
             return supplier;
         }
         return null;

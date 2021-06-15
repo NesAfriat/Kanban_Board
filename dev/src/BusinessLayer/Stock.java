@@ -190,7 +190,7 @@ public class Stock {
         for (Item item : defList) {
             im.addItem(item);
             boolean flag = false;
-            for(Item i: defects){
+            for (Item i : defects) {
                 if (i.getItem_id().equals(item.getItem_id())) {
                     flag = true;
                     break;
@@ -200,10 +200,11 @@ public class Stock {
                 defects.add(item);
         }
     }
-    public ProductManager getPM()
-    {
-        return  this.productManager;
+
+    public ProductManager getPM() {
+        return this.productManager;
     }
+
     private void clearDefects() {
         DataController dc = DataController.getInstance();
         IdentityMap im = IdentityMap.getInstance();

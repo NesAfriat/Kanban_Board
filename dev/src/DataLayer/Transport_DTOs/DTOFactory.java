@@ -1,27 +1,6 @@
 package DataLayer.Transport_DTOs;
 
-import DataLayer.Transport_DTOs.DocumentsDTOs.TransportDocDTO;
-import DataLayer.Transport_DTOs.DriversDTOs.DriverDTO;
-import DataLayer.Transport_DTOs.DriversDTOs.TruckDTO;
-import DataLayer.Transport_DTOs.DriversDTOs.TruckTypeDTO;
-import DataLayer.Transport_DTOs.ShopsDTOs.ProductDTO;
-import DataLayer.Transport_DTOs.ShopsDTOs.StoreDTO;
-import DataLayer.Transport_DTOs.ShopsDTOs.SupplierDTO;
-import BusinessLayer.Transport_BusinessLayer.Document.TransportDoc;
-import BusinessLayer.Transport_BusinessLayer.Document.Triple;
-import BusinessLayer.Transport_BusinessLayer.Drives.Driver;
-import BusinessLayer.Transport_BusinessLayer.Drives.Truck;
-import BusinessLayer.Transport_BusinessLayer.Drives.TruckType;
-import BusinessLayer.Transport_BusinessLayer.Shops.Product;
-import BusinessLayer.Transport_BusinessLayer.Shops.Store;
-import BusinessLayer.Transport_BusinessLayer.Shops.Supplier;
-import BusinessLayer.Transport_BusinessLayer.etc.Tuple;
-
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class  DTOFactory  {
+public class DTOFactory {
 
     //DriverDTOs
     /*

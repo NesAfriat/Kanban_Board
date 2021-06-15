@@ -14,6 +14,7 @@ public class Truck {
     public String toString() {
         return "Truck licensePlate: " + licensePlate + ", " + name + ", " + truckType.getName() + "\n ";
     }
+
     public String getName() {
         return name;
     }

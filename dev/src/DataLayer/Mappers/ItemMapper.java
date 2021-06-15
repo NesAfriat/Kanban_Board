@@ -132,7 +132,7 @@ public class ItemMapper extends Mapper {
         return output;
     }
 
-    public LinkedList<Item> addItemToProduct(GeneralProduct gp){
+    public LinkedList<Item> addItemToProduct(GeneralProduct gp) {
         LinkedList<Item> output = new LinkedList<>();
         try (Connection conn = connect()) {
             String statement = "SELECT * FROM Items WHERE gpID=? ";

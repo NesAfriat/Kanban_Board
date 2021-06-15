@@ -10,25 +10,22 @@ import java.util.Map;
 
 class IdentityMap {
     private static IdentityMap instance = null;
+    private final Map<String, Worker> workerMap; // maps id to workers
+    private final Map<String, WorkDay> workDayMap; // maps dates to workdays
+    private IdentityMap() {
+        this.workDayMap = new HashMap<>();
+        this.workerMap = new HashMap<>();
+    }
 
     public static IdentityMap getInstance() {
-        if (instance == null){
+        if (instance == null) {
             instance = new IdentityMap();
         }
         return instance;
     }
 
-
-    private final Map<String, Worker> workerMap; // maps id to workers
-    private final Map<String, WorkDay> workDayMap; // maps dates to workdays
-
-    private IdentityMap(){
-        this.workDayMap = new HashMap<>();
-        this.workerMap = new HashMap<>();
-    }
-
     public void addWorkDay(WorkDay workDay) {
-        workDayMap.put(workDay.getDate(),workDay);
+        workDayMap.put(workDay.getDate(), workDay);
     }
 
     public void addWorker(Worker worker) {
@@ -44,7 +41,7 @@ class IdentityMap {
         return workerMap.get(id);
     }
 
-    Collection<Worker> getAllWorkers(){
+    Collection<Worker> getAllWorkers() {
         return workerMap.values();
     }
 

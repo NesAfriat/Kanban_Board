@@ -1,13 +1,14 @@
 package PresentationLayer.Workers_PresentationLayer;
 
-import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 import BusinessLayer.Workers_BusinessLayer.Responses.Response;
+import BusinessLayer.Workers_BusinessLayer.Workers_Facade;
 
 class EditDefaultWorkDayShiftMenu extends HRManagerMenu {
-    EditDefaultWorkDayShiftMenu(Workers_Facade facade){
+    EditDefaultWorkDayShiftMenu(Workers_Facade facade) {
         super(facade);
     }
-    void run(){
+
+    void run() {
         boolean prev = false;
         while (!prev) {
             printPrettyHeadline("\n\nEdit Default Settings Menu");
@@ -16,7 +17,7 @@ class EditDefaultWorkDayShiftMenu extends HRManagerMenu {
             System.out.println("3) Get workday default settings");
             System.out.println("4) Edit workday default");
             System.out.println("5) Previous");
-           // System.out.println("6) Exit");
+            // System.out.println("6) Exit");
             System.out.print("Option: ");
             int option = getInputInt();
             switch (option) {
@@ -50,10 +51,9 @@ class EditDefaultWorkDayShiftMenu extends HRManagerMenu {
         System.out.println("Enter new amount required: ");
         int amountRequired = getInputInt();
         Response response = facade.setDefaultJobsInShift(day, shiftType, role, amountRequired);
-        if (response.ErrorOccurred()){
+        if (response.ErrorOccurred()) {
             printPrettyError(response.getErrorMessage());
-        }
-        else {
+        } else {
             printPrettyConfirm("New shift default updated successfully");
         }
     }
@@ -66,12 +66,12 @@ class EditDefaultWorkDayShiftMenu extends HRManagerMenu {
         boolean hasEvening = getInputYesNo();
         Response m_response = facade.setDefaultShiftInDay(day, "Morning", hasMorning);
         Response e_response = facade.setDefaultShiftInDay(day, "Evening", hasEvening);
-        if (m_response.ErrorOccurred()){
+        if (m_response.ErrorOccurred()) {
             printPrettyError(m_response.getErrorMessage());
         }
         if (e_response.ErrorOccurred())
             printPrettyError(e_response.getErrorMessage());
-        if (!m_response.ErrorOccurred() & !e_response.ErrorOccurred()){
+        if (!m_response.ErrorOccurred() & !e_response.ErrorOccurred()) {
             printPrettyConfirm("New workday setting updated successfully");
         }
     }

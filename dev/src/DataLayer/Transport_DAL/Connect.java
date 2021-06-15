@@ -1,9 +1,10 @@
 package DataLayer.Transport_DAL;
 
-import sun.rmi.transport.Transport;
-
 import java.io.File;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 
 public class Connect {
@@ -12,7 +13,7 @@ public class Connect {
         Connection conn = null;
         try {
             // db parameters
-            String url = "jdbc:sqlite:database.db";;
+            String url = "jdbc:sqlite:database.db";
             // create a connection to the database
             conn = DriverManager.getConnection(url);
             return conn;
@@ -21,21 +22,22 @@ public class Connect {
         }
         return null;
     }
-    public static void createDatabase (){
-        String db_name= "Transport.db";
+
+    public static void createDatabase() {
+        String db_name = "Transport.db";
         File f = new File(db_name);
-        if(!f.exists() && !f.isDirectory()) {
+        if (!f.exists() && !f.isDirectory()) {
             try {
                 Connect.createTablesAndLoadData();
-            }
-            catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println("dan");
             }
         }
 
 
-        }
-    public static void createTablesAndLoadData () throws SQLException {
+    }
+
+    public static void createTablesAndLoadData() throws SQLException {
         Connection conn = Connect.getConnection();
         Statement st = conn.createStatement();
         String delete = "\n" +
@@ -117,7 +119,7 @@ public class Connect {
 //        Connection conn = null;
 //        try {
 //            // db parameters
-            /** WATCH OUT URL IS NOT GENERIC**/
+    /** WATCH OUT URL IS NOT GENERIC**/
 //            String url = "jdbc:sqlite:C:\\Users\\guyne\\Documents\\BGU\\semester C\\HomeAssinments\\system architecture\\gitRipo\\ADSS_Group_K\\dev";
 //            // create a connection to the database
 //            conn = DriverManager.getConnection(url);

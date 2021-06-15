@@ -1,6 +1,5 @@
 package BusinessLayer.Workers_BusinessLayer.Responses;
 
-import BusinessLayer.Workers_BusinessLayer.InnerLogicException;
 import BusinessLayer.Workers_BusinessLayer.Shifts.Shift;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
@@ -15,21 +14,23 @@ public class ShiftResponse {
     private boolean approved;
     private Map<Job, JobArrangementResponse> currentWorkers;
 
-    public ShiftResponse(Shift shift){
+    public ShiftResponse(Shift shift) {
         this.approved = shift.isApproved();
         currentWorkers = new HashMap<>();
         List<Job> jobs = shift.getJobs();
-        for (Job job: jobs) {
+        for (Job job : jobs) {
             List<Worker> workers = shift.getCurrentWorkers(job);
             int required = shift.getAmountRequired(job);
             int amountAssigned = shift.getCurrentWorkersAmount(job);
-            currentWorkers.put(job, new JobArrangementResponse(workers,required,amountAssigned));
+            currentWorkers.put(job, new JobArrangementResponse(workers, required, amountAssigned));
         }
     }
 
-    public boolean isApproved(){return approved;}
+    public boolean isApproved() {
+        return approved;
+    }
 
-    public boolean isFullyOccupied(){
+    public boolean isFullyOccupied() {
         AtomicBoolean output = new AtomicBoolean(true);
         currentWorkers.forEach((job, jobArrangementResponse) -> {
             if (jobArrangementResponse.amountAssigned != jobArrangementResponse.required) {
@@ -61,12 +62,12 @@ public class ShiftResponse {
     public String Settings() {
         StringBuilder stringBuilder = new StringBuilder();
         currentWorkers.forEach((job, jobArrangement) -> {
-                stringBuilder.append("Job: ").append(job).append(" ,amount required: ").append(jobArrangement.required).append("\n");
+            stringBuilder.append("Job: ").append(job).append(" ,amount required: ").append(jobArrangement.required).append("\n");
         });
         return stringBuilder.toString();
     }
 
-    private static class JobArrangementResponse{
+    private static class JobArrangementResponse {
         int required;
         List<WorkerResponse> workers;
         int amountAssigned;
@@ -75,7 +76,7 @@ public class ShiftResponse {
             this.required = required;
             this.amountAssigned = amountAssigned;
             this.workers = new LinkedList<>();
-            for (Worker worker: workers) {
+            for (Worker worker : workers) {
                 WorkerResponse workerResponse = new WorkerResponse(worker);
                 this.workers.add(workerResponse);
             }

@@ -19,134 +19,132 @@ public class Workers_Facade implements Workers_Integration, GetOccupations_Integ
     private WorkerController workerController;
     private ShiftController shiftController;
 
-    public Workers_Facade(){
+    public Workers_Facade() {
         this.workerController = new WorkerController();
         this.shiftController = new ShiftController(workerController.getWorkersList());
     }
 
-    public ResponseT<WorkerResponse> login(String id){
+    public ResponseT<WorkerResponse> login(String id) {
         try {
             Worker worker = workerController.login(id);
             shiftController.setAdminAuthorization(worker.getIsAdmin());
             return new ResponseT<>(new WorkerResponse(worker));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
-    public Response logout(){
+    public Response logout() {
         try {
             workerController.logout();
             shiftController.setAdminAuthorization(false);
             return new Response();
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new Response(e.getMessage());
         }
     }
 
-    public ResponseT<WorkerResponse> getLoggedWorker(){
-        try{
+    public ResponseT<WorkerResponse> getLoggedWorker() {
+        try {
             return new ResponseT<WorkerResponse>(new WorkerResponse(workerController.getLoggedIn()));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
-    public ResponseT<ConstraintResponse> addConstraint(String date, String shiftType, String constraintType){
-        try{
+    public ResponseT<ConstraintResponse> addConstraint(String date, String shiftType, String constraintType) {
+        try {
             Constraint constraint = workerController.addConstraint(date, shiftType, constraintType);
             return new ResponseT<>(new ConstraintResponse(constraint));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
     public ResponseT<ConstraintResponse> removeConstraint(String date, String shiftType) {
-        try{
+        try {
             Constraint constraint = workerController.removeConstraint(date, shiftType);
             return new ResponseT<>(new ConstraintResponse(constraint));
-        }
-        catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
     public ResponseT<WorkDayResponse> viewShiftArrangement(String date) {
-        try{
+        try {
             WorkDay workDay = shiftController.getWorkDay(date);
             return new ResponseT<>(new WorkDayResponse(workDay));
-        }
-        catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
     public ResponseT<WorkerResponse> addWorker(String name, String id, String bankAccount, double salary, String educationFund,
-                                               int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate){
-        try{
+                                               int vacationDaysPerMonth, int sickDaysPerMonth, String startWorkingDate) {
+        try {
             Worker newWorker = workerController.addWorker(name, id, bankAccount, salary, educationFund, vacationDaysPerMonth,
                     sickDaysPerMonth, startWorkingDate);
             return new ResponseT<>(new WorkerResponse(newWorker));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
-    public ResponseT<WorkerResponse>fireWorker(String id, String endWorkingDate){
-        try{
+    public ResponseT<WorkerResponse> fireWorker(String id, String endWorkingDate) {
+        try {
             Worker firedWorker = workerController.fireWorker(id, endWorkingDate);
             shiftController.removeFromFutureShifts(firedWorker, firedWorker.getEndWorkingDate());
             return new ResponseT<>(new WorkerResponse(firedWorker));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
-    public ResponseT<WorkerResponse> getWorker(String id){
-        try{
+    public ResponseT<WorkerResponse> getWorker(String id) {
+        try {
             Worker worker = workerController.getWorker(id);
             return new ResponseT<>(new WorkerResponse(worker));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
-    public ResponseT<WorkerResponse> addOccupationToWorker(String id, String job){
-        try{
+    public ResponseT<WorkerResponse> addOccupationToWorker(String id, String job) {
+        try {
             Worker worker = workerController.addOccupation(id, job);
             return new ResponseT<>(new WorkerResponse(worker));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
-    public ResponseT<WorkerResponse> removeOccupationToWorker(String id, String job){
-        try{
+    public ResponseT<WorkerResponse> removeOccupationToWorker(String id, String job) {
+        try {
             Worker worker = workerController.removeOccupation(id, job);
             return new ResponseT<>(new WorkerResponse(worker));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
-    public ResponseT<ShiftResponse> addWorkerToCurrentShift(String id, String job){//assuming that current workday was chosen
-        try{
+    public ResponseT<ShiftResponse> addWorkerToCurrentShift(String id, String job) {//assuming that current workday was chosen
+        try {
             Shift changedShift = shiftController.addWorkerToCurrentShift(id, job);
             return new ResponseT<>(new ShiftResponse(changedShift));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
-    public ResponseT<List<WorkerResponse>> getAvailableWorkers(String job){
+    public ResponseT<List<WorkerResponse>> getAvailableWorkers(String job) {
         try {
             List<Worker> availableWorkers = shiftController.getAvailableWorkers(job);
             List<WorkerResponse> availableWorkersResponse = new LinkedList<>();
-            for (Worker worker: availableWorkers) {
+            for (Worker worker : availableWorkers) {
                 availableWorkersResponse.add(new WorkerResponse(worker));
             }
             return new ResponseT<>(availableWorkersResponse);
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
@@ -158,9 +156,9 @@ public class Workers_Facade implements Workers_Integration, GetOccupations_Integ
             Shift shift = shiftController.getCurrentShift();
             return new ResponseT<>(new ShiftResponse(shift));
         } catch (InnerLogicException e) {
-            try{
+            try {
                 shiftController.clearCurrentShift();
-            }catch (InnerLogicException err){
+            } catch (InnerLogicException err) {
                 return new ResponseT<>(err.getMessage());
             }
             return new ResponseT<>(e.getMessage());
@@ -190,7 +188,7 @@ public class Workers_Facade implements Workers_Integration, GetOccupations_Integ
         try {
             shiftController.clearCurrentShift();
             return new Response();
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new Response(e.getMessage());
         }
     }
@@ -288,28 +286,28 @@ public class Workers_Facade implements Workers_Integration, GetOccupations_Integ
     }
 
     public ResponseT<WorkerResponse> setWorkerID(String id, String newID) {
-        try{
+        try {
             Worker worker = workerController.setWorkerID(id, newID);
             return new ResponseT<>(new WorkerResponse(worker));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
     public ResponseT<WorkerResponse> setWorkerName(String id, String name) {
-        try{
+        try {
             Worker worker = workerController.setWorkerName(id, name);
             return new ResponseT<>(new WorkerResponse(worker));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
     public ResponseT<WorkerResponse> setWorkerSalary(String id, double salary) {
-        try{
+        try {
             Worker worker = workerController.setWorkerSalary(id, salary);
             return new ResponseT<>(new WorkerResponse(worker));
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
@@ -318,31 +316,31 @@ public class Workers_Facade implements Workers_Integration, GetOccupations_Integ
         try {
             List<Worker> workers = shiftController.getWorkersInShiftByJob(date, shiftType, job);
             List<WorkerResponse> workersResponse = new LinkedList<>();
-            for (Worker worker: workers) {
+            for (Worker worker : workers) {
                 workersResponse.add(new WorkerResponse(worker));
             }
             return new ResponseT<>(workersResponse);
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }
 
     @Override
     public Response addRequest(int OrderID, String date) {
-        try{
+        try {
             shiftController.addRequest(OrderID, date);
             return new Response();
 
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new Response(e.getMessage());
         }
     }
 
     public Response removeRequest(int OrderID, String date) {
-        try{
+        try {
             shiftController.removeRequest(OrderID, date);
             return new Response();
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new Response(e.getMessage());
         }
     }
@@ -353,11 +351,11 @@ public class Workers_Facade implements Workers_Integration, GetOccupations_Integ
 
     @Override
     public ResponseT<List<Job>> getWorkerOccupations(String WorkerId) {
-        try{
+        try {
             Worker worker = workerController.getWorker(WorkerId);
             List<Job> occupations = worker.getOccupations();
             return new ResponseT<>(occupations);
-        }catch (InnerLogicException e){
+        } catch (InnerLogicException e) {
             return new ResponseT<>(e.getMessage());
         }
     }

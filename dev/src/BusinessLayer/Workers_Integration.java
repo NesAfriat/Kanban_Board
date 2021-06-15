@@ -33,5 +33,4 @@ public interface Workers_Integration {
     public ResponseT<List<Job>> getWorkerOccupations(String WorkerId);
 
 
-
 }

@@ -22,7 +22,8 @@ public class TruckType {
         this.freeWeight = freeWeight;
         this.licensesForTruck = new LinkedList<>();
     }
-    public void AddLicense(License lic){
+
+    public void AddLicense(License lic) {
         licensesForTruck.add(lic);
     }
 
@@ -41,10 +42,11 @@ public class TruckType {
     public List<License> getLicensesForTruck() {
         return licensesForTruck;
     }
-    public List<License> CopyOfLicenses(){//return copy list with final objects
-        final List<License> finalCopy=new LinkedList<>();
-        for (License el:licensesForTruck) {
-            final License clel=el;
+
+    public List<License> CopyOfLicenses() {//return copy list with final objects
+        final List<License> finalCopy = new LinkedList<>();
+        for (License el : licensesForTruck) {
+            final License clel = el;
             finalCopy.add(clel);
         }
         return finalCopy;

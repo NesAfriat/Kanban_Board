@@ -1,11 +1,9 @@
 package BusinessLayer.FacedeModel;
 
 import BusinessLayer.*;
-import BusinessLayer.Controlls.Sales_Controller;
 import BusinessLayer.Controlls.Stock_Controller;
 import BusinessLayer.FacedeModel.Objects.*;
 import BusinessLayer.Transport_BusinessLayer.Transport_Integration;
-import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -17,23 +15,20 @@ public class facade {
     private SupModel supModel;
     private BusinessLayer.ProductManager ProductManager;
     private Transport_Integration transport_integration;
-    //    private Stock_Controller stock_controller;
-//    private Sales_Controller sales_controller;
-//    private Reports_Controller reports_controller;
-//for invent
-    GetOccupations_Integration getOccupations_integration;
-    private facade(Transport_Integration transport_integration,GetOccupations_Integration getOccupations_integration) {
+    private GetOccupations_Integration getOccupations_integration;
+
+    private facade(Transport_Integration transport_integration, GetOccupations_Integration getOccupations_integration) {
         inventModel = new inventModel();
         ProductManager = Stock_Controller.getInstance().getStock().getPM();
         supModel = new SupModel(transport_integration);
-        this.transport_integration=transport_integration;
-        this.getOccupations_integration=getOccupations_integration;
+        this.transport_integration = transport_integration;
+        this.getOccupations_integration = getOccupations_integration;
     }
 
 
-    public static facade getInstance(Transport_Integration transport_integration,GetOccupations_Integration getOccupations_integration) {
+    public static facade getInstance(Transport_Integration transport_integration, GetOccupations_Integration getOccupations_integration) {
         if (single_instance == null)
-            single_instance = new facade(transport_integration,getOccupations_integration);
+            single_instance = new facade(transport_integration, getOccupations_integration);
         return single_instance;
     }
 
@@ -42,13 +37,15 @@ public class facade {
         return supModel.create_order_Due_to_lack((inventModel.getStockC()).get_missing_General_products_with_amounts(), li);
 
     }
-    public Transport_Integration gettransport_integration(){
+
+    public Transport_Integration gettransport_integration() {
         return transport_integration;
     }
 
-    public GetOccupations_Integration getOccupations_integration(){
+    public GetOccupations_Integration getOccupations_integration() {
         return getOccupations_integration;
     }
+
     ////////////////////////////////////////
     public Stock_Controller getStockC() {
         return inventModel.getStockC();
@@ -66,10 +63,6 @@ public class facade {
         return simpleDateFormat.format(date);
     }
 
-    ////////////////////////////////
-    public Sales_Controller getSalesC() {
-        return inventModel.getSalesC();
-    }
 
     public Response create_category(String cat_name) {
         return inventModel.create_category(cat_name);

@@ -5,11 +5,12 @@ import BusinessLayer.Reports.Report;
 import java.sql.*;
 import java.util.LinkedList;
 
-public class Reports_CategoriesMapper extends Mapper{
-    public Reports_CategoriesMapper(){
+public class Reports_CategoriesMapper extends Mapper {
+    public Reports_CategoriesMapper() {
         super();
         create_table();
     }
+
     @Override
     void create_table() {
         String ReportsCategoriesTable = "CREATE TABLE IF NOT EXISTS ReportCategories(\n" +
@@ -28,6 +29,7 @@ public class Reports_CategoriesMapper extends Mapper{
             e.printStackTrace();
         }
     }
+
     public LinkedList<String> getCategories(int repID) {
         LinkedList<String> categories = new LinkedList<>();
         try (Connection conn = connect()) {
@@ -39,12 +41,10 @@ public class Reports_CategoriesMapper extends Mapper{
                     String category = rs.getString(2);
                     categories.add(category);
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-         catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    catch (SQLException throwables) {
+        } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
         return categories;
@@ -64,9 +64,11 @@ public class Reports_CategoriesMapper extends Mapper{
                         throw new Exception("failed inserting report category");
                 } catch (Exception e) {
                     e.printStackTrace();
-                } }}catch (SQLException throwables) {
-                    throwables.printStackTrace();
                 }
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
     }
+}
 

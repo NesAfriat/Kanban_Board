@@ -3,6 +3,7 @@ package BusinessLayer.Workers_BusinessLayer;
 import BusinessLayer.Workers_BusinessLayer.Shifts.ShiftType;
 import BusinessLayer.Workers_BusinessLayer.Workers.ConstraintType;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -14,19 +15,19 @@ public class WorkersUtils {
 
     private static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    private static final HashMap<String, Job> jobs = new HashMap<String, Job>(){{
-        put("Cashier",Job.Cashier);
-        put("Storekeeper",Job.Storekeeper);
-        put("Usher",Job.Usher);
-        put("Guard",Job.Guard);
-        put("Shift_Manager",Job.Shift_Manager);
-        put("HR_Manager",Job.HR_Manager);
-        put("Store_Manager",Job.Store_Manager);
-        put("Transport_Manager",Job.Transport_Manager);
-        put("Assistant_Branch_Manager",Job.Assistant_Branch_Manager);
-        put("DriverA",Job.DriverA);
-        put("DriverB",Job.DriverB);
-        put("DriverC",Job.DriverC);
+    private static final HashMap<String, Job> jobs = new HashMap<String, Job>() {{
+        put("Cashier", Job.Cashier);
+        put("Storekeeper", Job.Storekeeper);
+        put("Usher", Job.Usher);
+        put("Guard", Job.Guard);
+        put("Shift_Manager", Job.Shift_Manager);
+        put("HR_Manager", Job.HR_Manager);
+        put("Store_Manager", Job.Store_Manager);
+        put("Transport_Manager", Job.Transport_Manager);
+        put("Assistant_Branch_Manager", Job.Assistant_Branch_Manager);
+        put("DriverA", Job.DriverA);
+        put("DriverB", Job.DriverB);
+        put("DriverC", Job.DriverC);
 
     }};
 
@@ -47,8 +48,8 @@ public class WorkersUtils {
         int dayOfWeek;
         try {
             LocalDate localDate = LocalDate.parse(date, formatter);
-            dayOfWeek =localDate.getDayOfWeek().getValue();
-            return (dayOfWeek  % 7)+ 1; // adjust to israeli numbering of the week days.
+            dayOfWeek = localDate.getDayOfWeek().getValue();
+            return (dayOfWeek % 7) + 1; // adjust to israeli numbering of the week days.
         } catch (DateTimeParseException e) {
             throw new InnerLogicException("invalid date");
         }
@@ -57,7 +58,7 @@ public class WorkersUtils {
     public static void notPastDateValidation(String date) throws InnerLogicException {
         try {
             LocalDate localDate = LocalDate.parse(date, formatter);
-            if(localDate.isBefore(LocalDate.now())) throw new InnerLogicException("invalid Date (past date)");
+            if (localDate.isBefore(LocalDate.now())) throw new InnerLogicException("invalid Date (past date)");
         } catch (DateTimeParseException e) {
             throw new InnerLogicException("invalid date");
         }
@@ -75,7 +76,7 @@ public class WorkersUtils {
         dateValidation(date);
         LocalDate localDate = LocalDate.parse(date, formatter);
         LocalDate now = LocalDate.now();
-        if(now.getYear() > localDate.getYear()) return true;
+        if (now.getYear() > localDate.getYear()) return true;
         return now.getYear() == localDate.getYear() && now.getMonthValue() > localDate.getMonthValue();
     }
 
@@ -85,10 +86,9 @@ public class WorkersUtils {
         dateValidation(date2);
         LocalDate localDate1 = LocalDate.parse(date1, formatter);
         LocalDate localDate2 = LocalDate.parse(date2, formatter);
-        if (localDate1.isBefore(localDate2)){
+        if (localDate1.isBefore(localDate2)) {
             return localDate1.plusDays(6).isBefore(localDate2);
-        }
-        else
+        } else
             return localDate2.plusDays(6).isBefore(localDate1);
     }
 
@@ -107,7 +107,7 @@ public class WorkersUtils {
 
     public static Job parseJob(String job) throws InnerLogicException {
         Job role = jobs.get(job);
-        if (role == null){
+        if (role == null) {
             throw new InnerLogicException("invalid job type");
         }
         return role;

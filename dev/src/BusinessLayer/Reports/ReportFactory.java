@@ -13,7 +13,7 @@ public class ReportFactory {
     public Report getReport(String subject, String timeRange, LinkedList<String> categories) throws Exception {
         Report r = null;
         if (subject.equals("defects")) {
-            r = new ReportDefects(report_id,timeRange, categories);
+            r = new ReportDefects(report_id, timeRange, categories);
             r.createReport();
             report_id++;
         } else if (subject.equals("missing")) {

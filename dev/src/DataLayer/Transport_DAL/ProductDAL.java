@@ -1,11 +1,5 @@
 package DataLayer.Transport_DAL;
 
-import BusinessLayer.Transport_BusinessLayer.Shops.Product;
-
-import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
-
 public class ProductDAL {
 
 /*

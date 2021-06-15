@@ -12,7 +12,7 @@ public interface ISupplier {
     //this function remove contact from supplier contact list, if the contact do not exist return false
     public void removeContact(int contactID);
 
-   // public void setPayment(paymentMethods payment);
+    // public void setPayment(paymentMethods payment);
 
     public String getBankAccount();
 
@@ -32,5 +32,5 @@ public interface ISupplier {
     public int getId();
 
     public Contact getContact(int ContactId);
-    }
+}
 

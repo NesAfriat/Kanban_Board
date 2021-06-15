@@ -8,10 +8,10 @@ public class ProductDTO {
     private final List<SupplierDTO> suppList;
 
 
-    public ProductDTO(String name, int id, List<SupplierDTO> suppList){
-        this.name=name;
-        this.id=id;
-        this.suppList=suppList;
+    public ProductDTO(String name, int id, List<SupplierDTO> suppList) {
+        this.name = name;
+        this.id = id;
+        this.suppList = suppList;
     }
 
 
