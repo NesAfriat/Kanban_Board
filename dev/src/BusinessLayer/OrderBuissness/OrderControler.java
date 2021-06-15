@@ -52,7 +52,7 @@ public class OrderControler {
             String date= transport_integration.addTransportFromSupplierConstant(order.GetId(),SupId,productQuantity);
             if (date==null) {
                 removeOrderFromTheData(order);
-                System.out.println("There is no driver available to transport this order, please try again later");
+                throw new IllegalArgumentException("There is no driver available to transport this order, please try again later");
             }
         }
         else {
@@ -68,7 +68,7 @@ public class OrderControler {
             String date= transport_integration.addTransportFromSupplier(order.GetId(),SupId,productQuantity,date_string_format);
             if (date==null) {
                 removeOrderFromTheData(order);
-                System.out.println("There is no driver available to transport order id: "+idOrderCounter+", please try again later");
+                throw new IllegalArgumentException("There is no driver available to transport order id: "+idOrderCounter+", please try again later");
             }
         }
 
