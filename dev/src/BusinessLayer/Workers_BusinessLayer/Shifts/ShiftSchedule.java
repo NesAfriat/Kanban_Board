@@ -136,8 +136,6 @@ public class ShiftSchedule {
             if(pair.getKey() == OrderID){
                 // cannot add request if same order id already in the system within less than a week range
                 if(!WorkersUtils.dateDifferenceGreaterThen7(pair.getValue(), date)){
-                    System.out.println(pair.getKey());
-                    System.out.println(pair.getValue());
                     canAdd = false;
                 }
             }

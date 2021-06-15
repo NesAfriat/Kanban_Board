@@ -40,8 +40,16 @@ public class DocCont {
             String tdDate = td.getTransDate();
 
             // turn triple into hash map, the supplier is with id 1 in the hashmap.
-            if (today.equals(tdDate) && td.isApproved()) {
+            if (today.equals(tdDate) && td.isApproved() && td.getTruckWeightDep() ==-1) {
                 for (Triple<Integer, Integer, Integer> item : theTransportBible.get(td.getId()).getProductList()) {
+                    try {
+                        td.setTruckWeightDep(100);
+                        save(td.getId());
+                    }
+                    catch (Exception e) {
+                        System.out.println(e.toString());
+                    }
+                    System.out.println("Transported to Stock, delivery ID "+td.getId() +"\n");
                     pm.receiveShipment(item.getFirst(), td.getDestinationSupplier().get(1),item.getSecond());
                 }
             }
