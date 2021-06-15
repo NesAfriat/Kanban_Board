@@ -10,7 +10,6 @@ import BusinessLayer.Workers_BusinessLayer.Workers.Constraint;
 import BusinessLayer.Workers_BusinessLayer.Workers.Job;
 import BusinessLayer.Workers_BusinessLayer.Workers.Worker;
 import BusinessLayer.Workers_Integration;
-import javafx.util.Pair;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -347,7 +346,7 @@ public class Workers_Facade implements Workers_Integration, GetOccupations_Integ
         }
     }
 
-    public ResponseT<List<Pair<Integer, String>>> getRequests() {
+    public ResponseT<List<Pair>> getRequests() {
         return new ResponseT(shiftController.getRequests());
     }
 
