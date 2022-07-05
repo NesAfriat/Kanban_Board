@@ -1,0 +1,95 @@
+﻿<Window x:Class="Presentation.View.EditTaskView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Presentation.View"
+        mc:Ignorable="d"
+        Title="EditTaskView" WindowState="Maximized" Height="450" Width="800">
+
+    <Grid HorizontalAlignment="Center" Width="auto" >
+
+        <StackPanel Orientation="Vertical"  >
+
+            <Label Content="Edit Task" Foreground="Black" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Height="42" Margin="10" RenderTransformOrigin="0.505,-0.619"></Label>
+            <Border BorderBrush="Black" Margin="0,0,0,0" BorderThickness="0.5">
+                <Grid Margin="0,0,0,0" Height="344" >
+                    <Grid.ColumnDefinitions >
+                        <ColumnDefinition Width="157"/>
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="180" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="100"/>
+                        <RowDefinition Height="169"/>
+                        <RowDefinition Height="100"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Vertical">
+                        <Label Content="Title" FontWeight="Bold" Grid.Column="0" FontSize="15" HorizontalAlignment="Left" Grid.Row="0" ></Label>
+                        <Label Content="(max 50 characters)" FontWeight="Bold" FontSize="15" HorizontalAlignment="Left" Height="26" />
+                    </StackPanel>
+                    <TextBox Text="{Binding Path=Title, Mode=TwoWay}"  Grid.Column="1"  Width="200" VerticalAlignment="top" Height="30" HorizontalAlignment="Left" Margin="30,15,0,16"  Grid.Row="0"/>
+                    <TextBlock Text="{Binding Path=TitleMsg}" Width="150" Margin="10,10,-9,0" FontSize="12" TextWrapping="WrapWithOverflow" VerticalAlignment="top" Height="80" Grid.Column="2" Grid.Row="0" Foreground="{Binding Path=TitleMsgColor}" />
+
+                    <Label Content="Description" FontWeight="Bold" Grid.Column="0" FontSize="15" HorizontalAlignment="Left" Grid.Row="1" Width="91" Margin="0,0,0,131"/>
+                    <Label Content="(max 300 characters)" FontWeight="Bold" Grid.Column="0" FontSize="15" HorizontalAlignment="Left" Grid.Row="1" Margin="0,17,0,123" Width="157"/>
+                    <TextBox Text="{Binding Path=Description, Mode=TwoWay}" Grid.Column="1"  Width="265" HorizontalAlignment="Left" TextWrapping="Wrap" Margin="30,5,0,10" MinLines="5" MinHeight="80" Grid.Row="1"/>
+                    <TextBlock Text="{Binding Path=DescriptionMsg}" FontSize="12" Width="150" Grid.Column="2" TextWrapping="WrapWithOverflow" Margin="10,10,-9,0" VerticalAlignment="Top" Height="71" Grid.Row="1" Foreground="{Binding Path=DescriptionMsgColor}" />
+
+
+                    <Label Content="Due Date" FontWeight="Bold" Grid.Column="0" FontSize="15" HorizontalAlignment="Left" Grid.Row="2" Width="76" />
+                    <DatePicker  SelectedDate="{Binding Path=DueDate , Mode=TwoWay}" HorizontalAlignment="Left" Grid.Column="1" Margin="30,5,0,0"  Grid.Row="2" VerticalAlignment="Top" Height="24" Width="101">
+                        <DatePicker.Resources>
+                            <Style TargetType="DatePickerTextBox">
+                                <Setter Property="IsReadOnly" Value="True"/>
+                            </Style>
+                        </DatePicker.Resources>
+                    </DatePicker>
+                    <TextBlock Text="{Binding Path=DueDateMsg}" FontSize="12" Width="150" VerticalAlignment="Top" Margin="10,10,-9,0" Height="55" TextWrapping="WrapWithOverflow" Foreground="{Binding Path=DueDateMsgColor}"  Grid.Column="2" Grid.Row="2" />
+
+
+
+
+
+                </Grid>
+            </Border>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10" Visibility="{Binding Path=EditButtonsVisibility}">
+                <Button Content="Confirm Changes"  BorderThickness="2" Padding="3" Foreground="White" Background="MediumSeaGreen" FontWeight="Bold" Name="Login" Margin="35" FontSize="15" Width="150" Height="35" Click="ConfirmChanges" >
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Button Content="Finish" BorderThickness="2" Padding="3"  Foreground="DodgerBlue" Background="LightGray" FontWeight="Bold" Name="Register" Margin="20" FontSize="15" Width="100" Height="35" Click="CancelClick"   >
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Visibility="{Binding Path=AddTaskButtonsVisibility}">
+                <Button Content="Add Task"  BorderThickness="2" Padding="3" Foreground="White" Background="MediumSeaGreen" FontWeight="Bold"  Margin="35" FontSize="15" Width="150" Height="35" Click="AddTask" >
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+                <Button Content="Cancel" BorderThickness="2" Padding="3" Foreground="White" Background="Crimson" FontWeight="Bold"  Margin="20" FontSize="15" Width="100" Height="35" Click="CancelClick"   >
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="5"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+            <StackPanel HorizontalAlignment="Center">
+                <Label Content="{Binding Path=ErrorLabelContent, Mode=OneWay}" Foreground="Red" ></Label>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
